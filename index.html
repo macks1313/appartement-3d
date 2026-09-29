@@ -2,24 +2,29 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0,
-               maximum-scale=1.0, user-scalable=no">
 
-<title>Kitchen Timer</title>
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1,
+               maximum-scale=1,
+               user-scalable=no">
+
+<title>KitchenOS</title>
 
 <style>
+
 :root {
-    --bg: #111315;
-    --panel: #1b1e21;
-    --panel2: #24282c;
+    --bg: #101214;
+    --panel: #191c20;
+    --panel2: #24282d;
+    --panel3: #2c3137;
+    --border: #353b42;
     --text: #ffffff;
-    --muted: #9ca3aa;
+    --muted: #9da5ad;
     --accent: #ff9f1c;
-    --green: #36d399;
+    --green: #35d39a;
     --red: #ff4d4d;
     --blue: #4da3ff;
-    --border: #30353a;
 }
 
 * {
@@ -29,65 +34,94 @@
 
 body {
     margin: 0;
+    min-height: 100vh;
     background: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    min-height: 100vh;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 }
 
 button {
     font-family: inherit;
-    border: none;
-    cursor: pointer;
+    border: 0;
     touch-action: manipulation;
 }
 
+button:active {
+    transform: scale(.97);
+}
+
 header {
-    padding: 18px 20px;
-    background: #0c0e10;
+    height: 72px;
+    padding: 12px 20px;
+
+    background: #0b0d0f;
     border-bottom: 1px solid var(--border);
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 50;
 }
 
 .logo {
-    font-size: 22px;
-    font-weight: 800;
+    font-size: 23px;
+    font-weight: 900;
 }
 
 .logo span {
     color: var(--accent);
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .clock {
-    font-size: 18px;
-    font-weight: 700;
     color: var(--muted);
+    font-weight: 700;
+    font-size: 17px;
+}
+
+.icon-button {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 12px;
+
+    background: var(--panel2);
+    color: white;
+
+    font-size: 22px;
 }
 
 main {
-    max-width: 1200px;
+    max-width: 1250px;
     margin: auto;
     padding: 20px;
 }
 
-h1 {
-    margin: 5px 0 5px;
+.page-title {
+    margin-bottom: 20px;
+}
+
+.page-title h1 {
+    margin: 0;
     font-size: 30px;
 }
 
-.subtitle {
+.page-title p {
+    margin: 5px 0 0;
     color: var(--muted);
-    margin-bottom: 22px;
 }
-
-/* GRID */
 
 .grid {
     display: grid;
@@ -95,13 +129,11 @@ h1 {
     gap: 16px;
 }
 
-@media(max-width: 700px) {
+@media(max-width: 750px) {
     .grid {
         grid-template-columns: 1fr;
     }
 }
-
-/* CARDS */
 
 .card {
     background: var(--panel);
@@ -112,40 +144,36 @@ h1 {
 
 .card-title {
     font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 14px;
+    font-weight: 900;
+    margin-bottom: 15px;
 }
 
 .card-title small {
     display: block;
     color: var(--muted);
     font-size: 13px;
-    margin-top: 3px;
+    margin-top: 4px;
     font-weight: 500;
 }
 
-/* BIG TIMER */
+/* =========================
+   FRIES
+========================= */
 
-.main-timer {
+.fries-card {
     text-align: center;
-    padding: 25px;
-}
-
-.timer-name {
-    font-size: 20px;
-    font-weight: 800;
 }
 
 .timer-display {
-    font-size: 70px;
-    font-weight: 900;
+    font-size: 68px;
+    font-weight: 1000;
     letter-spacing: 2px;
     margin: 10px 0 18px;
 }
 
 .timer-display.finished {
     color: var(--red);
-    animation: pulse 0.8s infinite alternate;
+    animation: pulse .7s infinite alternate;
 }
 
 @keyframes pulse {
@@ -158,28 +186,78 @@ h1 {
     }
 }
 
-.big-button {
+.primary-button {
     width: 100%;
-    min-height: 65px;
-    border-radius: 14px;
+    min-height: 62px;
+
     background: var(--accent);
     color: #111;
-    font-size: 21px;
-    font-weight: 900;
-    margin-bottom: 10px;
-}
 
-.big-button:active {
-    transform: scale(.98);
+    border-radius: 14px;
+
+    font-size: 20px;
+    font-weight: 1000;
+
+    margin-bottom: 9px;
 }
 
 .secondary-button {
+    width: 100%;
+    min-height: 55px;
+
     background: var(--panel2);
     color: white;
+
     border: 1px solid var(--border);
+    border-radius: 13px;
+
+    font-size: 16px;
+    font-weight: 800;
 }
 
-/* QUICK BUTTONS */
+/* =========================
+   PRESETS
+========================= */
+
+.preset-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.preset-button {
+    min-height: 92px;
+
+    background: var(--panel2);
+    border: 1px solid var(--border);
+
+    color: white;
+
+    border-radius: 14px;
+
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.preset-button small {
+    display: block;
+    color: var(--muted);
+    margin-top: 6px;
+    font-size: 13px;
+}
+
+.preset-button:active {
+    background: var(--accent);
+    color: black;
+}
+
+.preset-button:active small {
+    color: black;
+}
+
+/* =========================
+   QUICK TIMERS
+========================= */
 
 .quick-grid {
     display: grid;
@@ -189,111 +267,19 @@ h1 {
 
 .quick-button {
     min-height: 58px;
+
     background: var(--panel2);
-    border: 1px solid var(--border);
     color: white;
+
+    border: 1px solid var(--border);
     border-radius: 12px;
-    font-weight: 800;
-    font-size: 16px;
-}
 
-.quick-button:active {
-    background: var(--accent);
-    color: black;
-}
-
-/* STEAK */
-
-.steak-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-}
-
-.steak-button {
-    min-height: 90px;
-    border-radius: 14px;
-    background: var(--panel2);
-    border: 1px solid var(--border);
-    color: white;
-    font-size: 18px;
-    font-weight: 800;
-}
-
-.steak-button span {
-    display: block;
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 5px;
-    font-weight: 500;
-}
-
-.steak-button:active {
-    background: var(--accent);
-    color: black;
-}
-
-.steak-button:active span {
-    color: black;
-}
-
-/* ACTIVE TIMERS */
-
-.timer-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.timer-row {
-    background: var(--panel2);
-    border-radius: 14px;
-    padding: 14px;
-
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: 10px;
-}
-
-.timer-row.finished {
-    background: #4b1515;
-    border: 2px solid var(--red);
-}
-
-.timer-row-name {
-    font-weight: 800;
-}
-
-.timer-row-time {
-    font-size: 27px;
     font-weight: 900;
 }
 
-.timer-actions {
-    display: flex;
-    gap: 6px;
-}
-
-.small-btn {
-    min-width: 48px;
-    min-height: 45px;
-    border-radius: 10px;
-    background: #343a40;
-    color: white;
-    font-weight: 800;
-}
-
-.small-btn.red {
-    background: var(--red);
-}
-
-.small-btn.green {
-    background: var(--green);
-    color: #07130d;
-}
-
-/* INPUT */
+/* =========================
+   INPUT
+========================= */
 
 .input-row {
     display: flex;
@@ -302,41 +288,134 @@ h1 {
 }
 
 input,
+textarea,
 select {
     width: 100%;
+
     background: #101214;
     border: 1px solid var(--border);
+
     color: white;
+
     border-radius: 10px;
-    padding: 14px;
+
+    padding: 13px;
+
     font-size: 16px;
     outline: none;
 }
 
 .add-button {
+    min-width: 55px;
+
     background: var(--green);
     color: #07130d;
+
     border-radius: 10px;
-    padding: 0 18px;
+
+    font-size: 22px;
+    font-weight: 1000;
+}
+
+/* =========================
+   ACTIVE TIMERS
+========================= */
+
+.timer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.timer-row {
+    background: var(--panel2);
+
+    border-radius: 14px;
+    padding: 13px;
+
+    display: grid;
+    grid-template-columns: 1fr auto;
+
+    gap: 10px;
+    align-items: center;
+}
+
+.timer-row.finished {
+    background: #4a1515;
+    border: 2px solid var(--red);
+}
+
+.timer-name {
     font-weight: 900;
 }
 
-/* NOTES */
-
-textarea {
-    width: 100%;
-    min-height: 130px;
-    resize: vertical;
-    background: #101214;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    color: white;
-    padding: 14px;
-    font-size: 16px;
-    font-family: inherit;
+.timer-time {
+    font-size: 28px;
+    font-weight: 1000;
 }
 
-/* CHECKLIST */
+.timer-actions {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.small-button {
+    min-width: 45px;
+    min-height: 43px;
+
+    padding: 0 10px;
+
+    background: var(--panel3);
+    color: white;
+
+    border-radius: 9px;
+
+    font-weight: 900;
+}
+
+.small-button.red {
+    background: var(--red);
+}
+
+.small-button.green {
+    background: var(--green);
+    color: #07130d;
+}
+
+/* =========================
+   CHECKLIST
+========================= */
+
+.check-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+
+    margin-bottom: 12px;
+    padding-bottom: 4px;
+}
+
+.check-tab {
+    flex-shrink: 0;
+
+    padding: 12px 15px;
+
+    border-radius: 10px;
+
+    background: var(--panel2);
+    color: white;
+
+    border: 1px solid var(--border);
+
+    font-weight: 800;
+}
+
+.check-tab.active {
+    background: var(--accent);
+    color: #111;
+}
 
 .checklist {
     display: flex;
@@ -346,39 +425,146 @@ textarea {
 
 .check {
     background: var(--panel2);
+
     padding: 14px;
+
     border-radius: 12px;
+
     display: flex;
     align-items: center;
     gap: 12px;
+
     font-weight: 700;
 }
 
 .check input {
     width: 25px;
     height: 25px;
+    flex-shrink: 0;
 }
 
 .check.done {
-    opacity: .5;
+    opacity: .45;
     text-decoration: line-through;
 }
 
-/* ALERT */
+.check-delete {
+    margin-left: auto;
+
+    width: 38px;
+    height: 38px;
+
+    background: #442020;
+    color: #ff7777;
+
+    border-radius: 9px;
+
+    font-weight: 900;
+}
+
+/* =========================
+   SETTINGS
+========================= */
+
+#settingsScreen {
+    display: none;
+}
+
+.settings-section {
+    margin-bottom: 25px;
+}
+
+.settings-section h2 {
+    margin-bottom: 5px;
+}
+
+.settings-section p {
+    color: var(--muted);
+    margin-top: 0;
+}
+
+.setting-row {
+    background: var(--panel2);
+
+    border: 1px solid var(--border);
+
+    border-radius: 13px;
+
+    padding: 12px;
+
+    display: grid;
+    grid-template-columns: 1fr 100px auto;
+
+    gap: 8px;
+
+    align-items: center;
+
+    margin-bottom: 8px;
+}
+
+.setting-name {
+    font-weight: 800;
+}
+
+.setting-time {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.delete-button {
+    background: #462020;
+    color: #ff7777;
+
+    border-radius: 9px;
+
+    min-height: 42px;
+    padding: 0 12px;
+
+    font-weight: 900;
+}
+
+.save-button {
+    background: var(--green);
+    color: #07130d;
+
+    min-height: 50px;
+
+    border-radius: 12px;
+
+    padding: 0 18px;
+
+    font-weight: 1000;
+}
+
+/* =========================
+   NOTES
+========================= */
+
+textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+/* =========================
+   ALARM
+========================= */
 
 #alarmOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(120,0,0,.94);
+
+    background: rgba(120, 0, 0, .96);
 
     display: none;
-    z-index: 100;
+
+    z-index: 500;
 
     align-items: center;
     justify-content: center;
 
+    padding: 20px;
+
     text-align: center;
-    padding: 25px;
 }
 
 #alarmOverlay.active {
@@ -395,7 +581,7 @@ textarea {
 }
 
 .alarm-title {
-    font-size: 50px;
+    font-size: 52px;
     font-weight: 1000;
 }
 
@@ -406,144 +592,258 @@ textarea {
 
 .stop-alarm {
     width: 100%;
+
     min-height: 80px;
-    border-radius: 18px;
+
     background: white;
     color: #900;
-    font-size: 25px;
+
+    border-radius: 18px;
+
+    font-size: 24px;
     font-weight: 1000;
 }
 
-/* FOOTER */
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0,0,0,.75);
+
+    display: none;
+
+    z-index: 200;
+
+    overflow-y: auto;
+
+    padding: 20px;
+}
+
+.modal.active {
+    display: block;
+}
+
+.modal-box {
+    max-width: 700px;
+    margin: 30px auto;
+
+    background: var(--panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    padding: 20px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    margin: 0;
+}
+
+.close-button {
+    width: 45px;
+    height: 45px;
+
+    background: var(--panel2);
+    color: white;
+
+    border-radius: 10px;
+
+    font-size: 20px;
+}
+
+.list-item {
+    display: grid;
+
+    grid-template-columns: 1fr auto;
+
+    gap: 8px;
+
+    align-items: center;
+
+    background: var(--panel2);
+
+    padding: 10px;
+
+    border-radius: 12px;
+
+    margin-bottom: 8px;
+}
 
 footer {
     text-align: center;
-    color: var(--muted);
     padding: 30px;
+    color: var(--muted);
     font-size: 13px;
 }
+
+.hidden {
+    display: none !important;
+}
+
 </style>
 </head>
 
+
 <body>
 
+
 <header>
-    <div class="logo">KITCHEN<span>OS</span></div>
-    <div class="clock" id="clock">--:--</div>
+
+    <div class="logo">
+        KITCHEN<span>OS</span>
+    </div>
+
+    <div class="header-right">
+
+        <div class="clock" id="clock">
+            --:--
+        </div>
+
+        <button
+            class="icon-button"
+            onclick="openSettings()">
+            ⚙️
+        </button>
+
+    </div>
+
 </header>
 
-<main>
 
-    <h1>Poste cuisine</h1>
-    <div class="subtitle">
-        Minuteurs, cuissons et outils rapides
+<!-- =========================
+     MAIN SCREEN
+========================= -->
+
+<main id="mainScreen">
+
+    <div class="page-title">
+
+        <h1>Poste cuisine</h1>
+
+        <p>
+            Minuteurs, cuissons et organisation
+        </p>
+
     </div>
+
 
     <div class="grid">
 
+
         <!-- FRITES -->
 
-        <section class="card main-timer">
-
-            <div class="timer-name">
-                🍟 Frites
-            </div>
-
-            <div class="timer-display" id="friesDisplay">
-                03:00
-            </div>
-
-            <button class="big-button" onclick="startFries()">
-                ▶ DÉMARRER 3:00
-            </button>
-
-            <button class="big-button secondary-button"
-                    onclick="resetFries()">
-                ↻ REMETTRE À ZÉRO
-            </button>
-
-        </section>
-
-
-        <!-- STEAK -->
-
-        <section class="card">
+        <section class="card fries-card">
 
             <div class="card-title">
-                🥩 Steak haché
-                <small>
-                    Choisir la cuisson
+                🍟 Frites
+                <small id="friesPresetLabel">
+                    Temps configuré : 3:00
                 </small>
             </div>
 
-            <div class="steak-grid">
+            <div
+                class="timer-display"
+                id="friesDisplay">
+                03:00
+            </div>
 
-                <button class="steak-button"
-                        onclick="startSteak('Bleu', 120)">
-                    🔵 Bleu
-                    <span>2:00</span>
-                </button>
+            <button
+                class="primary-button"
+                onclick="startFries()">
 
-                <button class="steak-button"
-                        onclick="startSteak('Saignant', 180)">
-                    🔴 Saignant
-                    <span>3:00</span>
-                </button>
+                ▶ DÉMARRER LES FRITES
 
-                <button class="steak-button"
-                        onclick="startSteak('À point', 240)">
-                    🟠 À point
-                    <span>4:00</span>
-                </button>
+            </button>
 
-                <button class="steak-button"
-                        onclick="startSteak('Bien cuit', 300)">
-                    🟤 Bien cuit
-                    <span>5:00</span>
-                </button>
+            <button
+                class="secondary-button"
+                onclick="resetFries()">
 
+                ↻ REMETTRE À ZÉRO
+
+            </button>
+
+        </section>
+
+
+        <!-- CUISSONS -->
+
+        <section class="card">
+
+            <div class="card-title">
+
+                🥩 Cuissons
+
+                <small>
+                    Appuyer pour lancer le minuteur
+                </small>
+
+            </div>
+
+            <div
+                id="presetGrid"
+                class="preset-grid">
             </div>
 
         </section>
 
 
-        <!-- MINUTEURS RAPIDES -->
+        <!-- RAPIDES -->
 
         <section class="card">
 
             <div class="card-title">
-                ⏱ Minuteurs rapides
+                ⚡ Minuteurs rapides
             </div>
 
             <div class="quick-grid">
 
-                <button class="quick-button"
-                        onclick="addTimer(30)">
+                <button
+                    class="quick-button"
+                    onclick="addTimer(30)">
                     30 sec
                 </button>
 
-                <button class="quick-button"
-                        onclick="addTimer(60)">
+                <button
+                    class="quick-button"
+                    onclick="addTimer(60)">
                     1 min
                 </button>
 
-                <button class="quick-button"
-                        onclick="addTimer(120)">
+                <button
+                    class="quick-button"
+                    onclick="addTimer(120)">
                     2 min
                 </button>
 
-                <button class="quick-button"
-                        onclick="addTimer(180)">
+                <button
+                    class="quick-button"
+                    onclick="addTimer(180)">
                     3 min
                 </button>
 
-                <button class="quick-button"
-                        onclick="addTimer(300)">
+                <button
+                    class="quick-button"
+                    onclick="addTimer(300)">
                     5 min
                 </button>
 
-                <button class="quick-button"
-                        onclick="addTimer(600)">
+                <button
+                    class="quick-button"
+                    onclick="addTimer(600)">
                     10 min
                 </button>
 
@@ -552,7 +852,7 @@ footer {
         </section>
 
 
-        <!-- MINUTEUR PERSONNALISÉ -->
+        <!-- NOUVEAU MINUTEUR -->
 
         <section class="card">
 
@@ -564,9 +864,7 @@ footer {
 
                 <input
                     id="customName"
-                    type="text"
-                    placeholder="Nom : poulet, sauce..."
-                >
+                    placeholder="Nom du minuteur">
 
             </div>
 
@@ -576,21 +874,21 @@ footer {
                     id="customMinutes"
                     type="number"
                     min="0"
-                    placeholder="Minutes"
-                >
+                    placeholder="Minutes">
 
                 <input
                     id="customSeconds"
                     type="number"
                     min="0"
                     max="59"
-                    placeholder="Secondes"
-                >
+                    placeholder="Secondes">
 
                 <button
                     class="add-button"
                     onclick="createCustomTimer()">
+
                     +
+
                 </button>
 
             </div>
@@ -598,7 +896,7 @@ footer {
         </section>
 
 
-        <!-- TIMERS -->
+        <!-- MINUTEURS EN COURS -->
 
         <section class="card">
 
@@ -610,9 +908,73 @@ footer {
                 id="timerList"
                 class="timer-list">
 
-                <div style="color:#888;">
-                    Aucun minuteur en cours
-                </div>
+                Aucun minuteur
+
+            </div>
+
+        </section>
+
+
+        <!-- CHECKLIST -->
+
+        <section class="card">
+
+            <div class="card-title">
+
+                📋 Checklists
+
+                <small>
+                    Plusieurs listes personnalisables
+                </small>
+
+            </div>
+
+            <div
+                id="checkTabs"
+                class="check-tabs">
+            </div>
+
+            <div
+                id="checklist"
+                class="checklist">
+            </div>
+
+            <div
+                class="input-row"
+                style="margin-top:12px">
+
+                <input
+                    id="newTask"
+                    placeholder="Ajouter une tâche">
+
+                <button
+                    class="add-button"
+                    onclick="addTask()">
+
+                    +
+
+                </button>
+
+            </div>
+
+            <div
+                class="input-row">
+
+                <button
+                    class="secondary-button"
+                    onclick="resetChecklist()">
+
+                    ↻ Réinitialiser
+
+                </button>
+
+                <button
+                    class="secondary-button"
+                    onclick="newChecklist()">
+
+                    + Nouvelle checklist
+
+                </button>
 
             </div>
 
@@ -624,65 +986,19 @@ footer {
         <section class="card">
 
             <div class="card-title">
+
                 📝 Notes cuisine
+
                 <small>
-                    Visible par l'équipe
+                    Sauvegardées automatiquement
                 </small>
+
             </div>
 
             <textarea
                 id="notes"
-                placeholder="Exemple :
-Attention allergènes
-Commande table 12
-Préparer sauce burger
-Stock tomates à vérifier">
+                placeholder="Notes pour l'équipe...">
             </textarea>
-
-        </section>
-
-
-        <!-- CHECKLIST -->
-
-        <section class="card">
-
-            <div class="card-title">
-                🧽 Checklist
-            </div>
-
-            <div class="checklist">
-
-                <label class="check">
-                    <input type="checkbox"
-                           onchange="toggleCheck(this)">
-                    Plan de travail propre
-                </label>
-
-                <label class="check">
-                    <input type="checkbox"
-                           onchange="toggleCheck(this)">
-                    Friteuse vérifiée
-                </label>
-
-                <label class="check">
-                    <input type="checkbox"
-                           onchange="toggleCheck(this)">
-                    Viande préparée
-                </label>
-
-                <label class="check">
-                    <input type="checkbox"
-                           onchange="toggleCheck(this)">
-                    Sauces disponibles
-                </label>
-
-                <label class="check">
-                    <input type="checkbox"
-                           onchange="toggleCheck(this)">
-                    Stock vérifié
-                </label>
-
-            </div>
 
         </section>
 
@@ -692,30 +1008,194 @@ Stock tomates à vérifier">
         <section class="card">
 
             <div class="card-title">
-                🔊 Sonnerie
+
+                🔊 Alarme
+
                 <small>
-                    Tester avant le service
+                    Tester le son avant le service
                 </small>
+
             </div>
 
             <button
-                class="big-button"
+                class="primary-button"
                 onclick="testSound()">
+
                 🔊 TESTER L'ALARME
+
             </button>
 
         </section>
+
 
     </div>
 
 </main>
 
+
+<!-- =========================
+     SETTINGS
+========================= -->
+
+<main id="settingsScreen">
+
+    <div class="page-title">
+
+        <h1>⚙️ Réglages</h1>
+
+        <p>
+            Personnalise complètement KitchenOS
+        </p>
+
+    </div>
+
+
+    <!-- FRITES -->
+
+    <section class="card settings-section">
+
+        <h2>🍟 Temps des frites</h2>
+
+        <p>
+            Modifie le temps utilisé par le bouton principal.
+        </p>
+
+        <div class="setting-row">
+
+            <div>
+                <div class="setting-name">
+                    Temps frites
+                </div>
+            </div>
+
+            <input
+                id="friesSettingMinutes"
+                type="number"
+                min="0">
+
+            <input
+                id="friesSettingSeconds"
+                type="number"
+                min="0"
+                max="59">
+
+        </div>
+
+        <button
+            class="save-button"
+            onclick="saveFriesSetting()">
+
+            💾 Enregistrer
+
+        </button>
+
+    </section>
+
+
+    <!-- PRESETS -->
+
+    <section class="card settings-section">
+
+        <h2>🥩 Cuissons prédéfinies</h2>
+
+        <p>
+            Ajoute, modifie ou supprime les boutons
+            de cuisson.
+        </p>
+
+        <div id="presetSettings"></div>
+
+        <h3>
+            Ajouter une cuisson
+        </h3>
+
+        <div class="input-row">
+
+            <input
+                id="newPresetName"
+                placeholder="Nom : Burger saignant">
+
+            <input
+                id="newPresetMinutes"
+                type="number"
+                min="0"
+                placeholder="Min">
+
+            <input
+                id="newPresetSeconds"
+                type="number"
+                min="0"
+                max="59"
+                placeholder="Sec">
+
+            <button
+                class="add-button"
+                onclick="addPreset()">
+
+                +
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- CHECKLISTS -->
+
+    <section class="card settings-section">
+
+        <h2>📋 Gestion des checklists</h2>
+
+        <p>
+            Crée autant de listes que nécessaire.
+        </p>
+
+        <div id="checklistSettings"></div>
+
+    </section>
+
+
+    <!-- RESET -->
+
+    <section class="card settings-section">
+
+        <h2>♻️ Réinitialisation</h2>
+
+        <p>
+            Remettre les réglages par défaut.
+        </p>
+
+        <button
+            class="delete-button"
+            onclick="resetEverything()">
+
+            Réinitialiser toute l'application
+
+        </button>
+
+    </section>
+
+
+    <button
+        class="primary-button"
+        onclick="closeSettings()">
+
+        ← RETOUR À LA CUISINE
+
+    </button>
+
+</main>
+
+
 <footer>
-    KitchenOS — outil de cuisine
+    KitchenOS
 </footer>
 
 
-<!-- ALARM -->
+<!-- =========================
+     ALARM
+========================= -->
 
 <div id="alarmOverlay">
 
@@ -730,15 +1210,17 @@ Stock tomates à vérifier">
         </div>
 
         <div
-            class="alarm-name"
-            id="alarmName">
+            id="alarmName"
+            class="alarm-name">
             Minuteur
         </div>
 
         <button
             class="stop-alarm"
             onclick="stopAlarm()">
+
             ARRÊTER L'ALARME
+
         </button>
 
     </div>
@@ -748,44 +1230,203 @@ Stock tomates à vérifier">
 
 <script>
 
-/* =========================
+/* =====================================================
+   DEFAULT DATA
+===================================================== */
+
+const DEFAULT_PRESETS = [
+
+    {
+        id: "blue",
+        name: "🔵 Bleu",
+        minutes: 2,
+        seconds: 0
+    },
+
+    {
+        id: "rare",
+        name: "🔴 Saignant",
+        minutes: 3,
+        seconds: 0
+    },
+
+    {
+        id: "medium",
+        name: "🟠 À point",
+        minutes: 4,
+        seconds: 0
+    },
+
+    {
+        id: "well",
+        name: "🟤 Bien cuit",
+        minutes: 5,
+        seconds: 0
+    }
+
+];
+
+
+const DEFAULT_CHECKLISTS = [
+
+    {
+        id: "opening",
+        name: "Ouverture",
+        tasks: [
+            "Allumer les équipements",
+            "Vérifier la friteuse",
+            "Vérifier les stocks",
+            "Préparer les sauces",
+            "Préparer les légumes",
+            "Nettoyer le plan de travail"
+        ]
+    },
+
+    {
+        id: "service",
+        name: "Service",
+        tasks: [
+            "Friteuse OK",
+            "Viande disponible",
+            "Pain disponible",
+            "Sauces disponibles",
+            "Légumes disponibles"
+        ]
+    },
+
+    {
+        id: "closing",
+        name: "Fermeture",
+        tasks: [
+            "Éteindre les équipements",
+            "Nettoyer la friteuse",
+            "Nettoyer les plans",
+            "Nettoyer le sol",
+            "Sortir les poubelles"
+        ]
+    }
+
+];
+
+
+/* =====================================================
+   STORAGE
+===================================================== */
+
+function saveData() {
+
+    localStorage.setItem(
+        "kitchen_presets",
+        JSON.stringify(presets)
+    );
+
+    localStorage.setItem(
+        "kitchen_checklists",
+        JSON.stringify(checklists)
+    );
+
+    localStorage.setItem(
+        "kitchen_fries_time",
+        JSON.stringify(friesPreset)
+    );
+
+}
+
+
+function loadData() {
+
+    const savedPresets =
+        localStorage.getItem("kitchen_presets");
+
+    const savedLists =
+        localStorage.getItem("kitchen_checklists");
+
+    const savedFries =
+        localStorage.getItem("kitchen_fries_time");
+
+
+    presets =
+        savedPresets
+        ? JSON.parse(savedPresets)
+        : structuredClone(DEFAULT_PRESETS);
+
+
+    checklists =
+        savedLists
+        ? JSON.parse(savedLists)
+        : structuredClone(DEFAULT_CHECKLISTS);
+
+
+    friesPreset =
+        savedFries
+        ? JSON.parse(savedFries)
+        : {
+            minutes: 3,
+            seconds: 0
+        };
+
+
+    if (!checklists.length) {
+        checklists =
+            structuredClone(DEFAULT_CHECKLISTS);
+    }
+
+}
+
+
+let presets;
+let checklists;
+let friesPreset;
+
+loadData();
+
+
+/* =====================================================
    CLOCK
-========================= */
+===================================================== */
 
 function updateClock() {
 
     const now = new Date();
 
-    const h = String(now.getHours()).padStart(2, "0");
-    const m = String(now.getMinutes()).padStart(2, "0");
+    document.getElementById("clock")
+        .textContent =
+        String(now.getHours()).padStart(2, "0")
+        + ":"
+        + String(now.getMinutes()).padStart(2, "0");
 
-    document.getElementById("clock").textContent =
-        h + ":" + m;
 }
 
 setInterval(updateClock, 1000);
 updateClock();
 
 
-/* =========================
+/* =====================================================
    AUDIO
-========================= */
+===================================================== */
 
 let audioContext = null;
 let alarmInterval = null;
 
+
 function initAudio() {
 
     if (!audioContext) {
+
         audioContext =
-            new (window.AudioContext ||
-                 window.webkitAudioContext)();
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
     }
 
     if (audioContext.state === "suspended") {
         audioContext.resume();
     }
+
 }
+
 
 function beep() {
 
@@ -798,31 +1439,38 @@ function beep() {
         audioContext.createGain();
 
     oscillator.type = "square";
+
     oscillator.frequency.value = 880;
 
     gain.gain.setValueAtTime(
-        0.001,
+        .001,
         audioContext.currentTime
     );
 
     gain.gain.exponentialRampToValueAtTime(
-        0.5,
-        audioContext.currentTime + 0.02
+        .5,
+        audioContext.currentTime + .02
     );
 
     gain.gain.exponentialRampToValueAtTime(
-        0.001,
-        audioContext.currentTime + 0.5
+        .001,
+        audioContext.currentTime + .5
     );
 
     oscillator.connect(gain);
-    gain.connect(audioContext.destination);
+
+    gain.connect(
+        audioContext.destination
+    );
 
     oscillator.start();
+
     oscillator.stop(
-        audioContext.currentTime + 0.5
+        audioContext.currentTime + .5
     );
+
 }
+
 
 function testSound() {
 
@@ -832,12 +1480,13 @@ function testSound() {
 
     setTimeout(beep, 600);
     setTimeout(beep, 1200);
+
 }
 
 
-/* =========================
+/* =====================================================
    ALARM
-========================= */
+===================================================== */
 
 function triggerAlarm(name) {
 
@@ -855,11 +1504,19 @@ function triggerAlarm(name) {
         setInterval(beep, 1300);
 
     if (navigator.vibrate) {
+
         navigator.vibrate([
-            500, 300, 500, 300, 1000
+            500,
+            300,
+            500,
+            300,
+            1000
         ]);
+
     }
+
 }
+
 
 function stopAlarm() {
 
@@ -873,43 +1530,63 @@ function stopAlarm() {
     if (navigator.vibrate) {
         navigator.vibrate(0);
     }
+
 }
 
 
-/* =========================
-   FORMAT TIME
-========================= */
+/* =====================================================
+   FORMAT
+===================================================== */
 
-function formatTime(seconds) {
+function formatTime(totalSeconds) {
 
-    const min =
-        Math.floor(seconds / 60);
+    totalSeconds =
+        Math.max(0, totalSeconds);
 
-    const sec =
-        seconds % 60;
+    const minutes =
+        Math.floor(totalSeconds / 60);
 
-    return String(min).padStart(2, "0")
+    const seconds =
+        totalSeconds % 60;
+
+    return String(minutes).padStart(2, "0")
         + ":"
-        + String(sec).padStart(2, "0");
+        + String(seconds).padStart(2, "0");
+
 }
 
 
-/* =========================
-   FRIES TIMER
-========================= */
+/* =====================================================
+   FRIES
+===================================================== */
 
 let friesRemaining = 180;
 let friesInterval = null;
 let friesRunning = false;
 
+
+function getFriesSeconds() {
+
+    return (
+        Number(friesPreset.minutes) * 60
+        +
+        Number(friesPreset.seconds)
+    );
+
+}
+
+
 function startFries() {
 
     initAudio();
 
-    if (friesRunning) return;
+    if (friesRunning) {
+        return;
+    }
 
     if (friesRemaining <= 0) {
-        friesRemaining = 180;
+        friesRemaining =
+            getFriesSeconds();
     }
 
     friesRunning = true;
@@ -923,102 +1600,166 @@ function startFries() {
 
             if (friesRemaining <= 0) {
 
-                clearInterval(friesInterval);
+                clearInterval(
+                    friesInterval
+                );
 
                 friesRunning = false;
 
-                triggerAlarm("🍟 FRITES TERMINÉES");
+                triggerAlarm(
+                    "🍟 FRITES TERMINÉES"
+                );
+
             }
 
         }, 1000);
+
 }
+
 
 function resetFries() {
 
     clearInterval(friesInterval);
 
     friesRunning = false;
-    friesRemaining = 180;
+
+    friesRemaining =
+        getFriesSeconds();
 
     updateFriesDisplay();
 
-    document.getElementById("friesDisplay")
-        .classList.remove("finished");
 }
+
 
 function updateFriesDisplay() {
 
-    const display =
-        document.getElementById("friesDisplay");
+    document.getElementById(
+        "friesDisplay"
+    ).textContent =
+        formatTime(friesRemaining);
 
-    display.textContent =
-        formatTime(Math.max(0, friesRemaining));
+    document.getElementById(
+        "friesPresetLabel"
+    ).textContent =
+        "Temps configuré : "
+        + formatTime(getFriesSeconds());
 
-    if (friesRemaining <= 0) {
-        display.classList.add("finished");
-    }
 }
 
 
-/* =========================
-   STEAK
-========================= */
+/* =====================================================
+   PRESETS
+===================================================== */
 
-function startSteak(name, seconds) {
+function renderPresets() {
 
-    createTimer(
-        "🥩 Steak " + name,
-        seconds
-    );
+    const grid =
+        document.getElementById(
+            "presetGrid"
+        );
+
+    grid.innerHTML = "";
+
+    presets.forEach(preset => {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "preset-button";
+
+        button.innerHTML =
+            escapeHTML(preset.name)
+            +
+            `<small>
+                ${formatTime(
+                    preset.minutes * 60
+                    +
+                    preset.seconds
+                )}
+            </small>`;
+
+        button.onclick = () => {
+
+            createTimer(
+                preset.name,
+                preset.minutes * 60
+                +
+                preset.seconds
+            );
+
+        };
+
+        grid.appendChild(button);
+
+    });
+
 }
 
 
-/* =========================
+/* =====================================================
    GENERIC TIMERS
-========================= */
+===================================================== */
 
 let timers = [];
 let timerId = 0;
+
 
 function createTimer(name, seconds) {
 
     initAudio();
 
     const timer = {
+
         id: ++timerId,
-        name: name,
+
+        name,
+
         remaining: seconds,
+
         running: true,
-        interval: null,
-        finished: false
+
+        finished: false,
+
+        interval: null
+
     };
+
 
     timer.interval =
         setInterval(() => {
 
-            if (!timer.running) return;
+            if (!timer.running) {
+                return;
+            }
 
             timer.remaining--;
 
-            renderTimers();
-
             if (timer.remaining <= 0) {
 
-                clearInterval(timer.interval);
+                timer.remaining = 0;
 
-                timer.finished = true;
+                clearInterval(
+                    timer.interval
+                );
+
                 timer.running = false;
 
-                renderTimers();
+                timer.finished = true;
 
                 triggerAlarm(timer.name);
+
             }
 
+            renderTimers();
+
         }, 1000);
+
 
     timers.push(timer);
 
     renderTimers();
+
 }
 
 
@@ -1028,62 +1769,76 @@ function addTimer(seconds) {
         "Minuteur " + formatTime(seconds),
         seconds
     );
+
 }
 
 
 function createCustomTimer() {
 
     const name =
-        document.getElementById("customName")
-            .value.trim() || "Minuteur";
+        document.getElementById(
+            "customName"
+        ).value.trim()
+        || "Minuteur";
 
     const minutes =
         Number(
-            document.getElementById("customMinutes")
-                .value
+            document.getElementById(
+                "customMinutes"
+            ).value
         ) || 0;
 
     const seconds =
         Number(
-            document.getElementById("customSeconds")
-                .value
+            document.getElementById(
+                "customSeconds"
+            ).value
         ) || 0;
 
     const total =
         minutes * 60 + seconds;
 
     if (total <= 0) {
-        alert("Indique une durée.");
+
+        alert(
+            "Indique une durée."
+        );
+
         return;
+
     }
 
     createTimer(name, total);
 
-    document.getElementById("customName")
-        .value = "";
+    document.getElementById(
+        "customName"
+    ).value = "";
 
-    document.getElementById("customMinutes")
-        .value = "";
+    document.getElementById(
+        "customMinutes"
+    ).value = "";
 
-    document.getElementById("customSeconds")
-        .value = "";
+    document.getElementById(
+        "customSeconds"
+    ).value = "";
+
 }
 
-
-/* =========================
-   TIMER CONTROLS
-========================= */
 
 function toggleTimer(id) {
 
     const timer =
         timers.find(t => t.id === id);
 
-    if (!timer || timer.finished) return;
+    if (!timer || timer.finished) {
+        return;
+    }
 
-    timer.running = !timer.running;
+    timer.running =
+        !timer.running;
 
     renderTimers();
+
 }
 
 
@@ -1092,77 +1847,97 @@ function addTime(id, seconds) {
     const timer =
         timers.find(t => t.id === id);
 
-    if (!timer) return;
+    if (!timer) {
+        return;
+    }
 
     timer.remaining += seconds;
 
     if (timer.finished) {
 
         timer.finished = false;
+
         timer.running = true;
 
         timer.interval =
             setInterval(() => {
 
-                if (!timer.running) return;
+                if (!timer.running) {
+                    return;
+                }
 
                 timer.remaining--;
 
-                renderTimers();
-
                 if (timer.remaining <= 0) {
 
-                    clearInterval(timer.interval);
+                    timer.remaining = 0;
 
-                    timer.finished = true;
+                    clearInterval(
+                        timer.interval
+                    );
+
                     timer.running = false;
 
-                    renderTimers();
+                    timer.finished = true;
 
-                    triggerAlarm(timer.name);
+                    triggerAlarm(
+                        timer.name
+                    );
+
                 }
 
+                renderTimers();
+
             }, 1000);
+
     }
 
     renderTimers();
+
 }
 
 
 function deleteTimer(id) {
 
-    const index =
-        timers.findIndex(t => t.id === id);
+    const timer =
+        timers.find(t => t.id === id);
 
-    if (index === -1) return;
+    if (!timer) {
+        return;
+    }
 
-    clearInterval(
-        timers[index].interval
-    );
+    clearInterval(timer.interval);
 
-    timers.splice(index, 1);
+    timers =
+        timers.filter(
+            t => t.id !== id
+        );
 
     renderTimers();
+
 }
 
 
-/* =========================
+/* =====================================================
    RENDER TIMERS
-========================= */
+===================================================== */
 
 function renderTimers() {
 
     const container =
-        document.getElementById("timerList");
+        document.getElementById(
+            "timerList"
+        );
 
-    if (timers.length === 0) {
+    if (!timers.length) {
 
         container.innerHTML =
-            `<div style="color:#888;">
+            `<div style="color:#888">
                 Aucun minuteur en cours
             </div>`;
 
         return;
+
     }
 
     container.innerHTML = "";
@@ -1174,19 +1949,24 @@ function renderTimers() {
 
         row.className =
             "timer-row"
-            + (timer.finished ? " finished" : "");
+            +
+            (
+                timer.finished
+                ? " finished"
+                : ""
+            );
 
         row.innerHTML = `
 
             <div>
 
-                <div class="timer-row-name">
+                <div class="timer-name">
                     ${escapeHTML(timer.name)}
                 </div>
 
-                <div class="timer-row-time">
+                <div class="timer-time">
                     ${formatTime(
-                        Math.max(0, timer.remaining)
+                        timer.remaining
                     )}
                 </div>
 
@@ -1197,28 +1977,44 @@ function renderTimers() {
                 ${
                     timer.finished
                     ?
-                    `<button
-                        class="small-btn green"
-                        onclick="addTime(${timer.id}, 60)">
+                    `
+                    <button
+                        class="small-button green"
+                        onclick="addTime(
+                            ${timer.id},
+                            60
+                        )">
                         +1m
-                    </button>`
+                    </button>
+                    `
                     :
-                    `<button
-                        class="small-btn"
-                        onclick="toggleTimer(${timer.id})">
-                        ${timer.running ? "Ⅱ" : "▶"}
-                    </button>`
+                    `
+                    <button
+                        class="small-button"
+                        onclick="toggleTimer(
+                            ${timer.id}
+                        )">
+                        ${timer.running
+                            ? "Ⅱ"
+                            : "▶"}
+                    </button>
+                    `
                 }
 
                 <button
-                    class="small-btn"
-                    onclick="addTime(${timer.id}, 30)">
+                    class="small-button"
+                    onclick="addTime(
+                        ${timer.id},
+                        30
+                    )">
                     +30s
                 </button>
 
                 <button
-                    class="small-btn red"
-                    onclick="deleteTimer(${timer.id})">
+                    class="small-button red"
+                    onclick="deleteTimer(
+                        ${timer.id}
+                    )">
                     ×
                 </button>
 
@@ -1226,67 +2022,769 @@ function renderTimers() {
         `;
 
         container.appendChild(row);
+
     });
+
 }
 
 
-/* =========================
-   SECURITY
-========================= */
+/* =====================================================
+   CHECKLISTS
+===================================================== */
+
+let activeChecklistId =
+    checklists[0]?.id;
+
+
+function getActiveChecklist() {
+
+    return checklists.find(
+        list =>
+            list.id === activeChecklistId
+    );
+
+}
+
+
+function renderChecklistTabs() {
+
+    const tabs =
+        document.getElementById(
+            "checkTabs"
+        );
+
+    tabs.innerHTML = "";
+
+    checklists.forEach(list => {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "check-tab"
+            +
+            (
+                list.id === activeChecklistId
+                ? " active"
+                : ""
+            );
+
+        button.textContent =
+            list.name;
+
+        button.onclick = () => {
+
+            activeChecklistId =
+                list.id;
+
+            renderChecklist();
+
+        };
+
+        tabs.appendChild(button);
+
+    });
+
+}
+
+
+function renderChecklist() {
+
+    renderChecklistTabs();
+
+    const container =
+        document.getElementById(
+            "checklist"
+        );
+
+    const list =
+        getActiveChecklist();
+
+    if (!list) {
+        return;
+    }
+
+    container.innerHTML = "";
+
+    list.tasks.forEach(
+        (task, index) => {
+
+            const label =
+                document.createElement(
+                    "label"
+                );
+
+            label.className = "check";
+
+            label.innerHTML = `
+
+                <input
+                    type="checkbox"
+                    onchange="
+                        toggleTask(
+                            ${index},
+                            this
+                        )
+                    ">
+
+                <span>
+                    ${escapeHTML(task)}
+                </span>
+
+                <button
+                    type="button"
+                    class="check-delete"
+                    onclick="
+                        event.preventDefault();
+                        deleteTask(${index})
+                    ">
+                    ×
+                </button>
+
+            `;
+
+            container.appendChild(label);
+
+        }
+    );
+
+}
+
+
+function toggleTask(index, checkbox) {
+
+    const list =
+        getActiveChecklist();
+
+    checkbox.parentElement.classList.toggle(
+        "done",
+        checkbox.checked
+    );
+
+}
+
+
+function addTask() {
+
+    const input =
+        document.getElementById(
+            "newTask"
+        );
+
+    const text =
+        input.value.trim();
+
+    if (!text) {
+        return;
+    }
+
+    const list =
+        getActiveChecklist();
+
+    list.tasks.push(text);
+
+    input.value = "";
+
+    saveData();
+
+    renderChecklist();
+
+}
+
+
+function deleteTask(index) {
+
+    const list =
+        getActiveChecklist();
+
+    list.tasks.splice(index, 1);
+
+    saveData();
+
+    renderChecklist();
+
+}
+
+
+function resetChecklist() {
+
+    renderChecklist();
+
+}
+
+
+function newChecklist() {
+
+    const name =
+        prompt(
+            "Nom de la nouvelle checklist :"
+        );
+
+    if (!name || !name.trim()) {
+        return;
+    }
+
+    const list = {
+
+        id:
+            "list_" +
+            Date.now(),
+
+        name:
+            name.trim(),
+
+        tasks: []
+
+    };
+
+    checklists.push(list);
+
+    activeChecklistId =
+        list.id;
+
+    saveData();
+
+    renderChecklist();
+
+}
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+function openSettings() {
+
+    document.getElementById(
+        "mainScreen"
+    ).style.display = "none";
+
+    document.getElementById(
+        "settingsScreen"
+    ).style.display = "block";
+
+    renderSettings();
+
+}
+
+
+function closeSettings() {
+
+    document.getElementById(
+        "settingsScreen"
+    ).style.display = "none";
+
+    document.getElementById(
+        "mainScreen"
+    ).style.display = "block";
+
+    renderPresets();
+
+    renderChecklist();
+
+    updateFriesDisplay();
+
+}
+
+
+function renderSettings() {
+
+    document.getElementById(
+        "friesSettingMinutes"
+    ).value =
+        friesPreset.minutes;
+
+    document.getElementById(
+        "friesSettingSeconds"
+    ).value =
+        friesPreset.seconds;
+
+
+    renderPresetSettings();
+
+    renderChecklistSettings();
+
+}
+
+
+/* =====================================================
+   FRIES SETTINGS
+===================================================== */
+
+function saveFriesSetting() {
+
+    friesPreset = {
+
+        minutes:
+            Number(
+                document.getElementById(
+                    "friesSettingMinutes"
+                ).value
+            ) || 0,
+
+        seconds:
+            Math.min(
+                59,
+                Number(
+                    document.getElementById(
+                        "friesSettingSeconds"
+                    ).value
+                ) || 0
+            )
+
+    };
+
+    friesRemaining =
+        getFriesSeconds();
+
+    saveData();
+
+    updateFriesDisplay();
+
+    alert(
+        "Temps des frites enregistré."
+    );
+
+}
+
+
+/* =====================================================
+   PRESET SETTINGS
+===================================================== */
+
+function renderPresetSettings() {
+
+    const container =
+        document.getElementById(
+            "presetSettings"
+        );
+
+    container.innerHTML = "";
+
+    presets.forEach(
+        (preset, index) => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "setting-row";
+
+            row.innerHTML = `
+
+                <input
+                    value="${escapeAttribute(
+                        preset.name
+                    )}"
+                    onchange="
+                        updatePresetName(
+                            ${index},
+                            this.value
+                        )
+                    ">
+
+                <input
+                    type="text"
+                    value="${formatTime(
+                        preset.minutes * 60
+                        +
+                        preset.seconds
+                    )}"
+                    onchange="
+                        updatePresetTime(
+                            ${index},
+                            this.value
+                        )
+                    ">
+
+                <button
+                    class="delete-button"
+                    onclick="
+                        deletePreset(${index})
+                    ">
+                    ×
+                </button>
+
+            `;
+
+            container.appendChild(row);
+
+        }
+    );
+
+}
+
+
+function updatePresetName(index, value) {
+
+    presets[index].name =
+        value.trim() || "Cuisson";
+
+    saveData();
+
+    renderPresets();
+
+}
+
+
+function updatePresetTime(index, value) {
+
+    const parts =
+        value.split(":");
+
+    let minutes =
+        Number(parts[0]) || 0;
+
+    let seconds =
+        Number(parts[1]) || 0;
+
+    seconds =
+        Math.min(59, Math.max(0, seconds));
+
+    presets[index].minutes =
+        minutes;
+
+    presets[index].seconds =
+        seconds;
+
+    saveData();
+
+    renderSettings();
+
+    renderPresets();
+
+}
+
+
+function addPreset() {
+
+    const name =
+        document.getElementById(
+            "newPresetName"
+        ).value.trim();
+
+    const minutes =
+        Number(
+            document.getElementById(
+                "newPresetMinutes"
+            ).value
+        ) || 0;
+
+    const seconds =
+        Math.min(
+            59,
+            Number(
+                document.getElementById(
+                    "newPresetSeconds"
+                ).value
+            ) || 0
+        );
+
+
+    if (!name) {
+
+        alert(
+            "Donne un nom à la cuisson."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        minutes <= 0 &&
+        seconds <= 0
+    ) {
+
+        alert(
+            "Indique une durée."
+        );
+
+        return;
+
+    }
+
+
+    presets.push({
+
+        id:
+            "preset_" +
+            Date.now(),
+
+        name,
+
+        minutes,
+
+        seconds
+
+    });
+
+
+    document.getElementById(
+        "newPresetName"
+    ).value = "";
+
+    document.getElementById(
+        "newPresetMinutes"
+    ).value = "";
+
+    document.getElementById(
+        "newPresetSeconds"
+    ).value = "";
+
+
+    saveData();
+
+    renderSettings();
+
+    renderPresets();
+
+}
+
+
+function deletePreset(index) {
+
+    if (
+        !confirm(
+            "Supprimer cette cuisson ?"
+        )
+    ) {
+        return;
+    }
+
+    presets.splice(index, 1);
+
+    saveData();
+
+    renderSettings();
+
+    renderPresets();
+
+}
+
+
+/* =====================================================
+   CHECKLIST SETTINGS
+===================================================== */
+
+function renderChecklistSettings() {
+
+    const container =
+        document.getElementById(
+            "checklistSettings"
+        );
+
+    container.innerHTML = "";
+
+    checklists.forEach(
+        (list, index) => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "list-item";
+
+            row.innerHTML = `
+
+                <input
+                    value="${escapeAttribute(
+                        list.name
+                    )}"
+                    onchange="
+                        renameChecklist(
+                            ${index},
+                            this.value
+                        )
+                    ">
+
+                <button
+                    class="delete-button"
+                    onclick="
+                        deleteChecklist(
+                            ${index}
+                        )
+                    ">
+                    Supprimer
+                </button>
+
+            `;
+
+            container.appendChild(row);
+
+        }
+    );
+
+}
+
+
+function renameChecklist(index, value) {
+
+    const name =
+        value.trim();
+
+    if (!name) {
+        return;
+    }
+
+    checklists[index].name =
+        name;
+
+    saveData();
+
+    renderChecklist();
+
+}
+
+
+function deleteChecklist(index) {
+
+    if (checklists.length <= 1) {
+
+        alert(
+            "Il faut conserver au moins une checklist."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !confirm(
+            "Supprimer cette checklist ?"
+        )
+    ) {
+        return;
+    }
+
+
+    const deleted =
+        checklists[index];
+
+    checklists.splice(
+        index,
+        1
+    );
+
+
+    if (
+        deleted.id ===
+        activeChecklistId
+    ) {
+
+        activeChecklistId =
+            checklists[0].id;
+
+    }
+
+
+    saveData();
+
+    renderChecklist();
+
+    renderChecklistSettings();
+
+}
+
+
+/* =====================================================
+   NOTES
+===================================================== */
+
+const notes =
+    document.getElementById(
+        "notes"
+    );
+
+
+notes.value =
+    localStorage.getItem(
+        "kitchen_notes"
+    ) || "";
+
+
+notes.addEventListener(
+    "input",
+    () => {
+
+        localStorage.setItem(
+            "kitchen_notes",
+            notes.value
+        );
+
+    }
+);
+
+
+/* =====================================================
+   RESET EVERYTHING
+===================================================== */
+
+function resetEverything() {
+
+    if (
+        !confirm(
+            "ATTENTION : remettre toute l'application à zéro ?"
+        )
+    ) {
+        return;
+    }
+
+    localStorage.clear();
+
+    location.reload();
+
+}
+
+
+/* =====================================================
+   SECURITY HELPERS
+===================================================== */
 
 function escapeHTML(text) {
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     div.textContent = text;
 
     return div.innerHTML;
+
 }
 
 
-/* =========================
-   CHECKLIST
-========================= */
+function escapeAttribute(text) {
 
-function toggleCheck(input) {
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 
-    const parent =
-        input.closest(".check");
-
-    if (input.checked) {
-        parent.classList.add("done");
-    } else {
-        parent.classList.remove("done");
-    }
 }
 
 
-/* =========================
-   NOTES SAVE
-========================= */
+/* =====================================================
+   INIT
+===================================================== */
 
-const notes =
-    document.getElementById("notes");
+friesRemaining =
+    getFriesSeconds();
 
-notes.value =
-    localStorage.getItem("kitchenNotes") || "";
+renderPresets();
 
-notes.addEventListener("input", () => {
-
-    localStorage.setItem(
-        "kitchenNotes",
-        notes.value
-    );
-
-});
-
-
-/* =========================
-   INITIALIZATION
-========================= */
+renderChecklist();
 
 updateFriesDisplay();
+
 renderTimers();
 
 </script>
