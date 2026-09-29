@@ -9,222 +9,865 @@ initial-scale=1.0,
 maximum-scale=1.0,
 user-scalable=no">
 
-<title>Mon Appartement 3D</title>
+<title>Mon Appartement</title>
 
 <style>
 
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
 html,
-body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #b9d7e5;
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
     font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-    touch-action: none;
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+    background:#dce8ed;
 }
 
-#app {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
+
+/* =========================
+   APPARTEMENT
+========================= */
+
+.apartment{
+
+    position:relative;
+
+    width:100vw;
+    height:100vh;
+
+    overflow:hidden;
+
+    background:
+    linear-gradient(
+        to bottom,
+        #b9d8e8 0%,
+        #dceaf0 46%,
+        #c7a77f 46%,
+        #c7a77f 100%
+    );
 }
 
-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-}
 
-/* -------------------------
-   INTERFACE
-------------------------- */
+/* =========================
+   FENÊTRE
+========================= */
 
-.top {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    right: 16px;
+.window{
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position:absolute;
 
-    pointer-events: none;
-}
+    left:8%;
+    top:8%;
 
-.title {
-    padding: 12px 16px;
+    width:34%;
+    height:38%;
 
-    background: rgba(255,255,255,.92);
+    background:
+    linear-gradient(
+        135deg,
+        #91c9e7,
+        #d9f0fa
+    );
 
-    border-radius: 16px;
-
-    font-size: 17px;
-    font-weight: 900;
-
-    color: #17212b;
+    border:14px solid #eee9df;
 
     box-shadow:
-        0 8px 25px rgba(0,0,0,.15);
+    inset 0 0 0 4px #b6b1a7,
+    0 15px 35px rgba(0,0,0,.22);
 }
 
-.room {
-    padding: 12px 16px;
+.window:before{
 
-    background: rgba(255,255,255,.92);
+    content:"";
 
-    border-radius: 16px;
+    position:absolute;
 
-    font-size: 15px;
-    font-weight: 800;
+    top:0;
+    bottom:0;
 
-    color: #17212b;
+    left:50%;
+
+    width:7px;
+
+    background:#eee9df;
+
+    transform:translateX(-50%);
+}
+
+.window:after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    top:50%;
+
+    height:7px;
+
+    background:#eee9df;
+
+    transform:translateY(-50%);
+}
+
+
+/* =========================
+   MUR
+========================= */
+
+.wall{
+
+    position:absolute;
+
+    right:0;
+    top:0;
+
+    width:52%;
+    height:48%;
+
+    background:
+    linear-gradient(
+        145deg,
+        #f7f4ed,
+        #ddd8ce
+    );
 
     box-shadow:
-        0 8px 25px rgba(0,0,0,.15);
+    -12px 10px 35px rgba(0,0,0,.08);
 }
 
-/* -------------------------
-   BOUTONS
-------------------------- */
 
-.buttons {
-    position: absolute;
+/* =========================
+   SOL
+========================= */
 
-    right: 16px;
-    bottom: 90px;
+.floor{
 
-    display: flex;
-    flex-direction: column;
+    position:absolute;
 
-    gap: 10px;
+    left:0;
+    right:0;
+
+    bottom:0;
+
+    height:54%;
+
+    background:
+
+    repeating-linear-gradient(
+        90deg,
+        rgba(80,45,20,.08) 0px,
+        rgba(80,45,20,.08) 3px,
+        transparent 3px,
+        transparent 120px
+    ),
+
+    linear-gradient(
+        135deg,
+        #caa982,
+        #a9845d
+    );
+
+    transform-origin:bottom;
+
 }
 
-button {
-    width: 52px;
-    height: 52px;
 
-    border: 0;
-    border-radius: 17px;
+/* =========================
+   TAPIS
+========================= */
 
-    background: rgba(255,255,255,.94);
+.rug{
 
-    font-size: 25px;
+    position:absolute;
+
+    left:30%;
+    bottom:18%;
+
+    width:43%;
+    height:24%;
+
+    background:
+    linear-gradient(
+        135deg,
+        #718d8d,
+        #506d70
+    );
+
+    border-radius:12px;
 
     box-shadow:
-        0 7px 20px rgba(0,0,0,.18);
+    0 15px 25px rgba(0,0,0,.22);
 
-    color: #17212b;
+    transform:rotate(-3deg);
 }
 
-button:active {
-    transform: scale(.91);
+
+/* =========================
+   CANAPÉ
+========================= */
+
+.sofa{
+
+    position:absolute;
+
+    left:7%;
+    bottom:24%;
+
+    width:38%;
+    height:22%;
+
+    background:#596767;
+
+    border-radius:18px 18px 10px 10px;
+
+    box-shadow:
+    0 16px 25px rgba(0,0,0,.3);
 }
 
-/* -------------------------
+
+/* assise */
+
+.sofa:before{
+
+    content:"";
+
+    position:absolute;
+
+    left:5%;
+    right:5%;
+
+    bottom:12%;
+
+    height:46%;
+
+    background:#687777;
+
+    border-radius:12px;
+}
+
+
+/* dossier */
+
+.sofa:after{
+
+    content:"";
+
+    position:absolute;
+
+    left:4%;
+    right:4%;
+
+    top:-24%;
+
+    height:55%;
+
+    background:#526060;
+
+    border-radius:18px 18px 5px 5px;
+}
+
+
+/* accoudoirs */
+
+.arm-left,
+.arm-right{
+
+    position:absolute;
+
+    bottom:0;
+
+    width:13%;
+    height:95%;
+
+    background:#4e5b5b;
+
+    border-radius:14px;
+
+    z-index:3;
+}
+
+.arm-left{
+    left:-3%;
+}
+
+.arm-right{
+    right:-3%;
+}
+
+
+/* =========================
+   COUSSINS
+========================= */
+
+.cushion{
+
+    position:absolute;
+
+    width:25%;
+    height:32%;
+
+    top:7%;
+
+    background:#9daaaa;
+
+    border-radius:8px;
+
+    z-index:5;
+}
+
+.cushion.one{
+    left:24%;
+}
+
+.cushion.two{
+    right:20%;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.table{
+
+    position:absolute;
+
+    left:38%;
+    bottom:22%;
+
+    width:25%;
+    height:10%;
+
+    background:#855633;
+
+    border-radius:10px;
+
+    box-shadow:
+    0 15px 20px rgba(0,0,0,.3);
+
+    z-index:8;
+}
+
+.table-leg{
+
+    position:absolute;
+
+    top:90%;
+
+    width:9%;
+    height:130%;
+
+    background:#634027;
+}
+
+.table-leg.one{
+    left:12%;
+}
+
+.table-leg.two{
+    right:12%;
+}
+
+
+/* =========================
+   TÉLÉVISION
+========================= */
+
+.tv{
+
+    position:absolute;
+
+    right:7%;
+    top:16%;
+
+    width:30%;
+    height:25%;
+
+    background:#111;
+
+    border:8px solid #202020;
+
+    border-radius:5px;
+
+    box-shadow:
+    0 15px 30px rgba(0,0,0,.35);
+
+    z-index:5;
+}
+
+
+/* écran */
+
+.tv-screen{
+
+    width:100%;
+    height:100%;
+
+    background:
+
+    radial-gradient(
+        circle at 50% 50%,
+        #496b7d,
+        #182936 70%
+    );
+}
+
+
+/* meuble TV */
+
+.tv-unit{
+
+    position:absolute;
+
+    right:5%;
+    top:41%;
+
+    width:34%;
+    height:8%;
+
+    background:#65472f;
+
+    box-shadow:
+    0 10px 20px rgba(0,0,0,.25);
+}
+
+
+/* =========================
+   PLANTE
+========================= */
+
+.plant{
+
+    position:absolute;
+
+    right:43%;
+    bottom:31%;
+
+    width:8%;
+    height:22%;
+
+    z-index:10;
+}
+
+.pot{
+
+    position:absolute;
+
+    bottom:0;
+
+    left:20%;
+
+    width:60%;
+    height:32%;
+
+    background:#b46d4b;
+
+    border-radius:5px 5px 14px 14px;
+}
+
+.leaf{
+
+    position:absolute;
+
+    width:45%;
+    height:45%;
+
+    background:#3f7049;
+
+    border-radius:
+    50% 10% 50% 10%;
+}
+
+.leaf:nth-child(1){
+    left:0;
+    top:10%;
+    transform:rotate(-30deg);
+}
+
+.leaf:nth-child(2){
+    right:0;
+    top:0;
+    transform:rotate(30deg);
+}
+
+.leaf:nth-child(3){
+    left:28%;
+    top:-15%;
+    transform:rotate(5deg);
+}
+
+
+/* =========================
+   LAMPE
+========================= */
+
+.lamp{
+
+    position:absolute;
+
+    right:15%;
+    bottom:30%;
+
+    width:7%;
+    height:35%;
+
+    z-index:10;
+}
+
+.lamp-base{
+
+    position:absolute;
+
+    bottom:0;
+
+    left:40%;
+
+    width:20%;
+    height:65%;
+
+    background:#343434;
+}
+
+.lamp-head{
+
+    position:absolute;
+
+    top:0;
+    left:5%;
+
+    width:90%;
+    height:25%;
+
+    background:#e7d19c;
+
+    clip-path:
+    polygon(
+    20% 0,
+    80% 0,
+    100% 100%,
+    0 100%
+    );
+}
+
+
+/* =========================
+   CUISINE
+========================= */
+
+.kitchen{
+
+    position:absolute;
+
+    right:0;
+    bottom:0;
+
+    width:25%;
+    height:36%;
+
+    background:#755039;
+
+    box-shadow:
+    -10px 0 25px rgba(0,0,0,.15);
+
+    z-index:3;
+}
+
+
+/* plan de travail */
+
+.counter{
+
+    position:absolute;
+
+    left:-5%;
+
+    top:0;
+
+    width:110%;
+    height:10%;
+
+    background:#e9e5dc;
+}
+
+
+/* placards */
+
+.cabinet{
+
+    position:absolute;
+
+    top:17%;
+
+    width:42%;
+    height:33%;
+
+    background:#8c6244;
+
+    border:3px solid #69482f;
+}
+
+.cabinet.one{
+    left:5%;
+}
+
+.cabinet.two{
+    right:5%;
+}
+
+
+/* frigo */
+
+.fridge{
+
+    position:absolute;
+
+    right:5%;
+
+    bottom:5%;
+
+    width:37%;
+    height:45%;
+
+    background:
+    linear-gradient(
+        90deg,
+        #d9dee1,
+        #f2f4f4,
+        #cbd0d3
+    );
+
+    border-radius:5px;
+
+    box-shadow:
+    0 8px 15px rgba(0,0,0,.2);
+}
+
+.fridge:after{
+
+    content:"";
+
+    position:absolute;
+
+    right:8%;
+
+    top:10%;
+
+    width:4px;
+    height:80%;
+
+    background:#8c9396;
+}
+
+
+/* =========================
+   PLAFON
+========================= */
+
+.ceiling-light{
+
+    position:absolute;
+
+    top:3%;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:90px;
+    height:35px;
+
+    background:#f4e6b7;
+
+    border-radius:
+    50%;
+
+    box-shadow:
+    0 0 35px #fff2bb;
+
+}
+
+
+/* =========================
+   TITRE
+========================= */
+
+.title{
+
+    position:absolute;
+
+    left:50%;
+    top:4%;
+
+    transform:translateX(-50%);
+
+    z-index:30;
+
+    padding:12px 22px;
+
+    background:
+    rgba(255,255,255,.9);
+
+    border-radius:18px;
+
+    font-size:18px;
+
+    font-weight:900;
+
+    color:#17212b;
+
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.18);
+
+    white-space:nowrap;
+}
+
+
+/* =========================
    INFO
-------------------------- */
+========================= */
 
-#info {
-    position: absolute;
+.info{
 
-    left: 50%;
-    bottom: 22px;
+    position:absolute;
 
-    transform: translateX(-50%);
+    left:50%;
+    bottom:4%;
 
-    width: max-content;
-    max-width: 82%;
+    transform:translateX(-50%);
 
-    padding: 13px 18px;
+    z-index:40;
 
-    background: rgba(255,255,255,.95);
+    padding:12px 20px;
 
-    border-radius: 16px;
+    background:
+    rgba(255,255,255,.92);
 
-    text-align: center;
+    border-radius:15px;
 
-    color: #17212b;
+    font-size:14px;
 
-    font-size: 14px;
-    font-weight: 700;
+    font-weight:700;
 
-    box-shadow:
-        0 8px 25px rgba(0,0,0,.18);
-
-    opacity: 0;
-
-    transition:
-        opacity .2s;
-}
-
-#help {
-    position: absolute;
-
-    left: 50%;
-    top: 78px;
-
-    transform: translateX(-50%);
-
-    padding: 9px 13px;
-
-    border-radius: 13px;
-
-    background: rgba(255,255,255,.78);
-
-    color: #52616d;
-
-    font-size: 12px;
-    font-weight: 600;
-
-    white-space: nowrap;
-
-    pointer-events: none;
-}
-
-/* -------------------------
-   ERREUR
-------------------------- */
-
-#error {
-    display: none;
-
-    position: absolute;
-
-    left: 15px;
-    right: 15px;
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    padding: 20px;
-
-    background: white;
-
-    border-radius: 20px;
+    color:#26343d;
 
     box-shadow:
-        0 10px 40px rgba(0,0,0,.25);
+    0 8px 20px rgba(0,0,0,.18);
 
-    color: #222;
+    text-align:center;
+}
 
-    font-weight: 700;
 
-    text-align: center;
+/* =========================
+   MOBILE
+========================= */
 
-    z-index: 50;
+@media(max-width:600px){
+
+    .title{
+
+        top:3%;
+
+        font-size:15px;
+
+        padding:10px 15px;
+    }
+
+    .window{
+
+        left:5%;
+        top:11%;
+
+        width:42%;
+        height:30%;
+    }
+
+    .wall{
+
+        height:48%;
+        width:55%;
+    }
+
+    .sofa{
+
+        left:5%;
+        bottom:26%;
+
+        width:43%;
+        height:18%;
+    }
+
+    .rug{
+
+        left:25%;
+        bottom:17%;
+
+        width:50%;
+        height:20%;
+    }
+
+    .table{
+
+        left:36%;
+        bottom:21%;
+
+        width:29%;
+    }
+
+    .tv{
+
+        right:5%;
+        top:17%;
+
+        width:34%;
+        height:19%;
+    }
+
+    .tv-unit{
+
+        right:3%;
+        top:36%;
+
+        width:38%;
+    }
+
+    .kitchen{
+
+        width:29%;
+        height:32%;
+    }
+
+    .plant{
+
+        right:40%;
+        bottom:28%;
+    }
+
+    .lamp{
+
+        right:12%;
+        bottom:29%;
+    }
+
+    .info{
+
+        bottom:3%;
+
+        max-width:90%;
+
+        font-size:12px;
+    }
 }
 
 </style>
@@ -233,1330 +876,119 @@ button:active {
 
 <body>
 
-<div id="app">
 
-<canvas id="canvas"></canvas>
+<div class="apartment">
 
-<div class="top">
+
+    <div class="wall"></div>
+
+    <div class="floor"></div>
+
+
+    <!-- FENÊTRE -->
+
+    <div class="window"></div>
+
+
+    <!-- LUMIÈRE -->
+
+    <div class="ceiling-light"></div>
+
+
+    <!-- TITRE -->
 
     <div class="title">
         🏠 MON APPARTEMENT
     </div>
 
-    <div class="room" id="room">
-        Appartement
+
+    <!-- TAPIS -->
+
+    <div class="rug"></div>
+
+
+    <!-- CANAPÉ -->
+
+    <div class="sofa">
+
+        <div class="arm-left"></div>
+        <div class="arm-right"></div>
+
+        <div class="cushion one"></div>
+        <div class="cushion two"></div>
+
     </div>
 
+
+    <!-- TABLE -->
+
+    <div class="table">
+
+        <div class="table-leg one"></div>
+        <div class="table-leg two"></div>
+
+    </div>
+
+
+    <!-- TV -->
+
+    <div class="tv">
+
+        <div class="tv-screen"></div>
+
+    </div>
+
+    <div class="tv-unit"></div>
+
+
+    <!-- PLANTE -->
+
+    <div class="plant">
+
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+
+        <div class="pot"></div>
+
+    </div>
+
+
+    <!-- LAMPE -->
+
+    <div class="lamp">
+
+        <div class="lamp-head"></div>
+        <div class="lamp-base"></div>
+
+    </div>
+
+
+    <!-- CUISINE -->
+
+    <div class="kitchen">
+
+        <div class="counter"></div>
+
+        <div class="cabinet one"></div>
+        <div class="cabinet two"></div>
+
+        <div class="fridge"></div>
+
+    </div>
+
+
+    <!-- TEXTE -->
+
+    <div class="info">
+
+        Salon · Cuisine · Coin TV · Fenêtre
+
+    </div>
+
+
 </div>
 
-
-<div id="help">
-    👆 Glisse pour tourner · 🤏 Pince pour zoomer · Touche les meubles
-</div>
-
-
-<div class="buttons">
-
-    <button id="plus">＋</button>
-
-    <button id="minus">−</button>
-
-    <button id="day">☀️</button>
-
-    <button id="reset">⌂</button>
-
-</div>
-
-
-<div id="info"></div>
-
-
-<div id="error">
-    Une erreur est survenue.
-</div>
-
-</div>
-
-
-<script>
-
-/* =========================================================
-   APPARTEMENT 3D
-   VERSION AUTONOME
-   AUCUNE BIBLIOTHÈQUE EXTERNE
-========================================================= */
-
-
-const canvas =
-    document.getElementById("canvas");
-
-const ctx =
-    canvas.getContext("2d");
-
-const info =
-    document.getElementById("info");
-
-const roomLabel =
-    document.getElementById("room");
-
-const errorBox =
-    document.getElementById("error");
-
-
-/* =========================================================
-   VARIABLES
-========================================================= */
-
-let width = 0;
-let height = 0;
-
-let rotation = -0.55;
-
-let cameraHeight = 7;
-
-let zoom = 1;
-
-let night = false;
-
-let dragging = false;
-
-let lastX = 0;
-let lastY = 0;
-
-let touchDistance = 0;
-
-
-/* =========================================================
-   APPARTEMENT
-========================================================= */
-
-const apartment = {
-
-    width: 22,
-    depth: 18,
-
-    wallHeight: 4.5
-
-};
-
-
-/* =========================================================
-   OBJETS
-========================================================= */
-
-const objects = [
-
-    {
-        name: "Canapé",
-        description:
-            "Un grand canapé confortable.",
-        x: -3,
-        z: 5,
-        w: 5,
-        d: 1.8,
-        h: 1.7,
-        color: "#59696b"
-    },
-
-    {
-        name: "Table basse",
-        description:
-            "Une table basse en bois.",
-        x: 0,
-        z: 2,
-        w: 3.2,
-        d: 1.5,
-        h: 1,
-        color: "#8b5a35"
-    },
-
-    {
-        name: "Télévision",
-        description:
-            "Une grande télévision.",
-        x: 5,
-        z: -7.4,
-        w: 4,
-        d: .3,
-        h: 2.2,
-        color: "#111111"
-    },
-
-    {
-        name: "Cuisine",
-        description:
-            "Les meubles de la cuisine.",
-        x: -6,
-        z: -7,
-        w: 7,
-        d: 1,
-        h: 2.5,
-        color: "#765038"
-    },
-
-    {
-        name: "Réfrigérateur",
-        description:
-            "Le réfrigérateur.",
-        x: -9.3,
-        z: -5.7,
-        w: 1.3,
-        d: 1.2,
-        h: 3.5,
-        color: "#dfe4e7"
-    },
-
-    {
-        name: "Lit",
-        description:
-            "Le lit de la chambre.",
-        x: 6.5,
-        z: 2.5,
-        w: 4.5,
-        d: 6,
-        h: 1.4,
-        color: "#e5dfd4"
-    },
-
-    {
-        name: "Baignoire",
-        description:
-            "Une baignoire.",
-        x: 7,
-        z: -6.5,
-        w: 3.5,
-        d: 1.5,
-        h: .7,
-        color: "#f4f4f4"
-    },
-
-    {
-        name: "Lavabo",
-        description:
-            "Le lavabo de la salle de bain.",
-        x: 4,
-        z: -6.5,
-        w: 1.5,
-        d: .8,
-        h: 1,
-        color: "#f4f4f4"
-    },
-
-    {
-        name: "Plante",
-        description:
-            "Une plante décorative.",
-        x: -8,
-        z: 5,
-        w: 1,
-        d: 1,
-        h: 2.5,
-        color: "#4d7d4c"
-    },
-
-    {
-        name: "Plante",
-        description:
-            "Une plante décorative.",
-        x: 9,
-        z: 6,
-        w: 1,
-        d: 1,
-        h: 2.5,
-        color: "#4d7d4c"
-    },
-
-    {
-        name: "Lampe",
-        description:
-            "Une lampe sur pied.",
-        x: 4,
-        z: 1,
-        w: .7,
-        d: .7,
-        h: 3,
-        color: "#d9bd7a"
-    }
-
-];
-
-
-/* =========================================================
-   REDIMENSIONNEMENT
-========================================================= */
-
-function resize() {
-
-    width =
-        window.innerWidth;
-
-    height =
-        window.innerHeight;
-
-    const ratio =
-        Math.min(
-            window.devicePixelRatio || 1,
-            2
-        );
-
-    canvas.width =
-        width * ratio;
-
-    canvas.height =
-        height * ratio;
-
-    canvas.style.width =
-        width + "px";
-
-    canvas.style.height =
-        height + "px";
-
-    ctx.setTransform(
-        ratio,
-        0,
-        0,
-        ratio,
-        0,
-        0
-    );
-}
-
-window.addEventListener(
-    "resize",
-    resize
-);
-
-resize();
-
-
-/* =========================================================
-   PROJECTION 3D
-========================================================= */
-
-function project(x, y, z) {
-
-    const cos =
-        Math.cos(rotation);
-
-    const sin =
-        Math.sin(rotation);
-
-    const rx =
-        x * cos -
-        z * sin;
-
-    const rz =
-        x * sin +
-        z * cos;
-
-    const depth =
-        rz + 35;
-
-    const perspective =
-        850 / depth;
-
-    return {
-
-        x:
-            width / 2 +
-            rx *
-            perspective *
-            zoom,
-
-        y:
-            height * .60 -
-            (y - cameraHeight) *
-            perspective *
-            zoom,
-
-        depth:
-            depth
-
-    };
-
-}
-
-
-/* =========================================================
-   POLYGONE
-========================================================= */
-
-function polygon(points, color) {
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        points[0].x,
-        points[0].y
-    );
-
-    for(let i = 1; i < points.length; i++) {
-
-        ctx.lineTo(
-            points[i].x,
-            points[i].y
-        );
-
-    }
-
-    ctx.closePath();
-
-    ctx.fillStyle =
-        color;
-
-    ctx.fill();
-
-    ctx.strokeStyle =
-        "rgba(0,0,0,.13)";
-
-    ctx.lineWidth =
-        1;
-
-    ctx.stroke();
-}
-
-
-/* =========================================================
-   BOÎTE 3D
-========================================================= */
-
-function box(
-    x,
-    y,
-    z,
-    w,
-    h,
-    d,
-    color
-) {
-
-    const p1 =
-        project(
-            x - w/2,
-            y,
-            z - d/2
-        );
-
-    const p2 =
-        project(
-            x + w/2,
-            y,
-            z - d/2
-        );
-
-    const p3 =
-        project(
-            x + w/2,
-            y,
-            z + d/2
-        );
-
-    const p4 =
-        project(
-            x - w/2,
-            y,
-            z + d/2
-        );
-
-    const t1 =
-        project(
-            x - w/2,
-            y + h,
-            z - d/2
-        );
-
-    const t2 =
-        project(
-            x + w/2,
-            y + h,
-            z - d/2
-        );
-
-    const t3 =
-        project(
-            x + w/2,
-            y + h,
-            z + d/2
-        );
-
-    const t4 =
-        project(
-            x - w/2,
-            y + h,
-            z + d/2
-        );
-
-
-    /* dessus */
-
-    polygon(
-        [t1,t2,t3,t4],
-        shade(color, 25)
-    );
-
-
-    /* face gauche */
-
-    polygon(
-        [t1,t4,p4,p1],
-        shade(color, -8)
-    );
-
-
-    /* face droite */
-
-    polygon(
-        [t2,t3,p3,p2],
-        shade(color, -25)
-    );
-
-
-    /* face avant */
-
-    polygon(
-        [t4,t3,p3,p4],
-        shade(color, -15)
-    );
-
-}
-
-
-/* =========================================================
-   COULEUR
-========================================================= */
-
-function shade(hex, amount) {
-
-    let color =
-        hex.replace("#","");
-
-    let r =
-        parseInt(
-            color.substring(0,2),
-            16
-        );
-
-    let g =
-        parseInt(
-            color.substring(2,4),
-            16
-        );
-
-    let b =
-        parseInt(
-            color.substring(4,6),
-            16
-        );
-
-    r =
-        Math.max(
-            0,
-            Math.min(
-                255,
-                r + amount
-            )
-        );
-
-    g =
-        Math.max(
-            0,
-            Math.min(
-                255,
-                g + amount
-            )
-        );
-
-    b =
-        Math.max(
-            0,
-            Math.min(
-                255,
-                b + amount
-            )
-        );
-
-    return (
-        "#" +
-        r.toString(16).padStart(2,"0") +
-        g.toString(16).padStart(2,"0") +
-        b.toString(16).padStart(2,"0")
-    );
-
-}
-
-
-/* =========================================================
-   SOL
-========================================================= */
-
-function drawFloor() {
-
-    const floor =
-        "#c6a47d";
-
-    box(
-        0,
-        -0.3,
-        0,
-        22,
-        .3,
-        18,
-        floor
-    );
-
-}
-
-
-/* =========================================================
-   MURS
-========================================================= */
-
-function drawWalls() {
-
-    const wall =
-        night
-        ? "#515862"
-        : "#eeeae0";
-
-
-    /* mur arrière */
-
-    box(
-        0,
-        0,
-        -9,
-        22,
-        4.5,
-        .35,
-        wall
-    );
-
-
-    /* mur gauche */
-
-    box(
-        -11,
-        0,
-        0,
-        .35,
-        4.5,
-        18,
-        wall
-    );
-
-
-    /* mur droit */
-
-    box(
-        11,
-        0,
-        0,
-        .35,
-        4.5,
-        18,
-        wall
-    );
-
-
-    /* mur avant */
-
-    box(
-        0,
-        0,
-        9,
-        22,
-        4.5,
-        .35,
-        wall
-    );
-
-
-    /* séparation chambre */
-
-    box(
-        2.5,
-        0,
-        -4.5,
-        .25,
-        4.2,
-        9,
-        wall
-    );
-
-
-    /* séparation cuisine */
-
-    box(
-        -7.5,
-        0,
-        2,
-        7,
-        4.2,
-        .25,
-        wall
-    );
-
-}
-
-
-/* =========================================================
-   FENÊTRES
-========================================================= */
-
-function drawWindows() {
-
-    const glass =
-        night
-        ? "#263c58"
-        : "#7fc4e4";
-
-
-    box(
-        -3,
-        1.8,
-        -8.75,
-        5,
-        2.5,
-        .08,
-        glass
-    );
-
-
-    box(
-        8,
-        1.8,
-        8.75,
-        4.5,
-        2.5,
-        .08,
-        glass
-    );
-
-}
-
-
-/* =========================================================
-   MEUBLES
-========================================================= */
-
-function drawObjects() {
-
-    const sorted =
-        [...objects].sort(
-            (a,b) =>
-                b.z - a.z
-        );
-
-
-    for(const obj of sorted) {
-
-        box(
-            obj.x,
-            0,
-            obj.z,
-            obj.w,
-            obj.h,
-            obj.d,
-            obj.color
-        );
-
-
-        /* détails du lit */
-
-        if(obj.name === "Lit") {
-
-            box(
-                obj.x,
-                1.4,
-                obj.z + 1,
-                obj.w - .3,
-                .18,
-                3,
-                "#819aa0"
-            );
-
-            box(
-                obj.x - 1.2,
-                1.5,
-                obj.z - 1.8,
-                1.6,
-                .22,
-                .9,
-                "#ffffff"
-            );
-
-            box(
-                obj.x + 1.2,
-                1.5,
-                obj.z - 1.8,
-                1.6,
-                .22,
-                .9,
-                "#ffffff"
-            );
-
-        }
-
-
-        /* détails canapé */
-
-        if(obj.name === "Canapé") {
-
-            box(
-                obj.x,
-                1.7,
-                obj.z - .7,
-                obj.w,
-                1.5,
-                .35,
-                obj.color
-            );
-
-        }
-
-
-        /* table */
-
-        if(obj.name === "Table basse") {
-
-            for(
-                let i = -1;
-                i <= 1;
-                i += 2
-            ) {
-
-                for(
-                    let j = -1;
-                    j <= 1;
-                    j += 2
-                ) {
-
-                    box(
-                        obj.x + i * 1.2,
-                        0,
-                        obj.z + j * .5,
-                        .15,
-                        1,
-                        .15,
-                        "#704625"
-                    );
-
-                }
-
-            }
-
-        }
-
-
-        /* plantes */
-
-        if(obj.name === "Plante") {
-
-            box(
-                obj.x,
-                obj.h,
-                obj.z,
-                .7,
-                1.3,
-                .7,
-                "#3f7048"
-            );
-
-        }
-
-
-        /* lampe */
-
-        if(obj.name === "Lampe") {
-
-            box(
-                obj.x,
-                0,
-                obj.z,
-                .12,
-                2.3,
-                .12,
-                "#333333"
-            );
-
-            box(
-                obj.x,
-                2.3,
-                obj.z,
-                1.1,
-                .7,
-                1.1,
-                "#f0d59a"
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   TEXTE DES PIÈCES
-========================================================= */
-
-function drawRoomLabels() {
-
-    drawText(
-        "SALON",
-        -3,
-        0,
-        4
-    );
-
-    drawText(
-        "CUISINE",
-        -6,
-        0,
-        -5
-    );
-
-    drawText(
-        "CHAMBRE",
-        6,
-        0,
-        5
-    );
-
-    drawText(
-        "SALLE DE BAIN",
-        7,
-        0,
-        -5.5
-    );
-
-}
-
-
-function drawText(
-    text,
-    x,
-    y,
-    z
-) {
-
-    const p =
-        project(
-            x,
-            y + .03,
-            z
-        );
-
-    ctx.save();
-
-    ctx.font =
-        "900 13px Arial";
-
-    ctx.textAlign =
-        "center";
-
-    ctx.fillStyle =
-        night
-        ? "rgba(255,255,255,.6)"
-        : "rgba(40,55,65,.42)";
-
-    ctx.fillText(
-        text,
-        p.x,
-        p.y
-    );
-
-    ctx.restore();
-
-}
-
-
-/* =========================================================
-   CIEL
-========================================================= */
-
-function drawBackground() {
-
-    if(night) {
-
-        ctx.fillStyle =
-            "#101827";
-
-    } else {
-
-        ctx.fillStyle =
-            "#b9d7e5";
-
-    }
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-}
-
-
-/* =========================================================
-   OMBRE
-========================================================= */
-
-function drawShadow() {
-
-    ctx.save();
-
-    ctx.fillStyle =
-        night
-        ? "rgba(0,0,0,.35)"
-        : "rgba(0,0,0,.12)";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        width/2,
-        height*.73,
-        width*.33 * zoom,
-        35 * zoom,
-        0,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-    ctx.restore();
-
-}
-
-
-/* =========================================================
-   RENDU
-========================================================= */
-
-function render() {
-
-    drawBackground();
-
-    drawShadow();
-
-    drawFloor();
-
-    drawWalls();
-
-    drawWindows();
-
-    drawObjects();
-
-    drawRoomLabels();
-
-    requestAnimationFrame(
-        render
-    );
-
-}
-
-
-/* =========================================================
-   ROTATION AU DOIGT
-========================================================= */
-
-canvas.addEventListener(
-    "pointerdown",
-    function(e) {
-
-        dragging = true;
-
-        lastX =
-            e.clientX;
-
-        lastY =
-            e.clientY;
-
-        canvas.setPointerCapture(
-            e.pointerId
-        );
-
-    }
-);
-
-
-canvas.addEventListener(
-    "pointermove",
-    function(e) {
-
-        if(!dragging)
-            return;
-
-        const dx =
-            e.clientX - lastX;
-
-        rotation +=
-            dx * .008;
-
-        lastX =
-            e.clientX;
-
-        lastY =
-            e.clientY;
-
-    }
-);
-
-
-canvas.addEventListener(
-    "pointerup",
-    function() {
-
-        dragging = false;
-
-    }
-);
-
-
-canvas.addEventListener(
-    "pointercancel",
-    function() {
-
-        dragging = false;
-
-    }
-);
-
-
-/* =========================================================
-   ZOOM SOURIS
-========================================================= */
-
-canvas.addEventListener(
-    "wheel",
-    function(e) {
-
-        e.preventDefault();
-
-        zoom +=
-            e.deltaY < 0
-            ? .08
-            : -.08;
-
-        zoom =
-            Math.max(
-                .55,
-                Math.min(
-                    1.8,
-                    zoom
-                )
-            );
-
-    },
-    {passive:false}
-);
-
-
-/* =========================================================
-   ZOOM BOUTONS
-========================================================= */
-
-document
-.getElementById("plus")
-.addEventListener(
-    "click",
-    function() {
-
-        zoom += .15;
-
-        zoom =
-            Math.min(
-                1.8,
-                zoom
-            );
-
-    }
-);
-
-
-document
-.getElementById("minus")
-.addEventListener(
-    "click",
-    function() {
-
-        zoom -= .15;
-
-        zoom =
-            Math.max(
-                .55,
-                zoom
-            );
-
-    }
-);
-
-
-/* =========================================================
-   JOUR / NUIT
-========================================================= */
-
-document
-.getElementById("day")
-.addEventListener(
-    "click",
-    function() {
-
-        night =
-            !night;
-
-        this.textContent =
-            night
-            ? "☀️"
-            : "🌙";
-
-    }
-);
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-document
-.getElementById("reset")
-.addEventListener(
-    "click",
-    function() {
-
-        rotation = -.55;
-
-        zoom = 1;
-
-        night = false;
-
-        document
-        .getElementById("day")
-        .textContent = "☀️";
-
-    }
-);
-
-
-/* =========================================================
-   TOUCH / CLIC OBJETS
-========================================================= */
-
-canvas.addEventListener(
-    "click",
-    function(e) {
-
-        /* éviter le clic après déplacement */
-
-        const x =
-            e.clientX;
-
-        const y =
-            e.clientY;
-
-
-        let closest = null;
-
-        let distance = 99999;
-
-
-        for(const obj of objects) {
-
-            const p =
-                project(
-                    obj.x,
-                    obj.h * .6,
-                    obj.z
-                );
-
-            const dx =
-                x - p.x;
-
-            const dy =
-                y - p.y;
-
-            const d =
-                Math.sqrt(
-                    dx*dx +
-                    dy*dy
-                );
-
-
-            if(
-                d < distance &&
-                d < 90
-            ) {
-
-                closest =
-                    obj;
-
-                distance =
-                    d;
-
-            }
-
-        }
-
-
-        if(closest) {
-
-            roomLabel.textContent =
-                closest.name;
-
-            info.innerHTML =
-                "<strong>" +
-                closest.name +
-                "</strong><br>" +
-                closest.description;
-
-            info.style.opacity =
-                "1";
-
-
-            clearTimeout(
-                window.infoTimeout
-            );
-
-
-            window.infoTimeout =
-                setTimeout(
-                    function() {
-
-                        info.style.opacity =
-                            "0";
-
-                    },
-                    3000
-                );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   DÉMARRAGE
-========================================================= */
-
-try {
-
-    render();
-
-} catch(error) {
-
-    errorBox.style.display =
-        "block";
-
-    errorBox.innerHTML =
-        "<strong>Erreur :</strong><br><br>" +
-        error.message;
-
-}
-
-</script>
 
 </body>
 </html>
