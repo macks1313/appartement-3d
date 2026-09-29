@@ -2,1526 +2,1684 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
-<title>Appartement–3D</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Appartement 3D</title>
 
 <style>
 *{
     box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+    margin:0;
+    padding:0;
 }
 
 html,body{
-    margin:0;
     width:100%;
     height:100%;
     overflow:hidden;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:#11151c;
+    background:#111b18;
 }
 
 body{
-    color:#fff;
+    color:white;
 }
 
-/* =========================================================
-   SCENE
-========================================================= */
-
-#scene{
-    position:fixed;
-    inset:0;
+#app{
+    position:relative;
+    width:100vw;
+    height:100vh;
     overflow:hidden;
-    background:
-        linear-gradient(
-            180deg,
-            #182334 0%,
-            #684d4b 42%,
-            #d98a55 67%,
-            #f0c28a 100%
-        );
+    background:#c9a27b;
 }
 
-/* ciel */
-
-.sky{
-    position:absolute;
-    inset:0 0 42% 0;
-    background:
-        radial-gradient(
-            circle at 75% 70%,
-            rgba(255,213,133,.95) 0 5%,
-            rgba(255,166,88,.35) 12%,
-            transparent 35%
-        ),
-        linear-gradient(
-            180deg,
-            #18202d,
-            #39485a 45%,
-            #b86754 78%,
-            #e7a269
-        );
-}
-
-/* soleil */
-
-.sun{
-    position:absolute;
-    width:150px;
-    height:150px;
-    right:19%;
-    top:24%;
-    border-radius:50%;
-    background:#ffd995;
-    box-shadow:
-        0 0 35px #ffca75,
-        0 0 100px rgba(255,170,80,.6);
-    opacity:.95;
-}
-
-/* montagnes */
-
-.mountains{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:38%;
-    height:24%;
-}
-
-.mountain{
-    position:absolute;
-    bottom:0;
-    width:55%;
-    height:100%;
-    background:#293743;
-    clip-path:polygon(
-        0 100%,
-        20% 54%,
-        30% 69%,
-        43% 32%,
-        57% 67%,
-        72% 42%,
-        100% 100%
-    );
-    opacity:.8;
-}
-
-.mountain:nth-child(1){
-    left:-10%;
-}
-
-.mountain:nth-child(2){
-    right:-10%;
-    transform:scaleX(-1);
-    opacity:.65;
-}
-
-.mountain:nth-child(3){
-    left:27%;
-    bottom:-8%;
-    transform:scale(.75);
-    opacity:.45;
-}
-
-/* =========================================================
-   APPARTEMENT
-========================================================= */
-
-.apartment{
-    position:absolute;
-    left:50%;
-    top:52%;
-    width:min(1100px,100vw);
-    height:min(680px,72vh);
-    transform:translate(-50%,-50%);
-    perspective:1100px;
-}
-
-/* sol */
-
-.floor{
-    position:absolute;
-    left:4%;
-    right:4%;
-    bottom:4%;
-    height:48%;
-    background:
-        repeating-linear-gradient(
-            90deg,
-            rgba(90,51,29,.08) 0 2px,
-            transparent 2px 120px
-        ),
-        linear-gradient(
-            145deg,
-            #a87851,
-            #d3a071 45%,
-            #8c5e40
-        );
-    transform:rotateX(58deg);
-    transform-origin:bottom;
-    border-radius:8px;
-    box-shadow:0 -20px 60px rgba(0,0,0,.3);
-}
-
-/* mur gauche */
-
-.wall-left{
-    position:absolute;
-    left:4%;
-    top:5%;
-    width:24%;
-    height:65%;
-    background:
-        linear-gradient(
-            90deg,
-            #514237,
-            #766051
-        );
-    transform:skewY(-10deg);
-    transform-origin:right;
-    box-shadow:inset -20px 0 30px rgba(0,0,0,.3);
-}
-
-/* mur droit */
-
-.wall-right{
-    position:absolute;
-    right:4%;
-    top:5%;
-    width:24%;
-    height:65%;
-    background:
-        linear-gradient(
-            90deg,
-            #766051,
-            #40352f
-        );
-    transform:skewY(10deg);
-    transform-origin:left;
-}
-
-/* mur arrière */
-
-.back-wall{
-    position:absolute;
-    left:20%;
-    right:20%;
-    top:5%;
-    height:60%;
-    background:
-        linear-gradient(
-            180deg,
-            #d7b998,
-            #c5a383
-        );
-    box-shadow:
-        inset 0 -20px 50px rgba(70,40,25,.22);
-}
-
-/* =========================================================
-   BAIE VITRÉE
-========================================================= */
-
-.window{
-    position:absolute;
-    left:32%;
-    top:10%;
-    width:38%;
-    height:54%;
-    border:12px solid #342c28;
-    background:
-        linear-gradient(
-            180deg,
-            #43596b,
-            #e19a68 72%,
-            #ffcc8c
-        );
-    box-shadow:
-        0 15px 35px rgba(0,0,0,.45);
-    overflow:hidden;
-}
-
-.window:before{
-    content:"";
-    position:absolute;
-    left:50%;
-    top:0;
-    bottom:0;
-    width:8px;
-    background:#3d322c;
-}
-
-.window:after{
-    content:"";
-    position:absolute;
-    left:0;
-    right:0;
-    top:58%;
-    height:7px;
-    background:#3d322c;
-}
-
-/* balcon */
-
-.balcony{
-    position:absolute;
-    left:29%;
-    right:29%;
-    top:58%;
-    height:7%;
-    background:
-        repeating-linear-gradient(
-            90deg,
-            transparent 0 32px,
-            #282625 32px 37px
-        );
-    border-top:7px solid #282625;
-}
-
-/* =========================================================
-   DÉCORATIONS
-========================================================= */
-
-.poster{
-    position:absolute;
-    width:90px;
-    height:115px;
-    background:#d8c2a5;
-    border:6px solid #3d3028;
-    box-shadow:5px 8px 15px rgba(0,0,0,.25);
-}
-
-.poster.one{
-    left:22%;
-    top:20%;
-    transform:rotate(-4deg);
-}
-
-.poster.two{
-    left:26%;
-    top:18%;
-    transform:rotate(5deg) scale(.8);
-}
-
-.poster span{
-    display:block;
-    text-align:center;
-    margin-top:32px;
-    font-family:Georgia,serif;
-    font-size:15px;
-    color:#34271f;
-}
-
-/* =========================================================
-   LIT
-========================================================= */
-
-.bed{
-    position:absolute;
-    left:39%;
-    bottom:17%;
-    width:39%;
-    height:32%;
-    transform:rotate(-3deg);
-    z-index:8;
-}
-
-.bed-frame{
-    position:absolute;
-    inset:12% 0 0;
-    background:#4a3025;
-    border-radius:14px;
-    box-shadow:0 15px 25px rgba(0,0,0,.35);
-}
-
-.mattress{
-    position:absolute;
-    left:2%;
-    right:2%;
-    top:3%;
-    height:63%;
-    background:
-        linear-gradient(
-            135deg,
-            #f4e8d4,
-            #d8c7af
-        );
-    border-radius:16px;
-    box-shadow:
-        inset 0 -8px 10px rgba(90,50,30,.15);
-}
-
-.blanket{
-    position:absolute;
-    right:2%;
-    bottom:10%;
-    width:67%;
-    height:48%;
-    border-radius:12px;
-    background:
-        linear-gradient(
-            135deg,
-            #34463e,
-            #59685b
-        );
-    box-shadow:0 7px 12px rgba(0,0,0,.25);
-}
-
-/* oreillers */
-
-.pillow{
-    position:absolute;
-    top:9%;
-    width:25%;
-    height:25%;
-    background:#fff9ee;
-    border-radius:16px;
-    box-shadow:0 5px 8px rgba(0,0,0,.15);
-}
-
-.pillow.left{
-    left:12%;
-}
-
-.pillow.right{
-    left:39%;
-}
-
-/* =========================================================
-   FEMME
-========================================================= */
-
-.woman{
-    position:absolute;
-    left:30%;
-    bottom:18%;
-    width:34%;
-    height:48%;
-    z-index:15;
-    cursor:pointer;
-    filter:drop-shadow(0 12px 8px rgba(0,0,0,.25));
-    transition:transform .3s;
-}
-
-.woman:hover{
-    transform:scale(1.02);
-}
-
-/* cheveux */
-
-.hair{
-    position:absolute;
-    left:31%;
-    top:6%;
-    width:30%;
-    height:32%;
-    background:
-        radial-gradient(
-            circle at 50% 35%,
-            #2b1713,
-            #120c0c 70%
-        );
-    border-radius:48% 48% 42% 42%;
-    z-index:4;
-}
-
-.hair:after{
-    content:"";
-    position:absolute;
-    left:-20%;
-    right:-20%;
-    top:40%;
-    height:70%;
-    background:#17100f;
-    border-radius:50%;
-}
-
-/* tête */
-
-.head{
-    position:absolute;
-    left:39%;
-    top:10%;
-    width:19%;
-    height:18%;
-    border-radius:50%;
-    background:
-        linear-gradient(
-            145deg,
-            #f2b58e,
-            #c97d61
-        );
-    z-index:5;
-}
-
-/* cou */
-
-.neck{
-    position:absolute;
-    left:43%;
-    top:24%;
-    width:11%;
-    height:12%;
-    background:#c98265;
-    z-index:3;
-}
-
-/* dos / corps */
-
-.body{
-    position:absolute;
-    left:26%;
-    top:28%;
-    width:47%;
-    height:47%;
-    border-radius:45% 45% 35% 35%;
-    background:
-        linear-gradient(
-            120deg,
-            #c98362,
-            #e0a17d 55%,
-            #ad6c55
-        );
-    transform:rotate(-9deg);
-}
-
-/* haut noir */
+/* =========================
+   INTERFACE
+========================= */
 
 .top{
     position:absolute;
-    left:38%;
-    top:29%;
-    width:29%;
-    height:28%;
-    background:#171617;
-    clip-path:polygon(
-        20% 0,
-        80% 0,
-        100% 100%,
-        0 100%
-    );
-    z-index:8;
-}
-
-/* bras */
-
-.arm{
-    position:absolute;
-    width:10%;
-    height:38%;
-    background:#d99675;
-    border-radius:20px;
-    z-index:10;
-}
-
-.arm.left{
-    left:26%;
-    top:34%;
-    transform:rotate(42deg);
-}
-
-.arm.right{
-    right:24%;
-    top:33%;
-    transform:rotate(-35deg);
-}
-
-/* jambes */
-
-.leg{
-    position:absolute;
-    height:15%;
-    width:50%;
-    background:
-        linear-gradient(
-            135deg,
-            #d99573,
-            #bd745c
-        );
-    border-radius:50px;
-    bottom:7%;
-    z-index:5;
-}
-
-.leg.one{
-    left:18%;
-    transform:rotate(8deg);
-}
-
-.leg.two{
-    left:42%;
-    transform:rotate(-13deg);
-}
-
-/* =========================================================
-   CHAT
-========================================================= */
-
-.cat{
-    position:absolute;
-    right:29%;
-    bottom:25%;
-    width:120px;
-    height:105px;
     z-index:20;
-    cursor:pointer;
-    transition:
-        transform .4s,
-        bottom .5s;
-}
-
-.cat.jump{
-    animation:catJump .7s ease;
-}
-
-@keyframes catJump{
-    0%{transform:translateY(0)}
-    40%{transform:translateY(-45px) rotate(-4deg)}
-    70%{transform:translateY(-20px) rotate(4deg)}
-    100%{transform:translateY(0)}
-}
-
-.cat-body{
-    position:absolute;
-    left:20px;
-    bottom:8px;
-    width:75px;
-    height:58px;
-    background:#4a3b36;
-    border-radius:50% 50% 40% 45%;
-}
-
-.cat-head{
-    position:absolute;
-    left:63px;
-    top:15px;
-    width:48px;
-    height:48px;
-    background:#58463f;
-    border-radius:50%;
-}
-
-.cat-ear{
-    position:absolute;
-    top:-11px;
-    width:19px;
-    height:24px;
-    background:#58463f;
-    clip-path:polygon(50% 0,100% 100%,0 100%);
-}
-
-.cat-ear.left{
-    left:4px;
-}
-
-.cat-ear.right{
-    right:4px;
-}
-
-.cat-eye{
-    position:absolute;
-    top:20px;
-    width:7px;
-    height:7px;
-    background:#e4bd63;
-    border-radius:50%;
-}
-
-.cat-eye.left{
-    left:12px;
-}
-
-.cat-eye.right{
-    right:12px;
-}
-
-.cat-tail{
-    position:absolute;
-    left:5px;
-    bottom:45px;
-    width:75px;
-    height:15px;
-    border-radius:20px;
-    border-top:9px solid #4a3b36;
-    transform:rotate(-30deg);
-}
-
-/* =========================================================
-   PLANTES
-========================================================= */
-
-.plant{
-    position:absolute;
-    z-index:14;
-    cursor:pointer;
-}
-
-.plant.one{
-    left:11%;
-    bottom:16%;
-}
-
-.plant.two{
-    right:10%;
-    bottom:15%;
-}
-
-.pot{
-    width:60px;
-    height:55px;
-    background:
-        linear-gradient(
-            90deg,
-            #8b4930,
-            #bd7652,
-            #79402e
-        );
-    clip-path:polygon(
-        10% 0,
-        90% 0,
-        78% 100%,
-        22% 100%
-    );
-}
-
-.leaves{
-    position:absolute;
-    left:-40px;
-    bottom:40px;
-    width:140px;
-    height:160px;
-}
-
-.leaf{
-    position:absolute;
-    width:45px;
-    height:80px;
-    background:
-        linear-gradient(
-            120deg,
-            #173c2c,
-            #49734e
-        );
-    border-radius:100% 0 100% 0;
-    transform-origin:bottom;
-}
-
-.leaf:nth-child(1){
-    left:45px;
-    top:0;
-    transform:rotate(0deg);
-}
-
-.leaf:nth-child(2){
-    left:10px;
-    top:35px;
-    transform:rotate(-38deg);
-}
-
-.leaf:nth-child(3){
-    left:80px;
-    top:30px;
-    transform:rotate(38deg);
-}
-
-.leaf:nth-child(4){
-    left:45px;
-    top:65px;
-    transform:rotate(-10deg);
-}
-
-/* =========================================================
-   BUREAU / PC
-========================================================= */
-
-.desk{
-    position:absolute;
-    right:11%;
-    bottom:18%;
-    width:24%;
-    height:12%;
-    background:#5c3929;
-    border-radius:8px;
-    z-index:13;
-    box-shadow:0 12px 15px rgba(0,0,0,.3);
-}
-
-.desk:before,
-.desk:after{
-    content:"";
-    position:absolute;
-    bottom:-100%;
-    width:9px;
-    height:100%;
-    background:#38261d;
-}
-
-.desk:before{
-    left:12%;
-}
-
-.desk:after{
-    right:12%;
-}
-
-.laptop{
-    position:absolute;
-    left:22%;
-    top:-62px;
-    width:58%;
-    height:60px;
-    background:#151719;
-    border:5px solid #25282a;
-    border-radius:6px;
-    z-index:16;
-    transform:skewX(-4deg);
-}
-
-.laptop:after{
-    content:"";
-    position:absolute;
-    left:-12%;
-    right:-12%;
-    bottom:-9px;
-    height:8px;
-    background:#25282a;
-    border-radius:4px;
-}
-
-/* =========================================================
-   LAMPE
-========================================================= */
-
-.lamp{
-    position:absolute;
-    left:17%;
-    bottom:17%;
-    width:70px;
-    height:210px;
-    z-index:17;
-}
-
-.lamp-shade{
-    position:absolute;
-    top:0;
-    left:0;
-    width:70px;
-    height:55px;
-    background:
-        linear-gradient(
-            180deg,
-            #f2d08c,
-            #b88345
-        );
-    clip-path:polygon(15% 0,85% 0,100% 100%,0 100%);
-    box-shadow:0 0 35px rgba(255,200,100,.45);
-}
-
-.lamp-pole{
-    position:absolute;
-    top:50px;
-    left:32px;
-    width:7px;
-    height:145px;
-    background:#25211e;
-}
-
-/* =========================================================
-   PETITS OBJETS
-========================================================= */
-
-.book{
-    position:absolute;
-    width:80px;
-    height:18px;
-    background:#38251e;
-    z-index:30;
-    border-radius:3px;
-}
-
-.book.one{
-    right:15%;
-    bottom:27%;
-    transform:rotate(-8deg);
-}
-
-.book.two{
-    right:16%;
-    bottom:29%;
-    transform:rotate(4deg);
-    background:#806147;
-}
-
-.candle{
-    position:absolute;
-    width:18px;
-    height:38px;
-    background:#f2d8b2;
-    border-radius:5px;
-    z-index:30;
-}
-
-.candle.one{
-    right:21%;
-    bottom:29%;
-}
-
-.candle:after{
-    content:"";
-    position:absolute;
-    width:9px;
-    height:14px;
-    left:4px;
-    top:-11px;
-    background:#ffbf62;
-    border-radius:50% 50% 50% 0;
-    transform:rotate(45deg);
-    box-shadow:0 0 15px #ffad42;
-}
-
-/* =========================================================
-   HUD
-========================================================= */
-
-.hud{
-    position:fixed;
-    z-index:100;
-    top:22px;
-    left:22px;
-    right:22px;
+    top:16px;
+    left:16px;
+    right:16px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    pointer-events:none;
-}
-
-.logo,
-.room{
-    background:rgba(255,255,255,.94);
-    color:#171d25;
-    border-radius:22px;
-    padding:16px 24px;
-    box-shadow:0 12px 35px rgba(0,0,0,.2);
-    font-weight:900;
-    font-size:20px;
 }
 
 .logo{
-    font-size:22px;
+    background:rgba(248,244,235,.95);
+    color:#19251f;
+    padding:14px 20px;
+    border-radius:18px;
+    font-size:18px;
+    font-weight:900;
+    box-shadow:0 10px 30px #0004;
 }
 
-.controls{
-    position:fixed;
-    z-index:100;
-    right:22px;
-    bottom:105px;
+.buttons{
     display:flex;
-    flex-direction:column;
-    gap:12px;
+    gap:6px;
+    background:#f8f4ebee;
+    padding:5px;
+    border-radius:17px;
 }
 
-.btn{
-    width:58px;
-    height:58px;
-    border:none;
-    border-radius:19px;
-    background:rgba(255,255,255,.94);
-    color:#18202a;
-    font-size:28px;
-    box-shadow:0 10px 25px rgba(0,0,0,.22);
+.buttons button{
+    border:0;
+    padding:10px 14px;
+    border-radius:12px;
+    background:transparent;
+    color:#17231d;
+    font-weight:800;
     cursor:pointer;
 }
 
-.btn:active{
-    transform:scale(.9);
+.buttons button.active{
+    background:#17251f;
+    color:white;
 }
 
-/* =========================================================
-   INFO
-========================================================= */
+/* =========================
+   SCENE
+========================= */
 
-.info{
-    position:fixed;
-    z-index:200;
+#room{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    transition:.7s;
+}
+
+#room.night{
+    filter:brightness(.58) saturate(.85);
+}
+
+#room.zoom{
+    transform:scale(1.06);
+}
+
+/* =========================
+   OUTILS
+========================= */
+
+.tools{
+    position:absolute;
+    right:18px;
+    top:105px;
+    z-index:30;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.tools button{
+    width:52px;
+    height:52px;
+    border:0;
+    border-radius:17px;
+    background:#f8f4ebee;
+    font-size:24px;
+    cursor:pointer;
+    box-shadow:0 8px 25px #0004;
+}
+
+/* =========================
+   OBJETS INTERACTIFS
+========================= */
+
+.hotspot{
+    position:absolute;
+    z-index:15;
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    border:2px solid white;
+    background:#17251fcc;
+    color:white;
+    cursor:pointer;
+    font-size:23px;
+    box-shadow:
+        0 0 0 7px #ffffff1c,
+        0 10px 25px #0005;
+    animation:pulse 2.3s infinite;
+    transition:.2s;
+}
+
+.hotspot:hover{
+    transform:scale(1.18);
+    background:#d5ae63;
+    color:#17251f;
+}
+
+.coffee{left:27%;top:53%}
+.cat{left:67%;top:67%}
+.plant{left:81%;top:47%}
+.camera{left:52%;top:72%}
+.window{left:65%;top:30%}
+.music{left:20%;top:63%}
+
+@keyframes pulse{
+    0%{box-shadow:0 0 0 0 #fff5}
+    70%{box-shadow:0 0 0 13px #fff0}
+    100%{box-shadow:0 0 0 0 #fff0}
+}
+
+/* =========================
+   MESSAGE
+========================= */
+
+.help{
+    position:absolute;
+    bottom:18px;
     left:50%;
-    bottom:30px;
-    transform:translateX(-50%) translateY(20px);
-    width:min(470px,88%);
-    background:rgba(255,255,255,.96);
-    color:#17202a;
-    padding:20px 25px;
-    border-radius:24px;
-    box-shadow:0 15px 45px rgba(0,0,0,.3);
-    text-align:center;
+    transform:translateX(-50%);
+    z-index:20;
+    background:#f8f4ebf2;
+    color:#17251f;
+    padding:13px 19px;
+    border-radius:17px;
+    font-weight:800;
+    white-space:nowrap;
+    box-shadow:0 10px 30px #0004;
+}
+
+/* =========================
+   PANNEAU
+========================= */
+
+.panel{
+    position:absolute;
+    right:20px;
+    bottom:20px;
+    z-index:100;
+    width:min(390px,calc(100% - 40px));
+    padding:23px;
+    border-radius:25px;
+    background:#14211ced;
+    border:1px solid #ffffff2b;
+    box-shadow:0 25px 70px #0009;
+    backdrop-filter:blur(18px);
+    transform:translateY(140%);
+    transition:.4s;
+}
+
+.panel.open{
+    transform:translateY(0);
+}
+
+.panel h2{
+    margin-bottom:9px;
+    font-size:23px;
+}
+
+.panel p{
+    color:#d8ded9;
+    line-height:1.5;
+    margin-bottom:18px;
+}
+
+.close{
+    position:absolute;
+    top:9px;
+    right:13px;
+    border:0;
+    background:none;
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.actions button{
+    border:1px solid #ffffff25;
+    background:#293930;
+    color:white;
+    padding:10px 14px;
+    border-radius:12px;
+    font-weight:750;
+    cursor:pointer;
+}
+
+.actions button:hover{
+    background:#d5ae63;
+    color:#17251f;
+}
+
+/* =========================
+   NOTIFICATION
+========================= */
+
+.toast{
+    position:absolute;
+    z-index:200;
+    top:90px;
+    left:50%;
+    transform:translate(-50%,-20px);
     opacity:0;
+    background:#f8f4eb;
+    color:#17251f;
+    padding:12px 17px;
+    border-radius:14px;
+    font-weight:850;
     pointer-events:none;
     transition:.3s;
 }
 
-.info.show{
+.toast.show{
     opacity:1;
-    transform:translateX(-50%) translateY(0);
+    transform:translate(-50%,0);
 }
 
-.info-title{
-    font-size:22px;
-    font-weight:900;
-    margin-bottom:6px;
-}
-
-.info-text{
-    font-size:15px;
-    font-weight:600;
-    color:#58616b;
-}
-
-/* =========================================================
-   MESSAGE
-========================================================= */
-
-.hint{
-    position:fixed;
-    z-index:100;
-    left:50%;
-    bottom:115px;
-    transform:translateX(-50%);
-    background:rgba(255,255,255,.9);
-    color:#485562;
-    padding:12px 20px;
-    border-radius:18px;
-    font-size:14px;
-    font-weight:800;
-    white-space:nowrap;
-}
-
-/* =========================================================
+/* =========================
    MOBILE
-========================================================= */
+========================= */
 
 @media(max-width:700px){
 
-    .apartment{
-        width:950px;
-        height:650px;
-        left:50%;
-        top:54%;
-        transform:translate(-50%,-50%) scale(.78);
-    }
-
-    .hud{
-        top:14px;
-        left:14px;
-        right:14px;
+    .top{
+        top:9px;
+        left:9px;
+        right:9px;
     }
 
     .logo{
-        font-size:17px;
-        padding:14px 17px;
+        font-size:13px;
+        padding:10px 12px;
     }
 
-    .room{
-        font-size:16px;
-        padding:14px 17px;
+    .buttons button{
+        font-size:11px;
+        padding:8px 8px;
     }
 
-    .controls{
-        right:14px;
-        bottom:120px;
+    .tools{
+        right:9px;
+        top:88px;
     }
 
-    .btn{
-        width:55px;
-        height:55px;
+    .tools button{
+        width:46px;
+        height:46px;
     }
 
-    .hint{
+    .hotspot{
+        width:45px;
+        height:45px;
+        font-size:19px;
+    }
+
+    .help{
+        font-size:12px;
         max-width:90%;
         overflow:hidden;
         text-overflow:ellipsis;
-        bottom:95px;
     }
 }
 </style>
 </head>
 
+
 <body>
 
-<div id="scene">
+<div id="app">
 
-    <div class="sky"></div>
-    <div class="sun"></div>
+<!-- =====================================================
+     INTERFACE
+====================================================== -->
 
-    <div class="mountains">
-        <div class="mountain"></div>
-        <div class="mountain"></div>
-        <div class="mountain"></div>
-    </div>
-
-    <div class="apartment">
-
-        <div class="floor"></div>
-        <div class="wall-left"></div>
-        <div class="wall-right"></div>
-        <div class="back-wall"></div>
-
-        <div class="window"></div>
-        <div class="balcony"></div>
-
-        <div class="poster one">
-            <span>GOOD<br>VIBES</span>
-        </div>
-
-        <div class="poster two">
-            <span>HOME</span>
-        </div>
-
-        <!-- LIT -->
-
-        <div class="bed">
-
-            <div class="bed-frame"></div>
-
-            <div class="mattress"></div>
-
-            <div class="blanket"></div>
-
-            <div class="pillow left"></div>
-            <div class="pillow right"></div>
-
-        </div>
-
-        <!-- FEMME -->
-
-        <div
-            class="woman"
-            onclick="womanClick()"
-            title="Cliquer"
-        >
-
-            <div class="hair"></div>
-            <div class="head"></div>
-            <div class="neck"></div>
-            <div class="body"></div>
-            <div class="top"></div>
-
-            <div class="arm left"></div>
-            <div class="arm right"></div>
-
-            <div class="leg one"></div>
-            <div class="leg two"></div>
-
-        </div>
-
-        <!-- CHAT -->
-
-        <div
-            class="cat"
-            id="cat"
-            onclick="catClick()"
-        >
-
-            <div class="cat-tail"></div>
-            <div class="cat-body"></div>
-
-            <div class="cat-head">
-
-                <div class="cat-ear left"></div>
-                <div class="cat-ear right"></div>
-
-                <div class="cat-eye left"></div>
-                <div class="cat-eye right"></div>
-
-            </div>
-
-        </div>
-
-        <!-- PLANTE 1 -->
-
-        <div
-            class="plant one"
-            onclick="plantClick()"
-        >
-
-            <div class="leaves">
-
-                <div class="leaf"></div>
-                <div class="leaf"></div>
-                <div class="leaf"></div>
-                <div class="leaf"></div>
-
-            </div>
-
-            <div class="pot"></div>
-
-        </div>
-
-        <!-- PLANTE 2 -->
-
-        <div
-            class="plant two"
-            onclick="plantClick()"
-        >
-
-            <div class="leaves">
-
-                <div class="leaf"></div>
-                <div class="leaf"></div>
-                <div class="leaf"></div>
-                <div class="leaf"></div>
-
-            </div>
-
-            <div class="pot"></div>
-
-        </div>
-
-        <!-- BUREAU -->
-
-        <div class="desk">
-
-            <div
-                class="laptop"
-                onclick="computerClick()"
-            ></div>
-
-        </div>
-
-        <!-- LAMPE -->
-
-        <div
-            class="lamp"
-            onclick="lampClick()"
-        >
-
-            <div class="lamp-shade"></div>
-            <div class="lamp-pole"></div>
-
-        </div>
-
-        <div class="book one"></div>
-        <div class="book two"></div>
-
-        <div class="candle one"></div>
-
-    </div>
-
-</div>
-
-
-<!-- HUD -->
-
-<div class="hud">
+<div class="top">
 
     <div class="logo">
         🏠 MON APPARTEMENT
     </div>
 
-    <div class="room">
-        Salon
+    <div class="buttons">
+
+        <button class="active" onclick="setScene('day',this)">
+            ☀️ Salon
+        </button>
+
+        <button onclick="setScene('magic',this)">
+            ✨ Magique
+        </button>
+
+        <button onclick="setScene('night',this)">
+            🌙 Nuit
+        </button>
+
     </div>
 
 </div>
 
 
-<!-- CONTROLES -->
+<!-- =====================================================
+     PIÈCE DESSINÉE DIRECTEMENT EN SVG
+====================================================== -->
 
-<div class="controls">
+<svg id="room"
+     viewBox="0 0 1400 900"
+     preserveAspectRatio="xMidYMid slice"
+     xmlns="http://www.w3.org/2000/svg">
 
-    <button
-        class="btn"
-        onclick="zoom(1.1)"
-    >
+    <defs>
+
+        <!-- lumière fenêtre -->
+
+        <linearGradient id="sky"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1">
+
+            <stop offset="0%" stop-color="#75b9df"/>
+            <stop offset="55%" stop-color="#e8b083"/>
+            <stop offset="100%" stop-color="#ef9b68"/>
+
+        </linearGradient>
+
+
+        <!-- sol -->
+
+        <linearGradient id="floor"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1">
+
+            <stop offset="0%" stop-color="#bd8f67"/>
+            <stop offset="100%" stop-color="#d6aa7b"/>
+
+        </linearGradient>
+
+
+        <!-- mur -->
+
+        <linearGradient id="wall"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1">
+
+            <stop offset="0%" stop-color="#e3c7a7"/>
+            <stop offset="100%" stop-color="#cba47e"/>
+
+        </linearGradient>
+
+
+        <!-- lumière chaude -->
+
+        <radialGradient id="lampGlow">
+
+            <stop offset="0%" stop-color="#ffe5a3" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#ffe5a3" stop-opacity="0"/>
+
+        </radialGradient>
+
+
+        <!-- ombre -->
+
+        <filter id="shadow">
+
+            <feDropShadow
+                dx="0"
+                dy="15"
+                stdDeviation="15"
+                flood-opacity=".28"/>
+
+        </filter>
+
+    </defs>
+
+
+    <!-- =================================================
+         MUR
+    ================================================== -->
+
+    <rect
+        width="1400"
+        height="900"
+        fill="url(#wall)"
+    />
+
+
+    <!-- =================================================
+         FENÊTRE
+    ================================================== -->
+
+    <rect
+        x="190"
+        y="100"
+        width="920"
+        height="520"
+        rx="3"
+        fill="#1c211f"
+        filter="url(#shadow)"
+    />
+
+    <rect
+        x="215"
+        y="125"
+        width="870"
+        height="470"
+        fill="url(#sky)"
+    />
+
+
+    <!-- montagnes -->
+
+    <path
+        d="M215 520
+           L370 370
+           L450 440
+           L575 310
+           L690 440
+           L820 330
+           L960 470
+           L1085 350
+           L1085 595
+           L215 595Z"
+        fill="#536e72"
+        opacity=".75"
+    />
+
+    <path
+        d="M215 550
+           L390 430
+           L530 500
+           L650 405
+           L800 510
+           L920 420
+           L1085 520
+           L1085 595
+           L215 595Z"
+        fill="#334e50"
+        opacity=".72"
+    />
+
+
+    <!-- lac -->
+
+    <rect
+        x="215"
+        y="510"
+        width="870"
+        height="85"
+        fill="#4e91a3"
+        opacity=".75"
+    />
+
+
+    <!-- soleil -->
+
+    <circle
+        cx="760"
+        cy="300"
+        r="55"
+        fill="#ffd27b"
+    />
+
+
+    <!-- cadres fenêtre -->
+
+    <rect
+        x="650"
+        y="125"
+        width="18"
+        height="470"
+        fill="#252722"
+    />
+
+    <rect
+        x="215"
+        y="355"
+        width="870"
+        height="18"
+        fill="#252722"
+    />
+
+
+    <!-- =================================================
+         SOL
+    ================================================== -->
+
+    <path
+        d="M0 600
+           L1400 600
+           L1400 900
+           L0 900Z"
+        fill="url(#floor)"
+    />
+
+
+    <!-- lattes -->
+
+    <g opacity=".16">
+
+        <path d="M100 600 L170 900"/>
+        <path d="M300 600 L340 900"/>
+        <path d="M520 600 L550 900"/>
+        <path d="M750 600 L760 900"/>
+        <path d="M980 600 L950 900"/>
+        <path d="M1200 600 L1140 900"/>
+
+    </g>
+
+
+    <!-- =================================================
+         TAPIS
+    ================================================== -->
+
+    <rect
+        x="470"
+        y="625"
+        width="570"
+        height="230"
+        rx="15"
+        fill="#705244"
+        transform="rotate(-2 750 740)"
+        filter="url(#shadow)"
+    />
+
+    <path
+        d="M500 680
+           H1000
+           M490 720
+           H1010
+           M500 760
+           H1000
+           M510 800
+           H990"
+        stroke="#c59b68"
+        stroke-width="5"
+        opacity=".45"
+    />
+
+
+    <!-- =================================================
+         CANAPÉ
+    ================================================== -->
+
+    <g filter="url(#shadow)">
+
+        <rect
+            x="720"
+            y="480"
+            width="420"
+            height="190"
+            rx="35"
+            fill="#e7dfcd"
+        />
+
+        <rect
+            x="760"
+            y="425"
+            width="145"
+            height="125"
+            rx="30"
+            fill="#eee7d9"
+        />
+
+        <rect
+            x="920"
+            y="425"
+            width="145"
+            height="125"
+            rx="30"
+            fill="#eee7d9"
+        />
+
+        <rect
+            x="700"
+            y="625"
+            width="40"
+            height="100"
+            fill="#513d34"
+        />
+
+        <rect
+            x="1110"
+            y="625"
+            width="40"
+            height="100"
+            fill="#513d34"
+        />
+
+    </g>
+
+
+    <!-- coussins -->
+
+    <rect
+        x="815"
+        y="520"
+        width="95"
+        height="75"
+        rx="20"
+        fill="#b98260"
+        transform="rotate(-8 860 555)"
+    />
+
+    <rect
+        x="965"
+        y="520"
+        width="95"
+        height="75"
+        rx="20"
+        fill="#557064"
+        transform="rotate(8 1010 555)"
+    />
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    <g filter="url(#shadow)">
+
+        <ellipse
+            cx="690"
+            cy="720"
+            rx="205"
+            ry="65"
+            fill="#805a3c"
+        />
+
+        <rect
+            x="670"
+            y="720"
+            width="40"
+            height="155"
+            fill="#543d2d"
+        />
+
+        <rect
+            x="545"
+            y="780"
+            width="290"
+            height="22"
+            rx="10"
+            fill="#543d2d"
+        />
+
+    </g>
+
+
+    <!-- ordinateur -->
+
+    <rect
+        x="615"
+        y="665"
+        width="125"
+        height="75"
+        rx="8"
+        fill="#222"
+    />
+
+    <rect
+        x="625"
+        y="675"
+        width="105"
+        height="55"
+        fill="#58747c"
+    />
+
+    <path
+        d="M600 740 H755 L735 750 H620Z"
+        fill="#bfc3bd"
+    />
+
+
+    <!-- tasse -->
+
+    <circle
+        cx="800"
+        cy="705"
+        r="25"
+        fill="#efe4cf"
+    />
+
+    <path
+        d="M820 700 Q850 700 842 720 Q835 735 820 725"
+        fill="none"
+        stroke="#efe4cf"
+        stroke-width="8"
+    />
+
+
+    <!-- =================================================
+         BIBLIOTHÈQUE
+    ================================================== -->
+
+    <rect
+        x="70"
+        y="350"
+        width="260"
+        height="400"
+        fill="#31463c"
+        filter="url(#shadow)"
+    />
+
+    <g fill="#d8b36a">
+
+        <rect x="95" y="390" width="100" height="18"/>
+        <rect x="205" y="380" width="90" height="18"/>
+
+        <rect x="95" y="445" width="75" height="18"/>
+        <rect x="180" y="435" width="115" height="18"/>
+
+        <rect x="95" y="500" width="110" height="18"/>
+        <rect x="215" y="490" width="80" height="18"/>
+
+        <rect x="95" y="555" width="90" height="18"/>
+        <rect x="195" y="545" width="100" height="18"/>
+
+    </g>
+
+
+    <!-- =================================================
+         PLANTE
+    ================================================== -->
+
+    <g filter="url(#shadow)">
+
+        <path
+            d="M1180 560
+               Q1120 520 1140 470
+               Q1200 500 1200 550Z"
+            fill="#315b42"
+        />
+
+        <path
+            d="M1195 555
+               Q1240 460 1280 470
+               Q1280 530 1220 580Z"
+            fill="#3e714e"
+        />
+
+        <path
+            d="M1210 560
+               Q1300 500 1340 535
+               Q1310 590 1230 600Z"
+            fill="#315b42"
+        />
+
+        <path
+            d="M1170 560
+               Q1140 480 1100 500
+               Q1100 550 1160 590Z"
+            fill="#4b8056"
+        />
+
+        <path
+            d="M1190 575
+               Q1240 420 1260 430
+               Q1270 520 1210 590Z"
+            fill="#5c9661"
+        />
+
+        <path
+            d="M1170 570
+               Q1210 520 1270 570
+               L1245 700
+               H1145Z"
+            fill="#b26f4b"
+        />
+
+    </g>
+
+
+    <!-- =================================================
+         LAMPE
+    ================================================== -->
+
+    <ellipse
+        cx="470"
+        cy="340"
+        rx="180"
+        ry="180"
+        fill="url(#lampGlow)"
+        opacity=".35"
+    />
+
+    <path
+        d="M470 80 V190"
+        stroke="#20251f"
+        stroke-width="8"
+    />
+
+    <path
+        d="M420 190
+           Q470 240 520 190
+           L500 250
+           H440Z"
+        fill="#242a25"
+    />
+
+
+    <!-- =================================================
+         CADRES
+    ================================================== -->
+
+    <rect
+        x="360"
+        y="175"
+        width="150"
+        height="110"
+        fill="#8e6d4e"
+    />
+
+    <rect
+        x="375"
+        y="190"
+        width="120"
+        height="80"
+        fill="#f0d9af"
+    />
+
+    <text
+        x="435"
+        y="235"
+        text-anchor="middle"
+        font-size="18"
+        font-weight="bold"
+        fill="#70513d">
+        BONHEUR
+    </text>
+
+
+    <!-- =================================================
+         PETIT CHAT SUR LE CANAPÉ
+    ================================================== -->
+
+    <g id="svgCat"
+       style="cursor:pointer"
+       onclick="catSVG()">
+
+        <!-- corps -->
+
+        <ellipse
+            cx="1000"
+            cy="620"
+            rx="80"
+            ry="48"
+            fill="#4a3c36"
+        />
+
+        <!-- tête -->
+
+        <circle
+            cx="950"
+            cy="590"
+            r="43"
+            fill="#55443c"
+        />
+
+        <!-- oreilles -->
+
+        <path
+            d="M920 565 L925 525 L950 555Z"
+            fill="#55443c"
+        />
+
+        <path
+            d="M965 555 L990 525 L990 570Z"
+            fill="#55443c"
+        />
+
+        <!-- yeux -->
+
+        <circle
+            cx="937"
+            cy="588"
+            r="5"
+            fill="#d8b36a"
+        />
+
+        <circle
+            cx="967"
+            cy="588"
+            r="5"
+            fill="#d8b36a"
+        />
+
+        <!-- queue -->
+
+        <path
+            d="M1050 620
+               Q1130 560 1110 520"
+            fill="none"
+            stroke="#4a3c36"
+            stroke-width="25"
+            stroke-linecap="round"
+        />
+
+    </g>
+
+
+    <!-- =================================================
+         TABLEAU DÉCORATIF
+    ================================================== -->
+
+    <rect
+        x="1160"
+        y="220"
+        width="170"
+        height="210"
+        fill="#17251f"
+        stroke="#d0a85d"
+        stroke-width="8"
+    />
+
+    <text
+        x="1245"
+        y="285"
+        text-anchor="middle"
+        fill="#d8b36a"
+        font-size="23"
+        font-weight="bold">
+        MORE
+    </text>
+
+    <text
+        x="1245"
+        y="320"
+        text-anchor="middle"
+        fill="#d8b36a"
+        font-size="23"
+        font-weight="bold">
+        SUN
+    </text>
+
+    <text
+        x="1245"
+        y="355"
+        text-anchor="middle"
+        fill="#d8b36a"
+        font-size="23"
+        font-weight="bold">
+        LESS
+    </text>
+
+    <text
+        x="1245"
+        y="390"
+        text-anchor="middle"
+        fill="#d8b36a"
+        font-size="23"
+        font-weight="bold">
+        STRESS
+    </text>
+
+</svg>
+
+
+<!-- =====================================================
+     HOTSPOTS
+====================================================== -->
+
+<button class="hotspot coffee"
+        onclick="openCoffee()">
+    ☕
+</button>
+
+<button class="hotspot cat"
+        onclick="openCat()">
+    🐈
+</button>
+
+<button class="hotspot plant"
+        onclick="openPlant()">
+    🌿
+</button>
+
+<button class="hotspot camera"
+        onclick="openCamera()">
+    📷
+</button>
+
+<button class="hotspot window"
+        onclick="openWindow()">
+    🌄
+</button>
+
+<button class="hotspot music"
+        onclick="openMusic()">
+    🎸
+</button>
+
+
+<!-- =====================================================
+     OUTILS
+====================================================== -->
+
+<div class="tools">
+
+    <button onclick="zoomRoom()">
         ＋
     </button>
 
-    <button
-        class="btn"
-        onclick="zoom(.9)"
-    >
-        −
+    <button onclick="toggleNight()">
+        🌙
     </button>
 
-    <button
-        class="btn"
-        onclick="toggleNight()"
-        id="dayButton"
-    >
-        ☀️
-    </button>
-
-    <button
-        class="btn"
-        onclick="resetView()"
-    >
+    <button onclick="resetRoom()">
         ⌂
     </button>
 
 </div>
 
 
-<div class="hint">
-    ☝️ Touche les objets · 🐈 Clique sur le chat · ✨ Explore l'appartement
+<!-- =====================================================
+     AIDE
+====================================================== -->
+
+<div class="help">
+
+    ☝️ Touche les objets
+    ·
+    🐈 Clique sur le chat
+    ·
+    ✨ Explore ton appartement
+
 </div>
 
 
-<!-- INFO -->
+<!-- =====================================================
+     PANNEAU
+====================================================== -->
 
-<div
-    class="info"
-    id="info"
->
+<div class="panel" id="panel">
 
-    <div
-        class="info-title"
-        id="infoTitle"
-    ></div>
+    <button class="close"
+            onclick="closePanel()">
+        ×
+    </button>
 
-    <div
-        class="info-text"
-        id="infoText"
-    ></div>
+    <h2 id="title">
+        Objet
+    </h2>
+
+    <p id="description">
+    </p>
+
+    <div class="actions"
+         id="actions">
+    </div>
+
+</div>
+
+
+<div class="toast"
+     id="toast">
+</div>
+
 
 </div>
 
 
 <script>
 
-/* =========================================================
-   INFOS
-========================================================= */
+/* =====================================================
+   PANNEAU
+===================================================== */
 
-const info = document.getElementById("info");
-const infoTitle = document.getElementById("infoTitle");
-const infoText = document.getElementById("infoText");
+function openPanel(title,description,buttons=[]){
 
-let infoTimer;
+    document.getElementById("title").textContent =
+        title;
 
-function showInfo(title,text){
+    document.getElementById("description").textContent =
+        description;
 
-    infoTitle.textContent = title;
-    infoText.textContent = text;
+    const actions =
+        document.getElementById("actions");
 
-    info.classList.add("show");
+    actions.innerHTML = "";
 
-    clearTimeout(infoTimer);
+    buttons.forEach(button => {
 
-    infoTimer = setTimeout(()=>{
-        info.classList.remove("show");
-    },4000);
+        const b =
+            document.createElement("button");
+
+        b.textContent =
+            button[0];
+
+        b.onclick =
+            button[1];
+
+        actions.appendChild(b);
+
+    });
+
+    document
+        .getElementById("panel")
+        .classList
+        .add("open");
 }
 
 
-/* =========================================================
-   INTERACTIONS
-========================================================= */
+function closePanel(){
 
-function womanClick(){
+    document
+        .getElementById("panel")
+        .classList
+        .remove("open");
 
-    showInfo(
-        "✨ Moment tranquille",
-        "Elle profite simplement de son appartement, avec son chat et la vue sur le coucher de soleil."
+}
+
+
+/* =====================================================
+   NOTIFICATION
+===================================================== */
+
+function toast(message){
+
+    const t =
+        document.getElementById("toast");
+
+    t.textContent =
+        message;
+
+    t.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer =
+        setTimeout(() => {
+
+            t.classList.remove("show");
+
+        },1800);
+}
+
+
+/* =====================================================
+   CAFÉ
+===================================================== */
+
+function openCoffee(){
+
+    openPanel(
+
+        "☕ Machine à café",
+
+        "La machine est prête. Il ne manque plus qu'une pression pour commencer la journée.",
+
+        [
+
+            [
+                "☕ Faire le café",
+
+                () => {
+
+                    toast(
+                        "☕ Café servi !"
+                    );
+
+                }
+            ],
+
+            [
+                "🔊 Allumer la machine",
+
+                () => {
+
+                    toast(
+                        "☕ Bzzzz... la machine chauffe"
+                    );
+
+                }
+            ]
+
+        ]
+
     );
 
 }
 
 
-function catClick(){
+/* =====================================================
+   CHAT
+===================================================== */
 
-    const cat = document.getElementById("cat");
+let petCount = 0;
 
-    cat.classList.remove("jump");
+function openCat(){
 
-    void cat.offsetWidth;
+    petCount++;
 
-    cat.classList.add("jump");
+    if(petCount % 2){
 
-    showInfo(
-        "🐈 Le chat",
-        "Il vient de te regarder… puis décide de faire semblant de ne pas t'avoir vu."
-    );
+        openPanel(
 
-}
+            "🐈 Peka",
 
+            "Le chat t'a remarqué. Il te regarde avec cet air qui signifie clairement : « c'est chez moi ici ».",
 
-function plantClick(){
+            [
 
-    showInfo(
-        "🌿 Les plantes",
-        "Il y en a partout dans l'appartement. Elles donnent une vraie ambiance jungle urbaine."
-    );
+                [
+                    "🐾 Caresser",
 
-}
+                    () => {
 
+                        toast(
+                            "😺 Prrrrrrrr..."
+                        );
 
-function computerClick(){
+                    }
+                ],
 
-    showInfo(
-        "💻 Ordinateur",
-        "Un petit coin bureau pour travailler, regarder un film ou passer la soirée."
-    );
+                [
+                    "🥩 Donner une friandise",
 
-}
+                    () => {
 
+                        toast(
+                            "🐈 Miam !"
+                        );
 
-function lampClick(){
+                    }
+                ]
 
-    showInfo(
-        "💡 Lampe",
-        "Une lumière chaude pour rendre l'appartement encore plus cosy."
-    );
+            ]
 
-}
-
-
-/* =========================================================
-   ZOOM
-========================================================= */
-
-let scale = 1;
-
-const apartment =
-    document.querySelector(".apartment");
-
-function zoom(amount){
-
-    scale *= amount;
-
-    scale = Math.max(
-        .55,
-        Math.min(
-            1.35,
-            scale
-        )
-    );
-
-    apartment.style.transform =
-        `translate(-50%,-50%) scale(${scale})`;
-
-}
-
-
-/* =========================================================
-   JOUR / NUIT
-========================================================= */
-
-let night = false;
-
-function toggleNight(){
-
-    night = !night;
-
-    const scene =
-        document.getElementById("scene");
-
-    const button =
-        document.getElementById("dayButton");
-
-    if(night){
-
-        scene.style.background =
-            "#090d14";
-
-        document.querySelector(".sky").style.background =
-            "linear-gradient(180deg,#050812,#10192a 50%,#18233a)";
-
-        document.querySelector(".sun").style.background =
-            "#e8ecff";
-
-        document.querySelector(".sun").style.boxShadow =
-            "0 0 35px #b9d0ff,0 0 90px rgba(130,160,255,.4)";
-
-        document.querySelector(".sun").style.width =
-            "90px";
-
-        document.querySelector(".sun").style.height =
-            "90px";
-
-        button.textContent = "🌙";
+        );
 
     }else{
 
-        scene.style.background =
-            "#11151c";
+        openPanel(
 
-        document.querySelector(".sky").style.background =
-            "linear-gradient(180deg,#18202d,#39485a 45%,#b86754 78%,#e7a269)";
+            "🐈 Peka",
 
-        document.querySelector(".sun").style.background =
-            "#ffd995";
+            "Il s'est installé sur le canapé et ne compte visiblement plus bouger.",
 
-        document.querySelector(".sun").style.boxShadow =
-            "0 0 35px #ffca75,0 0 100px rgba(255,170,80,.6)";
+            [
 
-        document.querySelector(".sun").style.width =
-            "150px";
+                [
+                    "🐾 Encore une caresse",
 
-        document.querySelector(".sun").style.height =
-            "150px";
+                    () => {
 
-        button.textContent = "☀️";
+                        toast(
+                            "😺 Il ronronne !"
+                        );
+
+                    }
+                ]
+
+            ]
+
+        );
 
     }
 
 }
 
 
-/* =========================================================
-   HOME
-========================================================= */
+/* =====================================================
+   CHAT SVG
+===================================================== */
 
-function resetView(){
+function catSVG(){
 
-    scale = 1;
+    openCat();
 
-    apartment.style.transform =
-        "translate(-50%,-50%) scale(1)";
+}
 
-    showInfo(
-        "🏠 Appartement",
-        "Bienvenue chez toi. Clique sur les différents éléments pour découvrir l'appartement."
+
+/* =====================================================
+   PLANTE
+===================================================== */
+
+function openPlant(){
+
+    openPanel(
+
+        "🌿 La plante",
+
+        "Une belle plante apporte un peu de vie dans l'appartement. Elle commence à avoir soif.",
+
+        [
+
+            [
+                "💧 Arroser",
+
+                () => {
+
+                    toast(
+                        "🌿 Glou glou... merci !"
+                    );
+
+                }
+            ],
+
+            [
+                "🌱 Lui parler",
+
+                () => {
+
+                    toast(
+                        "🌿 Elle semble apprécier"
+                    );
+
+                }
+            ]
+
+        ]
+
     );
 
 }
 
 
-/* =========================================================
-   PETITE ANIMATION DU CHAT
-========================================================= */
+/* =====================================================
+   APPAREIL PHOTO
+===================================================== */
 
-setInterval(()=>{
+function openCamera(){
 
-    const cat =
-        document.getElementById("cat");
+    openPanel(
 
-    if(Math.random() > .65){
+        "📷 Coin créatif",
 
-        cat.style.transform =
-            "translateX(10px)";
+        "Ton appareil photo est posé sur la table. C'est l'endroit parfait pour créer quelque chose.",
 
-        setTimeout(()=>{
-            cat.style.transform =
-                "translateX(0)";
-        },700);
+        [
+
+            [
+                "📸 Prendre une photo",
+
+                () => {
+
+                    toast(
+                        "📸 Clic ! Photo prise"
+                    );
+
+                }
+            ],
+
+            [
+                "💻 Ouvrir l'ordinateur",
+
+                () => {
+
+                    toast(
+                        "💻 Ordinateur allumé"
+                    );
+
+                }
+            ]
+
+        ]
+
+    );
+
+}
+
+
+/* =====================================================
+   FENÊTRE
+===================================================== */
+
+function openWindow(){
+
+    openPanel(
+
+        "🌄 La fenêtre",
+
+        "Une grande fenêtre donne sur les montagnes et le lac. Tu peux modifier l'ambiance de la pièce.",
+
+        [
+
+            [
+                "☀️ Journée",
+
+                () => {
+
+                    setSceneByName("day");
+
+                    closePanel();
+
+                }
+            ],
+
+            [
+                "✨ Magique",
+
+                () => {
+
+                    setSceneByName("magic");
+
+                    closePanel();
+
+                }
+            ],
+
+            [
+                "🌙 Nuit",
+
+                () => {
+
+                    setSceneByName("night");
+
+                    closePanel();
+
+                }
+            ]
+
+        ]
+
+    );
+
+}
+
+
+/* =====================================================
+   MUSIQUE
+===================================================== */
+
+function openMusic(){
+
+    openPanel(
+
+        "🎸 Coin musique",
+
+        "Choisis l'ambiance sonore de ton appartement.",
+
+        [
+
+            [
+                "🎵 Chill",
+
+                () => {
+
+                    toast(
+                        "🎵 Ambiance chill activée"
+                    );
+
+                }
+            ],
+
+            [
+                "🎷 Jazz",
+
+                () => {
+
+                    toast(
+                        "🎷 Ambiance jazz activée"
+                    );
+
+                }
+            ],
+
+            [
+                "🌧️ Pluie",
+
+                () => {
+
+                    toast(
+                        "🌧️ Ambiance pluie activée"
+                    );
+
+                }
+            ]
+
+        ]
+
+    );
+
+}
+
+
+/* =====================================================
+   SCÈNES
+===================================================== */
+
+function setScene(type,button){
+
+    document
+        .querySelectorAll(".buttons button")
+        .forEach(b =>
+            b.classList.remove("active")
+        );
+
+    if(button){
+
+        button.classList.add("active");
 
     }
 
-},4500);
+    setSceneByName(type);
+
+}
 
 
-/* =========================================================
-   BIENVENUE
-========================================================= */
+function setSceneByName(type){
 
-setTimeout(()=>{
+    const room =
+        document.getElementById("room");
 
-    showInfo(
-        "🏠 Bienvenue",
-        "Explore l'appartement et touche les différents objets."
+    room.classList.remove(
+        "night"
     );
 
-},800);
+
+    if(type === "night"){
+
+        room.classList.add(
+            "night"
+        );
+
+        toast(
+            "🌙 Ambiance nocturne"
+        );
+
+    }
+
+
+    if(type === "magic"){
+
+        room.style.filter =
+            "saturate(1.3) hue-rotate(8deg) brightness(.92)";
+
+        toast(
+            "✨ Ambiance magique"
+        );
+
+    }
+
+
+    if(type === "day"){
+
+        room.style.filter =
+            "";
+
+        toast(
+            "☀️ Journée"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   ZOOM
+===================================================== */
+
+function zoomRoom(){
+
+    document
+        .getElementById("room")
+        .classList
+        .toggle("zoom");
+
+}
+
+
+/* =====================================================
+   NUIT
+===================================================== */
+
+function toggleNight(){
+
+    const room =
+        document.getElementById("room");
+
+    room.classList.toggle(
+        "night"
+    );
+
+    room.style.filter = "";
+
+    toast(
+
+        room.classList.contains("night")
+
+        ?
+
+        "🌙 Nuit"
+
+        :
+
+        "☀️ Jour"
+
+    );
+
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+function resetRoom(){
+
+    const room =
+        document.getElementById("room");
+
+    room.classList.remove(
+        "night",
+        "zoom"
+    );
+
+    room.style.filter = "";
+
+    closePanel();
+
+    toast(
+        "🏠 Appartement réinitialisé"
+    );
+
+}
 
 </script>
 
