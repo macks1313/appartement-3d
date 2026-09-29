@@ -18,129 +18,49 @@ html,body{
     height:100%;
     overflow:hidden;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:#17120f;
+    background:#11151c;
 }
 
 body{
     color:#fff;
 }
 
-/* =========================
+/* =========================================================
    SCENE
-========================= */
+========================================================= */
 
 #scene{
-    position:absolute;
+    position:fixed;
     inset:0;
     overflow:hidden;
     background:
         linear-gradient(
             180deg,
-            #25201e 0%,
-            #59463a 38%,
-            #c8794d 63%,
-            #1e1714 100%
+            #182334 0%,
+            #684d4b 42%,
+            #d98a55 67%,
+            #f0c28a 100%
         );
-    transition:filter .8s,background 1s;
-}
-
-/* lumière générale */
-
-#scene::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    background:
-        radial-gradient(
-            circle at 72% 38%,
-            rgba(255,190,105,.30),
-            transparent 24%
-        ),
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,.45),
-            transparent 35%,
-            transparent 70%,
-            rgba(0,0,0,.42)
-        );
-    z-index:20;
-}
-
-/* =========================
-   FOND / FENÊTRE
-========================= */
-
-.wall{
-    position:absolute;
-    inset:0;
-    background:
-        linear-gradient(
-            90deg,
-            #332923 0%,
-            #514037 18%,
-            #6a5141 50%,
-            #4b392f 82%,
-            #2b211c 100%
-        );
-}
-
-/* plafond */
-
-.ceiling{
-    position:absolute;
-    left:-5%;
-    top:-4%;
-    width:110%;
-    height:24%;
-    background:linear-gradient(#3b302b,#241d1a);
-    transform:perspective(900px) rotateX(-18deg);
-    transform-origin:top;
-}
-
-/* grande baie vitrée */
-
-.window{
-    position:absolute;
-    top:9%;
-    right:10%;
-    width:43%;
-    height:48%;
-    min-width:300px;
-    border:14px solid #241b17;
-    border-radius:5px;
-    background:
-        linear-gradient(
-            180deg,
-            #442e42 0%,
-            #d07858 48%,
-            #f5b069 70%,
-            #39271e 100%
-        );
-    box-shadow:
-        0 20px 50px rgba(0,0,0,.65),
-        inset 0 0 30px rgba(255,170,90,.25);
-    overflow:hidden;
-    z-index:2;
 }
 
 /* ciel */
 
 .sky{
     position:absolute;
-    inset:0;
+    inset:0 0 42% 0;
     background:
         radial-gradient(
-            circle at 72% 57%,
-            #ffd895 0 4%,
-            #f7a766 8%,
-            transparent 19%
+            circle at 75% 70%,
+            rgba(255,213,133,.95) 0 5%,
+            rgba(255,166,88,.35) 12%,
+            transparent 35%
         ),
         linear-gradient(
-            #302942 0%,
-            #76505a 35%,
-            #d4785d 65%,
-            #f1a160 100%
+            180deg,
+            #18202d,
+            #39485a 45%,
+            #b86754 78%,
+            #e7a269
         );
 }
 
@@ -148,806 +68,979 @@ body{
 
 .sun{
     position:absolute;
-    width:75px;
-    height:75px;
+    width:150px;
+    height:150px;
+    right:19%;
+    top:24%;
     border-radius:50%;
-    background:#ffd789;
-    right:21%;
-    top:51%;
+    background:#ffd995;
     box-shadow:
-        0 0 45px #ffc46c,
-        0 0 90px rgba(255,177,90,.55);
+        0 0 35px #ffca75,
+        0 0 100px rgba(255,170,80,.6);
+    opacity:.95;
 }
 
 /* montagnes */
 
-.mountain{
-    position:absolute;
-    bottom:0;
-    width:100%;
-    height:40%;
-    background:#322b35;
-    clip-path:polygon(
-        0 100%,
-        0 60%,
-        12% 40%,
-        22% 65%,
-        36% 28%,
-        48% 58%,
-        62% 18%,
-        77% 55%,
-        90% 32%,
-        100% 55%,
-        100% 100%
-    );
-}
-
-.mountain.back{
-    height:48%;
-    opacity:.55;
-    background:#58424a;
-    transform:scale(1.1);
-}
-
-/* reflets vitres */
-
-.glassReflection{
-    position:absolute;
-    inset:0;
-    background:
-        linear-gradient(
-            120deg,
-            rgba(255,255,255,.15),
-            transparent 25%,
-            transparent 70%,
-            rgba(255,255,255,.08)
-        );
-}
-
-/* montants fenêtre */
-
-.frameV{
-    position:absolute;
-    top:0;
-    bottom:0;
-    width:9px;
-    background:#211915;
-}
-
-.frameV.one{left:33%}
-.frameV.two{left:66%}
-
-.frameH{
+.mountains{
     position:absolute;
     left:0;
     right:0;
-    height:8px;
-    top:51%;
-    background:#211915;
+    bottom:38%;
+    height:24%;
+}
+
+.mountain{
+    position:absolute;
+    bottom:0;
+    width:55%;
+    height:100%;
+    background:#293743;
+    clip-path:polygon(
+        0 100%,
+        20% 54%,
+        30% 69%,
+        43% 32%,
+        57% 67%,
+        72% 42%,
+        100% 100%
+    );
+    opacity:.8;
+}
+
+.mountain:nth-child(1){
+    left:-10%;
+}
+
+.mountain:nth-child(2){
+    right:-10%;
+    transform:scaleX(-1);
+    opacity:.65;
+}
+
+.mountain:nth-child(3){
+    left:27%;
+    bottom:-8%;
+    transform:scale(.75);
+    opacity:.45;
+}
+
+/* =========================================================
+   APPARTEMENT
+========================================================= */
+
+.apartment{
+    position:absolute;
+    left:50%;
+    top:52%;
+    width:min(1100px,100vw);
+    height:min(680px,72vh);
+    transform:translate(-50%,-50%);
+    perspective:1100px;
+}
+
+/* sol */
+
+.floor{
+    position:absolute;
+    left:4%;
+    right:4%;
+    bottom:4%;
+    height:48%;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            rgba(90,51,29,.08) 0 2px,
+            transparent 2px 120px
+        ),
+        linear-gradient(
+            145deg,
+            #a87851,
+            #d3a071 45%,
+            #8c5e40
+        );
+    transform:rotateX(58deg);
+    transform-origin:bottom;
+    border-radius:8px;
+    box-shadow:0 -20px 60px rgba(0,0,0,.3);
+}
+
+/* mur gauche */
+
+.wall-left{
+    position:absolute;
+    left:4%;
+    top:5%;
+    width:24%;
+    height:65%;
+    background:
+        linear-gradient(
+            90deg,
+            #514237,
+            #766051
+        );
+    transform:skewY(-10deg);
+    transform-origin:right;
+    box-shadow:inset -20px 0 30px rgba(0,0,0,.3);
+}
+
+/* mur droit */
+
+.wall-right{
+    position:absolute;
+    right:4%;
+    top:5%;
+    width:24%;
+    height:65%;
+    background:
+        linear-gradient(
+            90deg,
+            #766051,
+            #40352f
+        );
+    transform:skewY(10deg);
+    transform-origin:left;
+}
+
+/* mur arrière */
+
+.back-wall{
+    position:absolute;
+    left:20%;
+    right:20%;
+    top:5%;
+    height:60%;
+    background:
+        linear-gradient(
+            180deg,
+            #d7b998,
+            #c5a383
+        );
+    box-shadow:
+        inset 0 -20px 50px rgba(70,40,25,.22);
+}
+
+/* =========================================================
+   BAIE VITRÉE
+========================================================= */
+
+.window{
+    position:absolute;
+    left:32%;
+    top:10%;
+    width:38%;
+    height:54%;
+    border:12px solid #342c28;
+    background:
+        linear-gradient(
+            180deg,
+            #43596b,
+            #e19a68 72%,
+            #ffcc8c
+        );
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.45);
+    overflow:hidden;
+}
+
+.window:before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:0;
+    bottom:0;
+    width:8px;
+    background:#3d322c;
+}
+
+.window:after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:58%;
+    height:7px;
+    background:#3d322c;
 }
 
 /* balcon */
 
 .balcony{
     position:absolute;
-    left:-5%;
-    right:-5%;
-    bottom:-3%;
-    height:17%;
-    background:#332823;
-    border-top:8px solid #17120f;
-}
-
-.rail{
-    position:absolute;
-    top:-55%;
-    left:0;
-    right:0;
-    height:55%;
-    border-top:5px solid #211915;
-    border-bottom:5px solid #211915;
+    left:29%;
+    right:29%;
+    top:58%;
+    height:7%;
     background:
         repeating-linear-gradient(
             90deg,
-            transparent 0 9%,
-            #211915 9% 10%
+            transparent 0 32px,
+            #282625 32px 37px
         );
+    border-top:7px solid #282625;
 }
 
-/* =========================
-   SOL
-========================= */
+/* =========================================================
+   DÉCORATIONS
+========================================================= */
 
-.floor{
+.poster{
     position:absolute;
-    left:-10%;
-    right:-10%;
-    bottom:-14%;
-    height:58%;
-    background:
-        repeating-linear-gradient(
-            90deg,
-            rgba(65,36,20,.12) 0 3px,
-            transparent 3px 105px
-        ),
-        linear-gradient(
-            180deg,
-            #7a4d31,
-            #40271b
-        );
-    transform:perspective(900px) rotateX(58deg);
-    transform-origin:bottom;
-    z-index:3;
+    width:90px;
+    height:115px;
+    background:#d8c2a5;
+    border:6px solid #3d3028;
+    box-shadow:5px 8px 15px rgba(0,0,0,.25);
 }
 
-/* =========================
-   TAPIS
-========================= */
-
-.rug{
-    position:absolute;
-    width:43%;
-    height:24%;
-    left:27%;
-    bottom:12%;
-    background:
-        repeating-linear-gradient(
-            45deg,
-            #69432e 0 10px,
-            #80563a 10px 20px
-        );
-    border:8px solid #42291e;
-    box-shadow:0 15px 25px rgba(0,0,0,.4);
-    transform:skewX(-8deg);
-    z-index:5;
+.poster.one{
+    left:22%;
+    top:20%;
+    transform:rotate(-4deg);
 }
 
-.rug::after{
-    content:"";
-    position:absolute;
-    inset:15px;
-    border:3px solid rgba(218,174,123,.4);
+.poster.two{
+    left:26%;
+    top:18%;
+    transform:rotate(5deg) scale(.8);
 }
 
-/* =========================
+.poster span{
+    display:block;
+    text-align:center;
+    margin-top:32px;
+    font-family:Georgia,serif;
+    font-size:15px;
+    color:#34271f;
+}
+
+/* =========================================================
    LIT
-========================= */
+========================================================= */
 
 .bed{
     position:absolute;
-    width:43%;
-    height:32%;
-    left:43%;
+    left:39%;
     bottom:17%;
+    width:39%;
+    height:32%;
+    transform:rotate(-3deg);
     z-index:8;
-    transform:perspective(700px) rotateY(-8deg);
 }
 
-/* cadre */
-
-.bedFrame{
+.bed-frame{
     position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    height:24%;
-    background:#3a2419;
-    border-radius:5px;
-    box-shadow:0 20px 25px rgba(0,0,0,.45);
+    inset:12% 0 0;
+    background:#4a3025;
+    border-radius:14px;
+    box-shadow:0 15px 25px rgba(0,0,0,.35);
 }
-
-/* matelas */
 
 .mattress{
     position:absolute;
-    left:3%;
-    right:3%;
-    bottom:19%;
-    height:48%;
-    border-radius:14px;
+    left:2%;
+    right:2%;
+    top:3%;
+    height:63%;
     background:
         linear-gradient(
             135deg,
-            #eadbc6,
-            #c9b49b
+            #f4e8d4,
+            #d8c7af
         );
+    border-radius:16px;
     box-shadow:
-        0 12px 20px rgba(0,0,0,.3),
-        inset 0 0 15px rgba(255,255,255,.3);
+        inset 0 -8px 10px rgba(90,50,30,.15);
 }
-
-/* couverture */
 
 .blanket{
     position:absolute;
-    left:3%;
-    right:3%;
-    bottom:21%;
-    height:30%;
-    border-radius:8px 8px 15px 15px;
+    right:2%;
+    bottom:10%;
+    width:67%;
+    height:48%;
+    border-radius:12px;
     background:
         linear-gradient(
             135deg,
-            #42534e,
-            #253833
+            #34463e,
+            #59685b
         );
-    box-shadow:0 6px 12px rgba(0,0,0,.25);
+    box-shadow:0 7px 12px rgba(0,0,0,.25);
 }
 
 /* oreillers */
 
 .pillow{
     position:absolute;
-    width:27%;
-    height:20%;
-    bottom:51%;
-    background:#f1e7d8;
-    border-radius:15px;
-    box-shadow:0 6px 10px rgba(0,0,0,.18);
+    top:9%;
+    width:25%;
+    height:25%;
+    background:#fff9ee;
+    border-radius:16px;
+    box-shadow:0 5px 8px rgba(0,0,0,.15);
 }
 
-.pillow.left{left:10%}
-.pillow.right{left:42%}
+.pillow.left{
+    left:12%;
+}
 
-/* tête de lit */
+.pillow.right{
+    left:39%;
+}
 
-.headboard{
+/* =========================================================
+   FEMME
+========================================================= */
+
+.woman{
     position:absolute;
-    left:-2%;
-    right:-2%;
-    top:0;
-    height:26%;
+    left:30%;
+    bottom:18%;
+    width:34%;
+    height:48%;
+    z-index:15;
+    cursor:pointer;
+    filter:drop-shadow(0 12px 8px rgba(0,0,0,.25));
+    transition:transform .3s;
+}
+
+.woman:hover{
+    transform:scale(1.02);
+}
+
+/* cheveux */
+
+.hair{
+    position:absolute;
+    left:31%;
+    top:6%;
+    width:30%;
+    height:32%;
     background:
-        linear-gradient(
-            90deg,
-            #493022,
-            #694735,
-            #493022
+        radial-gradient(
+            circle at 50% 35%,
+            #2b1713,
+            #120c0c 70%
         );
-    border-radius:10px 10px 3px 3px;
-    box-shadow:0 10px 20px rgba(0,0,0,.4);
+    border-radius:48% 48% 42% 42%;
+    z-index:4;
 }
 
-/* =========================
-   TABLE DE CHEVET
-========================= */
-
-.nightstand{
-    position:absolute;
-    width:8%;
-    height:13%;
-    left:35%;
-    bottom:32%;
-    background:#533521;
-    border-radius:5px;
-    box-shadow:0 10px 15px rgba(0,0,0,.35);
-    z-index:9;
-}
-
-.nightstand::before{
+.hair:after{
     content:"";
     position:absolute;
-    left:8%;
-    right:8%;
-    top:15%;
-    height:4px;
-    background:#b38359;
+    left:-20%;
+    right:-20%;
+    top:40%;
+    height:70%;
+    background:#17100f;
+    border-radius:50%;
 }
 
-/* lampe */
+/* tête */
 
-.lamp{
+.head{
     position:absolute;
-    width:6%;
-    height:15%;
-    left:36%;
-    bottom:44%;
-    z-index:10;
+    left:39%;
+    top:10%;
+    width:19%;
+    height:18%;
+    border-radius:50%;
+    background:
+        linear-gradient(
+            145deg,
+            #f2b58e,
+            #c97d61
+        );
+    z-index:5;
 }
 
-.lampBase{
+/* cou */
+
+.neck{
     position:absolute;
-    bottom:0;
-    left:45%;
-    width:10%;
-    height:65%;
-    background:#211d1a;
+    left:43%;
+    top:24%;
+    width:11%;
+    height:12%;
+    background:#c98265;
+    z-index:3;
 }
 
-.lampShade{
+/* dos / corps */
+
+.body{
     position:absolute;
-    top:0;
-    left:5%;
-    width:90%;
-    height:45%;
-    background:#d9ad6c;
-    clip-path:polygon(15% 0,85% 0,100% 100%,0 100%);
-    filter:drop-shadow(0 0 12px #e7a95e);
+    left:26%;
+    top:28%;
+    width:47%;
+    height:47%;
+    border-radius:45% 45% 35% 35%;
+    background:
+        linear-gradient(
+            120deg,
+            #c98362,
+            #e0a17d 55%,
+            #ad6c55
+        );
+    transform:rotate(-9deg);
 }
 
-/* =========================
-   CANAPÉ
-========================= */
+/* haut noir */
 
-.sofa{
+.top{
     position:absolute;
-    left:7%;
-    bottom:19%;
-    width:34%;
-    height:27%;
+    left:38%;
+    top:29%;
+    width:29%;
+    height:28%;
+    background:#171617;
+    clip-path:polygon(
+        20% 0,
+        80% 0,
+        100% 100%,
+        0 100%
+    );
     z-index:8;
 }
 
-.sofaBase{
+/* bras */
+
+.arm{
     position:absolute;
-    bottom:0;
-    left:0;
-    right:0;
+    width:10%;
     height:38%;
-    border-radius:15px;
-    background:
-        linear-gradient(
-            #765a48,
-            #493326
-        );
-    box-shadow:0 15px 20px rgba(0,0,0,.45);
+    background:#d99675;
+    border-radius:20px;
+    z-index:10;
 }
 
-.sofaBack{
-    position:absolute;
-    left:0;
-    right:0;
-    top:0;
-    height:67%;
-    border-radius:18px 18px 5px 5px;
-    background:
-        linear-gradient(
-            #7e6655,
-            #584132
-        );
+.arm.left{
+    left:26%;
+    top:34%;
+    transform:rotate(42deg);
 }
 
-.sofaCushion{
-    position:absolute;
-    bottom:24%;
-    width:42%;
-    height:27%;
-    background:#a88c76;
-    border-radius:10px;
+.arm.right{
+    right:24%;
+    top:33%;
+    transform:rotate(-35deg);
 }
 
-.sofaCushion.one{left:8%}
-.sofaCushion.two{left:52%}
+/* jambes */
 
-/* =========================
-   TABLE BASSE
-========================= */
-
-.coffee{
+.leg{
     position:absolute;
-    width:18%;
     height:15%;
-    left:28%;
-    bottom:24%;
-    z-index:11;
-}
-
-.coffeeTop{
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    height:25%;
-    border-radius:50%;
-    background:#573522;
-    box-shadow:0 7px 12px rgba(0,0,0,.45);
-}
-
-.coffeeLeg{
-    position:absolute;
-    width:7%;
-    height:75%;
-    top:18%;
-    background:#332018;
-}
-
-.coffeeLeg.one{left:20%}
-.coffeeLeg.two{right:20%}
-
-/* tasse */
-
-.cup{
-    position:absolute;
-    width:15%;
-    height:22%;
-    top:-9%;
-    left:40%;
-    border-radius:4px 4px 8px 8px;
-    background:#ead9bf;
-}
-
-.cup::after{
-    content:"";
-    position:absolute;
-    right:-45%;
-    top:20%;
-    width:45%;
-    height:45%;
-    border:3px solid #ead9bf;
-    border-left:0;
-    border-radius:0 8px 8px 0;
-}
-
-/* =========================
-   MEUBLE / TV
-========================= */
-
-.tvUnit{
-    position:absolute;
-    right:7%;
-    bottom:22%;
-    width:27%;
-    height:25%;
-    z-index:7;
-}
-
-.tvCabinet{
-    position:absolute;
-    bottom:0;
-    width:100%;
-    height:35%;
+    width:50%;
     background:
         linear-gradient(
-            #5b3824,
-            #321f16
+            135deg,
+            #d99573,
+            #bd745c
         );
-    box-shadow:0 12px 20px rgba(0,0,0,.4);
+    border-radius:50px;
+    bottom:7%;
+    z-index:5;
 }
 
-.tv{
+.leg.one{
+    left:18%;
+    transform:rotate(8deg);
+}
+
+.leg.two{
+    left:42%;
+    transform:rotate(-13deg);
+}
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+.cat{
     position:absolute;
-    width:82%;
-    height:62%;
-    left:9%;
-    top:-38%;
-    background:
-        radial-gradient(
-            circle at 55% 45%,
-            #4c4655,
-            #08090b 60%
-        );
-    border:7px solid #151414;
-    border-radius:3px;
-    box-shadow:0 10px 25px rgba(0,0,0,.55);
+    right:29%;
+    bottom:25%;
+    width:120px;
+    height:105px;
+    z-index:20;
+    cursor:pointer;
+    transition:
+        transform .4s,
+        bottom .5s;
 }
 
-.tvStand{
+.cat.jump{
+    animation:catJump .7s ease;
+}
+
+@keyframes catJump{
+    0%{transform:translateY(0)}
+    40%{transform:translateY(-45px) rotate(-4deg)}
+    70%{transform:translateY(-20px) rotate(4deg)}
+    100%{transform:translateY(0)}
+}
+
+.cat-body{
     position:absolute;
-    bottom:31%;
-    left:44%;
-    width:12%;
-    height:13%;
-    background:#151414;
+    left:20px;
+    bottom:8px;
+    width:75px;
+    height:58px;
+    background:#4a3b36;
+    border-radius:50% 50% 40% 45%;
 }
 
-/* =========================
+.cat-head{
+    position:absolute;
+    left:63px;
+    top:15px;
+    width:48px;
+    height:48px;
+    background:#58463f;
+    border-radius:50%;
+}
+
+.cat-ear{
+    position:absolute;
+    top:-11px;
+    width:19px;
+    height:24px;
+    background:#58463f;
+    clip-path:polygon(50% 0,100% 100%,0 100%);
+}
+
+.cat-ear.left{
+    left:4px;
+}
+
+.cat-ear.right{
+    right:4px;
+}
+
+.cat-eye{
+    position:absolute;
+    top:20px;
+    width:7px;
+    height:7px;
+    background:#e4bd63;
+    border-radius:50%;
+}
+
+.cat-eye.left{
+    left:12px;
+}
+
+.cat-eye.right{
+    right:12px;
+}
+
+.cat-tail{
+    position:absolute;
+    left:5px;
+    bottom:45px;
+    width:75px;
+    height:15px;
+    border-radius:20px;
+    border-top:9px solid #4a3b36;
+    transform:rotate(-30deg);
+}
+
+/* =========================================================
    PLANTES
-========================= */
+========================================================= */
 
 .plant{
     position:absolute;
-    bottom:19%;
-    z-index:13;
+    z-index:14;
+    cursor:pointer;
 }
 
-.plant.left{
-    left:3%;
-    width:13%;
-    height:34%;
+.plant.one{
+    left:11%;
+    bottom:16%;
 }
 
-.plant.right{
-    right:2%;
-    width:13%;
-    height:37%;
+.plant.two{
+    right:10%;
+    bottom:15%;
 }
 
 .pot{
-    position:absolute;
-    bottom:0;
-    left:28%;
-    width:44%;
-    height:27%;
+    width:60px;
+    height:55px;
     background:
         linear-gradient(
-            #a96b43,
-            #623b27
+            90deg,
+            #8b4930,
+            #bd7652,
+            #79402e
         );
-    clip-path:polygon(8% 0,92% 0,80% 100%,20% 100%);
+    clip-path:polygon(
+        10% 0,
+        90% 0,
+        78% 100%,
+        22% 100%
+    );
+}
+
+.leaves{
+    position:absolute;
+    left:-40px;
+    bottom:40px;
+    width:140px;
+    height:160px;
 }
 
 .leaf{
     position:absolute;
-    width:32%;
-    height:35%;
+    width:45px;
+    height:80px;
     background:
         linear-gradient(
-            135deg,
-            #476b42,
-            #1e3d28
+            120deg,
+            #173c2c,
+            #49734e
         );
     border-radius:100% 0 100% 0;
     transform-origin:bottom;
 }
 
-.leaf.l1{left:5%;top:25%;transform:rotate(-42deg)}
-.leaf.l2{left:25%;top:5%;transform:rotate(-15deg)}
-.leaf.l3{left:50%;top:12%;transform:rotate(18deg)}
-.leaf.l4{left:67%;top:30%;transform:rotate(45deg)}
-.leaf.l5{left:36%;top:35%;transform:rotate(5deg)}
-
-/* =========================
-   DÉCORATION MURALE
-========================= */
-
-.frames{
-    position:absolute;
-    left:8%;
-    top:14%;
-    width:27%;
-    height:23%;
-    z-index:4;
+.leaf:nth-child(1){
+    left:45px;
+    top:0;
+    transform:rotate(0deg);
 }
 
-.frame{
+.leaf:nth-child(2){
+    left:10px;
+    top:35px;
+    transform:rotate(-38deg);
+}
+
+.leaf:nth-child(3){
+    left:80px;
+    top:30px;
+    transform:rotate(38deg);
+}
+
+.leaf:nth-child(4){
+    left:45px;
+    top:65px;
+    transform:rotate(-10deg);
+}
+
+/* =========================================================
+   BUREAU / PC
+========================================================= */
+
+.desk{
     position:absolute;
-    width:25%;
-    height:40%;
-    border:5px solid #b88a5b;
+    right:11%;
+    bottom:18%;
+    width:24%;
+    height:12%;
+    background:#5c3929;
+    border-radius:8px;
+    z-index:13;
+    box-shadow:0 12px 15px rgba(0,0,0,.3);
+}
+
+.desk:before,
+.desk:after{
+    content:"";
+    position:absolute;
+    bottom:-100%;
+    width:9px;
+    height:100%;
+    background:#38261d;
+}
+
+.desk:before{
+    left:12%;
+}
+
+.desk:after{
+    right:12%;
+}
+
+.laptop{
+    position:absolute;
+    left:22%;
+    top:-62px;
+    width:58%;
+    height:60px;
+    background:#151719;
+    border:5px solid #25282a;
+    border-radius:6px;
+    z-index:16;
+    transform:skewX(-4deg);
+}
+
+.laptop:after{
+    content:"";
+    position:absolute;
+    left:-12%;
+    right:-12%;
+    bottom:-9px;
+    height:8px;
+    background:#25282a;
+    border-radius:4px;
+}
+
+/* =========================================================
+   LAMPE
+========================================================= */
+
+.lamp{
+    position:absolute;
+    left:17%;
+    bottom:17%;
+    width:70px;
+    height:210px;
+    z-index:17;
+}
+
+.lamp-shade{
+    position:absolute;
+    top:0;
+    left:0;
+    width:70px;
+    height:55px;
     background:
         linear-gradient(
-            135deg,
-            #d19b72,
-            #5b3b31
+            180deg,
+            #f2d08c,
+            #b88345
         );
-    box-shadow:0 7px 12px rgba(0,0,0,.35);
+    clip-path:polygon(15% 0,85% 0,100% 100%,0 100%);
+    box-shadow:0 0 35px rgba(255,200,100,.45);
 }
 
-.frame:nth-child(1){left:0;top:20%;transform:rotate(-7deg)}
-.frame:nth-child(2){left:32%;top:2%;transform:rotate(4deg)}
-.frame:nth-child(3){left:65%;top:23%;transform:rotate(-3deg)}
-
-/* étagère */
-
-.shelf{
+.lamp-pole{
     position:absolute;
-    left:18%;
-    top:34%;
-    width:20%;
-    height:4px;
-    background:#291b15;
-    z-index:6;
-    box-shadow:0 0 0 1px #8d6244;
+    top:50px;
+    left:32px;
+    width:7px;
+    height:145px;
+    background:#25211e;
 }
+
+/* =========================================================
+   PETITS OBJETS
+========================================================= */
 
 .book{
     position:absolute;
-    bottom:4px;
-    width:12%;
-    height:65px;
-    background:#8a573d;
+    width:80px;
+    height:18px;
+    background:#38251e;
+    z-index:30;
+    border-radius:3px;
 }
 
-.book.b1{left:8%;height:50px}
-.book.b2{left:23%;height:65px;background:#5f7567}
-.book.b3{left:38%;height:45px;background:#a87648}
-.book.b4{left:53%;height:58px;background:#74514b}
+.book.one{
+    right:15%;
+    bottom:27%;
+    transform:rotate(-8deg);
+}
 
-/* =========================
-   OBJETS
-========================= */
-
-.vase{
-    position:absolute;
-    left:23%;
-    bottom:36%;
-    width:5%;
-    height:9%;
-    z-index:15;
-    background:#d19a65;
-    border-radius:20% 20% 40% 40%;
+.book.two{
+    right:16%;
+    bottom:29%;
+    transform:rotate(4deg);
+    background:#806147;
 }
 
 .candle{
     position:absolute;
-    right:21%;
-    bottom:42%;
-    width:3%;
-    height:6%;
-    background:#ead8b8;
-    z-index:15;
-    border-radius:3px;
+    width:18px;
+    height:38px;
+    background:#f2d8b2;
+    border-radius:5px;
+    z-index:30;
 }
 
-.candle::before{
+.candle.one{
+    right:21%;
+    bottom:29%;
+}
+
+.candle:after{
     content:"";
     position:absolute;
-    width:12px;
-    height:18px;
-    left:50%;
-    top:-18px;
-    transform:translateX(-50%);
-    background:#ffb64d;
+    width:9px;
+    height:14px;
+    left:4px;
+    top:-11px;
+    background:#ffbf62;
     border-radius:50% 50% 50% 0;
-    box-shadow:0 0 15px #ff9e38;
+    transform:rotate(45deg);
+    box-shadow:0 0 15px #ffad42;
 }
 
-/* =========================
-   UI
-========================= */
+/* =========================================================
+   HUD
+========================================================= */
 
-.top{
-    position:absolute;
+.hud{
+    position:fixed;
+    z-index:100;
     top:22px;
     left:22px;
     right:22px;
     display:flex;
     justify-content:space-between;
-    z-index:50;
+    align-items:center;
+    pointer-events:none;
 }
 
-.title,
+.logo,
 .room{
-    background:rgba(24,20,18,.82);
-    border:1px solid rgba(255,220,170,.18);
-    backdrop-filter:blur(15px);
-    padding:14px 20px;
-    border-radius:18px;
-    box-shadow:0 10px 30px rgba(0,0,0,.3);
-    font-weight:800;
+    background:rgba(255,255,255,.94);
+    color:#171d25;
+    border-radius:22px;
+    padding:16px 24px;
+    box-shadow:0 12px 35px rgba(0,0,0,.2);
+    font-weight:900;
+    font-size:20px;
 }
 
-.title{
-    font-size:19px;
+.logo{
+    font-size:22px;
 }
-
-.room{
-    font-size:16px;
-}
-
-/* boutons */
 
 .controls{
-    position:absolute;
-    right:20px;
-    top:50%;
-    transform:translateY(-50%);
+    position:fixed;
+    z-index:100;
+    right:22px;
+    bottom:105px;
     display:flex;
     flex-direction:column;
     gap:12px;
-    z-index:50;
 }
 
-button{
-    width:56px;
-    height:56px;
-    border:0;
-    border-radius:18px;
-    background:rgba(255,248,238,.94);
-    color:#241c18;
-    font-size:25px;
-    font-weight:900;
-    box-shadow:0 10px 25px rgba(0,0,0,.3);
+.btn{
+    width:58px;
+    height:58px;
+    border:none;
+    border-radius:19px;
+    background:rgba(255,255,255,.94);
+    color:#18202a;
+    font-size:28px;
+    box-shadow:0 10px 25px rgba(0,0,0,.22);
     cursor:pointer;
 }
 
-button:active{
-    transform:scale(.92);
+.btn:active{
+    transform:scale(.9);
 }
 
-/* message */
+/* =========================================================
+   INFO
+========================================================= */
 
 .info{
-    position:absolute;
+    position:fixed;
+    z-index:200;
     left:50%;
-    bottom:35px;
-    transform:translateX(-50%);
-    z-index:60;
-    background:rgba(25,20,17,.9);
-    border:1px solid rgba(255,220,170,.25);
-    backdrop-filter:blur(18px);
-    border-radius:20px;
-    padding:14px 22px;
+    bottom:30px;
+    transform:translateX(-50%) translateY(20px);
+    width:min(470px,88%);
+    background:rgba(255,255,255,.96);
+    color:#17202a;
+    padding:20px 25px;
+    border-radius:24px;
+    box-shadow:0 15px 45px rgba(0,0,0,.3);
     text-align:center;
-    min-width:250px;
-    max-width:85%;
     opacity:0;
+    pointer-events:none;
     transition:.3s;
-    box-shadow:0 12px 35px rgba(0,0,0,.45);
 }
 
 .info.show{
     opacity:1;
+    transform:translateX(-50%) translateY(0);
 }
 
-/* mode nuit */
-
-.night #scene{
-    filter:brightness(.48) saturate(.85);
+.info-title{
+    font-size:22px;
+    font-weight:900;
+    margin-bottom:6px;
 }
 
-.night .lampShade{
-    filter:drop-shadow(0 0 22px #ff9c3d);
+.info-text{
+    font-size:15px;
+    font-weight:600;
+    color:#58616b;
 }
 
-/* petit reflet chaud */
+/* =========================================================
+   MESSAGE
+========================================================= */
 
-.warmLight{
-    position:absolute;
-    width:45%;
-    height:45%;
-    right:5%;
-    bottom:5%;
-    background:radial-gradient(
-        circle,
-        rgba(255,157,75,.20),
-        transparent 65%
-    );
-    pointer-events:none;
-    z-index:18;
+.hint{
+    position:fixed;
+    z-index:100;
+    left:50%;
+    bottom:115px;
+    transform:translateX(-50%);
+    background:rgba(255,255,255,.9);
+    color:#485562;
+    padding:12px 20px;
+    border-radius:18px;
+    font-size:14px;
+    font-weight:800;
+    white-space:nowrap;
 }
 
-/* mobile */
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:700px){
 
-    .title{
-        font-size:16px;
-        padding:13px 16px;
+    .apartment{
+        width:950px;
+        height:650px;
+        left:50%;
+        top:54%;
+        transform:translate(-50%,-50%) scale(.78);
+    }
+
+    .hud{
+        top:14px;
+        left:14px;
+        right:14px;
+    }
+
+    .logo{
+        font-size:17px;
+        padding:14px 17px;
     }
 
     .room{
-        padding:13px 16px;
-    }
-
-    .window{
-        right:-12%;
-        width:65%;
-        height:42%;
-    }
-
-    .bed{
-        width:53%;
-        left:38%;
-        bottom:20%;
-    }
-
-    .sofa{
-        left:3%;
-        width:42%;
-    }
-
-    .tvUnit{
-        right:1%;
-        width:30%;
-    }
-
-    .plant.right{
-        right:-2%;
+        font-size:16px;
+        padding:14px 17px;
     }
 
     .controls{
         right:14px;
+        bottom:120px;
     }
 
-    button{
-        width:52px;
-        height:52px;
+    .btn{
+        width:55px;
+        height:55px;
     }
 
-    .info{
-        bottom:25px;
-        font-size:14px;
+    .hint{
+        max-width:90%;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        bottom:95px;
     }
 }
 </style>
@@ -957,285 +1050,478 @@ button:active{
 
 <div id="scene">
 
-    <div class="wall"></div>
-    <div class="ceiling"></div>
+    <div class="sky"></div>
+    <div class="sun"></div>
 
-    <!-- GRANDE BAIE VITRÉE -->
-    <div class="window">
-        <div class="sky"></div>
-        <div class="mountain back"></div>
+    <div class="mountains">
         <div class="mountain"></div>
-        <div class="sun"></div>
-        <div class="balcony">
-            <div class="rail"></div>
+        <div class="mountain"></div>
+        <div class="mountain"></div>
+    </div>
+
+    <div class="apartment">
+
+        <div class="floor"></div>
+        <div class="wall-left"></div>
+        <div class="wall-right"></div>
+        <div class="back-wall"></div>
+
+        <div class="window"></div>
+        <div class="balcony"></div>
+
+        <div class="poster one">
+            <span>GOOD<br>VIBES</span>
         </div>
-        <div class="frameV one"></div>
-        <div class="frameV two"></div>
-        <div class="frameH"></div>
-        <div class="glassReflection"></div>
+
+        <div class="poster two">
+            <span>HOME</span>
+        </div>
+
+        <!-- LIT -->
+
+        <div class="bed">
+
+            <div class="bed-frame"></div>
+
+            <div class="mattress"></div>
+
+            <div class="blanket"></div>
+
+            <div class="pillow left"></div>
+            <div class="pillow right"></div>
+
+        </div>
+
+        <!-- FEMME -->
+
+        <div
+            class="woman"
+            onclick="womanClick()"
+            title="Cliquer"
+        >
+
+            <div class="hair"></div>
+            <div class="head"></div>
+            <div class="neck"></div>
+            <div class="body"></div>
+            <div class="top"></div>
+
+            <div class="arm left"></div>
+            <div class="arm right"></div>
+
+            <div class="leg one"></div>
+            <div class="leg two"></div>
+
+        </div>
+
+        <!-- CHAT -->
+
+        <div
+            class="cat"
+            id="cat"
+            onclick="catClick()"
+        >
+
+            <div class="cat-tail"></div>
+            <div class="cat-body"></div>
+
+            <div class="cat-head">
+
+                <div class="cat-ear left"></div>
+                <div class="cat-ear right"></div>
+
+                <div class="cat-eye left"></div>
+                <div class="cat-eye right"></div>
+
+            </div>
+
+        </div>
+
+        <!-- PLANTE 1 -->
+
+        <div
+            class="plant one"
+            onclick="plantClick()"
+        >
+
+            <div class="leaves">
+
+                <div class="leaf"></div>
+                <div class="leaf"></div>
+                <div class="leaf"></div>
+                <div class="leaf"></div>
+
+            </div>
+
+            <div class="pot"></div>
+
+        </div>
+
+        <!-- PLANTE 2 -->
+
+        <div
+            class="plant two"
+            onclick="plantClick()"
+        >
+
+            <div class="leaves">
+
+                <div class="leaf"></div>
+                <div class="leaf"></div>
+                <div class="leaf"></div>
+                <div class="leaf"></div>
+
+            </div>
+
+            <div class="pot"></div>
+
+        </div>
+
+        <!-- BUREAU -->
+
+        <div class="desk">
+
+            <div
+                class="laptop"
+                onclick="computerClick()"
+            ></div>
+
+        </div>
+
+        <!-- LAMPE -->
+
+        <div
+            class="lamp"
+            onclick="lampClick()"
+        >
+
+            <div class="lamp-shade"></div>
+            <div class="lamp-pole"></div>
+
+        </div>
+
+        <div class="book one"></div>
+        <div class="book two"></div>
+
+        <div class="candle one"></div>
+
     </div>
-
-    <!-- SOL -->
-    <div class="floor"></div>
-
-    <!-- DÉCORATION -->
-    <div class="frames">
-        <div class="frame"></div>
-        <div class="frame"></div>
-        <div class="frame"></div>
-    </div>
-
-    <div class="shelf">
-        <div class="book b1"></div>
-        <div class="book b2"></div>
-        <div class="book b3"></div>
-        <div class="book b4"></div>
-    </div>
-
-    <!-- TAPIS -->
-    <div class="rug"></div>
-
-    <!-- CANAPÉ -->
-    <div class="sofa" data-name="Canapé" data-info="Un grand canapé confortable avec coussins.">
-        <div class="sofaBack"></div>
-        <div class="sofaBase"></div>
-        <div class="sofaCushion one"></div>
-        <div class="sofaCushion two"></div>
-    </div>
-
-    <!-- LIT -->
-    <div class="bed" data-name="Chambre" data-info="Une chambre chaleureuse avec lit double, couverture et oreillers.">
-        <div class="headboard"></div>
-        <div class="mattress"></div>
-        <div class="blanket"></div>
-        <div class="pillow left"></div>
-        <div class="pillow right"></div>
-        <div class="bedFrame"></div>
-    </div>
-
-    <!-- CHEVET -->
-    <div class="nightstand"></div>
-
-    <!-- LAMPE -->
-    <div class="lamp" data-name="Lampe" data-info="Une lumière chaude pour créer une ambiance cosy.">
-        <div class="lampBase"></div>
-        <div class="lampShade"></div>
-    </div>
-
-    <!-- TABLE -->
-    <div class="coffee" data-name="Table basse" data-info="Table basse en bois avec une tasse de café.">
-        <div class="coffeeTop"></div>
-        <div class="coffeeLeg one"></div>
-        <div class="coffeeLeg two"></div>
-        <div class="cup"></div>
-    </div>
-
-    <!-- TV -->
-    <div class="tvUnit" data-name="Télévision" data-info="Une télévision installée sur un meuble en bois.">
-        <div class="tv"></div>
-        <div class="tvStand"></div>
-        <div class="tvCabinet"></div>
-    </div>
-
-    <!-- PLANTE GAUCHE -->
-    <div class="plant left" data-name="Grande plante" data-info="Une grande plante verte décorative.">
-        <div class="pot"></div>
-        <div class="leaf l1"></div>
-        <div class="leaf l2"></div>
-        <div class="leaf l3"></div>
-        <div class="leaf l4"></div>
-        <div class="leaf l5"></div>
-    </div>
-
-    <!-- PLANTE DROITE -->
-    <div class="plant right">
-        <div class="pot"></div>
-        <div class="leaf l1"></div>
-        <div class="leaf l2"></div>
-        <div class="leaf l3"></div>
-        <div class="leaf l4"></div>
-        <div class="leaf l5"></div>
-    </div>
-
-    <div class="vase"></div>
-    <div class="candle"></div>
-
-    <div class="warmLight"></div>
 
 </div>
 
 
-<!-- INTERFACE -->
+<!-- HUD -->
 
-<div class="top">
-    <div class="title">🏠 APPARTEMENT–3D</div>
-    <div class="room">Salon</div>
+<div class="hud">
+
+    <div class="logo">
+        🏠 MON APPARTEMENT
+    </div>
+
+    <div class="room">
+        Salon
+    </div>
+
 </div>
+
+
+<!-- CONTROLES -->
 
 <div class="controls">
 
-    <button id="zoomIn">＋</button>
+    <button
+        class="btn"
+        onclick="zoom(1.1)"
+    >
+        ＋
+    </button>
 
-    <button id="zoomOut">−</button>
+    <button
+        class="btn"
+        onclick="zoom(.9)"
+    >
+        −
+    </button>
 
-    <button id="night">☀️</button>
+    <button
+        class="btn"
+        onclick="toggleNight()"
+        id="dayButton"
+    >
+        ☀️
+    </button>
 
-    <button id="reset">⌂</button>
+    <button
+        class="btn"
+        onclick="resetView()"
+    >
+        ⌂
+    </button>
 
 </div>
 
-<div class="info" id="info"></div>
+
+<div class="hint">
+    ☝️ Touche les objets · 🐈 Clique sur le chat · ✨ Explore l'appartement
+</div>
+
+
+<!-- INFO -->
+
+<div
+    class="info"
+    id="info"
+>
+
+    <div
+        class="info-title"
+        id="infoTitle"
+    ></div>
+
+    <div
+        class="info-text"
+        id="infoText"
+    ></div>
+
+</div>
 
 
 <script>
 
-const scene = document.getElementById("scene");
+/* =========================================================
+   INFOS
+========================================================= */
+
 const info = document.getElementById("info");
+const infoTitle = document.getElementById("infoTitle");
+const infoText = document.getElementById("infoText");
 
-let zoom = 1;
+let infoTimer;
 
-document.getElementById("zoomIn").onclick = () => {
+function showInfo(title,text){
 
-    zoom = Math.min(1.35, zoom + .08);
+    infoTitle.textContent = title;
+    infoText.textContent = text;
 
-    scene.style.transform =
-        `scale(${zoom})`;
+    info.classList.add("show");
 
-};
+    clearTimeout(infoTimer);
 
-document.getElementById("zoomOut").onclick = () => {
-
-    zoom = Math.max(.82, zoom - .08);
-
-    scene.style.transform =
-        `scale(${zoom})`;
-
-};
-
-document.getElementById("reset").onclick = () => {
-
-    zoom = 1;
-
-    scene.style.transform =
-        "scale(1)";
-
-};
-
-document.getElementById("night").onclick = () => {
-
-    document.body.classList.toggle("night");
-
-    const night =
-        document.body.classList.contains("night");
-
-    document.getElementById("night").textContent =
-        night ? "🌙" : "☀️";
-
-};
+    infoTimer = setTimeout(()=>{
+        info.classList.remove("show");
+    },4000);
+}
 
 
-/* objets interactifs */
+/* =========================================================
+   INTERACTIONS
+========================================================= */
 
-document.querySelectorAll("[data-name]").forEach(object => {
+function womanClick(){
 
-    object.addEventListener("click", () => {
+    showInfo(
+        "✨ Moment tranquille",
+        "Elle profite simplement de son appartement, avec son chat et la vue sur le coucher de soleil."
+    );
 
-        info.innerHTML =
-            "<strong>" +
-            object.dataset.name +
-            "</strong><br>" +
-            object.dataset.info;
-
-        info.classList.add("show");
-
-        clearTimeout(window.infoTimer);
-
-        window.infoTimer = setTimeout(() => {
-
-            info.classList.remove("show");
-
-        },3500);
-
-    });
-
-});
+}
 
 
-/* déplacement visuel très léger */
+function catClick(){
 
-let startX = null;
-let startY = null;
+    const cat = document.getElementById("cat");
 
-document.addEventListener("touchstart",e => {
+    cat.classList.remove("jump");
 
-    if(e.touches.length !== 1) return;
+    void cat.offsetWidth;
 
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
+    cat.classList.add("jump");
 
-});
+    showInfo(
+        "🐈 Le chat",
+        "Il vient de te regarder… puis décide de faire semblant de ne pas t'avoir vu."
+    );
 
-document.addEventListener("touchmove",e => {
-
-    if(startX === null || e.touches.length !== 1)
-        return;
-
-    const x = e.touches[0].clientX;
-    const y = e.touches[0].clientY;
-
-    const dx = x - startX;
-    const dy = y - startY;
-
-    const rotateY =
-        Math.max(-3,Math.min(3,dx / 90));
-
-    const rotateX =
-        Math.max(-2,Math.min(2,-dy / 120));
-
-    scene.style.transform =
-        `scale(${zoom})
-         rotateY(${rotateY}deg)
-         rotateX(${rotateX}deg)`;
-
-});
-
-document.addEventListener("touchend",() => {
-
-    startX = null;
-    startY = null;
-
-    scene.style.transform =
-        `scale(${zoom})`;
-
-});
+}
 
 
-/* souris */
+function plantClick(){
 
-document.addEventListener("mousemove",e => {
+    showInfo(
+        "🌿 Les plantes",
+        "Il y en a partout dans l'appartement. Elles donnent une vraie ambiance jungle urbaine."
+    );
 
-    if(window.innerWidth < 700)
-        return;
+}
 
-    const x =
-        (e.clientX / window.innerWidth - .5);
 
-    const y =
-        (e.clientY / window.innerHeight - .5);
+function computerClick(){
 
-    scene.style.transform =
-        `scale(${zoom})
-         rotateY(${x * 2}deg)
-         rotateX(${-y * 1.5}deg)`;
+    showInfo(
+        "💻 Ordinateur",
+        "Un petit coin bureau pour travailler, regarder un film ou passer la soirée."
+    );
 
-});
+}
 
-document.addEventListener("mouseleave",() => {
 
-    scene.style.transform =
-        `scale(${zoom})`;
+function lampClick(){
 
-});
+    showInfo(
+        "💡 Lampe",
+        "Une lumière chaude pour rendre l'appartement encore plus cosy."
+    );
+
+}
+
+
+/* =========================================================
+   ZOOM
+========================================================= */
+
+let scale = 1;
+
+const apartment =
+    document.querySelector(".apartment");
+
+function zoom(amount){
+
+    scale *= amount;
+
+    scale = Math.max(
+        .55,
+        Math.min(
+            1.35,
+            scale
+        )
+    );
+
+    apartment.style.transform =
+        `translate(-50%,-50%) scale(${scale})`;
+
+}
+
+
+/* =========================================================
+   JOUR / NUIT
+========================================================= */
+
+let night = false;
+
+function toggleNight(){
+
+    night = !night;
+
+    const scene =
+        document.getElementById("scene");
+
+    const button =
+        document.getElementById("dayButton");
+
+    if(night){
+
+        scene.style.background =
+            "#090d14";
+
+        document.querySelector(".sky").style.background =
+            "linear-gradient(180deg,#050812,#10192a 50%,#18233a)";
+
+        document.querySelector(".sun").style.background =
+            "#e8ecff";
+
+        document.querySelector(".sun").style.boxShadow =
+            "0 0 35px #b9d0ff,0 0 90px rgba(130,160,255,.4)";
+
+        document.querySelector(".sun").style.width =
+            "90px";
+
+        document.querySelector(".sun").style.height =
+            "90px";
+
+        button.textContent = "🌙";
+
+    }else{
+
+        scene.style.background =
+            "#11151c";
+
+        document.querySelector(".sky").style.background =
+            "linear-gradient(180deg,#18202d,#39485a 45%,#b86754 78%,#e7a269)";
+
+        document.querySelector(".sun").style.background =
+            "#ffd995";
+
+        document.querySelector(".sun").style.boxShadow =
+            "0 0 35px #ffca75,0 0 100px rgba(255,170,80,.6)";
+
+        document.querySelector(".sun").style.width =
+            "150px";
+
+        document.querySelector(".sun").style.height =
+            "150px";
+
+        button.textContent = "☀️";
+
+    }
+
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function resetView(){
+
+    scale = 1;
+
+    apartment.style.transform =
+        "translate(-50%,-50%) scale(1)";
+
+    showInfo(
+        "🏠 Appartement",
+        "Bienvenue chez toi. Clique sur les différents éléments pour découvrir l'appartement."
+    );
+
+}
+
+
+/* =========================================================
+   PETITE ANIMATION DU CHAT
+========================================================= */
+
+setInterval(()=>{
+
+    const cat =
+        document.getElementById("cat");
+
+    if(Math.random() > .65){
+
+        cat.style.transform =
+            "translateX(10px)";
+
+        setTimeout(()=>{
+            cat.style.transform =
+                "translateX(0)";
+        },700);
+
+    }
+
+},4500);
+
+
+/* =========================================================
+   BIENVENUE
+========================================================= */
+
+setTimeout(()=>{
+
+    showInfo(
+        "🏠 Bienvenue",
+        "Explore l'appartement et touche les différents objets."
+    );
+
+},800);
 
 </script>
 
