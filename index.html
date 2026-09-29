@@ -2,208 +2,768 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Appartement 03</title>
 
 <style>
 *{
     box-sizing:border-box;
-    margin:0;
-    padding:0;
     -webkit-tap-highlight-color:transparent;
 }
 
+:root{
+    --cream:#eee9dc;
+    --dark:#18201d;
+    --wood:#76543e;
+    --green:#3f5b4d;
+    --gold:#c79b55;
+    --text:#17201d;
+}
+
 html,body{
+    margin:0;
     width:100%;
     height:100%;
     overflow:hidden;
-    background:#101312;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#101311;
 }
+
+body{
+    color:var(--text);
+}
+
+/* =========================
+   APP
+========================= */
 
 #app{
     position:fixed;
     inset:0;
     overflow:hidden;
+    background:#101311;
 }
 
-canvas{
+#topbar{
     position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    touch-action:none;
-}
-
-.ui{
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-}
-
-.top{
-    position:absolute;
-    top:18px;
-    left:18px;
-    right:18px;
+    z-index:100;
+    top:20px;
+    left:20px;
+    right:20px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:10px;
+    pointer-events:none;
 }
 
 .pill{
-    background:rgba(244,240,228,.94);
-    color:#17231e;
-    border-radius:30px;
-    padding:15px 20px;
-    font-size:17px;
-    font-weight:900;
-    box-shadow:0 12px 35px rgba(0,0,0,.25);
-}
-
-.modes{
-    display:flex;
-    gap:4px;
-    padding:6px;
-    border-radius:27px;
-    background:rgba(244,240,228,.94);
-    box-shadow:0 12px 35px rgba(0,0,0,.25);
     pointer-events:auto;
-}
-
-.modes button{
-    width:43px;
-    height:40px;
     border:0;
-    border-radius:19px;
-    background:transparent;
-    font-size:20px;
+    background:rgba(244,241,230,.96);
+    color:#17201d;
+    border-radius:50px;
+    padding:16px 25px;
+    font-size:18px;
+    font-weight:900;
+    letter-spacing:.5px;
+    box-shadow:0 8px 30px rgba(0,0,0,.2);
+    backdrop-filter:blur(12px);
 }
 
-.modes button.active{
-    background:#18241f;
+#controls{
+    display:flex;
+    gap:8px;
 }
 
-.bottom{
+.control{
+    width:54px;
+    height:54px;
+    padding:0;
+    display:grid;
+    place-items:center;
+    font-size:25px;
+    cursor:pointer;
+}
+
+.control.active{
+    background:#192a24;
+    color:white;
+}
+
+/* =========================
+   ROOM
+========================= */
+
+#viewport{
     position:absolute;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    width:max-content;
-    max-width:calc(100% - 35px);
-    background:rgba(244,240,228,.94);
-    color:#17231e;
-    padding:13px 20px;
-    border-radius:22px;
-    font-size:13px;
-    font-weight:850;
-    text-align:center;
-    box-shadow:0 12px 35px rgba(0,0,0,.25);
+    inset:0;
+    overflow:hidden;
+    touch-action:none;
 }
 
-.panel{
+#world{
+    position:absolute;
+    width:1200px;
+    height:850px;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%) scale(1);
+    transform-origin:center center;
+    transition:transform .12s ease-out;
+}
+
+/* light atmosphere */
+
+#room{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 72% 27%,rgba(255,211,132,.85),transparent 19%),
+        linear-gradient(#b8c7c4 0%,#d7c7b0 45%,#d19d72 100%);
+}
+
+#room.night{
+    background:
+        radial-gradient(circle at 70% 28%,rgba(255,180,70,.15),transparent 20%),
+        linear-gradient(#111d2b,#292b31 45%,#241d1b);
+}
+
+#room.sunset{
+    background:
+        radial-gradient(circle at 70% 30%,#ffd17a,transparent 18%),
+        linear-gradient(#8b7582,#d69770 42%,#8d5748 100%);
+}
+
+/* wall */
+
+.wall{
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    height:570px;
+    background:
+        linear-gradient(90deg,rgba(255,255,255,.18),transparent 30%,rgba(0,0,0,.04)),
+        #d9c5a9;
+}
+
+#room.night .wall{
+    background:#30302d;
+}
+
+/* floor */
+
+.floor{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:310px;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0 118px,
+            rgba(83,53,37,.18) 119px 121px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            #a87552 0 76px,
+            #8e634a 77px 79px
+        );
+    transform:perspective(500px) rotateX(35deg);
+    transform-origin:bottom;
+}
+
+#room.night .floor{
+    background:
+        repeating-linear-gradient(90deg,transparent 0 118px,rgba(0,0,0,.2) 119px 121px),
+        repeating-linear-gradient(0deg,#604936 0 76px,#503b30 77px 79px);
+}
+
+/* =========================
+   WINDOW
+========================= */
+
+.window{
+    position:absolute;
+    left:255px;
+    top:105px;
+    width:690px;
+    height:390px;
+    background:
+        linear-gradient(to bottom,
+        #9ac6d5 0%,
+        #a7c8c8 52%,
+        #dfaa7b 100%);
+    border:18px solid #5b3c2d;
+    box-shadow:0 15px 40px rgba(0,0,0,.22);
+}
+
+.window:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(150deg,transparent 48%,rgba(255,255,255,.12) 49%,transparent 51%);
+}
+
+#room.night .window{
+    background:
+        radial-gradient(circle at 75% 22%,#eee3a1 0 7px,transparent 8px),
+        linear-gradient(#172638,#263847 65%,#4a3532);
+}
+
+.window-frame-v{
+    position:absolute;
+    left:50%;
+    top:0;
+    bottom:0;
+    width:14px;
+    background:#5b3c2d;
+    transform:translateX(-50%);
+}
+
+.window-frame-h{
+    position:absolute;
+    left:0;
+    right:0;
+    top:55%;
+    height:13px;
+    background:#5b3c2d;
+}
+
+/* mountains */
+
+.mountain{
+    position:absolute;
+    bottom:0;
+    width:0;
+    height:0;
+    border-left:120px solid transparent;
+    border-right:120px solid transparent;
+    border-bottom:180px solid #607879;
+}
+
+.m1{left:40px}
+.m2{left:220px;border-bottom-color:#4c696d;border-left-width:150px;border-right-width:150px}
+.m3{left:420px;border-bottom-color:#718080}
+.m4{left:570px;border-bottom-color:#52696a;border-left-width:170px;border-right-width:170px}
+
+.water{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    height:85px;
+    background:linear-gradient(#809da0,#68878c);
+}
+
+/* =========================
+   DECORATION
+========================= */
+
+.rug{
+    position:absolute;
+    left:370px;
+    bottom:78px;
+    width:460px;
+    height:220px;
+    background:
+        repeating-linear-gradient(
+            45deg,
+            #8b5d48 0 15px,
+            #bd906b 15px 30px,
+            #725b4b 30px 42px
+        );
+    transform:skew(-5deg);
+    border-radius:6px;
+    box-shadow:0 20px 25px rgba(0,0,0,.2);
+}
+
+.sofa{
+    position:absolute;
+    left:385px;
+    top:455px;
+    width:475px;
+    height:180px;
+    background:#eee7d6;
+    border-radius:28px 28px 18px 18px;
+    box-shadow:0 20px 35px rgba(0,0,0,.2);
+}
+
+.sofa:before{
+    content:"";
+    position:absolute;
+    left:20px;
+    right:20px;
+    top:-50px;
+    height:105px;
+    background:#eee7d6;
+    border-radius:35px 35px 10px 10px;
+}
+
+.cushion{
+    position:absolute;
+    width:105px;
+    height:75px;
+    border-radius:18px;
+    top:-23px;
+    z-index:3;
+}
+
+.c1{left:45px;background:#536e60}
+.c2{left:185px;background:#b86f50}
+.c3{right:50px;background:#d6b47d}
+
+.blanket{
+    position:absolute;
+    right:45px;
+    top:510px;
+    width:130px;
+    height:170px;
+    background:
+        repeating-linear-gradient(45deg,#735b48 0 12px,#94735a 12px 24px);
+    transform:rotate(12deg);
+    border-radius:20px;
+    z-index:5;
+}
+
+/* table */
+
+.table{
+    position:absolute;
+    left:510px;
+    top:585px;
+    width:270px;
+    height:120px;
+    background:#795237;
+    border-radius:18px;
+    z-index:10;
+    box-shadow:0 18px 30px rgba(0,0,0,.28);
+}
+
+.table:before,
+.table:after{
+    content:"";
+    position:absolute;
+    width:20px;
+    height:145px;
+    background:#5a3d2d;
+    top:75px;
+}
+
+.table:before{left:35px}
+.table:after{right:35px}
+
+/* coffee */
+
+.cup{
+    position:absolute;
+    left:55px;
+    top:25px;
+    width:42px;
+    height:35px;
+    border-radius:5px 5px 15px 15px;
+    background:#eee5d3;
+    cursor:pointer;
+}
+
+.cup:after{
+    content:"";
+    position:absolute;
+    right:-15px;
+    top:7px;
+    width:17px;
+    height:18px;
+    border:5px solid #eee5d3;
+    border-left:0;
+    border-radius:0 12px 12px 0;
+}
+
+/* book stack */
+
+.books{
+    position:absolute;
+    right:38px;
+    top:28px;
+    width:65px;
+    height:60px;
+    cursor:pointer;
+}
+
+.book{
+    position:absolute;
+    width:70px;
+    height:18px;
+    border-radius:3px;
+    color:white;
+    font-size:8px;
+    font-weight:bold;
+    padding:4px;
+}
+
+.b1{bottom:0;background:#344e45}
+.b2{bottom:17px;background:#9b634c;transform:rotate(-3deg)}
+.b3{bottom:34px;background:#c59c5e;transform:rotate(2deg)}
+
+/* plant */
+
+.plant{
+    position:absolute;
+    left:65px;
+    top:445px;
+    width:120px;
+    height:190px;
+    z-index:8;
+}
+
+.pot{
+    position:absolute;
+    bottom:0;
+    left:30px;
+    width:65px;
+    height:70px;
+    background:#b77d50;
+    clip-path:polygon(10% 0,90% 0,75% 100%,25% 100%);
+}
+
+.leaf{
+    position:absolute;
+    width:70px;
+    height:105px;
+    background:#3f6550;
+    border-radius:100% 0 100% 0;
+    transform-origin:bottom;
+}
+
+.l1{left:45px;bottom:55px;transform:rotate(-30deg)}
+.l2{left:65px;bottom:55px;transform:rotate(25deg)}
+.l3{left:10px;bottom:60px;transform:rotate(-60deg)}
+.l4{left:35px;bottom:75px;transform:rotate(10deg)}
+
+/* lamp */
+
+.lamp{
+    position:absolute;
+    right:90px;
+    top:330px;
+    width:100px;
+    height:180px;
+    z-index:20;
+    cursor:pointer;
+}
+
+.lamp-shade{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100px;
+    height:55px;
+    background:#343d32;
+    clip-path:polygon(20% 0,80% 0,100% 100%,0 100%);
+}
+
+.lamp-stem{
+    position:absolute;
+    top:55px;
+    left:47px;
+    width:7px;
+    height:100px;
+    background:#4d4036;
+}
+
+.lamp-light{
+    position:absolute;
+    top:-45px;
+    left:-60px;
+    width:220px;
+    height:220px;
+    background:radial-gradient(circle,rgba(255,213,106,.65),transparent 65%);
+    opacity:0;
+    pointer-events:none;
+}
+
+.lamp.on .lamp-light{
+    opacity:1;
+}
+
+/* =========================
+   CAT
+========================= */
+
+.cat{
+    position:absolute;
+    left:760px;
+    top:470px;
+    width:145px;
+    height:125px;
+    z-index:30;
+    cursor:pointer;
+    transition:transform .35s;
+}
+
+.cat:hover{
+    transform:translateY(-8px);
+}
+
+.cat-body{
+    position:absolute;
+    left:20px;
+    bottom:5px;
+    width:110px;
+    height:80px;
+    background:#413b39;
+    border-radius:55% 55% 45% 45%;
+}
+
+.cat-head{
     position:absolute;
     left:18px;
-    right:18px;
-    bottom:78px;
-    padding:22px;
+    top:0;
+    width:85px;
+    height:80px;
+    background:#4b4441;
+    border-radius:50%;
+}
+
+.ear{
+    position:absolute;
+    top:-20px;
+    width:34px;
+    height:42px;
+    background:#4b4441;
+    clip-path:polygon(50% 0,100% 100%,0 100%);
+}
+
+.ear.left{left:4px}
+.ear.right{right:4px}
+
+.eye{
+    position:absolute;
+    top:31px;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#e8bd51;
+}
+
+.eye.left{left:22px}
+.eye.right{right:22px}
+
+.nose{
+    position:absolute;
+    top:49px;
+    left:39px;
+    width:10px;
+    height:8px;
+    border-radius:50%;
+    background:#d88d86;
+}
+
+.tail{
+    position:absolute;
+    right:-38px;
+    bottom:25px;
+    width:75px;
+    height:100px;
+    border:17px solid #413b39;
+    border-left:0;
+    border-radius:0 70px 70px 0;
+    transform:rotate(-15deg);
+}
+
+.cat.sleep .eye{
+    height:2px;
+    top:36px;
+    border-radius:0;
+}
+
+.cat.happy{
+    animation:catBounce .45s ease;
+}
+
+@keyframes catBounce{
+    50%{transform:translateY(-25px) rotate(-3deg)}
+}
+
+/* =========================
+   WALL ART
+========================= */
+
+.art{
+    position:absolute;
+    cursor:pointer;
+    transition:transform .25s;
+}
+
+.art:hover{
+    transform:scale(1.06) rotate(-1deg);
+}
+
+.art-frame{
+    width:125px;
+    height:150px;
+    background:#704e3b;
+    padding:9px;
+    box-shadow:0 12px 20px rgba(0,0,0,.18);
+}
+
+.art-inner{
+    width:100%;
+    height:100%;
+    background:
+        radial-gradient(circle at 50% 70%,#d78a61 0 16%,transparent 17%),
+        linear-gradient(150deg,#596e69,#e0a477);
+    position:relative;
+    overflow:hidden;
+}
+
+.art-inner:after{
+    content:"BONHEUR";
+    position:absolute;
+    bottom:12px;
+    left:0;
+    right:0;
+    text-align:center;
+    font-family:Georgia,serif;
+    font-weight:bold;
+    color:#51382e;
+    font-size:12px;
+}
+
+.art1{left:950px;top:160px}
+.art2{left:95px;top:180px;transform:rotate(-4deg)}
+
+/* shelf */
+
+.shelf{
+    position:absolute;
+    left:40px;
+    top:310px;
+    width:190px;
+    height:185px;
+    z-index:15;
+}
+
+.shelf-board{
+    position:absolute;
+    left:0;
+    width:190px;
+    height:14px;
+    background:#684936;
+}
+
+.sb1{top:0}
+.sb2{top:72px}
+.sb3{top:145px}
+
+.book-small{
+    position:absolute;
+    bottom:14px;
+    width:27px;
+    height:65px;
+    border-radius:2px 2px 0 0;
+}
+
+.bs1{left:12px;background:#9b634c}
+.bs2{left:42px;height:75px;background:#b78c4e}
+.bs3{left:73px;height:58px;background:#496254}
+.bs4{left:105px;height:78px;background:#805c55}
+.bs5{left:140px;height:68px;background:#b99d6b}
+
+/* =========================
+   UI
+========================= */
+
+#hint{
+    position:absolute;
+    z-index:90;
+    bottom:24px;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(90%,760px);
+    background:rgba(244,241,230,.94);
     border-radius:28px;
-    background:rgba(22,34,29,.96);
+    padding:16px 22px;
+    text-align:center;
+    font-weight:800;
+    font-size:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.18);
+}
+
+#toast{
+    position:absolute;
+    z-index:200;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%) scale(.8);
+    width:min(88%,420px);
+    padding:28px;
+    border-radius:25px;
+    background:rgba(24,32,29,.95);
     color:white;
-    box-shadow:0 25px 70px rgba(0,0,0,.5);
-    border:1px solid rgba(255,255,255,.12);
-    transform:translateY(160%);
-    transition:.4s ease;
-    pointer-events:auto;
+    box-shadow:0 25px 70px rgba(0,0,0,.4);
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+    text-align:center;
 }
 
-.panel.open{
-    transform:translateY(0);
+#toast.show{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
 }
 
-.panel h2{
+#toast h2{
+    margin:0 0 10px;
     font-size:24px;
-    margin-bottom:7px;
 }
 
-.panel p{
-    color:#d5ddd8;
+#toast p{
+    margin:0;
     line-height:1.5;
-    margin-bottom:16px;
+    color:#d7ddd8;
 }
 
 .close{
     position:absolute;
-    top:9px;
-    right:13px;
+    top:12px;
+    right:15px;
     border:0;
     background:none;
     color:white;
-    font-size:30px;
+    font-size:25px;
 }
 
-.actions{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-}
+/* mobile */
 
-.actions button{
-    border:0;
-    border-radius:14px;
-    padding:11px 15px;
-    background:#d6b47a;
-    color:#18221e;
-    font-weight:900;
-}
-
-.toast{
-    position:absolute;
-    top:92px;
-    left:50%;
-    transform:translate(-50%,-15px);
-    background:#f4f0e4;
-    color:#17231e;
-    padding:12px 17px;
-    border-radius:17px;
-    font-weight:900;
-    opacity:0;
-    transition:.3s;
-    white-space:nowrap;
-}
-
-.toast.show{
-    opacity:1;
-    transform:translate(-50%,0);
-}
-
-@media(max-width:600px){
-    .top{
-        top:12px;
-        left:10px;
-        right:10px;
+@media(max-width:700px){
+    #topbar{
+        top:16px;
+        left:14px;
+        right:14px;
     }
 
     .pill{
-        padding:13px 15px;
+        padding:14px 18px;
+        font-size:15px;
+    }
+
+    .control{
+        width:45px;
+        height:45px;
+        font-size:20px;
+    }
+
+    #controls{
+        gap:5px;
+    }
+
+    #hint{
+        bottom:18px;
         font-size:14px;
-    }
-
-    .modes{
-        padding:5px;
-    }
-
-    .modes button{
-        width:35px;
-        height:35px;
-        font-size:17px;
-    }
-
-    .bottom{
-        bottom:13px;
-        font-size:11px;
-        padding:11px 15px;
+        padding:14px;
     }
 }
 </style>
@@ -213,1807 +773,421 @@ canvas{
 
 <div id="app">
 
-<canvas id="room"></canvas>
-
-<div class="ui">
-
-    <div class="top">
-
-        <div class="pill">
+    <div id="topbar">
+        <button class="pill" onclick="showInfo('Appartement 03','Bienvenue chez toi. Explore la pièce, touche les objets et change complètement l’ambiance.')">
             🏠 APPARTEMENT 03
+        </button>
+
+        <div id="controls">
+            <button class="pill control active" id="dayBtn" onclick="setMood('day')">☀️</button>
+            <button class="pill control" onclick="setMood('sunset')">🌅</button>
+            <button class="pill control" onclick="setMood('night')">🌙</button>
+            <button class="pill control" onclick="resetCamera()">🎥</button>
         </div>
+    </div>
 
-        <div class="modes">
+    <div id="viewport">
 
-            <button class="active" data-mode="day">☀️</button>
-            <button data-mode="sunset">🌅</button>
-            <button data-mode="night">🌙</button>
-            <button id="reset">🎥</button>
+        <div id="world">
+
+            <div id="room">
+
+                <div class="wall"></div>
+
+                <div class="window">
+                    <div class="mountain m1"></div>
+                    <div class="mountain m2"></div>
+                    <div class="mountain m3"></div>
+                    <div class="mountain m4"></div>
+                    <div class="water"></div>
+                    <div class="window-frame-v"></div>
+                    <div class="window-frame-h"></div>
+                </div>
+
+                <div class="art art1" onclick="showInfo('Vue sur le lac','Une grande fenêtre ouverte sur les montagnes. Clique sur les modes ☀️ 🌅 🌙 pour changer la lumière.')">
+                    <div class="art-frame">
+                        <div class="art-inner"></div>
+                    </div>
+                </div>
+
+                <div class="art art2" onclick="showInfo('Souvenir','Quelques photos et souvenirs donnent à l’appartement son caractère.')">
+                    <div class="art-frame">
+                        <div class="art-inner"></div>
+                    </div>
+                </div>
+
+                <div class="shelf">
+                    <div class="shelf-board sb1"></div>
+                    <div class="shelf-board sb2"></div>
+                    <div class="shelf-board sb3"></div>
+
+                    <div class="book-small bs1"></div>
+                    <div class="book-small bs2"></div>
+                    <div class="book-small bs3"></div>
+                    <div class="book-small bs4"></div>
+                    <div class="book-small bs5"></div>
+                </div>
+
+                <div class="plant">
+                    <div class="leaf l1"></div>
+                    <div class="leaf l2"></div>
+                    <div class="leaf l3"></div>
+                    <div class="leaf l4"></div>
+                    <div class="pot"></div>
+                </div>
+
+                <div class="sofa">
+                    <div class="cushion c1"></div>
+                    <div class="cushion c2"></div>
+                    <div class="cushion c3"></div>
+                </div>
+
+                <div class="blanket"></div>
+
+                <div class="rug"></div>
+
+                <div class="table">
+
+                    <div class="cup"
+                         onclick="showInfo('Café','Un café fraîchement préparé. ☕')">
+                    </div>
+
+                    <div class="books"
+                         onclick="showInfo('Livres','Voyage, cuisine, photographie… Quelques livres traînent sur la table.')">
+                        <div class="book b1">VOYAGES</div>
+                        <div class="book b2">CUISINE</div>
+                        <div class="book b3">DESIGN</div>
+                    </div>
+
+                </div>
+
+                <div class="lamp"
+                     onclick="toggleLamp()">
+                    <div class="lamp-light"></div>
+                    <div class="lamp-shade"></div>
+                    <div class="lamp-stem"></div>
+                </div>
+
+                <div class="cat"
+                     id="cat"
+                     onclick="catInteraction()">
+
+                    <div class="tail"></div>
+
+                    <div class="cat-body"></div>
+
+                    <div class="cat-head">
+                        <div class="ear left"></div>
+                        <div class="ear right"></div>
+                        <div class="eye left"></div>
+                        <div class="eye right"></div>
+                        <div class="nose"></div>
+                    </div>
+
+                </div>
+
+                <div class="floor"></div>
+
+            </div>
 
         </div>
 
     </div>
 
-    <div id="toast" class="toast"></div>
-
-    <div class="bottom">
+    <div id="hint">
         👆 Glisse pour regarder · 🤏 Pince pour zoomer · ✨ Touche les objets
     </div>
 
-    <div id="panel" class="panel">
-
-        <button class="close" id="close">×</button>
-
-        <h2 id="panelTitle"></h2>
-
-        <p id="panelText"></p>
-
-        <div id="actions" class="actions"></div>
-
+    <div id="toast">
+        <button class="close" onclick="closeInfo()">×</button>
+        <h2 id="toastTitle"></h2>
+        <p id="toastText"></p>
     </div>
 
 </div>
 
-</div>
-
-
 <script>
 
-/* =========================================================
-   APPARTEMENT 03
-   100% AUTONOME
-   Canvas + JavaScript
-========================================================= */
+/* =====================================================
+   CAMERA
+===================================================== */
 
-const canvas = document.getElementById("room");
-const ctx = canvas.getContext("2d");
+const world = document.getElementById("world");
 
-let W = 0;
-let H = 0;
-let dpr = 1;
+let scale = 1;
+let posX = 0;
+let posY = 0;
 
-let mode = "day";
+let dragging = false;
+let startX = 0;
+let startY = 0;
+let initialX = 0;
+let initialY = 0;
 
-let cameraX = 0;
-let cameraY = 0;
-let zoom = 1;
+function updateCamera(){
 
-let targetCameraX = 0;
-let targetCameraY = 0;
-let targetZoom = 1;
+    scale = Math.max(.75,Math.min(1.7,scale));
 
-let pointerDown = false;
-let lastX = 0;
-let lastY = 0;
+    world.style.transform =
+        `translate(calc(-50% + ${posX}px),calc(-50% + ${posY}px)) scale(${scale})`;
+}
 
-let pinchDistance = null;
+const viewport = document.getElementById("viewport");
 
-let objects = [];
+viewport.addEventListener("pointerdown",e=>{
 
-let hoveredObject = null;
+    if(e.target.closest("button,.cat,.cup,.books,.lamp,.art")) return;
+
+    dragging=true;
+
+    startX=e.clientX;
+    startY=e.clientY;
+
+    initialX=posX;
+    initialY=posY;
+
+    viewport.setPointerCapture(e.pointerId);
+});
+
+viewport.addEventListener("pointermove",e=>{
+
+    if(!dragging)return;
+
+    posX=initialX+(e.clientX-startX);
+    posY=initialY+(e.clientY-startY);
+
+    updateCamera();
+});
+
+viewport.addEventListener("pointerup",()=>{
+    dragging=false;
+});
+
+viewport.addEventListener("wheel",e=>{
+
+    e.preventDefault();
+
+    scale += e.deltaY < 0 ? .08 : -.08;
+
+    updateCamera();
+
+},{passive:false});
 
 
-/* =========================================================
-   COULEURS
-========================================================= */
+/* =====================================================
+   PINCH ZOOM MOBILE
+===================================================== */
 
-const themes = {
+let pinchDistance=null;
+let pinchScale=1;
 
-    day:{
-        sky:"#9bb9bd",
-        sky2:"#efb183",
-        wall:"#e5d0ad",
-        floor:"#b9875f",
-        floor2:"#956544",
-        wood:"#62432f",
-        dark:"#26342f",
-        green:"#4e6e58",
-        cream:"#eee5d2",
-        gold:"#c79b55",
-        light:"#ffd59c",
-        mountain:"#526969"
-    },
+viewport.addEventListener("touchstart",e=>{
 
-    sunset:{
-        sky:"#654d58",
-        sky2:"#d77b58",
-        wall:"#cfae8b",
-        floor:"#8b5e4c",
-        floor2:"#664337",
-        wood:"#50352a",
-        dark:"#252522",
-        green:"#435a4a",
-        cream:"#d8cbb6",
-        gold:"#bd844b",
-        light:"#ffad6c",
-        mountain:"#3f5154"
-    },
+    if(e.touches.length===2){
 
-    night:{
-        sky:"#101d2b",
-        sky2:"#243346",
-        wall:"#393733",
-        floor:"#423a34",
-        floor2:"#302a26",
-        wood:"#30251f",
-        dark:"#17221f",
-        green:"#314b3c",
-        cream:"#aaa391",
-        gold:"#a67c43",
-        light:"#f2bd70",
-        mountain:"#202f3b"
+        pinchDistance=Math.hypot(
+            e.touches[0].clientX-e.touches[1].clientX,
+            e.touches[0].clientY-e.touches[1].clientY
+        );
+
+        pinchScale=scale;
     }
 
-};
-
-function T(){
-    return themes[mode];
-}
+},{passive:true});
 
 
-/* =========================================================
-   RESIZE
-========================================================= */
+viewport.addEventListener("touchmove",e=>{
 
-function resize(){
+    if(e.touches.length!==2)return;
 
-    dpr = Math.min(window.devicePixelRatio || 1,2);
+    const distance=Math.hypot(
+        e.touches[0].clientX-e.touches[1].clientX,
+        e.touches[0].clientY-e.touches[1].clientY
+    );
 
-    W = window.innerWidth;
-    H = window.innerHeight;
+    if(pinchDistance){
 
-    canvas.width = W*dpr;
-    canvas.height = H*dpr;
+        scale=pinchScale*(distance/pinchDistance);
 
-    canvas.style.width = W+"px";
-    canvas.style.height = H+"px";
-
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-}
-
-window.addEventListener("resize",resize);
-
-resize();
-
-
-/* =========================================================
-   UTILS
-========================================================= */
-
-function lerp(a,b,t){
-    return a+(b-a)*t;
-}
-
-function clamp(v,min,max){
-    return Math.max(min,Math.min(max,v));
-}
-
-function roundRect(ctx,x,y,w,h,r){
-
-    ctx.beginPath();
-
-    ctx.roundRect(x,y,w,h,r);
-
-    ctx.fill();
-}
-
-function polygon(points,fill,stroke){
-
-    ctx.beginPath();
-
-    ctx.moveTo(points[0][0],points[0][1]);
-
-    for(let i=1;i<points.length;i++){
-        ctx.lineTo(points[i][0],points[i][1]);
+        updateCamera();
     }
 
-    ctx.closePath();
+},{passive:true});
 
-    if(fill){
-        ctx.fillStyle=fill;
-        ctx.fill();
-    }
 
-    if(stroke){
-        ctx.strokeStyle=stroke;
-        ctx.stroke();
-    }
+viewport.addEventListener("touchend",()=>{
+    pinchDistance=null;
+});
+
+
+function resetCamera(){
+
+    scale=1;
+    posX=0;
+    posY=0;
+
+    updateCamera();
+
+    showInfo(
+        "Mode caméra",
+        "La vue est revenue au centre. Sur ordinateur, utilise la molette. Sur téléphone, pince pour zoomer et glisse pour explorer."
+    );
 }
 
 
-/* =========================================================
-   PERSPECTIVE
-========================================================= */
+/* =====================================================
+   AMBIANCE
+===================================================== */
 
-function P(x,y,z){
+const room=document.getElementById("room");
+const dayBtn=document.getElementById("dayBtn");
 
-    const horizon = H*.39;
+function setMood(mood){
 
-    const depth = 1/(1+z*.075);
+    room.classList.remove("night","sunset");
 
-    const sx =
-        W/2 +
-        (x-cameraX)*depth*zoom;
-
-    const sy =
-        horizon +
-        (y-cameraY)*depth*zoom;
-
-    return [sx,sy,depth];
-}
-
-
-/* =========================================================
-   DRAW SKY
-========================================================= */
-
-function drawSky(){
-
-    const g =
-        ctx.createLinearGradient(
-            0,0,
-            0,H*.65
-        );
-
-    g.addColorStop(
-        0,
-        T().sky
-    );
-
-    g.addColorStop(
-        1,
-        T().sky2
-    );
-
-    ctx.fillStyle=g;
-
-    ctx.fillRect(
-        0,0,W,H
-    );
-
-}
-
-
-/* =========================================================
-   MOUNTAINS
-========================================================= */
-
-function drawMountains(){
-
-    polygon([
-        [0,H*.49],
-        [W*.15,H*.35],
-        [W*.29,H*.46],
-        [W*.43,H*.31],
-        [W*.58,H*.45],
-        [W*.73,H*.32],
-        [W*.87,H*.45],
-        [W,H*.34],
-        [W,H*.58],
-        [0,H*.58]
-    ],T().mountain);
-
-    polygon([
-        [0,H*.53],
-        [W*.19,H*.42],
-        [W*.34,H*.51],
-        [W*.51,H*.39],
-        [W*.68,H*.51],
-        [W*.82,H*.41],
-        [W,H*.49],
-        [W,H*.6],
-        [0,H*.6]
-    ],"#435b5c");
-
-}
-
-
-/* =========================================================
-   SUN
-========================================================= */
-
-function drawSun(){
-
-    if(mode==="night") return;
-
-    const x =
-        mode==="sunset"
-        ? W*.72
-        : W*.76;
-
-    const y =
-        mode==="sunset"
-        ? H*.38
-        : H*.27;
-
-    const r = 45;
-
-    const glow =
-        ctx.createRadialGradient(
-            x,y,5,
-            x,y,110
-        );
-
-    glow.addColorStop(
-        0,
-        "rgba(255,230,150,.85)"
-    );
-
-    glow.addColorStop(
-        1,
-        "rgba(255,180,100,0)"
-    );
-
-    ctx.fillStyle=glow;
-
-    ctx.beginPath();
-    ctx.arc(x,y,110,0,Math.PI*2);
-    ctx.fill();
-
-    ctx.fillStyle="#ffd37e";
-
-    ctx.beginPath();
-    ctx.arc(x,y,r,0,Math.PI*2);
-    ctx.fill();
-}
-
-
-/* =========================================================
-   ROOM
-========================================================= */
-
-function drawRoom(){
-
-    const horizon = H*.42;
-
-    /* back wall */
-
-    ctx.fillStyle=T().wall;
-
-    ctx.fillRect(
-        0,
-        horizon,
-        W,
-        H*.4
-    );
-
-
-    /* floor */
-
-    polygon([
-        [0,H*.73],
-        [W,H*.73],
-        [W,H],
-        [0,H]
-    ],T().floor);
-
-
-    /* floor perspective lines */
-
-    ctx.strokeStyle=
-        "rgba(65,42,29,.23)";
-
-    ctx.lineWidth=1;
-
-    for(let i=0;i<13;i++){
-
-        const x=i*W/12;
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            W/2+(x-W/2)*.25,
-            H*.73
-        );
-
-        ctx.lineTo(
-            x,
-            H
-        );
-
-        ctx.stroke();
-    }
-
-    for(let i=0;i<5;i++){
-
-        const y=
-            H*.73+
-            i*(H*.27/5);
-
-        ctx.beginPath();
-
-        ctx.moveTo(0,y);
-        ctx.lineTo(W,y);
-
-        ctx.stroke();
-    }
-
-}
-
-
-/* =========================================================
-   WINDOW
-========================================================= */
-
-function drawWindow(){
-
-    const x=W*.16;
-    const y=H*.24;
-    const w=W*.68;
-    const h=H*.38;
-
-    /* frame */
-
-    ctx.fillStyle=T().wood;
-
-    roundRect(
-        ctx,
-        x-10,
-        y-10,
-        w+20,
-        h+20,
-        5
-    );
-
-
-    /* glass */
-
-    const g=
-        ctx.createLinearGradient(
-            0,y,
-            0,y+h
-        );
-
-    g.addColorStop(
-        0,
-        mode==="night"
-        ? "#142437"
-        : mode==="sunset"
-        ? "#6d5261"
-        : "#71949e"
-    );
-
-    g.addColorStop(
-        1,
-        mode==="night"
-        ? "#263449"
-        : mode==="sunset"
-        ? "#db8561"
-        : "#edb083"
-    );
-
-    ctx.fillStyle=g;
-
-    ctx.fillRect(
-        x,
-        y,
-        w,
-        h
-    );
-
-
-    /* outside landscape */
-
-    polygon([
-        [x,y+h*.73],
-        [x+w*.18,y+h*.45],
-        [x+w*.34,y+h*.7],
-        [x+w*.48,y+h*.4],
-        [x+w*.65,y+h*.72],
-        [x+w*.82,y+h*.5],
-        [x+w,y+h*.72],
-        [x+w,y+h],
-        [x,y+h]
-    ],T().mountain);
-
-
-    /* lake */
-
-    ctx.fillStyle=
-        mode==="night"
-        ? "#253c4b"
-        : "#6e9fa8";
-
-    ctx.fillRect(
-        x,
-        y+h*.72,
-        w,
-        h*.28
-    );
-
-
-    /* frame bars */
-
-    ctx.fillStyle=T().wood;
-
-    ctx.fillRect(
-        x+w*.49,
-        y,
-        7,
-        h
-    );
-
-    ctx.fillRect(
-        x,
-        y+h*.72,
-        w,
-        7
-    );
-
-}
-
-
-/* =========================================================
-   CURTAINS
-========================================================= */
-
-function drawCurtains(){
-
-    ctx.fillStyle=
-        mode==="night"
-        ? "#282821"
-        : "#d6c3a5";
-
-    polygon([
-        [W*.10,H*.20],
-        [W*.18,H*.23],
-        [W*.18,H*.63],
-        [W*.10,H*.68]
-    ],T().cream);
-
-    polygon([
-        [W*.90,H*.20],
-        [W*.82,H*.23],
-        [W*.82,H*.63],
-        [W*.90,H*.68]
-    ],T().cream);
-
-}
-
-
-/* =========================================================
-   TABLE
-========================================================= */
-
-function drawTable(){
-
-    const cx=W*.50;
-    const cy=H*.69;
-
-    ctx.fillStyle=T().wood;
-
-    roundRect(
-        ctx,
-        cx-95,
-        cy-17,
-        190,
-        34,
-        9
-    );
-
-    ctx.fillRect(
-        cx-75,
-        cy+10,
-        10,
-        105
-    );
-
-    ctx.fillRect(
-        cx+65,
-        cy+10,
-        10,
-        105
-    );
-
-
-    /* laptop */
-
-    ctx.fillStyle="#202625";
-
-    polygon([
-        [cx-40,cy-50],
-        [cx+12,cy-50],
-        [cx+24,cy-17],
-        [cx-50,cy-17]
-    ],"#252a28");
-
-    ctx.fillStyle="#789a99";
-
-    ctx.fillRect(
-        cx-35,
-        cy-45,
-        42,
-        22
-    );
-
-    ctx.fillStyle="#303532";
-
-    polygon([
-        [cx-50,cy-16],
-        [cx+24,cy-16],
-        [cx+38,cy-8],
-        [cx-62,cy-8]
-    ],"#303532");
-
-
-    /* coffee */
-
-    ctx.fillStyle=T().cream;
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cx+63,
-        cy-2,
-        13,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-    ctx.fillStyle="#79533b";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        cx+63,
-        cy-3,
-        9,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-
-    /* book */
-
-    ctx.fillStyle="#536b59";
-
-    roundRect(
-        ctx,
-        cx-20,
-        cy-3,
-        42,
-        8,
-        2
-    );
-
-}
-
-
-/* =========================================================
-   SOFA
-========================================================= */
-
-function drawSofa(){
-
-    const x=W*.38;
-    const y=H*.64;
-
-    /* body */
-
-    ctx.fillStyle=T().cream;
-
-    roundRect(
-        ctx,
-        x-135,
-        y,
-        270,
-        105,
-        22
-    );
-
-    /* back */
-
-    roundRect(
-        ctx,
-        x-135,
-        y-75,
-        270,
-        90,
-        24
-    );
-
-    /* arms */
-
-    roundRect(
-        ctx,
-        x-153,
-        y-35,
-        35,
-        105,
-        18
-    );
-
-    roundRect(
-        ctx,
-        x+118,
-        y-35,
-        35,
-        105,
-        18
-    );
-
-
-    /* cushions */
-
-    ctx.fillStyle="#b77759";
-
-    roundRect(
-        ctx,
-        x-95,
-        y-48,
-        62,
-        47,
-        13
-    );
-
-    ctx.fillStyle="#55705e";
-
-    roundRect(
-        ctx,
-        x-25,
-        y-48,
-        62,
-        47,
-        13
-    );
-
-    ctx.fillStyle="#c3a982";
-
-    roundRect(
-        ctx,
-        x+45,
-        y-48,
-        62,
-        47,
-        13
-    );
-
-}
-
-
-/* =========================================================
-   RUG
-========================================================= */
-
-function drawRug(){
-
-    ctx.fillStyle="#79564a";
-
-    roundRect(
-        ctx,
-        W*.24,
-        H*.72,
-        W*.52,
-        H*.18,
-        15
-    );
-
-    ctx.strokeStyle=
-        "rgba(225,190,140,.5)";
-
-    ctx.lineWidth=3;
-
-    for(let i=0;i<7;i++){
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            W*.27,
-            H*.74+i*22
-        );
-
-        ctx.lineTo(
-            W*.73,
-            H*.74+i*22
-        );
-
-        ctx.stroke();
-
-    }
-
-}
-
-
-/* =========================================================
-   LIBRARY
-========================================================= */
-
-function drawLibrary(){
-
-    const x=W*.035;
-    const y=H*.42;
-    const w=W*.20;
-    const h=H*.36;
-
-    ctx.fillStyle=T().dark;
-
-    roundRect(
-        ctx,
-        x,
-        y,
-        w,
-        h,
-        5
-    );
-
-    for(let row=0;row<4;row++){
-
-        const yy=
-            y+35+
-            row*(h-50)/4;
-
-        ctx.fillStyle=T().wood;
-
-        ctx.fillRect(
-            x+8,
-            yy,
-            w-16,
-            5
-        );
-
-        const colors=[
-            "#ad6b50",
-            "#ba965d",
-            "#526b59",
-            "#80605a",
-            "#c8b38c"
-        ];
-
-        for(let i=0;i<5;i++){
-
-            ctx.fillStyle=
-                colors[(i+row)%colors.length];
-
-            const bh=
-                27+
-                (i%3)*8;
-
-            ctx.fillRect(
-                x+15+i*19,
-                yy-bh,
-                14,
-                bh
-            );
-        }
-    }
-
-}
-
-
-/* =========================================================
-   PLANT
-========================================================= */
-
-function drawPlant(){
-
-    const x=W*.87;
-    const y=H*.74;
-
-    ctx.fillStyle="#a56448";
-
-    roundRect(
-        ctx,
-        x-25,
-        y,
-        50,
-        45,
-        7
-    );
-
-    const leaves=[
-        [-50,-90,-.5],
-        [-25,-115,-.2],
-        [0,-130,0],
-        [25,-110,.2],
-        [50,-85,.5],
-        [-65,-45,-.8],
-        [65,-48,.8]
-    ];
-
-    leaves.forEach(l=>{
-
-        ctx.save();
-
-        ctx.translate(
-            x+l[0],
-            y+l[1]
-        );
-
-        ctx.rotate(l[2]);
-
-        ctx.fillStyle=T().green;
-
-        ctx.beginPath();
-
-        ctx.ellipse(
-            0,
-            0,
-            18,
-            42,
-            0,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-        ctx.restore();
-
+    document.querySelectorAll(".control").forEach(b=>{
+        b.classList.remove("active");
     });
 
+    if(mood==="night"){
+        room.classList.add("night");
+        document.querySelectorAll(".control")[2].classList.add("active");
+    }
+
+    if(mood==="sunset"){
+        room.classList.add("sunset");
+        document.querySelectorAll(".control")[1].classList.add("active");
+    }
+
+    if(mood==="day"){
+        dayBtn.classList.add("active");
+    }
 }
 
 
-/* =========================================================
+/* =====================================================
    LAMPE
-========================================================= */
+===================================================== */
 
-function drawLamp(){
+function toggleLamp(){
 
-    const x=W*.72;
-    const y=H*.42;
+    const lamp=document.querySelector(".lamp");
 
-    ctx.strokeStyle=T().wood;
-    ctx.lineWidth=5;
+    lamp.classList.toggle("on");
 
-    ctx.beginPath();
+    if(lamp.classList.contains("on")){
 
-    ctx.moveTo(x,y-90);
-    ctx.lineTo(x,y-10);
-
-    ctx.stroke();
-
-    ctx.fillStyle=T().dark;
-
-    ctx.beginPath();
-
-    ctx.moveTo(x-30,y-12);
-    ctx.lineTo(x+30,y-12);
-    ctx.lineTo(x+20,y+18);
-    ctx.lineTo(x-20,y+18);
-    ctx.closePath();
-
-    ctx.fill();
-
-    if(mode!=="night"){
-
-        const glow=
-            ctx.createRadialGradient(
-                x,y+15,3,
-                x,y+15,110
-            );
-
-        glow.addColorStop(
-            0,
-            "rgba(255,210,130,.22)"
+        showInfo(
+            "Lampe allumée",
+            "La lumière chaude change l’ambiance de la pièce."
         );
 
-        glow.addColorStop(
-            1,
-            "rgba(255,210,130,0)"
+    }else{
+
+        showInfo(
+            "Lampe éteinte",
+            "La pièce retrouve uniquement sa lumière naturelle."
         );
-
-        ctx.fillStyle=glow;
-
-        ctx.beginPath();
-
-        ctx.arc(
-            x,
-            y+15,
-            110,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
     }
-
 }
 
 
-/* =========================================================
-   GUITARE
-========================================================= */
-
-function drawGuitar(){
-
-    const x=W*.27;
-    const y=H*.70;
-
-    ctx.save();
-
-    ctx.translate(x,y);
-    ctx.rotate(-.12);
-
-    ctx.fillStyle="#a76042";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        0,
-        0,
-        25,
-        38,
-        0,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-    ctx.fillStyle="#6b432f";
-
-    ctx.fillRect(
-        -5,
-        -85,
-        10,
-        70
-    );
-
-    ctx.strokeStyle="#e6d4b0";
-    ctx.lineWidth=1;
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        -4,
-        -80
-    );
-
-    ctx.lineTo(
-        -4,
-        25
-    );
-
-    ctx.moveTo(
-        4,
-        -80
-    );
-
-    ctx.lineTo(
-        4,
-        25
-    );
-
-    ctx.stroke();
-
-    ctx.restore();
-
-}
-
-
-/* =========================================================
+/* =====================================================
    CHAT
-========================================================= */
+===================================================== */
 
-let catBob=0;
-let catTail=0;
+let catClicks=0;
 
-function drawCat(){
+function catInteraction(){
 
-    const x=W*.66;
-    const y=H*.67+catBob;
+    const cat=document.getElementById("cat");
 
-    /* queue */
+    cat.classList.remove("happy");
 
-    ctx.save();
+    void cat.offsetWidth;
 
-    ctx.translate(
-        x+60,
-        y+8
-    );
+    cat.classList.add("happy");
 
-    ctx.rotate(
-        Math.sin(catTail)*.25
-    );
+    catClicks++;
 
-    ctx.strokeStyle="#4a403a";
-    ctx.lineWidth=13;
-    ctx.lineCap="round";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        0,
-        0,
-        40,
-        -1.2,
-        1.5
-    );
-
-    ctx.stroke();
-
-    ctx.restore();
-
-
-    /* corps */
-
-    ctx.fillStyle="#544943";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        x,
-        y+15,
-        70,
-        42,
-        0,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-
-    /* tête */
-
-    ctx.beginPath();
-
-    ctx.arc(
-        x-48,
-        y-12,
-        38,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-
-    /* oreilles */
-
-    polygon([
-        [x-76,y-38],
-        [x-68,y-77],
-        [x-47,y-47]
-    ],"#544943");
-
-    polygon([
-        [x-43,y-47],
-        [x-22,y-78],
-        [x-18,y-32]
-    ],"#544943");
-
-
-    /* yeux */
-
-    ctx.fillStyle="#d7b65c";
-
-    ctx.beginPath();
-    ctx.arc(x-60,y-14,5,0,Math.PI*2);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(x-38,y-14,5,0,Math.PI*2);
-    ctx.fill();
-
-
-    /* nez */
-
-    ctx.fillStyle="#d28d82";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        x-49,
-        y,
-        4,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-}
-
-
-/* =========================================================
-   WALL ART
-========================================================= */
-
-function drawArt(){
-
-    const x=W*.77;
-    const y=H*.50;
-    const w=W*.12;
-    const h=H*.13;
-
-    ctx.fillStyle="#d8c6a7";
-
-    ctx.fillRect(
-        x,
-        y,
-        w,
-        h
-    );
-
-    ctx.strokeStyle=T().wood;
-    ctx.lineWidth=5;
-
-    ctx.strokeRect(
-        x,
-        y,
-        w,
-        h
-    );
-
-    ctx.fillStyle=T().wood;
-
-    ctx.font="bold 15px sans-serif";
-
-    ctx.textAlign="center";
-
-    ctx.fillText(
-        "BONHEUR",
-        x+w/2,
-        y+25
-    );
-
-    ctx.font="32px serif";
-
-    ctx.fillText(
-        "⌁",
-        x+w/2,
-        y+70
-    );
-
-}
-
-
-/* =========================================================
-   DECORATIONS
-========================================================= */
-
-function drawDecor(){
-
-    /* vase */
-
-    const x=W*.15;
-    const y=H*.72;
-
-    ctx.fillStyle="#b78358";
-
-    ctx.beginPath();
-
-    ctx.moveTo(x-20,y);
-    ctx.lineTo(x+20,y);
-    ctx.lineTo(x+13,y+45);
-    ctx.lineTo(x-13,y+45);
-    ctx.closePath();
-
-    ctx.fill();
-
-
-    /* flowers */
-
-    ctx.strokeStyle=T().green;
-    ctx.lineWidth=3;
-
-    for(let i=0;i<5;i++){
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            x,
-            y
-        );
-
-        ctx.lineTo(
-            x-35+i*17,
-            y-55-(i%2)*15
-        );
-
-        ctx.stroke();
-
-        ctx.fillStyle=
-            i%2
-            ? "#e7d9c0"
-            : "#c9836b";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            x-35+i*17,
-            y-55-(i%2)*15,
-            8,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-    }
-
-}
-
-
-/* =========================================================
-   HOTSPOTS
-========================================================= */
-
-function buildObjects(){
-
-    objects=[
-
-        {
-            id:"cat",
-            x:W*.66,
-            y:H*.67,
-            r:85,
-            title:"🐈 Le chat",
-            text:"Le propriétaire officiel du canapé vient de te remarquer.",
-            actions:[
-                ["🐾 Caresser",()=>{
-                    toast("😺 Prrrrrrrr...");
-                    catBob=-5;
-                    setTimeout(()=>{
-                        catBob=0;
-                    },350);
-                }],
-                ["🥩 Friandise",()=>{
-                    toast("🐈 Il arrive immédiatement.");
-                }]
-            ]
-        },
-
-        {
-            id:"coffee",
-            x:W*.68,
-            y:H*.70,
-            r:45,
-            title:"☕ Le café",
-            text:"Une tasse chaude attend sur la table.",
-            actions:[
-                ["☕ Boire",()=>{
-                    toast("☕ Mmmh... parfait.");
-                }]
-            ]
-        },
-
-        {
-            id:"laptop",
-            x:W*.50,
-            y:H*.69,
-            r:60,
-            title:"💻 Ordinateur",
-            text:"Ton espace de travail donne directement sur la baie vitrée.",
-            actions:[
-                ["💻 Travailler",()=>{
-                    toast("⌨️ Session de travail lancée.");
-                }],
-                ["🎵 Musique",()=>{
-                    toast("🎵 Playlist lancée.");
-                }]
-            ]
-        },
-
-        {
-            id:"guitar",
-            x:W*.27,
-            y:H*.68,
-            r:55,
-            title:"🎸 Guitare",
-            text:"Une guitare en bois attend près de la bibliothèque.",
-            actions:[
-                ["🎵 Jouer",()=>{
-                    toast("🎶 Quelques accords résonnent.");
-                }]
-            ]
-        },
-
-        {
-            id:"lamp",
-            x:W*.72,
-            y:H*.43,
-            r:60,
-            title:"💡 Lampe",
-            text:"Une lumière chaude transforme l'ambiance de la pièce.",
-            actions:[
-                ["✨ Ambiance",()=>{
-                    toast("✨ Ambiance chaleureuse.");
-                }]
-            ]
-        },
-
-        {
-            id:"window",
-            x:W*.50,
-            y:H*.43,
-            r:W*.30,
-            title:"🌄 Baie vitrée",
-            text:"Une grande fenêtre donne sur les montagnes et le lac.",
-            actions:[
-                ["🌅 Admirer la vue",()=>{
-                    toast("🏔️ Magnifique.");
-                }]
-            ]
-        },
-
-        {
-            id:"books",
-            x:W*.12,
-            y:H*.56,
-            r:65,
-            title:"📚 Bibliothèque",
-            text:"Des livres, des voyages et quelques objets oubliés.",
-            actions:[
-                ["📖 Lire",()=>{
-                    toast("📚 Tu choisis un livre.");
-                }]
-            ]
-        }
-
+    const messages=[
+        "Miaou. 🐈",
+        "Le chat te regarde.",
+        "Il vient de bouger.",
+        "Bon… apparemment il veut des caresses.",
+        "Miaou encore. 😼"
     ];
 
-}
-
-
-/* =========================================================
-   PANEL
-========================================================= */
-
-function openPanel(obj){
-
-    document.getElementById("panelTitle").textContent=obj.title;
-
-    document.getElementById("panelText").textContent=obj.text;
-
-    const actions=
-        document.getElementById("actions");
-
-    actions.innerHTML="";
-
-    obj.actions.forEach(a=>{
-
-        const b=
-            document.createElement("button");
-
-        b.textContent=a[0];
-
-        b.onclick=a[1];
-
-        actions.appendChild(b);
-
-    });
-
-    document
-        .getElementById("panel")
-        .classList.add("open");
-}
-
-document
-    .getElementById("close")
-    .onclick=()=>{
-        document
-            .getElementById("panel")
-            .classList.remove("open");
-    };
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-let toastTimeout;
-
-function toast(text){
-
-    const el=
-        document.getElementById("toast");
-
-    el.textContent=text;
-
-    el.classList.add("show");
-
-    clearTimeout(toastTimeout);
-
-    toastTimeout=setTimeout(()=>{
-        el.classList.remove("show");
-    },2200);
-
-}
-
-
-/* =========================================================
-   TOUCH / SOURIS
-========================================================= */
-
-function distance(a,b){
-
-    return Math.hypot(
-        a.clientX-b.clientX,
-        a.clientY-b.clientY
-    );
-}
-
-canvas.addEventListener(
-    "pointerdown",
-    e=>{
-
-        pointerDown=true;
-
-        lastX=e.clientX;
-        lastY=e.clientY;
-
-        canvas.setPointerCapture(e.pointerId);
-
-    }
-);
-
-
-canvas.addEventListener(
-    "pointermove",
-    e=>{
-
-        if(!pointerDown)return;
-
-        const dx=e.clientX-lastX;
-        const dy=e.clientY-lastY;
-
-        targetCameraX -= dx*0.75;
-
-        targetCameraY -= dy*0.45;
-
-        targetCameraX=
-            clamp(
-                targetCameraX,
-                -180,
-                180
-            );
-
-        targetCameraY=
-            clamp(
-                targetCameraY,
-                -80,
-                100
-            );
-
-        lastX=e.clientX;
-        lastY=e.clientY;
-
-    }
-);
-
-
-canvas.addEventListener(
-    "pointerup",
-    e=>{
-
-        pointerDown=false;
-
-        const moved=
-            Math.abs(
-                e.clientX-lastX
-            )+
-            Math.abs(
-                e.clientY-lastY
-            );
-
-        /* recherche de l'objet touché */
-
-        const rect=
-            canvas.getBoundingClientRect();
-
-        const x=e.clientX-rect.left;
-        const y=e.clientY-rect.top;
-
-        let nearest=null;
-        let nearestDistance=Infinity;
-
-        objects.forEach(obj=>{
-
-            const dx=x-obj.x;
-            const dy=y-obj.y;
-
-            const d=Math.sqrt(
-                dx*dx+dy*dy
-            );
-
-            if(
-                d<obj.r &&
-                d<nearestDistance
-            ){
-                nearest=obj;
-                nearestDistance=d;
-            }
-
-        });
-
-        if(nearest){
-
-            openPanel(nearest);
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   ZOOM
-========================================================= */
-
-canvas.addEventListener(
-    "wheel",
-    e=>{
-
-        e.preventDefault();
-
-        targetZoom +=
-            e.deltaY<0
-            ? .08
-            : -.08;
-
-        targetZoom=
-            clamp(
-                targetZoom,
-                .75,
-                1.45
-            );
-
-    },
-    {passive:false}
-);
-
-
-/* =========================================================
-   MODE
-========================================================= */
-
-document
-    .querySelectorAll(".modes button[data-mode]")
-    .forEach(button=>{
-
-        button.addEventListener(
-            "click",
-            ()=>{
-
-                mode=
-                    button.dataset.mode;
-
-                document
-                    .querySelectorAll(
-                        ".modes button"
-                    )
-                    .forEach(
-                        b=>b.classList.remove("active")
-                    );
-
-                button.classList.add("active");
-
-            }
-        );
-
-    });
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-document
-    .getElementById("reset")
-    .onclick=()=>{
-
-        targetCameraX=0;
-        targetCameraY=0;
-        targetZoom=1;
-
-        toast(
-            "🎥 Vue initiale restaurée."
-        );
-
-    };
-
-
-/* =========================================================
-   ANIMATION
-========================================================= */
-
-let time=0;
-
-function animate(){
-
-    time+=.016;
-
-    cameraX=
-        lerp(
-            cameraX,
-            targetCameraX,
-            .08
-        );
-
-    cameraY=
-        lerp(
-            cameraY,
-            targetCameraY,
-            .08
-        );
-
-    zoom=
-        lerp(
-            zoom,
-            targetZoom,
-            .08
-        );
-
-
-    catBob=
-        Math.sin(time*2)*1.5;
-
-    catTail=
-        time;
-
-
-    draw();
-
-    requestAnimationFrame(
-        animate
+    showInfo(
+        "Le chat",
+        messages[Math.min(catClicks-1,messages.length-1)]
     );
 
+    setTimeout(()=>{
+        cat.classList.remove("happy");
+    },600);
 }
 
 
-/* =========================================================
-   DRAW
-========================================================= */
+/* =====================================================
+   POPUPS
+===================================================== */
 
-function draw(){
+function showInfo(title,text){
 
-    ctx.clearRect(
-        0,
-        0,
-        W,
-        H
-    );
+    document.getElementById("toastTitle").textContent=title;
+    document.getElementById("toastText").textContent=text;
 
-    drawSky();
+    document.getElementById("toast").classList.add("show");
+}
 
-    drawSun();
+function closeInfo(){
 
-    drawMountains();
-
-    drawRoom();
-
-    drawWindow();
-
-    drawCurtains();
-
-    drawRug();
-
-    drawLibrary();
-
-    drawSofa();
-
-    drawTable();
-
-    drawPlant();
-
-    drawLamp();
-
-    drawGuitar();
-
-    drawDecor();
-
-    drawArt();
-
-    drawCat();
-
+    document.getElementById("toast").classList.remove("show");
 }
 
 
-/* =========================================================
-   START
-========================================================= */
+/* =====================================================
+   AUTO LIGHT
+===================================================== */
 
-buildObjects();
+setInterval(()=>{
 
-animate();
+    const cat=document.getElementById("cat");
+
+    if(Math.random()>.65){
+
+        cat.style.transform="translateX(5px)";
+
+        setTimeout(()=>{
+            cat.style.transform="";
+        },700);
+    }
+
+},4500);
+
+
+/* =====================================================
+   DOUBLE CLICK RESET
+===================================================== */
+
+world.addEventListener("dblclick",()=>{
+
+    scale=1.15;
+    posX=0;
+    posY=0;
+
+    updateCamera();
+
+});
+
+
+/* =====================================================
+   INITIAL
+===================================================== */
+
+updateCamera();
 
 </script>
 
