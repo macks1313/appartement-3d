@@ -2,1311 +2,174 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>Mon Appartement</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Mon Appartement 3D</title>
 
 <style>
-
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
+html,body{
     margin:0;
     width:100%;
     height:100%;
     overflow:hidden;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-    background:#bcd7e4;
-    color:#18232e;
+    background:#10151b;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
-/* =========================
-   FOND
-========================= */
+canvas{
+    display:block;
+    width:100%;
+    height:100%;
+}
 
-#app{
+#interface{
     position:fixed;
     inset:0;
-    overflow:hidden;
-    background:
-        linear-gradient(
-            180deg,
-            #b9d7e5 0%,
-            #c8dfe9 55%,
-            #aecbd8 100%
-        );
+    pointer-events:none;
+    z-index:10;
 }
 
-/* =========================
-   BARRE DU HAUT
-========================= */
-
-#header{
+.top{
     position:absolute;
-    z-index:20;
     top:18px;
     left:18px;
     right:18px;
-
     display:flex;
     justify-content:space-between;
     align-items:center;
-
-    pointer-events:none;
 }
 
-#title{
+.logo,.room{
     background:rgba(255,255,255,.94);
-    border-radius:22px;
-    padding:15px 21px;
+    color:#17212b;
+    border-radius:20px;
+    padding:15px 20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.22);
+    font-weight:900;
+    backdrop-filter:blur(10px);
+}
 
+.logo{
     font-size:20px;
-    font-weight:900;
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,.15);
 }
 
-#room{
-    background:rgba(255,255,255,.94);
-    border-radius:22px;
-    padding:15px 22px;
-
-    font-size:18px;
-    font-weight:900;
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,.15);
+.room{
+    font-size:17px;
 }
 
-/* =========================
-   SCÈNE
-========================= */
-
-#viewport{
+.buttons{
     position:absolute;
-    inset:0;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    overflow:hidden;
-
-    touch-action:none;
-}
-
-#scene{
-    width:850px;
-    height:650px;
-
-    position:relative;
-
-    transform:
-        translate3d(0,0,0)
-        scale(1);
-
-    transform-origin:center center;
-
-    transition:transform .08s linear;
-}
-
-/* =========================
-   APPARTEMENT
-========================= */
-
-#floor{
-    position:absolute;
-
-    width:720px;
-    height:500px;
-
-    left:65px;
-    top:75px;
-
-    background:
-        repeating-linear-gradient(
-            90deg,
-            rgba(100,65,40,.10) 0px,
-            rgba(100,65,40,.10) 2px,
-            transparent 2px,
-            transparent 52px
-        ),
-        #c89b70;
-
-    border:
-        8px solid #8e684c;
-
-    border-radius:8px;
-
-    transform:
-        perspective(1000px)
-        rotateX(58deg)
-        rotateZ(-1deg);
-
-    box-shadow:
-        0 35px 50px rgba(0,0,0,.25);
-}
-
-/* =========================
-   PIÈCES
-========================= */
-
-.roomBox{
-    position:absolute;
-
-    border:
-        5px solid #dedbd2;
-
-    background:#eeeae1;
-
-    box-shadow:
-        inset 0 0 0 2px rgba(0,0,0,.05);
-}
-
-#living{
-    left:75px;
-    top:90px;
-    width:370px;
-    height:235px;
-}
-
-#kitchen{
-    left:75px;
-    top:330px;
-    width:300px;
-    height:200px;
-}
-
-#bedroom{
-    left:450px;
-    top:90px;
-    width:285px;
-    height:255px;
-}
-
-#bathroom{
-    left:450px;
-    top:350px;
-    width:285px;
-    height:180px;
-}
-
-/* =========================
-   NOMS DES PIÈCES
-========================= */
-
-.label{
-    position:absolute;
-
-    padding:7px 11px;
-
-    background:rgba(255,255,255,.70);
-
-    border-radius:10px;
-
-    font-weight:900;
-    font-size:15px;
-
-    color:#53616d;
-
-    pointer-events:none;
-}
-
-#living .label{
-    left:20px;
-    top:18px;
-}
-
-#kitchen .label{
-    left:18px;
-    top:15px;
-}
-
-#bedroom .label{
-    left:18px;
-    top:18px;
-}
-
-#bathroom .label{
-    left:18px;
-    top:15px;
-}
-
-/* =========================
-   FENÊTRES
-========================= */
-
-.window{
-    position:absolute;
-
-    background:
-        linear-gradient(
-            135deg,
-            #74b5cf,
-            #a9d8e7
-        );
-
-    border:
-        6px solid #f8f7f2;
-
-    box-shadow:
-        0 3px 7px rgba(0,0,0,.18);
-}
-
-.window:after{
-    content:"";
-
-    position:absolute;
-
-    left:50%;
-    top:0;
-    bottom:0;
-
-    width:5px;
-
-    background:#f8f7f2;
-}
-
-.window:before{
-    content:"";
-
-    position:absolute;
-
-    top:50%;
-    left:0;
-    right:0;
-
-    height:5px;
-
-    background:#f8f7f2;
-}
-
-.window1{
-    width:120px;
-    height:70px;
-
-    left:210px;
-    top:2px;
-}
-
-.window2{
-    width:115px;
-    height:70px;
-
-    left:130px;
-    top:2px;
-}
-
-.window3{
-    width:115px;
-    height:70px;
-
-    right:25px;
-    top:40px;
-}
-
-/* =========================
-   CANAPÉ
-========================= */
-
-.sofa{
-    position:absolute;
-
-    left:100px;
-    top:105px;
-
-    width:190px;
-    height:75px;
-
-    background:#58686b;
-
-    border-radius:18px;
-
-    box-shadow:
-        0 10px 12px rgba(0,0,0,.18);
-}
-
-.sofa:before{
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    height:28px;
-
-    background:#4d5c5e;
-
-    border-radius:0 0 15px 15px;
-}
-
-.sofa:after{
-    content:"";
-
-    position:absolute;
-
-    left:15px;
-    right:15px;
-    top:-28px;
-
-    height:48px;
-
-    background:#657779;
-
-    border-radius:17px 17px 5px 5px;
-}
-
-.cushion{
-    position:absolute;
-
-    z-index:2;
-
-    width:42px;
-    height:32px;
-
-    top:10px;
-
-    background:#849b9d;
-
-    border-radius:8px;
-}
-
-.c1{left:30px;}
-.c2{left:75px;}
-.c3{left:120px;}
-
-/* =========================
-   TABLE BASSE
-========================= */
-
-.table{
-    position:absolute;
-
-    left:140px;
-    top:190px;
-
-    width:125px;
-    height:60px;
-
-    background:#865b3d;
-
-    border-radius:6px;
-
-    box-shadow:
-        0 8px 10px rgba(0,0,0,.2);
-}
-
-.table:after{
-    content:"";
-
-    position:absolute;
-
-    left:10px;
-    right:10px;
-    bottom:-35px;
-
-    height:35px;
-
-    border-left:7px solid #65432e;
-    border-right:7px solid #65432e;
-}
-
-/* =========================
-   TV
-========================= */
-
-.tvUnit{
-    position:absolute;
-
-    right:20px;
-    top:130px;
-
-    width:115px;
-    height:35px;
-
-    background:#51392c;
-
-    border-radius:4px;
-}
-
-.tv{
-    position:absolute;
-
-    right:27px;
-    top:72px;
-
-    width:105px;
-    height:70px;
-
-    background:#080b0d;
-
-    border:5px solid #15191b;
-
-    border-radius:3px;
-
-    box-shadow:
-        0 7px 12px rgba(0,0,0,.3);
-}
-
-.tvScreen{
-    position:absolute;
-    inset:5px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #101b24,
-            #263e4d
-        );
-}
-
-/* =========================
-   BIBLIOTHÈQUE
-========================= */
-
-.bookshelf{
-    position:absolute;
-
-    left:15px;
-    bottom:15px;
-
-    width:80px;
-    height:115px;
-
-    background:#55392a;
-
-    border-radius:3px;
-
-    box-shadow:
-        0 6px 8px rgba(0,0,0,.18);
-}
-
-.shelf{
-    position:absolute;
-
-    left:5px;
-    right:5px;
-
-    height:6px;
-
-    background:#805538;
-}
-
-.s1{top:28px;}
-.s2{top:57px;}
-.s3{top:86px;}
-
-.book{
-    position:absolute;
-
-    bottom:6px;
-
-    width:8px;
-
-    border-radius:1px;
-}
-
-.b1{
-    left:12px;
-    height:20px;
-    background:#8c594c;
-}
-
-.b2{
-    left:23px;
-    height:25px;
-    background:#637b83;
-}
-
-.b3{
-    left:34px;
-    height:18px;
-    background:#a18151;
-}
-
-.b4{
-    left:45px;
-    height:23px;
-    background:#56715a;
-}
-
-/* =========================
-   CUISINE
-========================= */
-
-.cabinet{
-    position:absolute;
-
-    bottom:22px;
-
-    width:65px;
-    height:70px;
-
-    background:#795338;
-
-    border:3px solid #60402d;
-
-    border-radius:3px;
-}
-
-.cab1{left:20px;}
-.cab2{left:90px;}
-.cab3{left:160px;}
-
-.counter{
-    position:absolute;
-
-    left:15px;
-    bottom:90px;
-
-    width:230px;
-    height:18px;
-
-    background:#dedbd3;
-
-    border-radius:4px;
-}
-
-.sink{
-    position:absolute;
-
-    left:65px;
-    bottom:94px;
-
-    width:55px;
-    height:12px;
-
-    background:#89959a;
-
-    border-radius:8px;
-}
-
-.stove{
-    position:absolute;
-
-    left:145px;
-    bottom:94px;
-
-    width:70px;
-    height:12px;
-
-    background:#1c2022;
-
-    border-radius:3px;
-}
-
-.burner{
-    position:absolute;
-
-    width:14px;
-    height:14px;
-
-    border-radius:50%;
-
-    background:#090b0c;
-}
-
-.burner1{
-    left:155px;
-    bottom:105px;
-}
-
-.burner2{
-    left:185px;
-    bottom:105px;
-}
-
-.fridge{
-    position:absolute;
-
-    right:15px;
-    bottom:15px;
-
-    width:55px;
-    height:140px;
-
-    background:#dce1e3;
-
-    border-radius:5px;
-
-    box-shadow:
-        0 7px 10px rgba(0,0,0,.15);
-}
-
-.fridge:after{
-    content:"";
-
-    position:absolute;
-
-    left:8px;
-    right:8px;
-    top:70px;
-
-    height:2px;
-
-    background:#a7afb2;
-}
-
-/* =========================
-   LIT
-========================= */
-
-.bed{
-    position:absolute;
-
-    left:55px;
-    top:80px;
-
-    width:170px;
-    height:125px;
-
-    background:#634735;
-
-    border-radius:5px;
-
-    box-shadow:
-        0 8px 12px rgba(0,0,0,.18);
-}
-
-.mattress{
-    position:absolute;
-
-    left:6px;
-    top:6px;
-
-    width:158px;
-    height:113px;
-
-    background:#eee9dd;
-
-    border-radius:6px;
-}
-
-.blanket{
-    position:absolute;
-
-    left:6px;
-    bottom:5px;
-
-    width:158px;
-    height:62px;
-
-    background:#829ca0;
-
-    border-radius:4px;
-}
-
-.pillow{
-    position:absolute;
-
-    top:14px;
-
-    width:55px;
-    height:35px;
-
-    background:white;
-
-    border-radius:10px;
-}
-
-.pillow1{left:20px;}
-.pillow2{right:20px;}
-
-/* =========================
-   TABLES DE NUIT
-========================= */
-
-.nightstand{
-    position:absolute;
-
-    width:42px;
-    height:45px;
-
-    background:#765039;
-
-    border-radius:3px;
-}
-
-.night1{
-    left:5px;
-    top:115px;
-}
-
-.night2{
-    right:5px;
-    top:115px;
-}
-
-/* =========================
-   LAMPE
-========================= */
-
-.lamp{
-    position:absolute;
-
-    width:10px;
-    height:55px;
-
-    background:#34383a;
-}
-
-.lamp:before{
-    content:"";
-
-    position:absolute;
-
-    width:38px;
-    height:25px;
-
-    left:-14px;
-    top:-20px;
-
-    background:#e4c982;
-
-    border-radius:20px 20px 5px 5px;
-}
-
-.lamp1{
-    left:15px;
-    top:45px;
-}
-
-.lamp2{
-    right:20px;
-    top:40px;
-}
-
-/* =========================
-   SALLE DE BAIN
-========================= */
-
-.bath{
-    position:absolute;
-
-    left:20px;
-    top:65px;
-
-    width:135px;
-    height:75px;
-
-    background:#f8f8f7;
-
-    border:6px solid #d9d9d6;
-
-    border-radius:18px;
-}
-
-.bathWater{
-    position:absolute;
-
-    left:8px;
-    right:8px;
-    top:8px;
-    bottom:8px;
-
-    background:#a8d6e3;
-
-    border-radius:12px;
-}
-
-.bathTap{
-    position:absolute;
-
-    width:8px;
-    height:30px;
-
-    right:20px;
-    top:-30px;
-
-    background:#777f82;
-}
-
-/* =========================
-   LAVABO
-========================= */
-
-.sinkBathroom{
-    position:absolute;
-
-    right:25px;
-    top:65px;
-
-    width:80px;
-    height:50px;
-
-    background:#f5f5f3;
-
-    border-radius:8px;
-
-    box-shadow:
-        0 5px 8px rgba(0,0,0,.12);
-}
-
-.mirror{
-    position:absolute;
-
-    right:25px;
-    top:15px;
-
-    width:80px;
-    height:45px;
-
-    background:#92c5d6;
-
-    border:5px solid white;
-
-    border-radius:5px;
-}
-
-/* =========================
-   WC
-========================= */
-
-.toilet{
-    position:absolute;
-
-    right:40px;
-    bottom:18px;
-
-    width:50px;
-    height:45px;
-
-    background:white;
-
-    border-radius:18px;
-}
-
-/* =========================
-   PLANTES
-========================= */
-
-.plant{
-    position:absolute;
-
-    width:38px;
-    height:38px;
-
-    background:#47764e;
-
-    border-radius:50%;
-
-    box-shadow:
-        0 4px 8px rgba(0,0,0,.15);
-}
-
-.plant:after{
-    content:"";
-
-    position:absolute;
-
-    left:11px;
-    bottom:-25px;
-
-    width:18px;
-    height:27px;
-
-    background:#a66a47;
-
-    border-radius:3px;
-}
-
-.plant1{
-    left:330px;
-    bottom:20px;
-}
-
-.plant2{
-    right:15px;
-    bottom:15px;
-}
-
-/* =========================
-   DÉCORATION
-========================= */
-
-.picture{
-    position:absolute;
-
-    width:70px;
-    height:48px;
-
-    border:6px solid #674832;
-
-    background:#c18d62;
-}
-
-.picture1{
-    left:20px;
-    top:15px;
-}
-
-.picture2{
-    left:105px;
-    top:15px;
-
-    background:#7b9ca6;
-}
-
-/* =========================
-   CONTRÔLES
-========================= */
-
-#controls{
-    position:absolute;
-
-    z-index:30;
-
     right:18px;
-    bottom:100px;
-
+    bottom:105px;
     display:flex;
     flex-direction:column;
-
     gap:12px;
+    pointer-events:auto;
 }
 
 button{
     width:58px;
     height:58px;
-
     border:0;
-
-    border-radius:19px;
-
+    border-radius:20px;
     background:rgba(255,255,255,.95);
-
-    color:#18232e;
-
+    color:#18222c;
     font-size:28px;
-    font-weight:800;
-
-    box-shadow:
-        0 8px 22px rgba(0,0,0,.18);
+    font-weight:900;
+    box-shadow:0 10px 28px rgba(0,0,0,.22);
 }
 
 button:active{
     transform:scale(.92);
 }
 
-/* =========================
-   INFO
-========================= */
+.help{
+    position:absolute;
+    left:50%;
+    bottom:25px;
+    transform:translateX(-50%);
+    width:max-content;
+    max-width:90%;
+    padding:13px 20px;
+    background:rgba(255,255,255,.92);
+    border-radius:18px;
+    color:#4d5b68;
+    font-weight:800;
+    font-size:14px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(0,0,0,.18);
+}
 
 #info{
     position:absolute;
-
-    z-index:50;
-
     left:50%;
-    bottom:80px;
-
+    bottom:105px;
     transform:translateX(-50%);
-
-    min-width:260px;
-    max-width:80%;
-
-    padding:16px 22px;
-
-    background:rgba(255,255,255,.96);
-
-    border-radius:22px;
-
+    background:rgba(255,255,255,.95);
+    border-radius:20px;
+    padding:16px 24px;
+    min-width:230px;
     text-align:center;
-
-    box-shadow:
-        0 12px 35px rgba(0,0,0,.2);
-
+    color:#18222c;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
     opacity:0;
-
-    transition:opacity .25s;
-
-    pointer-events:none;
+    transition:.25s;
 }
 
 #info strong{
-    font-size:19px;
+    font-size:18px;
 }
-
-#info small{
-    font-size:14px;
-}
-
-/* =========================
-   AIDE
-========================= */
-
-#help{
-    position:absolute;
-
-    z-index:20;
-
-    left:50%;
-    bottom:18px;
-
-    transform:translateX(-50%);
-
-    background:rgba(255,255,255,.88);
-
-    padding:10px 15px;
-
-    border-radius:15px;
-
-    color:#53616d;
-
-    font-size:13px;
-
-    font-weight:700;
-
-    white-space:nowrap;
-}
-
-/* =========================
-   MOBILE
-========================= */
 
 @media(max-width:600px){
-
-    #title{
+    .logo{
         font-size:17px;
-        padding:13px 16px;
+        padding:14px 17px;
     }
 
-    #room{
+    .room{
         font-size:15px;
-        padding:13px 16px;
+        padding:14px 16px;
     }
 
-    #scene{
-        transform:scale(.72);
-    }
-
-    #help{
-        max-width:88%;
+    .help{
+        font-size:13px;
+        white-space:nowrap;
         overflow:hidden;
-        text-overflow:ellipsis;
     }
 }
-
 </style>
 </head>
 
 <body>
 
-<div id="app">
+<div id="interface">
 
-    <div id="header">
-
-        <div id="title">
-            🏠 MON APPARTEMENT
-        </div>
-
-        <div id="room">
-            Salon
-        </div>
-
+    <div class="top">
+        <div class="logo">🏠 MON APPARTEMENT</div>
+        <div class="room" id="room">Salon</div>
     </div>
-
-
-    <div id="viewport">
-
-        <div id="scene">
-
-            <div id="floor">
-
-                <!-- ================= SALON ================= -->
-
-                <div
-                    class="roomBox"
-                    id="living"
-                    data-name="Salon"
-                    data-info="Un salon confortable avec canapé, télévision, bibliothèque et décoration."
-                >
-
-                    <div class="label">
-                        SALON
-                    </div>
-
-                    <div class="window window1"></div>
-
-                    <div class="sofa">
-
-                        <div class="cushion c1"></div>
-                        <div class="cushion c2"></div>
-                        <div class="cushion c3"></div>
-
-                    </div>
-
-                    <div class="table"></div>
-
-                    <div class="tv">
-                        <div class="tvScreen"></div>
-                    </div>
-
-                    <div class="tvUnit"></div>
-
-                    <div class="bookshelf">
-
-                        <div class="shelf s1"></div>
-                        <div class="shelf s2"></div>
-                        <div class="shelf s3"></div>
-
-                        <div class="book b1"></div>
-                        <div class="book b2"></div>
-                        <div class="book b3"></div>
-                        <div class="book b4"></div>
-
-                    </div>
-
-                    <div class="picture picture1"></div>
-                    <div class="picture picture2"></div>
-
-                    <div class="plant plant1"></div>
-
-                </div>
-
-
-                <!-- ================= CUISINE ================= -->
-
-                <div
-                    class="roomBox"
-                    id="kitchen"
-                    data-name="Cuisine"
-                    data-info="Cuisine équipée avec meubles, évier, plaque de cuisson et réfrigérateur."
-                >
-
-                    <div class="label">
-                        CUISINE
-                    </div>
-
-                    <div class="window window2"></div>
-
-                    <div class="counter"></div>
-
-                    <div class="cabinet cab1"></div>
-                    <div class="cabinet cab2"></div>
-                    <div class="cabinet cab3"></div>
-
-                    <div class="sink"></div>
-
-                    <div class="stove"></div>
-
-                    <div class="burner burner1"></div>
-                    <div class="burner burner2"></div>
-
-                    <div class="fridge"></div>
-
-                </div>
-
-
-                <!-- ================= CHAMBRE ================= -->
-
-                <div
-                    class="roomBox"
-                    id="bedroom"
-                    data-name="Chambre"
-                    data-info="Chambre avec grand lit, oreillers, couverture, tables de nuit et lampes."
-                >
-
-                    <div class="label">
-                        CHAMBRE
-                    </div>
-
-                    <div class="window window3"></div>
-
-                    <div class="bed">
-
-                        <div class="mattress"></div>
-
-                        <div class="blanket"></div>
-
-                        <div class="pillow pillow1"></div>
-                        <div class="pillow pillow2"></div>
-
-                    </div>
-
-                    <div class="nightstand night1"></div>
-                    <div class="nightstand night2"></div>
-
-                    <div class="lamp lamp1"></div>
-                    <div class="lamp lamp2"></div>
-
-                </div>
-
-
-                <!-- ================= SALLE DE BAIN ================= -->
-
-                <div
-                    class="roomBox"
-                    id="bathroom"
-                    data-name="Salle de bain"
-                    data-info="Salle de bain avec baignoire, lavabo, miroir et toilettes."
-                >
-
-                    <div class="label">
-                        SALLE DE BAIN
-                    </div>
-
-                    <div class="bath">
-
-                        <div class="bathWater"></div>
-                        <div class="bathTap"></div>
-
-                    </div>
-
-                    <div class="mirror"></div>
-
-                    <div class="sinkBathroom"></div>
-
-                    <div class="toilet"></div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ================= CONTRÔLES ================= -->
-
-    <div id="controls">
-
-        <button id="zoomIn">
-            ＋
-        </button>
-
-        <button id="zoomOut">
-            −
-        </button>
-
-        <button id="dayNight">
-            ☀️
-        </button>
-
-        <button id="home">
-            ⌂
-        </button>
-
-    </div>
-
 
     <div id="info"></div>
 
+    <div class="buttons">
+        <button id="plus">＋</button>
+        <button id="minus">−</button>
+        <button id="light">☀️</button>
+        <button id="home">⌂</button>
+    </div>
 
-    <div id="help">
-        👆 Glisse pour déplacer · 🤏 Pince pour zoomer · Touche les pièces
+    <div class="help">
+        👆 Glisse pour regarder · 🤏 Pince pour zoomer · 👆 Touche les objets
     </div>
 
 </div>
 
+<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
 <script>
 
@@ -1314,310 +177,1438 @@ button:active{
    VARIABLES
 ========================================================= */
 
-const viewport =
-    document.getElementById("viewport");
+let scene;
+let camera;
+let renderer;
+let controls;
 
-const scene =
-    document.getElementById("scene");
+let night=false;
 
-const info =
-    document.getElementById("info");
+const clickable=[];
 
-const room =
-    document.getElementById("room");
-
-const app =
-    document.getElementById("app");
-
-let scale = 1;
-
-let offsetX = 0;
-let offsetY = 0;
-
-let startX = 0;
-let startY = 0;
-
-let dragging = false;
-
-let startOffsetX = 0;
-let startOffsetY = 0;
-
-let pinchDistance = 0;
-
-let dark = false;
+const roomLabel=document.getElementById("room");
+const info=document.getElementById("info");
 
 
 /* =========================================================
-   TRANSFORMATION
+   INITIALISATION
 ========================================================= */
 
-function updateScene(){
+function start(){
 
-    scene.style.transform =
-        "translate3d(" +
-        offsetX +
-        "px," +
-        offsetY +
-        "px,0) scale(" +
-        scale +
-        ")";
+    scene=new THREE.Scene();
+
+    scene.background=new THREE.Color(0x9fc4d5);
+
+    scene.fog=new THREE.Fog(
+        0x9fc4d5,
+        18,
+        50
+    );
+
+    camera=new THREE.PerspectiveCamera(
+        58,
+        innerWidth/innerHeight,
+        .1,
+        100
+    );
+
+    camera.position.set(
+        14,
+        10,
+        15
+    );
+
+    renderer=new THREE.WebGLRenderer({
+        antialias:true,
+        powerPreference:"high-performance"
+    });
+
+    renderer.setPixelRatio(
+        Math.min(devicePixelRatio,1.8)
+    );
+
+    renderer.setSize(
+        innerWidth,
+        innerHeight
+    );
+
+    renderer.shadowMap.enabled=true;
+    renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+
+    document.body.appendChild(renderer.domElement);
+
+    controls=new THREE.OrbitControls(
+        camera,
+        renderer.domElement
+    );
+
+    controls.enableDamping=true;
+    controls.dampingFactor=.06;
+
+    controls.minDistance=5;
+    controls.maxDistance=30;
+
+    controls.maxPolarAngle=Math.PI/2.08;
+
+    controls.target.set(
+        0,
+        2,
+        0
+    );
+
+    lights();
+
+    apartment();
+
+    interactions();
+
+    buttons();
+
+    addEventListener("resize",resize);
+
+    animate();
+}
+
+
+/* =========================================================
+   LUMIERES
+========================================================= */
+
+function lights(){
+
+    const ambient=new THREE.HemisphereLight(
+        0xffffff,
+        0x59636d,
+        1.8
+    );
+
+    scene.add(ambient);
+
+    const sun=new THREE.DirectionalLight(
+        0xfff5dc,
+        3
+    );
+
+    sun.position.set(
+        -10,
+        18,
+        10
+    );
+
+    sun.castShadow=true;
+
+    sun.shadow.mapSize.width=2048;
+    sun.shadow.mapSize.height=2048;
+
+    sun.shadow.camera.left=-20;
+    sun.shadow.camera.right=20;
+    sun.shadow.camera.top=20;
+    sun.shadow.camera.bottom=-20;
+
+    scene.add(sun);
+
+    window.sun=sun;
+
+    /* lumières intérieures */
+
+    addLight(-5,4,3,0xffd7a0,2.5,8);
+    addLight(4,4,-2,0xffe2b2,2.2,8);
+    addLight(7,3,6,0xffd7a0,1.8,7);
+    addLight(-7,3,-6,0xffe1bd,1.8,7);
+}
+
+function addLight(x,y,z,color,intensity,distance){
+
+    const light=new THREE.PointLight(
+        color,
+        intensity,
+        distance
+    );
+
+    light.position.set(x,y,z);
+
+    scene.add(light);
+}
+
+
+/* =========================================================
+   MATERIAUX
+========================================================= */
+
+function mat(color,rough=.7,metal=0){
+
+    return new THREE.MeshStandardMaterial({
+        color:color,
+        roughness:rough,
+        metalness:metal
+    });
+}
+
+const WALL=mat(0xf0eadf,.95);
+const FLOOR=mat(0x9b6b46,.72);
+const WOOD=mat(0x68432d,.7);
+const DARKWOOD=mat(0x35231b,.65);
+const FABRIC=mat(0x536d72,.95);
+const CREAM=mat(0xe9dfcf,.95);
+const WHITE=mat(0xf8f6ef,.8);
+const BLACK=mat(0x111315,.3,.15);
+const GREEN=mat(0x315c3d,.85);
+
+
+/* =========================================================
+   APPARTEMENT
+========================================================= */
+
+function apartment(){
+
+    floor();
+
+    walls();
+
+    livingRoom();
+
+    kitchen();
+
+    bedroom();
+
+    bathroom();
+
+    decoration();
 
 }
 
 
 /* =========================================================
-   SOURIS / DOIGT
+   SOL
 ========================================================= */
 
-viewport.addEventListener(
-    "pointerdown",
-    function(e){
+function floor(){
 
-        dragging = true;
+    const f=new THREE.Mesh(
+        new THREE.BoxGeometry(24,.35,20),
+        FLOOR
+    );
 
-        startX = e.clientX;
-        startY = e.clientY;
+    f.position.y=-.18;
 
-        startOffsetX = offsetX;
-        startOffsetY = offsetY;
+    f.receiveShadow=true;
 
-        viewport.setPointerCapture(e.pointerId);
+    scene.add(f);
 
+    /* lames du parquet */
+
+    for(let x=-11;x<=11;x+=1.2){
+
+        const line=new THREE.Mesh(
+            new THREE.BoxGeometry(.025,.01,19.5),
+            mat(0x68462f,1)
+        );
+
+        line.position.set(
+            x,
+            .01,
+            0
+        );
+
+        scene.add(line);
     }
-);
-
-
-viewport.addEventListener(
-    "pointermove",
-    function(e){
-
-        if(!dragging) return;
-
-        const dx =
-            e.clientX - startX;
-
-        const dy =
-            e.clientY - startY;
-
-        offsetX =
-            startOffsetX + dx;
-
-        offsetY =
-            startOffsetY + dy;
-
-        updateScene();
-
-    }
-);
-
-
-viewport.addEventListener(
-    "pointerup",
-    function(){
-
-        dragging = false;
-
-    }
-);
+}
 
 
 /* =========================================================
-   ZOOM
+   MURS
 ========================================================= */
 
-viewport.addEventListener(
-    "wheel",
-    function(e){
+function walls(){
 
-        e.preventDefault();
+    wall(24,5,.35,0,2.5,-10,WALL);
+    wall(.35,5,20,-12,2.5,0,WALL);
+    wall(.35,5,20,12,2.5,0,WALL);
 
-        if(e.deltaY < 0){
+    /*
+      mur arrière partiel
+      pour garder la vue intérieure
+    */
 
-            scale += .08;
+    wall(24,5,.35,0,2.5,10,WALL);
 
-        }else{
+    /* séparation chambre */
 
-            scale -= .08;
+    wall(.25,5,7,2,2.5,-6.5,WALL);
 
+    /* séparation salle de bain */
+
+    wall(7,4,.25,7,2,-2,WALL);
+
+    /* séparation cuisine */
+
+    wall(7,4,.25,-8,2,2,WALL);
+}
+
+function wall(w,h,d,x,y,z,material){
+
+    const m=new THREE.Mesh(
+        new THREE.BoxGeometry(w,h,d),
+        material
+    );
+
+    m.position.set(x,y,z);
+
+    m.castShadow=true;
+    m.receiveShadow=true;
+
+    scene.add(m);
+}
+
+
+/* =========================================================
+   CANAPE
+========================================================= */
+
+function livingRoom(){
+
+    sofa(-3,0,4);
+
+    coffeeTable(-1,0,1);
+
+    television(5,3,-8.8);
+
+    rug(-1,.03,2);
+
+    shelf(-7,0,-8.7);
+}
+
+function sofa(x,y,z){
+
+    const g=new THREE.Group();
+
+    const seat=new THREE.Mesh(
+        new THREE.BoxGeometry(5.4,.65,2),
+        FABRIC
+    );
+
+    seat.position.y=.7;
+
+    g.add(seat);
+
+    const back=new THREE.Mesh(
+        new THREE.BoxGeometry(5.4,1.8,.45),
+        FABRIC
+    );
+
+    back.position.set(
+        0,
+        1.45,
+        -.78
+    );
+
+    g.add(back);
+
+    for(let s of [-2.45,2.45]){
+
+        const arm=new THREE.Mesh(
+            new THREE.BoxGeometry(.45,1.25,2),
+            FABRIC
+        );
+
+        arm.position.set(
+            s,
+            1,
+            0
+        );
+
+        g.add(arm);
+    }
+
+    /* coussins */
+
+    for(let i=-1;i<=1;i++){
+
+        const pillow=new THREE.Mesh(
+            new THREE.BoxGeometry(
+                1.35,
+                .25,
+                .75
+            ),
+            mat(
+                i===0?0x8b6552:0x788f8e,
+                .95
+            )
+        );
+
+        pillow.position.set(
+            i*1.55,
+            1.15,
+            -.25
+        );
+
+        pillow.rotation.z=(i*.03);
+
+        g.add(pillow);
+    }
+
+    g.position.set(x,y,z);
+
+    g.rotation.y=-.12;
+
+    clickableObject(
+        g,
+        "Canapé",
+        "Un grand canapé confortable."
+    );
+
+    scene.add(g);
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+function coffeeTable(x,y,z){
+
+    const g=new THREE.Group();
+
+    const top=new THREE.Mesh(
+        new THREE.BoxGeometry(3.3,.25,1.6),
+        WOOD
+    );
+
+    top.position.y=1;
+
+    g.add(top);
+
+    for(let x of [-1.25,1.25]){
+        for(let z of [-.55,.55]){
+
+            const leg=new THREE.Mesh(
+                new THREE.BoxGeometry(.16,1,.16),
+                DARKWOOD
+            );
+
+            leg.position.set(x,.5,z);
+
+            g.add(leg);
         }
+    }
 
-        scale =
-            Math.max(
-                .55,
-                Math.min(
-                    1.8,
-                    scale
+    /* livre */
+
+    const book=new THREE.Mesh(
+        new THREE.BoxGeometry(.9,.08,.65),
+        mat(0x7d332b, .9)
+    );
+
+    book.position.set(
+        -.5,
+        1.18,
+        0
+    );
+
+    g.add(book);
+
+    g.position.set(x,y,z);
+
+    clickableObject(
+        g,
+        "Table basse",
+        "Table basse en bois avec quelques objets décoratifs."
+    );
+
+    scene.add(g);
+}
+
+
+/* =========================================================
+   TELEVISION
+========================================================= */
+
+function television(x,y,z){
+
+    const g=new THREE.Group();
+
+    const screen=new THREE.Mesh(
+        new THREE.BoxGeometry(4.5,2.6,.16),
+        BLACK
+    );
+
+    g.add(screen);
+
+    const screenGlow=new THREE.Mesh(
+        new THREE.BoxGeometry(4.1,2.2,.03),
+        mat(0x182d3a,.25)
+    );
+
+    screenGlow.position.z=.1;
+
+    g.add(screenGlow);
+
+    const cabinet=new THREE.Mesh(
+        new THREE.BoxGeometry(5.5,.65,1),
+        DARKWOOD
+    );
+
+    cabinet.position.y=-1.65;
+
+    g.add(cabinet);
+
+    const foot1=new THREE.Mesh(
+        new THREE.BoxGeometry(.15,.5,.5),
+        BLACK
+    );
+
+    foot1.position.set(-1.8,-1.15,0);
+
+    g.add(foot1);
+
+    const foot2=foot1.clone();
+
+    foot2.position.x=1.8;
+
+    g.add(foot2);
+
+    g.position.set(x,y,z);
+
+    clickableObject(
+        g,
+        "Télévision",
+        "Une grande télévision dans le salon."
+    );
+
+    scene.add(g);
+}
+
+
+/* =========================================================
+   TAPIS
+========================================================= */
+
+function rug(x,y,z){
+
+    const r=new THREE.Mesh(
+        new THREE.BoxGeometry(7,.08,4.5),
+        mat(0x6e8580,1)
+    );
+
+    r.position.set(x,y+.04,z);
+
+    scene.add(r);
+
+    /* motifs */
+
+    for(let i=-2;i<=2;i++){
+
+        const stripe=new THREE.Mesh(
+            new THREE.BoxGeometry(.08,.02,4),
+            mat(0xb0b6a5,1)
+        );
+
+        stripe.position.set(
+            x+i*1.3,
+            y+.1,
+            z
+        );
+
+        scene.add(stripe);
+    }
+}
+
+
+/* =========================================================
+   CUISINE
+========================================================= */
+
+function kitchen(){
+
+    for(let i=0;i<5;i++){
+
+        const cabinet=new THREE.Mesh(
+            new THREE.BoxGeometry(1.5,1.2,.75),
+            WOOD
+        );
+
+        cabinet.position.set(
+            -9+i*1.65,
+            .6,
+            -8.8
+        );
+
+        cabinet.castShadow=true;
+
+        clickableObject(
+            cabinet,
+            "Meuble de cuisine",
+            "Meuble bas en bois."
+        );
+
+        scene.add(cabinet);
+    }
+
+    const counter=new THREE.Mesh(
+        new THREE.BoxGeometry(8.5,.22,1),
+        CREAM
+    );
+
+    counter.position.set(
+        -5.7,
+        1.3,
+        -8.8
+    );
+
+    scene.add(counter);
+
+    /* plaque de cuisson */
+
+    const hob=new THREE.Mesh(
+        new THREE.BoxGeometry(2,.05,.65),
+        BLACK
+    );
+
+    hob.position.set(
+        -3.5,
+        1.44,
+        -8.8
+    );
+
+    scene.add(hob);
+
+    /* évier */
+
+    const sink=new THREE.Mesh(
+        new THREE.BoxGeometry(1.4,.08,.6),
+        mat(0x9ca6ab,.25,.75)
+    );
+
+    sink.position.set(
+        -6.3,
+        1.44,
+        -8.8
+    );
+
+    clickableObject(
+        sink,
+        "Évier",
+        "Évier avec robinet métallique."
+    );
+
+    scene.add(sink);
+
+    /* robinet */
+
+    const faucet=new THREE.Mesh(
+        new THREE.CylinderGeometry(.06,.06,.8,12),
+        mat(0x969da0,.2,.9)
+    );
+
+    faucet.position.set(
+        -6.3,
+        1.8,
+        -8.6
+    );
+
+    scene.add(faucet);
+
+    /* frigo */
+
+    refrigerator();
+
+    /* hotte */
+
+    const hood=new THREE.Mesh(
+        new THREE.BoxGeometry(2.2,.4,.6),
+        mat(0x777d80,.3,.4)
+    );
+
+    hood.position.set(
+        -3.5,
+        3.1,
+        -8.5
+    );
+
+    scene.add(hood);
+}
+
+
+/* =========================================================
+   FRIGO
+========================================================= */
+
+function refrigerator(){
+
+    const g=new THREE.Group();
+
+    const body=new THREE.Mesh(
+        new THREE.BoxGeometry(1.4,3.8,1.1),
+        mat(0xd7dcde,.3,.25)
+    );
+
+    body.position.y=1.9;
+
+    g.add(body);
+
+    const handle=new THREE.Mesh(
+        new THREE.BoxGeometry(.07,1.5,.08),
+        BLACK
+    );
+
+    handle.position.set(
+        .55,
+        2,
+        -.58
+    );
+
+    g.add(handle);
+
+    g.position.set(
+        -10.3,
+        0,
+        -7.3
+    );
+
+    clickableObject(
+        g,
+        "Réfrigérateur",
+        "Le réfrigérateur de la cuisine."
+    );
+
+    scene.add(g);
+}
+
+
+/* =========================================================
+   CHAMBRE
+========================================================= */
+
+function bedroom(){
+
+    const bed=new THREE.Group();
+
+    const frame=new THREE.Mesh(
+        new THREE.BoxGeometry(4.8,.45,6),
+        DARKWOOD
+    );
+
+    frame.position.y=.5;
+
+    bed.add(frame);
+
+    const mattress=new THREE.Mesh(
+        new THREE.BoxGeometry(4.5,.55,5.7),
+        WHITE
+    );
+
+    mattress.position.y=.85;
+
+    bed.add(mattress);
+
+    const blanket=new THREE.Mesh(
+        new THREE.BoxGeometry(4.3,.16,3.2),
+        mat(0x647f84,.95)
+    );
+
+    blanket.position.set(
+        0,
+        1.18,
+        1
+    );
+
+    bed.add(blanket);
+
+    /* oreillers */
+
+    for(let x of [-1.2,1.2]){
+
+        const pillow=new THREE.Mesh(
+            new THREE.BoxGeometry(
+                1.7,
+                .35,
+                1
+            ),
+            WHITE
+        );
+
+        pillow.position.set(
+            x,
+            1.2,
+            -1.75
+        );
+
+        bed.add(pillow);
+    }
+
+    /* tête de lit */
+
+    const head=new THREE.Mesh(
+        new THREE.BoxGeometry(4.8,2,.3),
+        WOOD
+    );
+
+    head.position.set(
+        0,
+        1.35,
+        -2.9
+    );
+
+    bed.add(head);
+
+    bed.position.set(
+        6.5,
+        0,
+        3.5
+    );
+
+    bed.rotation.y=-.12;
+
+    clickableObject(
+        bed,
+        "Lit",
+        "Un grand lit avec oreillers et couverture."
+    );
+
+    scene.add(bed);
+
+    bedside(
+        3.8,
+        0,
+        1
+    );
+
+    bedside(
+        9.2,
+        0,
+        1
+    );
+}
+
+
+/* =========================================================
+   CHEVET
+========================================================= */
+
+function bedside(x,y,z){
+
+    const g=new THREE.Group();
+
+    const table=new THREE.Mesh(
+        new THREE.BoxGeometry(1.1,.8,.9),
+        WOOD
+    );
+
+    table.position.y=.4;
+
+    g.add(table);
+
+    const lamp=new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            .3,
+            .42,
+            .45,
+            20
+        ),
+        mat(0xe4c98f,.9)
+    );
+
+    lamp.position.y=1.05;
+
+    g.add(lamp);
+
+    g.position.set(x,y,z);
+
+    scene.add(g);
+}
+
+
+/* =========================================================
+   SALLE DE BAIN
+========================================================= */
+
+function bathroom(){
+
+    /* baignoire */
+
+    const bath=new THREE.Mesh(
+        new THREE.BoxGeometry(4,.7,1.8),
+        WHITE
+    );
+
+    bath.position.set(
+        7,
+        .4,
+        -7
+    );
+
+    clickableObject(
+        bath,
+        "Baignoire",
+        "Une grande baignoire."
+    );
+
+    scene.add(bath);
+
+    const water=new THREE.Mesh(
+        new THREE.BoxGeometry(3.4,.05,1.25),
+        mat(0x79c9e2,.15,.1)
+    );
+
+    water.position.set(
+        7,
+        .78,
+        -7
+    );
+
+    scene.add(water);
+
+    /* lavabo */
+
+    const vanity=new THREE.Mesh(
+        new THREE.BoxGeometry(1.8,1,.8),
+        WOOD
+    );
+
+    vanity.position.set(
+        4,
+        .5,
+        -6.5
+    );
+
+    scene.add(vanity);
+
+    const basin=new THREE.Mesh(
+        new THREE.BoxGeometry(1.4,.12,.6),
+        WHITE
+    );
+
+    basin.position.set(
+        4,
+        1.05,
+        -6.5
+    );
+
+    clickableObject(
+        basin,
+        "Lavabo",
+        "Le lavabo de la salle de bain."
+    );
+
+    scene.add(basin);
+
+    /* miroir */
+
+    const mirror=new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.8,
+            2,
+            .08
+        ),
+        mat(0x9ed3e2,.12,.3)
+    );
+
+    mirror.position.set(
+        4,
+        2.4,
+        -7
+    );
+
+    scene.add(mirror);
+}
+
+
+/* =========================================================
+   DECORATION
+========================================================= */
+
+function decoration(){
+
+    plant(-9,0,5);
+    plant(10,0,6);
+
+    plant(8,0,-5);
+
+    lamp(1,0,4);
+
+    windowObject(-5,3,-9.78);
+    windowObject(8,3,9.78);
+
+    bookshelf();
+
+    pictures();
+}
+
+
+/* =========================================================
+   PLANTE
+========================================================= */
+
+function plant(x,y,z){
+
+    const g=new THREE.Group();
+
+    const pot=new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            .45,.32,.65,18
+        ),
+        mat(0xa96245,.9)
+    );
+
+    pot.position.y=.33;
+
+    g.add(pot);
+
+    for(let i=0;i<9;i++){
+
+        const leaf=new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .42,
+                10,
+                10
+            ),
+            GREEN
+        );
+
+        leaf.position.set(
+            Math.sin(i*.8)*.4,
+            .8+Math.random()*.8,
+            Math.cos(i*.8)*.4
+        );
+
+        leaf.scale.set(
+            .65,
+            1.3,
+            .5
+        );
+
+        g.add(leaf);
+    }
+
+    g.position.set(x,y,z);
+
+    clickableObject(
+        g,
+        "Plante",
+        "Une plante décorative."
+    );
+
+    scene.add(g);
+}
+
+
+/* =========================================================
+   LAMPE
+========================================================= */
+
+function lamp(x,y,z){
+
+    const g=new THREE.Group();
+
+    const base=new THREE.Mesh(
+        new THREE.CylinderGeometry(.35,.4,.12,20),
+        BLACK
+    );
+
+    base.position.y=.06;
+
+    g.add(base);
+
+    const pole=new THREE.Mesh(
+        new THREE.CylinderGeometry(.06,.06,2.3,12),
+        BLACK
+    );
+
+    pole.position.y=1.2;
+
+    g.add(pole);
+
+    const shade=new THREE.Mesh(
+        new THREE.ConeGeometry(
+            .65,.8,24,1,true
+        ),
+        new THREE.MeshStandardMaterial({
+            color:0xe5c98c,
+            side:THREE.DoubleSide
+        })
+    );
+
+    shade.position.y=2.5;
+
+    g.add(shade);
+
+    const bulb=new THREE.PointLight(
+        0xffd69a,
+        1.8,
+        6
+    );
+
+    bulb.position.y=2.2;
+
+    g.add(bulb);
+
+    g.position.set(x,y,z);
+
+    clickableObject(
+        g,
+        "Lampe",
+        "Une lampe qui éclaire le salon."
+    );
+
+    scene.add(g);
+}
+
+
+/* =========================================================
+   FENETRES
+========================================================= */
+
+function windowObject(x,y,z){
+
+    const frame=new THREE.Mesh(
+        new THREE.BoxGeometry(
+            5,
+            2.5,
+            .18
+        ),
+        WHITE
+    );
+
+    frame.position.set(x,y,z);
+
+    scene.add(frame);
+
+    const glass=new THREE.Mesh(
+        new THREE.BoxGeometry(
+            4.5,
+            2,
+            .08
+        ),
+        new THREE.MeshStandardMaterial({
+            color:0x74b9d4,
+            transparent:true,
+            opacity:.7,
+            roughness:.1
+        })
+    );
+
+    glass.position.set(
+        x,
+        y,
+        z+(z>0?.1:-.1)
+    );
+
+    clickableObject(
+        glass,
+        "Fenêtre",
+        "Une grande fenêtre avec vue extérieure."
+    );
+
+    scene.add(glass);
+}
+
+
+/* =========================================================
+   BIBLIOTHEQUE
+========================================================= */
+
+function bookshelf(){
+
+    const g=new THREE.Group();
+
+    const body=new THREE.Mesh(
+        new THREE.BoxGeometry(
+            2.5,
+            4,
+            .5
+        ),
+        DARKWOOD
+    );
+
+    body.position.y=2;
+
+    g.add(body);
+
+    for(let y of [.7,1.7,2.7,3.7]){
+
+        const shelf=new THREE.Mesh(
+            new THREE.BoxGeometry(
+                2.2,
+                .12,
+                .7
+            ),
+            WOOD
+        );
+
+        shelf.position.set(
+            0,
+            y,
+            -.15
+        );
+
+        g.add(shelf);
+
+        for(let i=0;i<5;i++){
+
+            const book=new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    .25+Math.random()*.15,
+                    .65,
+                    .35
+                ),
+                mat(
+                    [
+                        0x7c4036,
+                        0x435c68,
+                        0x8c744c,
+                        0x5c6848
+                    ][i%4],
+                    .95
                 )
             );
 
-        updateScene();
-
-    },
-    {passive:false}
-);
-
-
-/* =========================================================
-   BOUTON ZOOM +
-========================================================= */
-
-document
-.getElementById("zoomIn")
-.addEventListener(
-    "click",
-    function(){
-
-        scale += .12;
-
-        scale =
-            Math.min(
-                1.8,
-                scale
+            book.position.set(
+                -0.8+i*.38,
+                y+.4,
+                -.2
             );
 
-        updateScene();
-
+            g.add(book);
+        }
     }
-);
+
+    g.position.set(
+        -9,
+        0,
+        -8.8
+    );
+
+    scene.add(g);
+}
 
 
 /* =========================================================
-   BOUTON ZOOM -
+   TABLEAUX
 ========================================================= */
 
-document
-.getElementById("zoomOut")
-.addEventListener(
-    "click",
-    function(){
+function pictures(){
 
-        scale -= .12;
+    for(let x of [-4,0,4]){
 
-        scale =
-            Math.max(
-                .55,
-                scale
+        const frame=new THREE.Mesh(
+            new THREE.BoxGeometry(
+                1.5,
+                1.1,
+                .08
+            ),
+            DARKWOOD
+        );
+
+        frame.position.set(
+            x,
+            3,
+            9.75
+        );
+
+        scene.add(frame);
+
+        const picture=new THREE.Mesh(
+            new THREE.BoxGeometry(
+                1.25,
+                .85,
+                .03
+            ),
+            mat(
+                x===0?0x8aa9b5:0xc59c72,
+                1
+            )
+        );
+
+        picture.position.set(
+            x,
+            3,
+            9.7
+        );
+
+        scene.add(picture);
+    }
+}
+
+
+/* =========================================================
+   OBJETS CLIQUABLES
+========================================================= */
+
+function clickableObject(object,title,text){
+
+    object.userData.clickable=true;
+    object.userData.title=title;
+    object.userData.text=text;
+
+    clickable.push(object);
+}
+
+
+/* =========================================================
+   INTERACTIONS
+========================================================= */
+
+const raycaster=new THREE.Raycaster();
+const pointer=new THREE.Vector2();
+
+function interactions(){
+
+    renderer.domElement.addEventListener(
+        "pointerup",
+        e=>{
+
+            pointer.x=
+                (e.clientX/innerWidth)*2-1;
+
+            pointer.y=
+                -(e.clientY/innerHeight)*2+1;
+
+            raycaster.setFromCamera(
+                pointer,
+                camera
             );
 
-        updateScene();
+            const hits=raycaster.intersectObjects(
+                clickable,
+                true
+            );
 
-    }
-);
+            if(!hits.length)return;
+
+            let obj=hits[0].object;
+
+            while(
+                obj &&
+                !obj.userData.clickable
+            ){
+                obj=obj.parent;
+            }
+
+            if(obj && obj.userData.clickable){
+
+                info.innerHTML=
+                    "<strong>"+
+                    obj.userData.title+
+                    "</strong><br>"+
+                    obj.userData.text;
+
+                info.style.opacity="1";
+
+                clearTimeout(window.infoTimer);
+
+                window.infoTimer=setTimeout(()=>{
+                    info.style.opacity="0";
+                },3500);
+            }
+        }
+    );
+}
 
 
 /* =========================================================
-   RETOUR POSITION INITIALE
+   BOUTONS
 ========================================================= */
 
-document
-.getElementById("home")
-.addEventListener(
-    "click",
-    function(){
+function buttons(){
 
-        scale = 1;
+    document.getElementById("plus").onclick=()=>{
 
-        offsetX = 0;
-        offsetY = 0;
+        controls.dollyIn(1.25);
+        controls.update();
+    };
 
-        updateScene();
+    document.getElementById("minus").onclick=()=>{
 
-    }
-);
+        controls.dollyOut(1.25);
+        controls.update();
+    };
 
+    document.getElementById("home").onclick=()=>{
 
-/* =========================================================
-   JOUR / NUIT
-========================================================= */
+        camera.position.set(
+            14,
+            10,
+            15
+        );
 
-document
-.getElementById("dayNight")
-.addEventListener(
-    "click",
-    function(){
+        controls.target.set(
+            0,
+            2,
+            0
+        );
 
-        dark = !dark;
+        controls.update();
+    };
 
-        if(dark){
+    document.getElementById("light").onclick=()=>{
 
-            app.style.background =
-                "linear-gradient(180deg,#182536,#26384a 60%,#17222e)";
+        night=!night;
 
-            this.textContent = "🌙";
+        if(night){
+
+            scene.background.set(0x111722);
+            scene.fog.color.set(0x111722);
+            sun.intensity=.35;
+
+            document.getElementById(
+                "light"
+            ).textContent="🌙";
 
         }else{
 
-            app.style.background =
-                "linear-gradient(180deg,#b9d7e5 0%,#c8dfe9 55%,#aecbd8 100%)";
+            scene.background.set(0x9fc4d5);
+            scene.fog.color.set(0x9fc4d5);
+            sun.intensity=3;
 
-            this.textContent = "☀️";
-
+            document.getElementById(
+                "light"
+            ).textContent="☀️";
         }
-
-    }
-);
+    };
+}
 
 
 /* =========================================================
-   OBJETS / PIÈCES CLIQUABLES
+   ANIMATION
 ========================================================= */
 
-const rooms =
-    document.querySelectorAll(".roomBox");
+function animate(){
 
+    requestAnimationFrame(animate);
 
-rooms.forEach(function(item){
+    controls.update();
 
-    item.addEventListener(
-        "click",
-        function(e){
-
-            e.stopPropagation();
-
-            const name =
-                item.dataset.name;
-
-            const description =
-                item.dataset.info;
-
-            room.textContent =
-                name;
-
-            info.innerHTML =
-                "<strong>" +
-                name +
-                "</strong><br>" +
-                "<small>" +
-                description +
-                "</small>";
-
-            info.style.opacity = "1";
-
-            clearTimeout(
-                window.infoTimer
-            );
-
-            window.infoTimer =
-                setTimeout(
-                    function(){
-
-                        info.style.opacity = "0";
-
-                    },
-                    3500
-                );
-
-        }
+    renderer.render(
+        scene,
+        camera
     );
-
-});
+}
 
 
 /* =========================================================
-   DÉMARRAGE
+   RESIZE
 ========================================================= */
 
-updateScene();
+function resize(){
+
+    camera.aspect=
+        innerWidth/innerHeight;
+
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(
+        innerWidth,
+        innerHeight
+    );
+}
+
+
+/* =========================================================
+   DEMARRAGE DIRECT
+========================================================= */
+
+start();
 
 </script>
 
