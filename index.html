@@ -1,980 +1,314 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Mon Appartement 3D</title>
-
+<title>Appartement 3D interactif</title>
 <style>
-*{box-sizing:border-box}
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:#111;
-  touch-action:none;
-}
-
-#app{
-  position:fixed;
-  inset:0;
-}
-
-canvas{
-  display:block;
-}
-
-.topbar{
-  position:fixed;
-  top:14px;
-  left:14px;
-  right:14px;
-  z-index:10;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  pointer-events:none;
-}
-
-.title{
-  background:rgba(255,255,255,.94);
-  color:#111;
-  padding:13px 18px;
-  border-radius:18px;
-  font-size:18px;
-  font-weight:800;
-  box-shadow:0 8px 25px rgba(0,0,0,.18);
-}
-
-.room{
-  background:rgba(255,255,255,.94);
-  color:#222;
-  padding:12px 16px;
-  border-radius:18px;
-  font-weight:700;
-  box-shadow:0 8px 25px rgba(0,0,0,.18);
-}
-
-.help{
-  position:fixed;
-  left:50%;
-  bottom:22px;
-  transform:translateX(-50%);
-  z-index:10;
-  background:rgba(255,255,255,.93);
-  color:#222;
-  padding:12px 18px;
-  border-radius:18px;
-  text-align:center;
-  font-size:13px;
-  font-weight:600;
-  box-shadow:0 8px 25px rgba(0,0,0,.2);
-  pointer-events:none;
-  white-space:nowrap;
-}
-
-.info{
-  position:fixed;
-  left:50%;
-  bottom:85px;
-  transform:translateX(-50%);
-  z-index:20;
-  width:min(88%,360px);
-  background:rgba(20,20,20,.94);
-  color:white;
-  padding:18px;
-  border-radius:20px;
-  box-shadow:0 15px 45px rgba(0,0,0,.4);
-  display:none;
-}
-
-.info h2{
-  margin:0 0 7px;
-  font-size:20px;
-}
-
-.info p{
-  margin:0;
-  line-height:1.45;
-  color:#ddd;
-}
-
-.close{
-  position:absolute;
-  right:10px;
-  top:8px;
-  width:32px;
-  height:32px;
-  border:0;
-  border-radius:50%;
-  background:#333;
-  color:white;
-  font-size:20px;
-}
-
-.controls{
-  position:fixed;
-  right:15px;
-  bottom:85px;
-  z-index:10;
-  display:flex;
-  flex-direction:column;
-  gap:9px;
-}
-
-.controls button{
-  width:48px;
-  height:48px;
-  border:0;
-  border-radius:16px;
-  background:rgba(255,255,255,.94);
-  color:#111;
-  font-size:22px;
-  box-shadow:0 7px 20px rgba(0,0,0,.2);
-}
-
-#loading{
-  position:fixed;
-  inset:0;
-  z-index:100;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#d9eaf1;
-  color:#111;
-  font-size:20px;
-  font-weight:800;
-}
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#b9d7e7}
+  #app{position:fixed;inset:0}
+  canvas{display:block}
+  .top{
+    position:fixed;left:14px;right:14px;top:14px;z-index:5;
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    pointer-events:none
+  }
+  .pill,.btn{
+    pointer-events:auto;border:0;border-radius:18px;padding:12px 16px;
+    background:rgba(255,255,255,.90);color:#151515;font-weight:800;
+    box-shadow:0 8px 28px rgba(0,0,0,.14);backdrop-filter:blur(12px);
+  }
+  .title{font-size:17px}
+  .controls{display:flex;gap:8px}
+  .btn{font-size:15px;cursor:pointer}
+  #hint{
+    position:fixed;left:18px;bottom:20px;z-index:5;
+    max-width:calc(100% - 36px);padding:13px 16px;border-radius:18px;
+    background:rgba(255,255,255,.90);box-shadow:0 8px 28px rgba(0,0,0,.14);
+    font-weight:700;color:#222
+  }
+  #info{
+    position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(20px);
+    z-index:6;opacity:0;pointer-events:none;transition:.22s;
+    width:min(360px,calc(100% - 30px));padding:16px 18px;border-radius:20px;
+    background:rgba(20,22,28,.92);color:#fff;box-shadow:0 12px 40px rgba(0,0,0,.35);
+    text-align:center
+  }
+  #info.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  #loading{
+    position:fixed;inset:0;z-index:20;display:grid;place-items:center;
+    background:#dcecf4;color:#151515;font-size:24px;font-weight:900;
+    transition:opacity .35s
+  }
+  #loading.hide{opacity:0;pointer-events:none}
+  @media(max-width:600px){
+    .title{font-size:15px;padding:10px 12px}
+    .btn{padding:10px 12px;font-size:14px}
+  }
 </style>
 </head>
-
 <body>
-
-<div id="loading">🏠 Construction de l’appartement…</div>
-
 <div id="app"></div>
+<div id="loading">🏠 Construction de l'appartement…</div>
 
-<div class="topbar">
-  <div class="title">🏠 MON APPARTEMENT</div>
-  <div class="room" id="roomName">Salon</div>
+<div class="top">
+  <div class="pill title">🏠 MON APPARTEMENT · 3D</div>
+  <div class="controls">
+    <button class="btn" id="dayBtn">🌙 Nuit</button>
+    <button class="btn" id="resetBtn">↻ Vue</button>
+  </div>
 </div>
 
-<div class="controls">
-  <button id="plus">＋</button>
-  <button id="minus">−</button>
-  <button id="light">☀️</button>
-  <button id="reset">⌖</button>
-</div>
-
-<div class="help">
-  👆 Glisse pour regarder · 🤏 Pince pour zoomer · 👇 Touche les objets
-</div>
-
-<div class="info" id="info">
-  <button class="close" id="close">×</button>
-  <h2 id="infoTitle"></h2>
-  <p id="infoText"></p>
-</div>
-
-<script type="module">
-
-import * as THREE from
-'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
-
-import {OrbitControls} from
-'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/controls/OrbitControls.js';
-
-
-// ======================================================
-// SCÈNE
-// ======================================================
-
-const scene = new THREE.Scene();
-
-scene.background = new THREE.Color(0xb8d4df);
-
-scene.fog = new THREE.Fog(0xb8d4df,18,38);
-
-
-// ======================================================
-// CAMÉRA
-// ======================================================
-
-const camera = new THREE.PerspectiveCamera(
-  55,
-  innerWidth/innerHeight,
-  .1,
-  100
-);
-
-camera.position.set(9,8,11);
-
-
-// ======================================================
-// RENDERER
-// ======================================================
-
-const renderer = new THREE.WebGLRenderer({
-  antialias:true
-});
-
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.setSize(innerWidth,innerHeight);
-
-renderer.shadowMap.enabled=true;
-renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-
-renderer.outputColorSpace=THREE.SRGBColorSpace;
-
-document.getElementById("app").appendChild(renderer.domElement);
-
-
-// ======================================================
-// CONTROLES
-// ======================================================
-
-const controls=new OrbitControls(camera,renderer.domElement);
-
-controls.enableDamping=true;
-controls.dampingFactor=.06;
-
-controls.target.set(0,1,0);
-
-controls.minDistance=4;
-controls.maxDistance=22;
-
-controls.maxPolarAngle=Math.PI*.48;
-
-
-// ======================================================
-// LUMIÈRES
-// ======================================================
-
-const ambient=new THREE.HemisphereLight(
-  0xffffff,
-  0x777777,
-  2
-);
-
-scene.add(ambient);
-
-
-const sun=new THREE.DirectionalLight(
-  0xffffff,
-  3
-);
-
-sun.position.set(7,12,5);
-
-sun.castShadow=true;
-
-sun.shadow.mapSize.set(2048,2048);
-
-scene.add(sun);
-
-
-// ======================================================
-// MATÉRIAUX
-// ======================================================
-
-const matFloor=new THREE.MeshStandardMaterial({
-  color:0xc7a37c,
-  roughness:.85
-});
-
-const matWall=new THREE.MeshStandardMaterial({
-  color:0xf0eee7,
-  roughness:.8
-});
-
-const matWood=new THREE.MeshStandardMaterial({
-  color:0x70452c,
-  roughness:.75
-});
-
-const matDarkWood=new THREE.MeshStandardMaterial({
-  color:0x39251b,
-  roughness:.7
-});
-
-const matFabric=new THREE.MeshStandardMaterial({
-  color:0x6f7774,
-  roughness:1
-});
-
-const matCarpet=new THREE.MeshStandardMaterial({
-  color:0x819894,
-  roughness:1
-});
-
-const matMetal=new THREE.MeshStandardMaterial({
-  color:0x777777,
-  metalness:.7,
-  roughness:.3
-});
-
-const matGlass=new THREE.MeshPhysicalMaterial({
-  color:0x9bd7ed,
-  transparent:true,
-  opacity:.35,
-  roughness:.05
-});
-
-
-// ======================================================
-// UTILITAIRE CUBE
-// ======================================================
-
-function cube(
-  name,
-  x,y,z,
-  sx,sy,sz,
-  material,
-  clickable=false
-){
-
-  const g=new THREE.BoxGeometry(sx,sy,sz);
-
-  const m=new THREE.Mesh(g,material);
-
-  m.position.set(x,y,z);
-
-  m.castShadow=true;
-  m.receiveShadow=true;
-
-  m.name=name;
-
-  if(clickable){
-    m.userData.clickable=true;
-  }
-
-  scene.add(m);
-
-  return m;
-}
-
-
-// ======================================================
-// SOL
-// ======================================================
-
-cube(
-  "Sol",
-  0,-.12,0,
-  18,.2,14,
-  matFloor
-);
-
-
-// ======================================================
-// MURS
-// ======================================================
-
-cube(
-  "Mur arrière",
-  0,2.5,-7,
-  18,5,.25,
-  matWall
-);
-
-cube(
-  "Mur gauche",
-  -9,2.5,0,
-  .25,5,14,
-  matWall
-);
-
-cube(
-  "Mur droit",
-  9,2.5,0,
-  .25,5,14,
-  matWall
-);
-
-
-// séparation chambre
-cube(
-  "Mur chambre",
-  -2.5,2.5,1.5,
-  .2,5,4,
-  matWall
-);
-
-
-// ======================================================
-// TAPIS SALON
-// ======================================================
-
-cube(
-  "Grand tapis du salon",
-  2,.02,2.2,
-  6,.08,4,
-  matCarpet,
-  true
-);
-
-
-// ======================================================
-// CANAPÉ
-// ======================================================
-
-cube(
-  "Canapé",
-  2,1.05,-1.3,
-  4,.9,1.1,
-  matFabric,
-  true
-);
-
-cube(
-  "Dossier canapé",
-  2,1.75,-1.75,
-  4,1.4,.35,
-  matFabric
-);
-
-cube(
-  "Accoudoir gauche",
-  0,1.35,-1.3,
-  .35,1.2,1.1,
-  matFabric
-);
-
-cube(
-  "Accoudoir droit",
-  4,1.35,-1.3,
-  .35,1.2,1.1,
-  matFabric
-);
-
-
-// ======================================================
-// TABLE BASSE
-// ======================================================
-
-cube(
-  "Table basse",
-  2,.7,1,
-  2.8,.18,1.3,
-  matWood,
-  true
-);
-
-for(let x of [.8,3.2]){
-  for(let z of [.55,1.45]){
-    cube(
-      "Pied table",
-      x,.35,z,
-      .12,.7,.12,
-      matDarkWood
-    );
+<div id="hint">👆 Glisse pour regarder autour · 🤏 Pince pour zoomer · touche les objets</div>
+<div id="info"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
   }
 }
-
-
-// ======================================================
-// TÉLÉVISION
-// ======================================================
-
-cube(
-  "Meuble TV",
-  2,.55,-6.4,
-  4,.8,.7,
-  matDarkWood,
-  true
-);
-
-const tv=cube(
-  "Télévision",
-  2,2.2,-6.05,
-  3.8,2.1,.12,
-  new THREE.MeshStandardMaterial({
-    color:0x080b0d,
-    roughness:.2,
-    metalness:.3,
-    emissive:0x071b2b
-  }),
-  true
-);
-
-
-// ======================================================
-// MEUBLE TV DÉTAILS
-// ======================================================
-
-cube(
-  "Console",
-  1.1,.9,-6.1,
-  .8,.3,.5,
-  matMetal,
-  true
-);
-
-cube(
-  "Enceinte gauche",
-  -.3,1,-6.1,
-  .45,.8,.45,
-  matDarkWood
-);
-
-cube(
-  "Enceinte droite",
-  4.3,1,-6.1,
-  .45,.8,.45,
-  matDarkWood
-);
-
-
-// ======================================================
-// PLANTE
-// ======================================================
-
-cube(
-  "Pot plante",
-  -6,.7,-4.5,
-  .9,1.2,.9,
-  matWood,
-  true
-);
-
-for(let i=0;i<8;i++){
-
-  const leaf=new THREE.Mesh(
-    new THREE.SphereGeometry(.55,.16,.12),
-    new THREE.MeshStandardMaterial({
-      color:0x3c7944
-    })
-  );
-
-  leaf.position.set(
-    -6+Math.cos(i)*.8,
-    1.7+Math.sin(i)*.4,
-    -4.5+Math.sin(i)*.6
-  );
-
-  leaf.scale.y=1.5;
-
-  leaf.castShadow=true;
-
-  scene.add(leaf);
-}
-
-
-// ======================================================
-// TABLE À MANGER
-// ======================================================
-
-cube(
-  "Table à manger",
-  -5,.9,2.8,
-  3.2,.18,1.5,
-  matWood,
-  true
-);
-
-for(let x of [-6.2,-3.8]){
-  for(let z of [2.1,3.5]){
-
-    cube(
-      "Chaise",
-      x,.65,z,
-      .65,1.2,.65,
-      matDarkWood,
-      true
-    );
-
-  }
-}
-
-
-// ======================================================
-// CUISINE
-// ======================================================
-
-cube(
-  "Plan de travail cuisine",
-  -5,1.25,-5.5,
-  6,1.2,1.2,
-  matDarkWood,
-  true
-);
-
-cube(
-  "Évier",
-  -5.5,1.9,-5.5,
-  1.2,.08,.7,
-  matMetal,
-  true
-);
-
-cube(
-  "Réfrigérateur",
-  -1.5,2.4,-5.5,
-  1.3,4.8,1.2,
-  matMetal,
-  true
-);
-
-cube(
-  "Four",
-  -4,1.8,-5.5,
-  1.1,1.2,1,
-  matMetal,
-  true
-);
-
-
-// ======================================================
-// LIT
-// ======================================================
-
-cube(
-  "Lit",
-  -5,1,5,
-  4, .45, 5,
-  matDarkWood,
-  true
-);
-
-cube(
-  "Matelas",
-  -5,1.45,5,
-  3.8,.55,4.7,
-  new THREE.MeshStandardMaterial({
-    color:0xe7e2d7,
-    roughness:1
-  }),
-  true
-);
-
-cube(
-  "Oreiller 1",
-  -6,1.85,6.4,
-  1.2,.3,.7,
-  matWall
-);
-
-cube(
-  "Oreiller 2",
-  -4,1.85,6.4,
-  1.2,.3,.7,
-  matWall
-);
-
-
-// ======================================================
-// ARMOIRE
-// ======================================================
-
-cube(
-  "Armoire",
-  -8,2.3,4.8,
-  1.3,4.5,3,
-  matWood,
-  true
-);
-
-
-// ======================================================
-// FENÊTRE
-// ======================================================
-
-cube(
-  "Fenêtre",
-  5,3,-6.82,
-  4,2.4,.08,
-  matGlass,
-  true
-);
-
-
-// cadre
-for(const x of [3,7]){
-  cube(
-    "Cadre fenêtre",
-    x,3,-6.7,
-    .12,2.7,.15,
-    matWood
-  );
-}
-
-cube(
-  "Cadre fenêtre horizontal",
-  5,3,-6.7,
-  4,.12,.15,
-  matWood
-);
-
-
-// ======================================================
-// LAMPES
-// ======================================================
-
-function lamp(x,y,z){
-
-  const bulb=new THREE.Mesh(
-    new THREE.SphereGeometry(.25,20,20),
-    new THREE.MeshStandardMaterial({
-      color:0xffe7a3,
-      emissive:0xffb52e,
-      emissiveIntensity:2
-    })
-  );
-
-  bulb.position.set(x,y,z);
-
-  scene.add(bulb);
-
-  const light=new THREE.PointLight(
-    0xffd89a,
-    4,
-    8
-  );
-
-  light.position.set(x,y,z);
-
-  light.castShadow=true;
-
-  scene.add(light);
-
-  return light;
-}
-
-const lamp1=lamp(2,4,-1);
-
-const lamp2=lamp(-5,4,4);
-
-
-// ======================================================
-// LIVRES
-// ======================================================
-
-for(let i=0;i<5;i++){
-
-  cube(
-    "Livre",
-    -7+i*.35,
-    1.4,
-    -6,
-    .25,
-    .8,
-    .7,
-    matDarkWood,
-    true
-  );
-}
-
-
-// ======================================================
-// RAYCASTER POUR OBJETS CLIQUABLES
-// ======================================================
-
-const raycaster=new THREE.Raycaster();
-
-const pointer=new THREE.Vector2();
-
-renderer.domElement.addEventListener(
-  "pointerdown",
-  e=>{
-
-    pointer.x=(e.clientX/innerWidth)*2-1;
-    pointer.y=-(e.clientY/innerHeight)*2+1;
-
-    raycaster.setFromCamera(pointer,camera);
-
-    const hits=raycaster.intersectObjects(
-      scene.children,
-      true
-    );
-
-    const hit=hits.find(
-      h=>h.object.userData.clickable
-    );
-
-    if(hit){
-
-      const name=hit.object.name;
-
-      const descriptions={
-
-        "Canapé":
-          "Un grand canapé confortable. Tu peux l'inspecter et imaginer une soirée devant la télévision.",
-
-        "Table basse":
-          "La table basse du salon. Quelques objets pourraient être ajoutés dessus.",
-
-        "Télévision":
-          "📺 Télévision — elle pourrait devenir interactive avec une vraie interface.",
-
-        "Console":
-          "🎮 Console de jeux.",
-
-        "Grand tapis du salon":
-          "Un grand tapis placé au centre du salon.",
-
-        "Plante":
-          "🌿 Une plante décorative.",
-
-        "Table à manger":
-          "🍽️ La table à manger.",
-
-        "Évier":
-          "🚰 Évier de la cuisine.",
-
-        "Réfrigérateur":
-          "🧊 Réfrigérateur. On pourrait ajouter un inventaire à l'intérieur.",
-
-        "Four":
-          "🔥 Four de la cuisine.",
-
-        "Lit":
-          "🛏️ Ton lit.",
-
-        "Matelas":
-          "Un matelas confortable.",
-
-        "Armoire":
-          "👕 Armoire. Elle pourrait s'ouvrir dans une prochaine version.",
-
-        "Fenêtre":
-          "🪟 Fenêtre donnant sur l'extérieur.",
-
-        "Livre":
-          "📖 Un livre posé dans la bibliothèque."
-      };
-
-      document.getElementById("infoTitle").textContent=name;
-
-      document.getElementById("infoText").textContent=
-        descriptions[name] ||
-        "Objet interactif de l'appartement.";
-
-      document.getElementById("info").style.display="block";
-    }
-
-  }
-);
-
-
-// ======================================================
-// BOUTONS
-// ======================================================
-
-document.getElementById("close").onclick=()=>{
-  document.getElementById("info").style.display="none";
-};
-
-
-document.getElementById("plus").onclick=()=>{
-
-  camera.position.multiplyScalar(.85);
-
-};
-
-
-document.getElementById("minus").onclick=()=>{
-
-  camera.position.multiplyScalar(1.15);
-
-};
-
-
-document.getElementById("reset").onclick=()=>{
-
-  camera.position.set(9,8,11);
-
-  controls.target.set(0,1,0);
-
-};
-
-
-let night=false;
-
-document.getElementById("light").onclick=()=>{
-
-  night=!night;
-
-  if(night){
-
-    scene.background.set(0x101827);
-
-    scene.fog.color.set(0x101827);
-
-    ambient.intensity=.35;
-
-    sun.intensity=.5;
-
-    lamp1.intensity=7;
-
-    lamp2.intensity=7;
-
-  }else{
-
-    scene.background.set(0xb8d4df);
-
-    scene.fog.color.set(0xb8d4df);
-
-    ambient.intensity=2;
-
-    sun.intensity=3;
-
-    lamp1.intensity=4;
-
-    lamp2.intensity=4;
-
-  }
-
-};
-
-
-// ======================================================
-// REDIMENSIONNEMENT
-// ======================================================
-
-addEventListener("resize",()=>{
-
-  camera.aspect=innerWidth/innerHeight;
-
-  camera.updateProjectionMatrix();
-
-  renderer.setSize(
-    innerWidth,
-    innerHeight
-  );
-
-});
-
-
-// ======================================================
-// ANIMATION
-// ======================================================
-
-function animate(){
-
-  requestAnimationFrame(animate);
-
-  controls.update();
-
-  renderer.render(scene,camera);
-
-}
-
-animate();
-
-
-// ======================================================
-// FIN CHARGEMENT
-// ======================================================
-
-setTimeout(()=>{
-
-  document.getElementById("loading").style.display="none";
-
-},1000);
-
 </script>
 
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xb9d7e7);
+scene.fog = new THREE.Fog(0xb9d7e7, 14, 30);
+
+const camera = new THREE.PerspectiveCamera(58, innerWidth/innerHeight, .1, 100);
+camera.position.set(8.5,6.5,9.5);
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.05;
+document.getElementById('app').appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true;
+controls.dampingFactor=.07;
+controls.minDistance=4;
+controls.maxDistance=18;
+controls.maxPolarAngle=Math.PI*.48;
+controls.target.set(0,1.2,0);
+
+const hemi=new THREE.HemisphereLight(0xdff4ff,0x6c4b35,2.1);
+scene.add(hemi);
+
+const sun=new THREE.DirectionalLight(0xfff1d1,3.2);
+sun.position.set(5,10,6);
+sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+sun.shadow.camera.left=-12; sun.shadow.camera.right=12;
+sun.shadow.camera.top=12; sun.shadow.camera.bottom=-12;
+scene.add(sun);
+
+const warm=new THREE.PointLight(0xffb35c,2.2,9);
+warm.position.set(-2.5,3.1,-1.8);
+warm.castShadow=true;
+scene.add(warm);
+
+const objects=[];
+const clickable=[];
+
+function mat(color,rough=.75,metal=0){
+  return new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal});
+}
+function box(name,x,y,z,sx,sy,sz,color,opts={}){
+  const g=new THREE.Group(); g.name=name;
+  const m=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat(color,opts.rough??.7,opts.metal??0));
+  m.position.set(x,y,z); m.castShadow=true; m.receiveShadow=true; g.add(m);
+  scene.add(g); objects.push(g); return g;
+}
+function cyl(name,x,y,z,r,h,color){
+  const g=new THREE.Group(); g.name=name;
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,32),mat(color,.65));
+  m.position.set(x,y,z); m.castShadow=true; m.receiveShadow=true; g.add(m);
+  scene.add(g); objects.push(g); return g;
+}
+function addClick(g,label,action){
+  g.userData={label,action};
+  g.traverse(o=>{if(o.isMesh){o.userData.root=g;clickable.push(o)}});
+}
+function textSprite(text){
+  const c=document.createElement('canvas'); c.width=512;c.height=128;
+  const x=c.getContext('2d'); x.fillStyle='rgba(0,0,0,.72)';x.roundRect(10,20,492,88,28);x.fill();
+  x.fillStyle='#fff';x.font='bold 42px sans-serif';x.textAlign='center';x.fillText(text,256,78);
+  const t=new THREE.CanvasTexture(c); const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true}));
+  s.scale.set(2.8,.7,1); return s;
+}
+
+// Sol + murs
+box('Sol',0,-.15,0,18,.3,14,0xc9a27b);
+box('Mur arrière',0,3,-7,18,6,.25,0xe9e2d4);
+box('Mur gauche',-9,3,0,.25,6,14,0xe9e2d4);
+box('Mur droite',9,3,0,.25,6,14,0xe9e2d4);
+
+// Tapis
+box('Tapis salon',1,.03,1.3,6.8,.06,4.2,0x718d8b);
+box('Tapis chambre',-5,.04,-3.8,3.5,.05,4.2,0x7b8da2);
+
+// Canapé
+const sofa=box('Canapé',2.4,1.05,2.4,5.2,1.5,1.35,0x6f747a);
+box('Dossier canapé',2.4,1.75,1.88,5.15,1.35,.38,0x5e6369);
+box('Accoudoir gauche',-.15,1.25,2.4,.42,1.25,1.55,0x5e6369);
+box('Accoudoir droit',4.95,1.25,2.4,.42,1.25,1.55,0x5e6369);
+addClick(sofa,'🛋️ Canapé · tu peux t’asseoir ici',()=>show('🛋️ Le canapé est confortable… mais malheureusement je ne peux pas m’y asseoir à ta place 😄'));
+
+// Table basse
+const table=box('Table basse',2.2,.7,0,3.3,.18,1.5,0x8b5b36);
+for(const x of [.8,3.6]) for(const z of [-.5,.5]) box('Pied table',x,.35,z,.16,.7,.16,0x55351f);
+addClick(table,'🪵 Table basse',()=>show('🪵 Une table basse en bois. Elle pourrait accueillir des magazines, une tasse ou une manette.'));
+
+// TV + meuble
+box('Meuble TV',-2.9,.65,-5.9,4.5,1.1,.65,0x3b302a);
+const tv=box('TV',-2.9,2.1,-5.55,3.9,2.2,.16,0x111318,{metal:.2});
+const screen=box('Écran TV',-2.9,2.1,-5.43,3.45,1.72,.03,0x17283a);
+addClick(tv,'📺 Télévision',()=>{
+  const c=screen.children[0].material.color;
+  c.setHex(c.getHex()===0x17283a?0x59b8ff:0x17283a);
+  show(c.getHex()===0x59b8ff?'📺 TV allumée · écran bleu':'📺 TV éteinte');
+});
+
+// Lampe
+const lamp=cyl('Lampe',6.3,.9,-4.8,.42,1.8,0x44464a);
+const shade=box('Abat-jour',6.3,2,-4.8,1.25,.65,1.25,0xe8d6b2);
+const lampLight=new THREE.PointLight(0xffc46b,0,6);
+lampLight.position.set(6.3,2.1,-4.8); lampLight.castShadow=true; scene.add(lampLight);
+addClick(shade,'💡 Lampe',()=>{
+  lampLight.intensity=lampLight.intensity?0:4;
+  show(lampLight.intensity?'💡 Lampe allumée':'💡 Lampe éteinte');
+});
+
+// Plante
+const plant=new THREE.Group(); plant.name='Plante';
+cyl('Pot',-6.8,.55,2.7,.55,1.1,0xa65e3b).position.set(-6.8,0,0);
+const pot=new THREE.Mesh(new THREE.CylinderGeometry(.6,.48,1,24),mat(0xa65e3b));
+pot.position.set(-6.8,.5,2.7);pot.castShadow=true;plant.add(pot);
+for(let i=0;i<9;i++){
+  const leaf=new THREE.Mesh(new THREE.SphereGeometry(.5,.12,12),mat(0x4c8b55));
+  leaf.scale.set(.35,.75,.16); leaf.position.set(-6.8+Math.sin(i*2.2)*.7,1.45+(i%3)*.22,2.7+Math.cos(i*1.8)*.55);
+  leaf.rotation.z=(i%2?-1:1)*.5; leaf.castShadow=true; plant.add(leaf);
+}
+scene.add(plant);objects.push(plant);
+addClick(plant,'🌿 Plante',()=>show('🌿 Une plante verte. Elle n’a pas besoin d’eau dans cette version 😄'));
+
+// Cuisine
+box('Plan de travail',5.8,1.25,-3.5,5.2,.35,1.5,0x6e5a4a);
+box('Meuble cuisine',5.8,.55,-3.5,5.2,1.2,1.5,0x4a3b34);
+for(let i=0;i<4;i++) box('Porte placard',3.55+i*1.35,.55,-2.72,1.1,.9,.06,0x705848);
+const fridge=box('Frigo',-5.9,2.2,-5.2,1.7,4.1,1.5,0xbcc3c8,{metal:.65,rough:.35});
+const fridgeDoor=box('Porte frigo',-5.9,2.2,-4.38,1.45,3.85,.08,0xc8ced2,{metal:.6,rough:.3});
+addClick(fridgeDoor,'🧊 Frigo',()=>{
+  fridgeDoor.rotation.y = fridgeDoor.rotation.y===0 ? -.65 : 0;
+  show(fridgeDoor.rotation.y?'🧊 Le frigo est ouvert':'🧊 Le frigo est fermé');
+});
+
+// Évier
+box('Évier',6.4,1.48,-3.25,1.5,.08,.85,0xb9c2c7,{metal:.8,rough:.25});
+cyl('Robinet',6.4,1.95,-3.55,.09,.7,0x9ba3a7).rotation.x=Math.PI/2;
+
+// Chambre / lit
+box('Lit',-5.2,.65,-1.9,4.3,.6,3.1,0x8b674f);
+box('Matelas',-5.2,1.08,-1.9,4.0,.45,2.8,0xf1ede6);
+box('Oreiller',-6.3,1.38,-2.55,1.35,.3,.75,0xffffff);
+const pillow=box('Oreiller 2',-4.7,1.38,-2.55,1.35,.3,.75,0xffffff);
+addClick(pillow,'🛏️ Lit',()=>show('🛏️ Chambre · il est probablement temps de dormir.'));
+
+box('Chevet',-7.6,.65,-.8,1.1,1.2,1.1,0x63452f);
+const bedside=cyl('Lampe chevet',-7.6,1.55,-.8,.28,.65,0x7d6850);
+const bedLight=new THREE.PointLight(0xffbf75,0,4);bedLight.position.set(-7.6,1.9,-.8);scene.add(bedLight);
+addClick(bedside,'🛏️ Lampe de chevet',()=>{bedLight.intensity=bedLight.intensity?0:2.5;show(bedLight.intensity?'💡 Lampe allumée':'💡 Lampe éteinte')});
+
+// Tableau
+const picture=box('Tableau',1.5,3.1,-6.78,2.2,1.35,.08,0x28394d);
+addClick(picture,'🖼️ Tableau',()=>show('🖼️ Décoration murale.'));
+
+// Porte
+const door=box('Porte',7.9,2.3,6.85,2.2,4.4,.16,0x704b35);
+addClick(door,'🚪 Porte',()=>{door.rotation.y=door.rotation.y===0?-1.1:0;show(door.rotation.y?'🚪 Porte ouverte':'🚪 Porte fermée')});
+
+// Fenêtre
+const windowFrame=box('Fenêtre',-1.0,3.4,-6.78,4.2,2.4,.1,0x3f4b52);
+const glass=box('Vitre',-1.0,3.4,-6.7,3.7,1.9,.04,0x82b8d1,{rough:.2,metal:.1});
+addClick(glass,'🪟 Fenêtre',()=>show('🪟 Une grande fenêtre donne sur l’extérieur.'));
+
+// Petit ordinateur
+const desk=box('Bureau',-1.8,1.05,5.2,2.6,.22,1.25,0x704a31);
+const monitor=box('Ordinateur',-1.8,2.05,5.0,1.7,1.1,.12,0x171a1f);
+addClick(monitor,'💻 Ordinateur',()=>show('💻 Ordinateur · écran verrouillé.'));
+
+// Horloge
+const clock=cyl('Horloge',4.0,3.2,-6.78,.7,.12,0xf0f0ea);
+clock.rotation.x=Math.PI/2;
+addClick(clock,'🕒 Horloge',()=>show('🕒 13:37 · le temps passe vite.'));
+
+// Curseur / interaction
+const raycaster=new THREE.Raycaster();
+const pointer=new THREE.Vector2();
+function pointerFromEvent(e){
+  const r=renderer.domElement.getBoundingClientRect();
+  pointer.x=((e.clientX-r.left)/r.width)*2-1;
+  pointer.y=-((e.clientY-r.top)/r.height)*2+1;
+}
+renderer.domElement.addEventListener('pointerdown',e=>{
+  pointerFromEvent(e);
+  raycaster.setFromCamera(pointer,camera);
+  const hits=raycaster.intersectObjects(clickable,true);
+  if(hits.length){
+    const root=hits[0].object.userData.root;
+    if(root?.userData?.action) root.userData.action();
+  }
+});
+
+function show(txt){
+  const info=document.getElementById('info');
+  info.textContent=txt; info.classList.add('show');
+  clearTimeout(show.t); show.t=setTimeout(()=>info.classList.remove('show'),2600);
+}
+
+// Jour / nuit
+let night=false;
+document.getElementById('dayBtn').onclick=()=>{
+  night=!night;
+  scene.background.setHex(night?0x111827:0xb9d7e7);
+  scene.fog.color.setHex(night?0x111827:0xb9d7e7);
+  sun.intensity=night?.35:3.2;
+  hemi.intensity=night?.35:2.1;
+  warm.intensity=night?3.5:2.2;
+  document.getElementById('dayBtn').textContent=night?'☀️ Jour':'🌙 Nuit';
+  show(night?'🌙 Mode nuit':'☀️ Mode jour');
+};
+
+const startPos=camera.position.clone();
+const startTarget=controls.target.clone();
+document.getElementById('resetBtn').onclick=()=>{
+  camera.position.copy(startPos); controls.target.copy(startTarget); controls.update();
+};
+
+addEventListener('resize',()=>{
+  camera.aspect=innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+});
+
+function animate(){
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene,camera);
+}
+animate();
+
+setTimeout(()=>document.getElementById('loading').classList.add('hide'),900);
+</script>
 </body>
 </html>
