@@ -2,1705 +2,1557 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
 
 <title>Mon Appartement 3D</title>
 
 <style>
+
 * {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #b9d7e5;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #b9d7e5;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    touch-action: none;
+}
+
+#app {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
 }
 
 canvas {
-  display: block;
-  position: fixed;
-  inset: 0;
-  z-index: 1;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
-#loading {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #b9d7e5;
-  transition: opacity .45s;
-}
+/* -------------------------
+   INTERFACE
+------------------------- */
 
-.loadingBox {
-  text-align: center;
-  color: #17212b;
-  padding: 25px;
-}
+.top {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
 
-.loadingHouse {
-  font-size: 64px;
-  margin-bottom: 14px;
-}
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-.loadingText {
-  font-size: 24px;
-  font-weight: 800;
-}
-
-.loadingSmall {
-  margin-top: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  opacity: .65;
-}
-
-#ui {
-  position: fixed;
-  inset: 0;
-  z-index: 20;
-  pointer-events: none;
-}
-
-.topbar {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  right: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-
-.title,
-.room {
-  background: rgba(255,255,255,.94);
-  border-radius: 18px;
-  box-shadow: 0 8px 25px rgba(0,0,0,.15);
+    pointer-events: none;
 }
 
 .title {
-  padding: 15px 20px;
-  font-size: 20px;
-  font-weight: 900;
+    padding: 12px 16px;
+
+    background: rgba(255,255,255,.92);
+
+    border-radius: 16px;
+
+    font-size: 17px;
+    font-weight: 900;
+
+    color: #17212b;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.15);
 }
 
 .room {
-  padding: 15px 18px;
-  font-weight: 800;
+    padding: 12px 16px;
+
+    background: rgba(255,255,255,.92);
+
+    border-radius: 16px;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    color: #17212b;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.15);
 }
+
+/* -------------------------
+   BOUTONS
+------------------------- */
+
+.buttons {
+    position: absolute;
+
+    right: 16px;
+    bottom: 90px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+button {
+    width: 52px;
+    height: 52px;
+
+    border: 0;
+    border-radius: 17px;
+
+    background: rgba(255,255,255,.94);
+
+    font-size: 25px;
+
+    box-shadow:
+        0 7px 20px rgba(0,0,0,.18);
+
+    color: #17212b;
+}
+
+button:active {
+    transform: scale(.91);
+}
+
+/* -------------------------
+   INFO
+------------------------- */
 
 #info {
-  position: absolute;
-  left: 50%;
-  bottom: 30px;
-  transform: translateX(-50%);
-  min-width: 240px;
-  max-width: 85%;
-  padding: 15px 20px;
-  border-radius: 18px;
-  background: rgba(255,255,255,.95);
-  color: #17212b;
-  text-align: center;
-  box-shadow: 0 8px 30px rgba(0,0,0,.18);
-  font-weight: 700;
-  opacity: 0;
-  transition: opacity .25s;
-}
+    position: absolute;
 
-#controls {
-  position: absolute;
-  right: 18px;
-  bottom: 105px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  pointer-events: auto;
-}
+    left: 50%;
+    bottom: 22px;
 
-.control {
-  width: 54px;
-  height: 54px;
-  border: 0;
-  border-radius: 17px;
-  background: rgba(255,255,255,.95);
-  font-size: 25px;
-  box-shadow: 0 6px 20px rgba(0,0,0,.16);
-}
+    transform: translateX(-50%);
 
-.control:active {
-  transform: scale(.92);
+    width: max-content;
+    max-width: 82%;
+
+    padding: 13px 18px;
+
+    background: rgba(255,255,255,.95);
+
+    border-radius: 16px;
+
+    text-align: center;
+
+    color: #17212b;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.18);
+
+    opacity: 0;
+
+    transition:
+        opacity .2s;
 }
 
 #help {
-  position: absolute;
-  left: 50%;
-  bottom: 30px;
-  transform: translateX(-50%);
-  padding: 10px 15px;
-  border-radius: 14px;
-  background: rgba(255,255,255,.84);
-  font-size: 13px;
-  color: #44515c;
-  white-space: nowrap;
+    position: absolute;
+
+    left: 50%;
+    top: 78px;
+
+    transform: translateX(-50%);
+
+    padding: 9px 13px;
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,.78);
+
+    color: #52616d;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    pointer-events: none;
 }
 
+/* -------------------------
+   ERREUR
+------------------------- */
+
 #error {
-  display: none;
-  margin-top: 18px;
-  padding: 12px 15px;
-  border-radius: 12px;
-  background: #fff;
-  color: #a40000;
-  font-size: 13px;
-  line-height: 1.4;
-  max-width: 330px;
+    display: none;
+
+    position: absolute;
+
+    left: 15px;
+    right: 15px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    padding: 20px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.25);
+
+    color: #222;
+
+    font-weight: 700;
+
+    text-align: center;
+
+    z-index: 50;
 }
+
 </style>
 </head>
 
+
 <body>
 
-<div id="loading">
-  <div class="loadingBox">
-    <div class="loadingHouse">🏠</div>
-    <div class="loadingText">Construction de l’appartement…</div>
-    <div class="loadingSmall">Chargement de la vue 3D</div>
-    <div id="error"></div>
-  </div>
-</div>
+<div id="app">
 
-<div id="ui">
+<canvas id="canvas"></canvas>
 
-  <div class="topbar">
-    <div class="title">🏠 MON APPARTEMENT</div>
-    <div class="room" id="roomName">Salon</div>
-  </div>
+<div class="top">
 
-  <div id="info"></div>
+    <div class="title">
+        🏠 MON APPARTEMENT
+    </div>
 
-  <div id="controls">
-    <button class="control" id="zoomIn">＋</button>
-    <button class="control" id="zoomOut">−</button>
-    <button class="control" id="light">🌙</button>
-    <button class="control" id="home">⌂</button>
-  </div>
-
-  <div id="help">
-    👆 Glisse pour regarder autour de toi · Touche les objets
-  </div>
+    <div class="room" id="room">
+        Appartement
+    </div>
 
 </div>
 
-<script type="module">
 
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+<div id="help">
+    👆 Glisse pour tourner · 🤏 Pince pour zoomer · Touche les meubles
+</div>
 
-import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
+
+<div class="buttons">
+
+    <button id="plus">＋</button>
+
+    <button id="minus">−</button>
+
+    <button id="day">☀️</button>
+
+    <button id="reset">⌂</button>
+
+</div>
 
 
-let scene;
-let camera;
-let renderer;
-let controls;
+<div id="info"></div>
+
+
+<div id="error">
+    Une erreur est survenue.
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   APPARTEMENT 3D
+   VERSION AUTONOME
+   AUCUNE BIBLIOTHÈQUE EXTERNE
+========================================================= */
+
+
+const canvas =
+    document.getElementById("canvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+const info =
+    document.getElementById("info");
+
+const roomLabel =
+    document.getElementById("room");
+
+const errorBox =
+    document.getElementById("error");
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let width = 0;
+let height = 0;
+
+let rotation = -0.55;
+
+let cameraHeight = 7;
+
+let zoom = 1;
 
 let night = false;
 
-const objects = [];
-
-const loading = document.getElementById("loading");
-const errorBox = document.getElementById("error");
-const info = document.getElementById("info");
-
-
-try {
-
-  init();
-
-} catch (e) {
-
-  showError(e);
-
-}
-
-
-function init() {
-
-  scene = new THREE.Scene();
-
-  scene.background =
-    new THREE.Color(0xb9d7e5);
-
-  scene.fog =
-    new THREE.Fog(
-      0xb9d7e5,
-      15,
-      55
-    );
-
-
-  camera =
-    new THREE.PerspectiveCamera(
-      55,
-      innerWidth / innerHeight,
-      0.1,
-      100
-    );
-
-
-  camera.position.set(
-    12,
-    9,
-    14
-  );
-
-
-  renderer =
-    new THREE.WebGLRenderer({
-      antialias: true,
-      powerPreference: "high-performance"
-    });
-
-
-  renderer.setPixelRatio(
-    Math.min(devicePixelRatio, 2)
-  );
-
-
-  renderer.setSize(
-    innerWidth,
-    innerHeight
-  );
-
-
-  renderer.shadowMap.enabled = true;
-
-  renderer.shadowMap.type =
-    THREE.PCFSoftShadowMap;
-
-
-  document.body.appendChild(
-    renderer.domElement
-  );
-
-
-  controls =
-    new OrbitControls(
-      camera,
-      renderer.domElement
-    );
-
-
-  controls.enableDamping = true;
-
-  controls.dampingFactor = 0.07;
-
-  controls.minDistance = 5;
-
-  controls.maxDistance = 30;
-
-  controls.maxPolarAngle =
-    Math.PI / 2.03;
-
-
-  controls.target.set(
-    0,
-    1,
-    0
-  );
-
-
-  createLights();
-
-  createApartment();
-
-  setupInteraction();
-
-  setupButtons();
-
-
-  addEventListener(
-    "resize",
-    resize
-  );
-
-
-  animate();
-
-
-  setTimeout(
-    hideLoading,
-    450
-  );
-
-}
-
-
-function hideLoading() {
-
-  loading.style.opacity = "0";
-
-  setTimeout(
-    () => loading.remove(),
-    500
-  );
-
-}
-
-
-function showError(e) {
-
-  errorBox.style.display = "block";
-
-  errorBox.innerHTML =
-    "Le moteur 3D n’a pas pu démarrer." +
-    "<br><br>" +
-    "<b>Erreur :</b> " +
-    String(
-      e && e.message
-        ? e.message
-        : e
-    );
-
-}
-
-
-function mat(
-  color,
-  roughness = .75,
-  metalness = 0
-) {
-
-  return new THREE.MeshStandardMaterial({
-    color,
-    roughness,
-    metalness
-  });
-
-}
-
-
-function addBox(
-  w,
-  h,
-  d,
-  x,
-  y,
-  z,
-  material,
-  clickable = false,
-  title = "",
-  desc = ""
-) {
-
-  const mesh =
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        w,
-        h,
-        d
-      ),
-      material
-    );
-
-
-  mesh.position.set(
-    x,
-    y,
-    z
-  );
-
-
-  mesh.castShadow = true;
-
-  mesh.receiveShadow = true;
-
-
-  if (clickable) {
-
-    addClickable(
-      mesh,
-      title,
-      desc
-    );
-
-  }
-
-
-  scene.add(mesh);
-
-  return mesh;
-
-}
-
-
-function createLights() {
-
-  const hemi =
-    new THREE.HemisphereLight(
-      0xffffff,
-      0x66727a,
-      1.7
-    );
-
-
-  scene.add(hemi);
-
-
-  const sun =
-    new THREE.DirectionalLight(
-      0xffffff,
-      2.5
-    );
-
-
-  sun.position.set(
-    8,
-    15,
-    8
-  );
-
-
-  sun.castShadow = true;
-
-
-  sun.shadow.mapSize.set(
-    1024,
-    1024
-  );
-
-
-  sun.shadow.camera.left = -20;
-
-  sun.shadow.camera.right = 20;
-
-  sun.shadow.camera.top = 20;
-
-  sun.shadow.camera.bottom = -20;
-
-
-  scene.add(sun);
-
-
-  window.sun = sun;
-
-}
-
-
-function createApartment() {
-
-  createFloor();
-
-  createWalls();
-
-  createLivingRoom();
-
-  createKitchen();
-
-  createBedroom();
-
-  createBathroom();
-
-  createDecorations();
-
-}
-
-
-function createFloor() {
-
-  addBox(
-    22,
-    .3,
-    18,
-    0,
-    -.15,
-    0,
-    mat(0xc5a27e,.85)
-  );
-
-}
-
-
-function createWalls() {
-
-  const wall =
-    mat(
-      0xf1eee5,
-      .9
-    );
-
-
-  addBox(
-    22,
-    4.5,
-    .35,
-    0,
-    2.25,
-    -9,
-    wall
-  );
-
-
-  addBox(
-    .35,
-    4.5,
-    18,
-    -11,
-    2.25,
-    0,
-    wall
-  );
-
-
-  addBox(
-    .35,
-    4.5,
-    18,
-    11,
-    2.25,
-    0,
-    wall
-  );
-
-
-  addBox(
-    22,
-    4.5,
-    .35,
-    0,
-    2.25,
-    9,
-    wall
-  );
-
-
-  addBox(
-    .25,
-    4.2,
-    9,
-    2.5,
-    2.1,
-    -4.5,
-    wall
-  );
-
-
-  addBox(
-    7,
-    4.2,
-    .25,
-    -7.5,
-    2.1,
-    2,
-    wall
-  );
-
-}
-
-
-function createLivingRoom() {
-
-  createSofa(
-    -3,
-    1.2,
-    5
-  );
-
-
-  createTable(
-    0,
-    .8,
-    2
-  );
-
-
-  createTV(
-    5,
-    2,
-    -7.8
-  );
-
-
-  createRug(
-    0,
-    .02,
-    1
-  );
-
-}
-
-
-function createSofa(
-  x,
-  y,
-  z
-) {
-
-  const material =
-    mat(
-      0x5f6b6b,
-      .9
-    );
-
-
-  const group =
-    new THREE.Group();
-
-
-  const seat =
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        5,
-        .65,
-        1.8
-      ),
-      material
-    );
-
-
-  seat.position.y = .65;
-
-  group.add(seat);
-
-
-  const back =
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        5,
-        1.8,
-        .45
-      ),
-      material
-    );
-
-
-  back.position.set(
-    0,
-    1.35,
-    -.7
-  );
-
-
-  group.add(back);
-
-
-  for (
-    const sx of [-2.3, 2.3]
-  ) {
-
-    const arm =
-      new THREE.Mesh(
-        new THREE.BoxGeometry(
-          .45,
-          1.25,
-          1.8
-        ),
-        material
-      );
-
-
-    arm.position.set(
-      sx,
-      1,
-      0
-    );
-
-
-    group.add(arm);
-
-  }
-
-
-  group.position.set(
-    x,
-    y,
-    z
-  );
-
-
-  group.rotation.y = -.25;
-
-
-  addClickable(
-    group,
-    "Canapé",
-    "Un canapé confortable pour se poser."
-  );
-
-
-  scene.add(group);
-
-}
-
-
-function createTable(
-  x,
-  y,
-  z
-) {
-
-  const wood =
-    mat(
-      0x8b5a35,
-      .7
-    );
-
-
-  const group =
-    new THREE.Group();
-
-
-  const top =
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        3.2,
-        .25,
-        1.5
-      ),
-      wood
-    );
-
-
-  top.position.y = 1;
-
-  group.add(top);
-
-
-  for (
-    const i of [-1,1]
-  ) {
-
-    for (
-      const j of [-1,1]
-    ) {
-
-      const leg =
-        new THREE.Mesh(
-          new THREE.BoxGeometry(
-            .15,
-            1,
-            .15
-          ),
-          wood
-        );
-
-
-      leg.position.set(
-        i * 1.3,
-        .5,
-        j * .55
-      );
-
-
-      group.add(leg);
-
+let dragging = false;
+
+let lastX = 0;
+let lastY = 0;
+
+let touchDistance = 0;
+
+
+/* =========================================================
+   APPARTEMENT
+========================================================= */
+
+const apartment = {
+
+    width: 22,
+    depth: 18,
+
+    wallHeight: 4.5
+
+};
+
+
+/* =========================================================
+   OBJETS
+========================================================= */
+
+const objects = [
+
+    {
+        name: "Canapé",
+        description:
+            "Un grand canapé confortable.",
+        x: -3,
+        z: 5,
+        w: 5,
+        d: 1.8,
+        h: 1.7,
+        color: "#59696b"
+    },
+
+    {
+        name: "Table basse",
+        description:
+            "Une table basse en bois.",
+        x: 0,
+        z: 2,
+        w: 3.2,
+        d: 1.5,
+        h: 1,
+        color: "#8b5a35"
+    },
+
+    {
+        name: "Télévision",
+        description:
+            "Une grande télévision.",
+        x: 5,
+        z: -7.4,
+        w: 4,
+        d: .3,
+        h: 2.2,
+        color: "#111111"
+    },
+
+    {
+        name: "Cuisine",
+        description:
+            "Les meubles de la cuisine.",
+        x: -6,
+        z: -7,
+        w: 7,
+        d: 1,
+        h: 2.5,
+        color: "#765038"
+    },
+
+    {
+        name: "Réfrigérateur",
+        description:
+            "Le réfrigérateur.",
+        x: -9.3,
+        z: -5.7,
+        w: 1.3,
+        d: 1.2,
+        h: 3.5,
+        color: "#dfe4e7"
+    },
+
+    {
+        name: "Lit",
+        description:
+            "Le lit de la chambre.",
+        x: 6.5,
+        z: 2.5,
+        w: 4.5,
+        d: 6,
+        h: 1.4,
+        color: "#e5dfd4"
+    },
+
+    {
+        name: "Baignoire",
+        description:
+            "Une baignoire.",
+        x: 7,
+        z: -6.5,
+        w: 3.5,
+        d: 1.5,
+        h: .7,
+        color: "#f4f4f4"
+    },
+
+    {
+        name: "Lavabo",
+        description:
+            "Le lavabo de la salle de bain.",
+        x: 4,
+        z: -6.5,
+        w: 1.5,
+        d: .8,
+        h: 1,
+        color: "#f4f4f4"
+    },
+
+    {
+        name: "Plante",
+        description:
+            "Une plante décorative.",
+        x: -8,
+        z: 5,
+        w: 1,
+        d: 1,
+        h: 2.5,
+        color: "#4d7d4c"
+    },
+
+    {
+        name: "Plante",
+        description:
+            "Une plante décorative.",
+        x: 9,
+        z: 6,
+        w: 1,
+        d: 1,
+        h: 2.5,
+        color: "#4d7d4c"
+    },
+
+    {
+        name: "Lampe",
+        description:
+            "Une lampe sur pied.",
+        x: 4,
+        z: 1,
+        w: .7,
+        d: .7,
+        h: 3,
+        color: "#d9bd7a"
     }
 
-  }
+];
 
 
-  group.position.set(
-    x,
-    y,
-    z
-  );
-
-
-  addClickable(
-    group,
-    "Table basse",
-    "Table basse en bois."
-  );
-
-
-  scene.add(group);
-
-}
-
-
-function createTV(
-  x,
-  y,
-  z
-) {
-
-  const group =
-    new THREE.Group();
-
-
-  const black =
-    mat(
-      0x080808,
-      .2,
-      .1
-    );
-
-
-  const screen =
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        4,
-        2.2,
-        .15
-      ),
-      black
-    );
-
-
-  group.add(screen);
-
-
-  const stand =
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        2.5,
-        .35,
-        .5
-      ),
-      black
-    );
-
-
-  stand.position.y = -1.3;
-
-  group.add(stand);
-
-
-  group.position.set(
-    x,
-    y,
-    z
-  );
-
-
-  group.rotation.y =
-    Math.PI;
-
-
-  addClickable(
-    group,
-    "Télévision",
-    "Une grande télévision."
-  );
-
-
-  scene.add(group);
-
-}
-
-
-function createKitchen() {
-
-  const counterMat =
-    mat(
-      0xeeeeea,
-      .55
-    );
-
-
-  const woodMat =
-    mat(
-      0x765038,
-      .8
-    );
-
-
-  for (
-    let i = 0;
-    i < 4;
-    i++
-  ) {
-
-    addBox(
-      1.8,
-      1.1,
-      .7,
-      -8 + i * 1.9,
-      .55,
-      -7.9,
-      woodMat,
-      true,
-      "Meuble de cuisine",
-      "Meuble bas de la cuisine."
-    );
-
-  }
-
-
-  addBox(
-    7.6,
-    .18,
-    .85,
-    -5.2,
-    1.15,
-    -7.9,
-    counterMat
-  );
-
-
-  addBox(
-    1.3,
-    .08,
-    .5,
-    -5.3,
-    1.27,
-    -7.9,
-    mat(
-      0x9099a0,
-      .25,
-      .7
-    ),
-    true,
-    "Évier",
-    "Évier de la cuisine."
-  );
-
-
-  addBox(
-    1.2,
-    3.5,
-    1,
-    -9.5,
-    1.75,
-    -6,
-    mat(
-      0xdfe4e7,
-      .3,
-      .25
-    ),
-    true,
-    "Réfrigérateur",
-    "Le réfrigérateur."
-  );
-
-}
-
-
-function createBedroom() {
-
-  const group =
-    new THREE.Group();
-
-
-  const frame =
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        4.5,
-        .45,
-        6
-      ),
-      mat(0x5d4636)
-    );
-
-
-  frame.position.y = .45;
-
-  group.add(frame);
-
-
-  const mattress =
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        4.25,
-        .5,
-        5.6
-      ),
-      mat(
-        0xe7e1d5,
-        1
-      )
-    );
-
-
-  mattress.position.y = .85;
-
-  group.add(mattress);
-
-
-  const blanket =
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        4.1,
-        .15,
-        3
-      ),
-      mat(0x829ca0)
-    );
-
-
-  blanket.position.set(
-    0,
-    1.15,
-    1
-  );
-
-
-  group.add(blanket);
-
-
-  const pillowMat =
-    mat(
-      0xffffff,
-      1
-    );
-
-
-  for (
-    const px of [-1.2,1.2]
-  ) {
-
-    const pillow =
-      new THREE.Mesh(
-        new THREE.BoxGeometry(
-          1.7,
-          .35,
-          1
-        ),
-        pillowMat
-      );
-
-
-    pillow.position.set(
-      px,
-      1.25,
-      -1.7
-    );
-
-
-    group.add(pillow);
-
-  }
-
-
-  group.position.set(
-    6,
-    0,
-    2.5
-  );
-
-
-  group.rotation.y = -.15;
-
-
-  addClickable(
-    group,
-    "Lit",
-    "Le lit de la chambre."
-  );
-
-
-  scene.add(group);
-
-}
-
-
-function createBathroom() {
-
-  const white =
-    mat(
-      0xf4f4f4,
-      .4
-    );
-
-
-  addBox(
-    3.5,
-    .7,
-    1.5,
-    7,
-    .45,
-    -6.5,
-    white,
-    true,
-    "Baignoire",
-    "Une baignoire."
-  );
-
-
-  addBox(
-    1.5,
-    .8,
-    .7,
-    4,
-    .4,
-    -6.5,
-    white,
-    true,
-    "Lavabo",
-    "Le lavabo de la salle de bain."
-  );
-
-}
-
-
-function createRug(
-  x,
-  y,
-  z
-) {
-
-  addBox(
-    6,
-    .04,
-    4,
-    x,
-    y + .02,
-    z,
-    mat(
-      0x819b98,
-      1
-    )
-  );
-
-}
-
-
-function createDecorations() {
-
-  createPlant(
-    -8,
-    0,
-    5
-  );
-
-
-  createPlant(
-    9,
-    0,
-    6
-  );
-
-
-  createLamp(
-    4,
-    0,
-    1
-  );
-
-
-  createWindow(
-    -2,
-    3,
-    -8.8
-  );
-
-
-  createWindow(
-    8,
-    3,
-    8.8
-  );
-
-}
-
-
-function createPlant(
-  x,
-  y,
-  z
-) {
-
-  const group =
-    new THREE.Group();
-
-
-  const pot =
-    new THREE.Mesh(
-      new THREE.CylinderGeometry(
-        .45,
-        .35,
-        .7,
-        16
-      ),
-      mat(0xb36d48)
-    );
-
-
-  pot.position.y = .35;
-
-  group.add(pot);
-
-
-  const green =
-    mat(0x3f7048);
-
-
-  for (
-    let i = 0;
-    i < 8;
-    i++
-  ) {
-
-    const leaf =
-      new THREE.Mesh(
-        new THREE.SphereGeometry(
-          .35,
-          10,
-          10
-        ),
-        green
-      );
-
-
-    leaf.position.set(
-      Math.sin(i) * .35,
-      .9 + Math.random() * .7,
-      Math.cos(i) * .35
-    );
-
-
-    leaf.scale.set(
-      .8,
-      1.4,
-      .6
-    );
-
-
-    group.add(leaf);
-
-  }
-
-
-  group.position.set(
-    x,
-    y,
-    z
-  );
-
-
-  addClickable(
-    group,
-    "Plante",
-    "Une plante décorative."
-  );
-
-
-  scene.add(group);
-
-}
-
-
-function createLamp(
-  x,
-  y,
-  z
-) {
-
-  const group =
-    new THREE.Group();
-
-
-  const stand =
-    new THREE.Mesh(
-      new THREE.CylinderGeometry(
-        .08,
-        .08,
-        2.5,
-        12
-      ),
-      mat(
-        0x333333,
-        .3,
-        .6
-      )
-    );
-
-
-  stand.position.y = 1.25;
-
-  group.add(stand);
-
-
-  const shade =
-    new THREE.Mesh(
-      new THREE.ConeGeometry(
-        .65,
-        .8,
-        20,
-        1,
-        true
-      ),
-      new THREE.MeshStandardMaterial({
-        color: 0xf0d59a,
-        side: THREE.DoubleSide
-      })
-    );
-
-
-  shade.position.y = 2.55;
-
-  group.add(shade);
-
-
-  const light =
-    new THREE.PointLight(
-      0xffdca0,
-      1.5,
-      7
-    );
-
-
-  light.position.y = 2.3;
-
-  group.add(light);
-
-
-  group.position.set(
-    x,
-    y,
-    z
-  );
-
-
-  addClickable(
-    group,
-    "Lampe",
-    "Une lampe décorative."
-  );
-
-
-  scene.add(group);
-
-}
-
-
-function createWindow(
-  x,
-  y,
-  z
-) {
-
-  const frameMat =
-    mat(0xffffff);
-
-
-  const glassMat =
-    new THREE.MeshStandardMaterial({
-      color: 0x8fc9e5,
-      transparent: true,
-      opacity: .65,
-      roughness: .1
-    });
-
-
-  const frame =
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        5,
-        2.5,
-        .15
-      ),
-      frameMat
-    );
-
-
-  frame.position.set(
-    x,
-    y,
-    z
-  );
-
-
-  scene.add(frame);
-
-
-  const glass =
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        4.5,
-        2,
-        .18
-      ),
-      glassMat
-    );
-
-
-  glass.position.set(
-    x,
-    y,
-    z + (z > 0 ? -.08 : .08)
-  );
-
-
-  addClickable(
-    glass,
-    "Fenêtre",
-    "Une grande fenêtre donnant sur l'extérieur."
-  );
-
-
-  scene.add(glass);
-
-}
-
-
-function addClickable(
-  object,
-  title,
-  description
-) {
-
-  object.userData.clickable = true;
-
-  object.userData.title = title;
-
-  object.userData.description =
-    description;
-
-  objects.push(object);
-
-}
-
-
-const raycaster =
-  new THREE.Raycaster();
-
-
-const pointer =
-  new THREE.Vector2();
-
-
-function setupInteraction() {
-
-  renderer.domElement.addEventListener(
-    "pointerdown",
-    event => {
-
-      pointer.x =
-        (event.clientX / innerWidth) * 2 - 1;
-
-
-      pointer.y =
-        -(event.clientY / innerHeight) * 2 + 1;
-
-
-      raycaster.setFromCamera(
-        pointer,
-        camera
-      );
-
-
-      const hits =
-        raycaster.intersectObjects(
-          scene.children,
-          true
-        );
-
-
-      for (
-        const hit of hits
-      ) {
-
-        let obj =
-          hit.object;
-
-
-        while (
-          obj &&
-          !obj.userData.clickable
-        ) {
-
-          obj =
-            obj.parent;
-
-        }
-
-
-        if (
-          obj &&
-          obj.userData.clickable
-        ) {
-
-          showInfo(
-            obj.userData.title,
-            obj.userData.description
-          );
-
-
-          return;
-
-        }
-
-      }
-
-    }
-  );
-
-}
-
-
-function showInfo(
-  title,
-  description
-) {
-
-  info.innerHTML =
-    "<strong>" +
-    title +
-    "</strong><br>" +
-    description;
-
-
-  info.style.opacity = "1";
-
-
-  clearTimeout(
-    window.infoTimer
-  );
-
-
-  window.infoTimer =
-    setTimeout(
-      () => {
-        info.style.opacity = "0";
-      },
-      3500
-    );
-
-}
-
-
-function setupButtons() {
-
-  document
-    .getElementById("zoomIn")
-    .onclick = () => {
-
-      controls.dollyIn(1.25);
-
-      controls.update();
-
-    };
-
-
-  document
-    .getElementById("zoomOut")
-    .onclick = () => {
-
-      controls.dollyOut(1.25);
-
-      controls.update();
-
-    };
-
-
-  document
-    .getElementById("home")
-    .onclick = () => {
-
-      camera.position.set(
-        12,
-        9,
-        14
-      );
-
-
-      controls.target.set(
-        0,
-        1,
-        0
-      );
-
-
-      controls.update();
-
-    };
-
-
-  document
-    .getElementById("light")
-    .onclick = () => {
-
-      night = !night;
-
-
-      if (night) {
-
-        scene.background.set(
-          0x101826
-        );
-
-
-        scene.fog.color.set(
-          0x101826
-        );
-
-
-        window.sun.intensity =
-          .35;
-
-
-        document
-          .getElementById("light")
-          .textContent = "☀️";
-
-
-      } else {
-
-        scene.background.set(
-          0xb9d7e5
-        );
-
-
-        scene.fog.color.set(
-          0xb9d7e5
-        );
-
-
-        window.sun.intensity =
-          2.5;
-
-
-        document
-          .getElementById("light")
-          .textContent = "🌙";
-
-      }
-
-    };
-
-}
-
-
-function animate() {
-
-  requestAnimationFrame(
-    animate
-  );
-
-
-  controls.update();
-
-
-  renderer.render(
-    scene,
-    camera
-  );
-
-}
-
+/* =========================================================
+   REDIMENSIONNEMENT
+========================================================= */
 
 function resize() {
 
-  camera.aspect =
-    innerWidth / innerHeight;
+    width =
+        window.innerWidth;
+
+    height =
+        window.innerHeight;
+
+    const ratio =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+    canvas.width =
+        width * ratio;
+
+    canvas.height =
+        height * ratio;
+
+    canvas.style.width =
+        width + "px";
+
+    canvas.style.height =
+        height + "px";
+
+    ctx.setTransform(
+        ratio,
+        0,
+        0,
+        ratio,
+        0,
+        0
+    );
+}
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+resize();
 
 
-  camera.updateProjectionMatrix();
+/* =========================================================
+   PROJECTION 3D
+========================================================= */
+
+function project(x, y, z) {
+
+    const cos =
+        Math.cos(rotation);
+
+    const sin =
+        Math.sin(rotation);
+
+    const rx =
+        x * cos -
+        z * sin;
+
+    const rz =
+        x * sin +
+        z * cos;
+
+    const depth =
+        rz + 35;
+
+    const perspective =
+        850 / depth;
+
+    return {
+
+        x:
+            width / 2 +
+            rx *
+            perspective *
+            zoom,
+
+        y:
+            height * .60 -
+            (y - cameraHeight) *
+            perspective *
+            zoom,
+
+        depth:
+            depth
+
+    };
+
+}
 
 
-  renderer.setSize(
-    innerWidth,
-    innerHeight
-  );
+/* =========================================================
+   POLYGONE
+========================================================= */
+
+function polygon(points, color) {
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        points[0].x,
+        points[0].y
+    );
+
+    for(let i = 1; i < points.length; i++) {
+
+        ctx.lineTo(
+            points[i].x,
+            points[i].y
+        );
+
+    }
+
+    ctx.closePath();
+
+    ctx.fillStyle =
+        color;
+
+    ctx.fill();
+
+    ctx.strokeStyle =
+        "rgba(0,0,0,.13)";
+
+    ctx.lineWidth =
+        1;
+
+    ctx.stroke();
+}
+
+
+/* =========================================================
+   BOÎTE 3D
+========================================================= */
+
+function box(
+    x,
+    y,
+    z,
+    w,
+    h,
+    d,
+    color
+) {
+
+    const p1 =
+        project(
+            x - w/2,
+            y,
+            z - d/2
+        );
+
+    const p2 =
+        project(
+            x + w/2,
+            y,
+            z - d/2
+        );
+
+    const p3 =
+        project(
+            x + w/2,
+            y,
+            z + d/2
+        );
+
+    const p4 =
+        project(
+            x - w/2,
+            y,
+            z + d/2
+        );
+
+    const t1 =
+        project(
+            x - w/2,
+            y + h,
+            z - d/2
+        );
+
+    const t2 =
+        project(
+            x + w/2,
+            y + h,
+            z - d/2
+        );
+
+    const t3 =
+        project(
+            x + w/2,
+            y + h,
+            z + d/2
+        );
+
+    const t4 =
+        project(
+            x - w/2,
+            y + h,
+            z + d/2
+        );
+
+
+    /* dessus */
+
+    polygon(
+        [t1,t2,t3,t4],
+        shade(color, 25)
+    );
+
+
+    /* face gauche */
+
+    polygon(
+        [t1,t4,p4,p1],
+        shade(color, -8)
+    );
+
+
+    /* face droite */
+
+    polygon(
+        [t2,t3,p3,p2],
+        shade(color, -25)
+    );
+
+
+    /* face avant */
+
+    polygon(
+        [t4,t3,p3,p4],
+        shade(color, -15)
+    );
+
+}
+
+
+/* =========================================================
+   COULEUR
+========================================================= */
+
+function shade(hex, amount) {
+
+    let color =
+        hex.replace("#","");
+
+    let r =
+        parseInt(
+            color.substring(0,2),
+            16
+        );
+
+    let g =
+        parseInt(
+            color.substring(2,4),
+            16
+        );
+
+    let b =
+        parseInt(
+            color.substring(4,6),
+            16
+        );
+
+    r =
+        Math.max(
+            0,
+            Math.min(
+                255,
+                r + amount
+            )
+        );
+
+    g =
+        Math.max(
+            0,
+            Math.min(
+                255,
+                g + amount
+            )
+        );
+
+    b =
+        Math.max(
+            0,
+            Math.min(
+                255,
+                b + amount
+            )
+        );
+
+    return (
+        "#" +
+        r.toString(16).padStart(2,"0") +
+        g.toString(16).padStart(2,"0") +
+        b.toString(16).padStart(2,"0")
+    );
+
+}
+
+
+/* =========================================================
+   SOL
+========================================================= */
+
+function drawFloor() {
+
+    const floor =
+        "#c6a47d";
+
+    box(
+        0,
+        -0.3,
+        0,
+        22,
+        .3,
+        18,
+        floor
+    );
+
+}
+
+
+/* =========================================================
+   MURS
+========================================================= */
+
+function drawWalls() {
+
+    const wall =
+        night
+        ? "#515862"
+        : "#eeeae0";
+
+
+    /* mur arrière */
+
+    box(
+        0,
+        0,
+        -9,
+        22,
+        4.5,
+        .35,
+        wall
+    );
+
+
+    /* mur gauche */
+
+    box(
+        -11,
+        0,
+        0,
+        .35,
+        4.5,
+        18,
+        wall
+    );
+
+
+    /* mur droit */
+
+    box(
+        11,
+        0,
+        0,
+        .35,
+        4.5,
+        18,
+        wall
+    );
+
+
+    /* mur avant */
+
+    box(
+        0,
+        0,
+        9,
+        22,
+        4.5,
+        .35,
+        wall
+    );
+
+
+    /* séparation chambre */
+
+    box(
+        2.5,
+        0,
+        -4.5,
+        .25,
+        4.2,
+        9,
+        wall
+    );
+
+
+    /* séparation cuisine */
+
+    box(
+        -7.5,
+        0,
+        2,
+        7,
+        4.2,
+        .25,
+        wall
+    );
+
+}
+
+
+/* =========================================================
+   FENÊTRES
+========================================================= */
+
+function drawWindows() {
+
+    const glass =
+        night
+        ? "#263c58"
+        : "#7fc4e4";
+
+
+    box(
+        -3,
+        1.8,
+        -8.75,
+        5,
+        2.5,
+        .08,
+        glass
+    );
+
+
+    box(
+        8,
+        1.8,
+        8.75,
+        4.5,
+        2.5,
+        .08,
+        glass
+    );
+
+}
+
+
+/* =========================================================
+   MEUBLES
+========================================================= */
+
+function drawObjects() {
+
+    const sorted =
+        [...objects].sort(
+            (a,b) =>
+                b.z - a.z
+        );
+
+
+    for(const obj of sorted) {
+
+        box(
+            obj.x,
+            0,
+            obj.z,
+            obj.w,
+            obj.h,
+            obj.d,
+            obj.color
+        );
+
+
+        /* détails du lit */
+
+        if(obj.name === "Lit") {
+
+            box(
+                obj.x,
+                1.4,
+                obj.z + 1,
+                obj.w - .3,
+                .18,
+                3,
+                "#819aa0"
+            );
+
+            box(
+                obj.x - 1.2,
+                1.5,
+                obj.z - 1.8,
+                1.6,
+                .22,
+                .9,
+                "#ffffff"
+            );
+
+            box(
+                obj.x + 1.2,
+                1.5,
+                obj.z - 1.8,
+                1.6,
+                .22,
+                .9,
+                "#ffffff"
+            );
+
+        }
+
+
+        /* détails canapé */
+
+        if(obj.name === "Canapé") {
+
+            box(
+                obj.x,
+                1.7,
+                obj.z - .7,
+                obj.w,
+                1.5,
+                .35,
+                obj.color
+            );
+
+        }
+
+
+        /* table */
+
+        if(obj.name === "Table basse") {
+
+            for(
+                let i = -1;
+                i <= 1;
+                i += 2
+            ) {
+
+                for(
+                    let j = -1;
+                    j <= 1;
+                    j += 2
+                ) {
+
+                    box(
+                        obj.x + i * 1.2,
+                        0,
+                        obj.z + j * .5,
+                        .15,
+                        1,
+                        .15,
+                        "#704625"
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        /* plantes */
+
+        if(obj.name === "Plante") {
+
+            box(
+                obj.x,
+                obj.h,
+                obj.z,
+                .7,
+                1.3,
+                .7,
+                "#3f7048"
+            );
+
+        }
+
+
+        /* lampe */
+
+        if(obj.name === "Lampe") {
+
+            box(
+                obj.x,
+                0,
+                obj.z,
+                .12,
+                2.3,
+                .12,
+                "#333333"
+            );
+
+            box(
+                obj.x,
+                2.3,
+                obj.z,
+                1.1,
+                .7,
+                1.1,
+                "#f0d59a"
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   TEXTE DES PIÈCES
+========================================================= */
+
+function drawRoomLabels() {
+
+    drawText(
+        "SALON",
+        -3,
+        0,
+        4
+    );
+
+    drawText(
+        "CUISINE",
+        -6,
+        0,
+        -5
+    );
+
+    drawText(
+        "CHAMBRE",
+        6,
+        0,
+        5
+    );
+
+    drawText(
+        "SALLE DE BAIN",
+        7,
+        0,
+        -5.5
+    );
+
+}
+
+
+function drawText(
+    text,
+    x,
+    y,
+    z
+) {
+
+    const p =
+        project(
+            x,
+            y + .03,
+            z
+        );
+
+    ctx.save();
+
+    ctx.font =
+        "900 13px Arial";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.fillStyle =
+        night
+        ? "rgba(255,255,255,.6)"
+        : "rgba(40,55,65,.42)";
+
+    ctx.fillText(
+        text,
+        p.x,
+        p.y
+    );
+
+    ctx.restore();
+
+}
+
+
+/* =========================================================
+   CIEL
+========================================================= */
+
+function drawBackground() {
+
+    if(night) {
+
+        ctx.fillStyle =
+            "#101827";
+
+    } else {
+
+        ctx.fillStyle =
+            "#b9d7e5";
+
+    }
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+}
+
+
+/* =========================================================
+   OMBRE
+========================================================= */
+
+function drawShadow() {
+
+    ctx.save();
+
+    ctx.fillStyle =
+        night
+        ? "rgba(0,0,0,.35)"
+        : "rgba(0,0,0,.12)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        width/2,
+        height*.73,
+        width*.33 * zoom,
+        35 * zoom,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.restore();
+
+}
+
+
+/* =========================================================
+   RENDU
+========================================================= */
+
+function render() {
+
+    drawBackground();
+
+    drawShadow();
+
+    drawFloor();
+
+    drawWalls();
+
+    drawWindows();
+
+    drawObjects();
+
+    drawRoomLabels();
+
+    requestAnimationFrame(
+        render
+    );
+
+}
+
+
+/* =========================================================
+   ROTATION AU DOIGT
+========================================================= */
+
+canvas.addEventListener(
+    "pointerdown",
+    function(e) {
+
+        dragging = true;
+
+        lastX =
+            e.clientX;
+
+        lastY =
+            e.clientY;
+
+        canvas.setPointerCapture(
+            e.pointerId
+        );
+
+    }
+);
+
+
+canvas.addEventListener(
+    "pointermove",
+    function(e) {
+
+        if(!dragging)
+            return;
+
+        const dx =
+            e.clientX - lastX;
+
+        rotation +=
+            dx * .008;
+
+        lastX =
+            e.clientX;
+
+        lastY =
+            e.clientY;
+
+    }
+);
+
+
+canvas.addEventListener(
+    "pointerup",
+    function() {
+
+        dragging = false;
+
+    }
+);
+
+
+canvas.addEventListener(
+    "pointercancel",
+    function() {
+
+        dragging = false;
+
+    }
+);
+
+
+/* =========================================================
+   ZOOM SOURIS
+========================================================= */
+
+canvas.addEventListener(
+    "wheel",
+    function(e) {
+
+        e.preventDefault();
+
+        zoom +=
+            e.deltaY < 0
+            ? .08
+            : -.08;
+
+        zoom =
+            Math.max(
+                .55,
+                Math.min(
+                    1.8,
+                    zoom
+                )
+            );
+
+    },
+    {passive:false}
+);
+
+
+/* =========================================================
+   ZOOM BOUTONS
+========================================================= */
+
+document
+.getElementById("plus")
+.addEventListener(
+    "click",
+    function() {
+
+        zoom += .15;
+
+        zoom =
+            Math.min(
+                1.8,
+                zoom
+            );
+
+    }
+);
+
+
+document
+.getElementById("minus")
+.addEventListener(
+    "click",
+    function() {
+
+        zoom -= .15;
+
+        zoom =
+            Math.max(
+                .55,
+                zoom
+            );
+
+    }
+);
+
+
+/* =========================================================
+   JOUR / NUIT
+========================================================= */
+
+document
+.getElementById("day")
+.addEventListener(
+    "click",
+    function() {
+
+        night =
+            !night;
+
+        this.textContent =
+            night
+            ? "☀️"
+            : "🌙";
+
+    }
+);
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+document
+.getElementById("reset")
+.addEventListener(
+    "click",
+    function() {
+
+        rotation = -.55;
+
+        zoom = 1;
+
+        night = false;
+
+        document
+        .getElementById("day")
+        .textContent = "☀️";
+
+    }
+);
+
+
+/* =========================================================
+   TOUCH / CLIC OBJETS
+========================================================= */
+
+canvas.addEventListener(
+    "click",
+    function(e) {
+
+        /* éviter le clic après déplacement */
+
+        const x =
+            e.clientX;
+
+        const y =
+            e.clientY;
+
+
+        let closest = null;
+
+        let distance = 99999;
+
+
+        for(const obj of objects) {
+
+            const p =
+                project(
+                    obj.x,
+                    obj.h * .6,
+                    obj.z
+                );
+
+            const dx =
+                x - p.x;
+
+            const dy =
+                y - p.y;
+
+            const d =
+                Math.sqrt(
+                    dx*dx +
+                    dy*dy
+                );
+
+
+            if(
+                d < distance &&
+                d < 90
+            ) {
+
+                closest =
+                    obj;
+
+                distance =
+                    d;
+
+            }
+
+        }
+
+
+        if(closest) {
+
+            roomLabel.textContent =
+                closest.name;
+
+            info.innerHTML =
+                "<strong>" +
+                closest.name +
+                "</strong><br>" +
+                closest.description;
+
+            info.style.opacity =
+                "1";
+
+
+            clearTimeout(
+                window.infoTimeout
+            );
+
+
+            window.infoTimeout =
+                setTimeout(
+                    function() {
+
+                        info.style.opacity =
+                            "0";
+
+                    },
+                    3000
+                );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   DÉMARRAGE
+========================================================= */
+
+try {
+
+    render();
+
+} catch(error) {
+
+    errorBox.style.display =
+        "block";
+
+    errorBox.innerHTML =
+        "<strong>Erreur :</strong><br><br>" +
+        error.message;
 
 }
 
