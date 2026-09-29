@@ -2,463 +2,242 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<title>Appartement 3D</title>
+<title>Appartement 03</title>
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
+    -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
+html,body{
     width:100%;
     height:100%;
     overflow:hidden;
-    background:#111;
-    font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
+    background:#101313;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
-body{
-    color:white;
-}
-
-#app{
+#scene{
     position:fixed;
     inset:0;
 }
 
 canvas{
     display:block;
+    width:100%;
+    height:100%;
 }
 
-
-/* =====================================================
-   UI
-===================================================== */
-
-.interface{
+.ui{
     position:fixed;
     inset:0;
     pointer-events:none;
-    z-index:20;
 }
 
-.topbar{
+.top{
     position:absolute;
-    top:22px;
-    left:22px;
-    right:22px;
-
+    top:18px;
+    left:18px;
+    right:18px;
     display:flex;
-    align-items:center;
     justify-content:space-between;
-
-    pointer-events:none;
+    align-items:center;
 }
 
-.logo{
-    pointer-events:auto;
-
-    padding:13px 18px;
-
-    border-radius:18px;
-
-    background:
-        rgba(255,248,235,.82);
-
-    color:#18231e;
-
-    backdrop-filter:
-        blur(18px);
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,.22);
-
-    font-weight:900;
-
-    letter-spacing:.4px;
-}
-
-.controls{
-    pointer-events:auto;
-
-    display:flex;
-    gap:6px;
-
-    padding:6px;
-
-    border-radius:18px;
-
-    background:
-        rgba(255,248,235,.78);
-
-    backdrop-filter:
-        blur(18px);
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,.2);
-}
-
-.controls button{
-    border:0;
-
-    padding:
-        10px
-        13px;
-
-    border-radius:13px;
-
-    background:transparent;
-
-    color:#18231e;
-
-    font-weight:800;
-
-    cursor:pointer;
-
-    transition:.2s;
-}
-
-.controls button:hover{
-    background:#e4d2ae;
-}
-
-.controls button.active{
-    background:#18231e;
-    color:white;
-}
-
-
-/* =====================================================
-   OBJECT INFO
-===================================================== */
-
-.object-panel{
-
-    position:absolute;
-
-    right:24px;
-    bottom:24px;
-
-    width:
-        min(
-            380px,
-            calc(100vw - 48px)
-        );
-
-    padding:23px;
-
+.title{
+    padding:15px 21px;
     border-radius:25px;
+    background:rgba(244,239,226,.92);
+    color:#18231f;
+    font-size:17px;
+    font-weight:900;
+    letter-spacing:.4px;
+    box-shadow:0 10px 35px rgba(0,0,0,.2);
+}
 
-    background:
-        rgba(20,31,27,.88);
-
-    border:
-        1px solid
-        rgba(255,255,255,.14);
-
-    backdrop-filter:
-        blur(22px);
-
-    box-shadow:
-        0 30px 80px rgba(0,0,0,.45);
-
-    transform:
-        translateY(
-            calc(100% + 50px)
-        );
-
-    transition:
-        transform .45s
-        cubic-bezier(.2,.8,.2,1);
-
+.modes{
+    display:flex;
+    gap:4px;
+    padding:6px;
+    border-radius:22px;
+    background:rgba(244,239,226,.92);
+    box-shadow:0 10px 35px rgba(0,0,0,.2);
     pointer-events:auto;
 }
 
-.object-panel.open{
-    transform:
-        translateY(0);
+.modes button{
+    width:43px;
+    height:40px;
+    border:0;
+    border-radius:16px;
+    background:transparent;
+    font-size:19px;
+    cursor:pointer;
 }
 
-.object-panel h2{
-    font-size:25px;
-
-    margin-bottom:8px;
+.modes button.active{
+    background:#18231f;
 }
 
-.object-panel p{
-    color:#d9e0da;
+.help{
+    position:absolute;
+    left:50%;
+    bottom:20px;
+    transform:translateX(-50%);
+    width:max-content;
+    max-width:calc(100% - 35px);
+    padding:13px 20px;
+    border-radius:20px;
+    background:rgba(244,239,226,.9);
+    color:#18231f;
+    font-size:13px;
+    font-weight:800;
+    text-align:center;
+    box-shadow:0 10px 35px rgba(0,0,0,.2);
+}
 
-    line-height:1.55;
+.panel{
+    position:absolute;
+    left:18px;
+    right:18px;
+    bottom:85px;
+    max-width:430px;
+    margin:auto;
+    padding:22px;
+    border-radius:27px;
+    background:rgba(24,35,31,.94);
+    color:white;
+    box-shadow:0 25px 70px rgba(0,0,0,.45);
+    border:1px solid rgba(255,255,255,.12);
+    transform:translateY(150%);
+    transition:.45s cubic-bezier(.2,.8,.2,1);
+    pointer-events:auto;
+}
 
-    margin-bottom:18px;
+.panel.open{
+    transform:translateY(0);
+}
+
+.panel h2{
+    font-size:24px;
+    margin-bottom:7px;
+}
+
+.panel p{
+    color:#d7ded8;
+    line-height:1.5;
+    margin-bottom:17px;
 }
 
 .close{
     position:absolute;
-
     right:12px;
-    top:9px;
-
-    width:35px;
-    height:35px;
-
+    top:10px;
     border:0;
-
-    background:transparent;
-
+    background:none;
     color:white;
-
-    font-size:27px;
-
+    font-size:28px;
     cursor:pointer;
 }
 
-.panel-buttons{
+.actions{
     display:flex;
-    flex-wrap:wrap;
     gap:8px;
+    flex-wrap:wrap;
 }
 
-.panel-buttons button{
-
-    border:
-        1px solid
-        rgba(255,255,255,.12);
-
-    background:#2d4036;
-
-    color:white;
-
-    border-radius:12px;
-
-    padding:
-        10px
-        13px;
-
-    font-weight:800;
-
+.actions button{
+    border:0;
+    padding:11px 14px;
+    border-radius:13px;
+    background:#d5b478;
+    color:#17211d;
+    font-weight:850;
     cursor:pointer;
-
-    transition:.2s;
 }
-
-.panel-buttons button:hover{
-
-    background:#d5ad68;
-
-    color:#18231e;
-}
-
-
-/* =====================================================
-   CENTER MESSAGE
-===================================================== */
-
-.center-message{
-
-    position:absolute;
-
-    left:50%;
-    bottom:25px;
-
-    transform:
-        translateX(-50%);
-
-    padding:
-        11px
-        17px;
-
-    border-radius:16px;
-
-    background:
-        rgba(255,248,235,.8);
-
-    color:#18231e;
-
-    backdrop-filter:
-        blur(16px);
-
-    font-size:13px;
-
-    font-weight:800;
-
-    box-shadow:
-        0 10px 35px rgba(0,0,0,.2);
-
-    white-space:nowrap;
-}
-
-
-/* =====================================================
-   CROSSHAIR
-===================================================== */
-
-.crosshair{
-
-    position:absolute;
-
-    left:50%;
-    top:50%;
-
-    width:5px;
-    height:5px;
-
-    transform:
-        translate(-50%,-50%);
-
-    border-radius:50%;
-
-    background:white;
-
-    opacity:.4;
-
-    pointer-events:none;
-}
-
-
-/* =====================================================
-   NOTIFICATION
-===================================================== */
 
 .toast{
-
     position:absolute;
-
-    top:90px;
-
+    top:85px;
     left:50%;
-
-    transform:
-        translate(-50%,-15px);
-
-    padding:
-        11px
-        17px;
-
-    border-radius:14px;
-
-    background:#fff8eb;
-
-    color:#18231e;
-
+    transform:translate(-50%,-15px);
+    padding:12px 17px;
+    border-radius:16px;
+    background:#f4efe2;
+    color:#18231f;
     font-weight:850;
-
-    box-shadow:
-        0 12px 35px rgba(0,0,0,.25);
-
     opacity:0;
-
     transition:.3s;
-
-    pointer-events:none;
 }
 
-.toast.visible{
-
+.toast.show{
     opacity:1;
-
-    transform:
-        translate(-50%,0);
+    transform:translate(-50%,0);
 }
 
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width:700px){
-
-    .topbar{
-
-        top:10px;
+@media(max-width:600px){
+    .top{
+        top:12px;
         left:10px;
         right:10px;
-
     }
 
-    .logo{
-
-        font-size:12px;
-
-        padding:
-            10px
-            12px;
-
+    .title{
+        padding:12px 15px;
+        font-size:14px;
     }
 
-    .controls button{
-
-        font-size:10px;
-
-        padding:
-            8px
-            8px;
-
+    .modes{
+        padding:5px;
     }
 
-    .center-message{
-
-        font-size:10px;
-
-        max-width:
-            90vw;
-
-        overflow:hidden;
-
-        text-overflow:ellipsis;
-
+    .modes button{
+        width:35px;
+        height:35px;
+        font-size:16px;
     }
 
+    .help{
+        bottom:13px;
+        font-size:11px;
+        padding:11px 15px;
+    }
 }
-
 </style>
 </head>
 
-
 <body>
 
-<div id="app"></div>
+<div id="scene"></div>
 
+<div class="ui">
 
-<div class="interface">
+    <div class="top">
 
-    <div class="topbar">
-
-        <div class="logo">
+        <div class="title">
             🏠 APPARTEMENT 03
         </div>
 
-        <div class="controls">
+        <div class="modes">
 
-            <button
-                class="active"
-                onclick="setEnvironment('day',this)">
+            <button class="active" onclick="environment('day',this)">
                 ☀️
             </button>
 
-            <button
-                onclick="setEnvironment('sunset',this)">
+            <button onclick="environment('sunset',this)">
                 🌅
             </button>
 
-            <button
-                onclick="setEnvironment('night',this)">
+            <button onclick="environment('night',this)">
                 🌙
             </button>
 
-            <button
-                onclick="toggleCamera()">
+            <button onclick="resetCamera()">
                 🎥
             </button>
 
@@ -466,507 +245,340 @@ canvas{
 
     </div>
 
+    <div id="toast" class="toast"></div>
 
-    <div
-        id="toast"
-        class="toast">
+    <div class="help">
+        👆 Glisse pour regarder · 🤏 Pince pour zoomer · ✨ Touche les objets
     </div>
 
+    <div id="panel" class="panel">
 
-    <div
-        class="crosshair">
-    </div>
-
-
-    <div
-        class="center-message">
-
-        🖱️ Déplace la caméra · Clique sur les objets · Explore l'appartement
-
-    </div>
-
-
-    <div
-        id="panel"
-        class="object-panel">
-
-        <button
-            class="close"
-            onclick="closePanel()">
-            ×
-        </button>
+        <button class="close" onclick="closePanel()">×</button>
 
         <h2 id="panelTitle"></h2>
 
         <p id="panelText"></p>
 
-        <div
-            id="panelButtons"
-            class="panel-buttons">
-        </div>
+        <div id="actions" class="actions"></div>
 
     </div>
 
 </div>
 
 
-<!-- =====================================================
-     THREE.JS
-===================================================== -->
+<script type="module">
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+import * as THREE from
+"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
-
-
-<script>
-
-/* =====================================================
-   SCENE
-===================================================== */
-
-const scene =
-    new THREE.Scene();
-
-scene.background =
-    new THREE.Color(
-        0xcaa27c
-    );
+import {OrbitControls} from
+"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
 
 
-/* =====================================================
-   CAMERA
-===================================================== */
+/* =========================================================
+   SCÈNE
+========================================================= */
 
-const camera =
-    new THREE.PerspectiveCamera(
-        52,
-        window.innerWidth /
-        window.innerHeight,
-        .1,
-        100
-    );
+const scene = new THREE.Scene();
 
-camera.position.set(
-    9,
-    6.2,
-    11
+scene.background = new THREE.Color(0xc8a982);
+
+
+/* =========================================================
+   CAMÉRA
+========================================================= */
+
+const camera = new THREE.PerspectiveCamera(
+    52,
+    innerWidth / innerHeight,
+    0.1,
+    100
 );
 
+camera.position.set(9,5.7,10);
 
-/* =====================================================
+
+/* =========================================================
    RENDERER
-===================================================== */
+========================================================= */
 
-const renderer =
-    new THREE.WebGLRenderer({
-        antialias:true,
-        powerPreference:"high-performance"
-    });
+const renderer = new THREE.WebGLRenderer({
+    antialias:true,
+    powerPreference:"high-performance"
+});
 
-renderer.setSize(
-    window.innerWidth,
-    window.innerHeight
-);
+renderer.setSize(innerWidth,innerHeight);
 
 renderer.setPixelRatio(
-    Math.min(
-        window.devicePixelRatio,
-        2
-    )
+    Math.min(devicePixelRatio,2)
 );
 
 renderer.shadowMap.enabled=true;
 
-renderer.shadowMap.type =
+renderer.shadowMap.type=
     THREE.PCFSoftShadowMap;
 
-renderer.outputColorSpace =
+renderer.outputColorSpace=
     THREE.SRGBColorSpace;
 
-renderer.toneMapping =
+renderer.toneMapping=
     THREE.ACESFilmicToneMapping;
 
-renderer.toneMappingExposure =
-    1.1;
+renderer.toneMappingExposure=1.15;
 
 document
-    .getElementById("app")
+    .getElementById("scene")
     .appendChild(renderer.domElement);
 
 
-/* =====================================================
-   CONTROLS
-===================================================== */
+/* =========================================================
+   CAMÉRA / MOBILE
+========================================================= */
 
 const controls =
-    new THREE.OrbitControls(
+    new OrbitControls(
         camera,
         renderer.domElement
     );
 
 controls.enableDamping=true;
-
-controls.dampingFactor=.06;
+controls.dampingFactor=.07;
 
 controls.minDistance=5;
-
-controls.maxDistance=18;
+controls.maxDistance=15;
 
 controls.maxPolarAngle=
     Math.PI*.48;
 
+controls.minPolarAngle=
+    Math.PI*.25;
+
 controls.target.set(
     0,
-    2,
-    0
+    2.2,
+    -1
 );
 
 
-/* =====================================================
-   LIGHTING
-===================================================== */
+/* =========================================================
+   LUMIÈRES
+========================================================= */
 
 const ambient =
     new THREE.HemisphereLight(
-        0xffe9c5,
-        0x27332d,
-        2.2
+        0xffead0,
+        0x26342f,
+        2.4
     );
 
-scene.add(
-    ambient
-);
+scene.add(ambient);
 
 
 const sun =
     new THREE.DirectionalLight(
-        0xffd39b,
+        0xffd5a0,
         4
     );
 
 sun.position.set(
     -5,
     10,
-    5
+    6
 );
 
 sun.castShadow=true;
 
-sun.shadow.mapSize.set(
-    2048,
-    2048
-);
+sun.shadow.mapSize.width=2048;
+sun.shadow.mapSize.height=2048;
 
 sun.shadow.camera.left=-15;
 sun.shadow.camera.right=15;
 sun.shadow.camera.top=15;
 sun.shadow.camera.bottom=-15;
 
-scene.add(
-    sun
-);
+scene.add(sun);
 
 
-/* =====================================================
-   MATERIALS
-===================================================== */
+/* =========================================================
+   MATÉRIAUX
+========================================================= */
 
-function material(
+function mat(
     color,
-    roughness=.7,
-    metalness=0
+    rough=.75,
+    metal=0
 ){
-
     return new THREE.MeshStandardMaterial({
-
         color,
-
-        roughness,
-
-        metalness
-
+        roughness:rough,
+        metalness:metal
     });
-
 }
 
-
-const wallMat =
-    material(
-        0xe4c9a5
-    );
-
-const floorMat =
-    material(
-        0x765039,
-        .85
-    );
-
-const woodMat =
-    material(
-        0x704a32
-    );
-
-const darkWoodMat =
-    material(
-        0x403027
-    );
-
-const creamMat =
-    material(
-        0xe7dfce,
-        .9
-    );
-
-const greenMat =
-    material(
-        0x496c54,
-        .9
-    );
-
-const terracottaMat =
-    material(
-        0xa86647,
-        .9
-    );
+const wall=mat(0xe5d0b0);
+const wood=mat(0x754d34);
+const darkWood=mat(0x3d3028);
+const cream=mat(0xe7decb);
+const green=mat(0x3f624d);
+const darkGreen=mat(0x263c32);
+const terracotta=mat(0xa86446);
+const gold=mat(0xb88c4c,.35,.65);
+const black=mat(0x191c1b,.4);
+const blue=mat(0x6f9caf,.5);
 
 
-/* =====================================================
-   HELPERS
-===================================================== */
+/* =========================================================
+   OUTILS
+========================================================= */
 
-function box(
-    w,
-    h,
-    d,
-    mat,
-    x,
-    y,
-    z
+function cube(
+    w,h,d,
+    material,
+    x,y,z
 ){
 
-    const mesh =
+    const m=
         new THREE.Mesh(
-            new THREE.BoxGeometry(
-                w,h,d
-            ),
-            mat
+            new THREE.BoxGeometry(w,h,d),
+            material
         );
 
-    mesh.position.set(
-        x,y,z
-    );
+    m.position.set(x,y,z);
 
-    mesh.castShadow=true;
+    m.castShadow=true;
+    m.receiveShadow=true;
 
-    mesh.receiveShadow=true;
+    scene.add(m);
 
-    scene.add(
-        mesh
-    );
-
-    return mesh;
-
+    return m;
 }
 
 
-function cylinder(
+function cyl(
     radius,
     height,
-    mat,
-    x,
-    y,
-    z
+    material,
+    x,y,z,
+    segments=32
 ){
 
-    const mesh =
+    const m=
         new THREE.Mesh(
             new THREE.CylinderGeometry(
                 radius,
                 radius,
                 height,
-                32
+                segments
             ),
-            mat
+            material
         );
 
-    mesh.position.set(
-        x,y,z
-    );
+    m.position.set(x,y,z);
 
-    mesh.castShadow=true;
+    m.castShadow=true;
+    m.receiveShadow=true;
 
-    mesh.receiveShadow=true;
+    scene.add(m);
 
-    scene.add(
-        mesh
-    );
-
-    return mesh;
-
+    return m;
 }
 
 
-/* =====================================================
-   ROOM
-===================================================== */
+/* =========================================================
+   STRUCTURE DE LA PIÈCE
+========================================================= */
 
-const room =
-    new THREE.Group();
+cube(
+    18,.3,14,
+    wood,
+    0,-.15,0
+);
 
-scene.add(
-    room
+cube(
+    18,8,.25,
+    wall,
+    0,4,-6
+);
+
+cube(
+    .25,8,14,
+    wall,
+    -9,4,0
 );
 
 
-/* floor */
+/* =========================================================
+   PARQUET
+========================================================= */
 
-const floor =
-    box(
-        18,
-        .3,
-        14,
-        floorMat,
-        0,
-        -.15,
-        0
-    );
+for(let x=-8.5;x<=8.5;x+=.65){
 
-
-/* back wall */
-
-box(
-    18,
-    8,
-    .25,
-    wallMat,
-    0,
-    4,
-    -6
-);
-
-
-/* left wall */
-
-box(
-    .25,
-    8,
-    14,
-    wallMat,
-    -9,
-    4,
-    0
-);
-
-
-/* =====================================================
-   FLOOR BOARDS
-===================================================== */
-
-for(
-    let x=-8.5;
-    x<=8.5;
-    x+=.8
-){
-
-    const line =
-        box(
-            .018,
-            .012,
-            13.8,
-            darkWoodMat,
-            x,
-            .012,
-            0
+    const line=
+        cube(
+            .025,.015,13.7,
+            darkWood,
+            x,.02,0
         );
 
-    line.material.opacity=.18;
-
+    line.material.transparent=true;
+    line.material.opacity=.35;
 }
 
 
-/* =====================================================
-   WINDOW
-===================================================== */
+/* =========================================================
+   GRANDE BAIE VITRÉE
+========================================================= */
 
-const windowFrame =
-    new THREE.Group();
+cube(
+    9,.18,.25,
+    darkWood,
+    1.2,5.8,-5.75
+);
 
-scene.add(
-    windowFrame
+cube(
+    9,.18,.25,
+    darkWood,
+    1.2,1.7,-5.75
+);
+
+cube(
+    .18,4.3,.25,
+    darkWood,
+    -3.2,3.75,-5.75
+);
+
+cube(
+    .18,4.3,.25,
+    darkWood,
+    5.6,3.75,-5.75
 );
 
 
-box(
-    9,
-    .18,
-    .22,
-    darkWoodMat,
-    1.3,
-    5.8,
-    -5.75
-);
-
-box(
-    9,
-    .18,
-    .22,
-    darkWoodMat,
-    1.3,
-    1.7,
-    -5.75
-);
-
-box(
-    .18,
-    4.3,
-    .22,
-    darkWoodMat,
-    -3.0,
-    3.75,
-    -5.75
-);
-
-box(
-    .18,
-    4.3,
-    .22,
-    darkWoodMat,
-    5.6,
-    3.75,
-    -5.75
-);
-
-
-/* glass */
-
-const glass =
+const glass=
     new THREE.Mesh(
         new THREE.PlaneGeometry(
             8.4,
             4
         ),
         new THREE.MeshBasicMaterial({
-            color:0x78b8cf,
+            color:0x79aebe,
             transparent:true,
-            opacity:.7
+            opacity:.62
         })
     );
 
 glass.position.set(
-    1.3,
+    1.2,
     3.75,
-    -5.62
+    -5.6
 );
 
-scene.add(
-    glass
-);
+scene.add(glass);
 
 
-/* =====================================================
-   MOUNTAINS
-===================================================== */
+/* =========================================================
+   PAYSAGE
+========================================================= */
 
 function mountain(
     x,
@@ -976,288 +588,285 @@ function mountain(
     z
 ){
 
-    const geo =
-        new THREE.ConeGeometry(
-            width,
-            height,
-            5
-        );
-
-    const mesh =
+    const m=
         new THREE.Mesh(
-            geo,
-            material(
-                color,
-                1
-            )
+            new THREE.ConeGeometry(
+                width,
+                height,
+                5
+            ),
+            mat(color,1)
         );
 
-    mesh.position.set(
+    m.position.set(
         x,
-        height/2+.8,
+        height/2+.9,
         z
     );
 
-    mesh.rotation.y=
-        Math.random();
+    m.rotation.y=Math.random();
 
-    scene.add(
-        mesh
-    );
-
-    return mesh;
-
+    scene.add(m);
 }
-
 
 mountain(
     -3,
     3.5,
     4,
-    0x567171,
-    -5.35
-);
-
-mountain(
-    .3,
-    4,
-    5,
-    0x405e61,
-    -5.3
-);
-
-mountain(
-    4,
-    3.4,
-    4.2,
-    0x536b6c,
+    0x5a7170,
     -5.25
 );
 
+mountain(
+    .4,
+    4,
+    5,
+    0x425e61,
+    -5.2
+);
 
-/* =====================================================
-   SUN
-===================================================== */
+mountain(
+    4.1,
+    3.4,
+    4.2,
+    0x526b6c,
+    -5.18
+);
 
-const sunMesh =
+
+/* lac */
+
+cube(
+    12,
+    .03,
+    1.7,
+    blue,
+    1,
+    .75,
+    -5.1
+);
+
+
+/* soleil */
+
+const sunDisk=
     new THREE.Mesh(
         new THREE.SphereGeometry(
-            .65,
-            32,
-            32
+            .62,32,32
         ),
         new THREE.MeshBasicMaterial({
-            color:0xffd98d
+            color:0xffd487
         })
     );
 
-sunMesh.position.set(
-    2.5,
-    5.5,
-    -5.35
+sunDisk.position.set(
+    2.4,
+    5.2,
+    -5.25
 );
 
-scene.add(
-    sunMesh
-);
+scene.add(sunDisk);
 
 
-/* =====================================================
-   SOFA
-===================================================== */
+/* =========================================================
+   TAPIS
+========================================================= */
 
-const sofa =
-    new THREE.Group();
-
-scene.add(
-    sofa
+cube(
+    7,.06,4,
+    mat(0x765349,1),
+    0,.04,.7
 );
 
 
-const sofaBase =
-    box(
-        6,
-        1.4,
-        2.2,
-        creamMat,
-        1.8,
-        1.45,
-        -1.4
-    );
+/* =========================================================
+   CANAPÉ
+========================================================= */
 
-sofa.add(
-    sofaBase
+cube(
+    6.2,
+    1.25,
+    2.25,
+    cream,
+    1.7,
+    1.35,
+    -1.5
+);
+
+cube(
+    6.2,
+    2.3,
+    .55,
+    cream,
+    1.7,
+    2.65,
+    -2.35
 );
 
 
-const back =
-    box(
-        6,
-        2.4,
-        .65,
-        creamMat,
-        1.8,
-        2.7,
-        -2.2
-    );
+/* accoudoirs */
 
-sofa.add(
-    back
+cube(
+    .5,
+    1.6,
+    2.2,
+    cream,
+    -1.35,
+    1.65,
+    -1.5
+);
+
+cube(
+    .5,
+    1.6,
+    2.2,
+    cream,
+    4.75,
+    1.65,
+    -1.5
 );
 
 
-function cushion(
+/* coussins */
+
+function pillow(
     x,
-    color
+    z,
+    color,
+    rot
 ){
 
-    const c =
-        box(
+    const p=
+        cube(
             1.25,
-            .7,
-            .55,
-            material(color,.95),
+            .72,
+            .48,
+            mat(color,.95),
             x,
-            2.0,
-            -2.05
+            2.05,
+            z
         );
 
-    c.rotation.z=
-        (Math.random()-.5)*.15;
+    p.rotation.z=rot||0;
 
-    sofa.add(
-        c
-    );
-
+    return p;
 }
 
-
-cushion(
-    .2,
-    0xb77b5c
+pillow(
+    .1,
+    -2.08,
+    0xb77c5c,
+    -.08
 );
 
-cushion(
+pillow(
+    1.65,
+    -2.08,
+    0x58755f,
+    .05
+);
+
+pillow(
+    3.2,
+    -2.08,
+    0xc7b08b,
+    -.04
+);
+
+
+/* =========================================================
+   TABLE BASSE
+========================================================= */
+
+cyl(
     1.8,
-    0x58725f
+    .25,
+    wood,
+    -1,
+    1.5,
+    1.1
 );
 
-cushion(
-    3.4,
-    0xc8b18c
+cyl(
+    .22,
+    2,
+    darkWood,
+    -1,
+    .55,
+    1.1
 );
 
 
-/* =====================================================
-   TABLE
-===================================================== */
+/* =========================================================
+   LIVRES SUR TABLE
+========================================================= */
 
-const table =
-    new THREE.Group();
-
-scene.add(
-    table
-);
-
-const top =
-    cylinder(
-        2,
-        .35,
-        woodMat,
-        -1,
-        1.45,
-        1.2
+const book1=
+    cube(
+        1,
+        .18,
+        .7,
+        mat(0x5d7862),
+        -.5,
+        1.73,
+        1
     );
 
-table.add(
-    top
-);
+book1.rotation.y=.2;
 
-const leg =
-    cylinder(
-        .25,
-        2,
-        darkWoodMat,
-        -1,
-        .45,
-        1.2
+const book2=
+    cube(
+        1.1,
+        .18,
+        .72,
+        mat(0xa86b4d),
+        -.45,
+        1.91,
+        1
     );
 
-table.add(
-    leg
-);
+book2.rotation.y=.2;
 
 
-/* =====================================================
-   RUG
-===================================================== */
+/* =========================================================
+   BIBLIOTHÈQUE
+========================================================= */
 
-const rug =
-    box(
-        7,
-        .05,
-        4,
-        material(
-            0x755347,
-            1
-        ),
-        0,
-        .04,
-        .9
-    );
-
-rug.rotation.y=
-    -.08;
-
-
-/* =====================================================
-   BOOKSHELF
-===================================================== */
-
-const shelf =
-    new THREE.Group();
-
-scene.add(
-    shelf
-);
-
-box(
-    3,
-    5,
-    .5,
-    greenMat,
-    -6.8,
-    2.5,
-    -4.8
+cube(
+    3.1,
+    5.3,
+    .55,
+    darkGreen,
+    -6.7,
+    2.65,
+    -4.65
 );
 
 for(
     let y=1;
-    y<5;
+    y<5.5;
     y+=1
 ){
 
-    box(
-        2.6,
-        .08,
-        .6,
-        darkWoodMat,
-        -6.8,
+    cube(
+        2.7,
+        .09,
+        .65,
+        darkWood,
+        -6.7,
         y,
-        -4.45
+        -4.25
     );
 
 }
 
 
-/* books */
-
 const bookColors=[
-    0xb87853,
-    0xd1aa65,
-    0x728a71,
-    0x96715d,
-    0xd5c7a8
+    0xb86f4d,
+    0xc59c5c,
+    0x667c68,
+    0x805b52,
+    0xd1c3a0
 ];
 
 for(
@@ -1266,8 +875,6 @@ for(
     row++
 ){
 
-    let x=-7.9;
-
     for(
         let i=0;
         i<5;
@@ -1275,58 +882,45 @@ for(
     ){
 
         const b=
-            box(
-                .28,
-                .72,
+            cube(
                 .3,
-                material(
+                .72,
+                .34,
+                mat(
                     bookColors[
-                        (row+i) %
+                        (i+row)%
                         bookColors.length
                     ]
                 ),
-                x,
-                1.42+
-                row,
-                -4.25
+                -7.75+
+                i*.48,
+                1.42+row,
+                -4.18
             );
 
         b.rotation.z=
-            (Math.random()-.5)*.12;
-
-        x+=.45;
+            (Math.random()-.5)*.08;
 
     }
-
 }
 
 
-/* =====================================================
-   PLANT
-===================================================== */
+/* =========================================================
+   PLANTES
+========================================================= */
 
-function createPlant(
-    x,
-    z,
-    scale=1
+function plant(
+    x,z,s=1
 ){
 
-    const g=
-        new THREE.Group();
-
-    scene.add(g);
-
-    const pot=
-        cylinder(
-            .65*scale,
-            .8*scale,
-            terracottaMat,
-            x,
-            .4*scale,
-            z
-        );
-
-    g.add(pot);
+    cyl(
+        .55*s,
+        .65*s,
+        terracotta,
+        x,
+        .32*s,
+        z
+    );
 
     for(
         let i=0;
@@ -1337,28 +931,22 @@ function createPlant(
         const leaf=
             new THREE.Mesh(
                 new THREE.SphereGeometry(
-                    .35*scale,
+                    .34*s,
                     16,
-                    10
+                    12
                 ),
-                greenMat
+                green
             );
 
         leaf.scale.y=1.8;
 
         leaf.position.set(
             x+
-            Math.sin(i*2.1)*
-            .5*
-            scale,
-
-            .9*scale+
-            (i%3)*.3,
-
+            Math.sin(i*1.8)*.55*s,
+            .8*s+
+            (i%3)*.3*s,
             z+
-            Math.cos(i*1.7)*
-            .5*
-            scale
+            Math.cos(i*1.7)*.45*s
         );
 
         leaf.rotation.z=
@@ -1366,230 +954,211 @@ function createPlant(
 
         leaf.castShadow=true;
 
-        scene.add(
-            leaf
-        );
-
+        scene.add(leaf);
     }
-
-    return g;
-
 }
 
-
-createPlant(
-    7,
-    -3.8,
-    1.3
+plant(
+    7,-4.1,1.5
 );
 
 
-/* =====================================================
-   LAMP
-===================================================== */
+/* =========================================================
+   LAMPE
+========================================================= */
 
-const lamp =
-    new THREE.Group();
-
-scene.add(
-    lamp
+cube(
+    .1,
+    3.1,
+    .1,
+    darkWood,
+    -3.9,
+    3.2,
+    1.9
 );
 
-box(
-    .12,
-    3,
-    .12,
-    darkWoodMat,
-    -3.8,
-    3.5,
-    1.8
-);
-
-const shade =
+const shade=
     new THREE.Mesh(
         new THREE.ConeGeometry(
-            .8,
-            .8,
-            32,
-            1,
-            true
+            .75,.75,32,1,true
         ),
-        material(
-            0x2b302b
-        )
+        darkGreen
     );
 
 shade.position.set(
-    -3.8,
+    -3.9,
     5,
-    1.8
+    1.9
 );
 
-lamp.add(
-    shade
-);
+shade.castShadow=true;
+
+scene.add(shade);
 
 
-const lampLight =
+const lampLight=
     new THREE.PointLight(
-        0xffd98c,
-        2,
+        0xffd58d,
+        2.3,
         7
     );
 
 lampLight.position.set(
-    -3.8,
-    4.6,
-    1.8
+    -3.9,
+    4.5,
+    1.9
 );
 
-lamp.add(
-    lampLight
-);
+scene.add(lampLight);
 
 
-/* =====================================================
-   COFFEE CUP
-===================================================== */
+/* =========================================================
+   GUITARE
+========================================================= */
 
-const cup =
-    cylinder(
-        .28,
-        .25,
-        material(
-            0xf0e4d1,
-            .9
-        ),
-        -.25,
-        1.78,
-        1
-    );
-
-cup.userData.interactive=true;
-cup.userData.type="coffee";
-
-
-/* =====================================================
-   LAPTOP
-===================================================== */
-
-const laptop =
+const guitar=
     new THREE.Group();
 
-scene.add(
-    laptop
-);
-
-box(
-    1.4,
-    .08,
-    .9,
-    material(
-        0x222622,
-        .5,
-        .5
-    ),
-    -1,
-    1.8,
-    1
-);
-
-box(
-    1.2,
-    .75,
-    .06,
-    material(
-        0x161916,
-        .4,
-        .6
-    ),
-    -1,
-    2.2,
-    .62
-);
+scene.add(guitar);
 
 
-/* =====================================================
-   GUITAR
-===================================================== */
-
-const guitar =
-    new THREE.Group();
-
-scene.add(
-    guitar
-);
-
-const body =
+const guitarBody=
     new THREE.Mesh(
         new THREE.SphereGeometry(
-            .8,
-            32,
-            20
+            .75,32,20
         ),
-        material(
-            0xa96040,
-            .75
-        )
+        mat(0xa95f3f,.75)
     );
 
-body.scale.set(
-    .9,
-    1.1,
+guitarBody.scale.set(
+    .85,
+    1.15,
     .4
 );
 
-body.position.set(
-    -5,
-    .95,
-    .5
+guitarBody.position.set(
+    -4.8,
+    1,
+    .4
 );
 
-guitar.add(
-    body
-);
+guitar.add(guitarBody);
 
-const neck =
-    box(
-        .25,
+
+const guitarNeck=
+    cube(
+        .22,
         3.3,
-        .15,
-        darkWoodMat,
-        -5,
-        2.3,
-        .5
+        .12,
+        darkWood,
+        -4.8,
+        2.25,
+        .4
     );
 
-neck.rotation.z=
-    -.12;
+guitarNeck.rotation.z=-.1;
 
-guitar.add(
-    neck
-);
+guitar.add(guitarNeck);
 
 
-/* =====================================================
-   CAT
-===================================================== */
+/* =========================================================
+   ORDINATEUR
+========================================================= */
 
-const cat =
+const laptop=
     new THREE.Group();
 
-scene.add(
-    cat
+scene.add(laptop);
+
+
+const laptopBase=
+    cube(
+        1.55,
+        .08,
+        .95,
+        mat(0x222523,.35,.5),
+        -1,
+        1.82,
+        1
+    );
+
+laptopBase.rotation.x=-.04;
+
+laptop.add(laptopBase);
+
+
+const screen=
+    cube(
+        1.4,
+        .85,
+        .07,
+        black,
+        -1,
+        2.25,
+        .6
+    );
+
+screen.rotation.x=-.05;
+
+laptop.add(screen);
+
+
+/* écran lumineux */
+
+const screenGlow=
+    new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            1.15,.58
+        ),
+        new THREE.MeshBasicMaterial({
+            color:0x8baaa1
+        })
+    );
+
+screenGlow.position.set(
+    -1,
+    2.25,
+    .555
 );
 
-const catBody =
+screenGlow.rotation.x=-.05;
+
+scene.add(screenGlow);
+
+
+/* =========================================================
+   TASSE
+========================================================= */
+
+const cup=
+    cyl(
+        .25,
+        .27,
+        cream,
+        -.2,
+        1.82,
+        1
+    );
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+const cat=
+    new THREE.Group();
+
+scene.add(cat);
+
+
+/* corps */
+
+const catBody=
     new THREE.Mesh(
         new THREE.SphereGeometry(
-            .65,
-            24,
-            16
+            .65,24,18
         ),
-        material(
-            0x51443d,
-            .95
-        )
+        mat(0x51453e,.96)
     );
 
 catBody.scale.set(
@@ -1599,271 +1168,251 @@ catBody.scale.set(
 );
 
 catBody.position.set(
-    3,
+    3.1,
     2.35,
-    -1.7
+    -1.55
 );
 
-cat.add(
-    catBody
-);
+cat.add(catBody);
 
 
-const catHead =
+/* tête */
+
+const catHead=
     new THREE.Mesh(
         new THREE.SphereGeometry(
-            .48,
-            24,
-            16
+            .48,24,18
         ),
-        material(
-            0x5d4b42,
-            .95
-        )
+        mat(0x5c4c43,.96)
     );
 
 catHead.position.set(
-    2.45,
-    2.65,
-    -1.7
+    2.5,
+    2.7,
+    -1.55
 );
 
-cat.add(
-    catHead
-);
+cat.add(catHead);
 
 
-/* ears */
+/* oreilles */
 
 function ear(x){
 
     const e=
         new THREE.Mesh(
             new THREE.ConeGeometry(
-                .2,
-                .45,
-                4
+                .2,.45,4
             ),
-            material(
-                0x5d4b42
-            )
+            mat(0x5c4c43)
         );
 
     e.position.set(
         x,
-        3.05,
-        -1.7
+        3.08,
+        -1.55
     );
 
-    cat.add(
-        e
-    );
-
+    cat.add(e);
 }
 
+ear(2.25);
+ear(2.75);
 
-ear(2.2);
-ear(2.7);
 
+/* yeux */
 
-/* eyes */
-
-const eyeMat =
+const eyeMat=
     new THREE.MeshBasicMaterial({
-        color:0xd7b461
+        color:0xd7b45e
     });
 
-const eye1 =
+const eye1=
     new THREE.Mesh(
         new THREE.SphereGeometry(
-            .055,
-            12,
-            12
+            .055,12,12
         ),
         eyeMat
     );
 
 eye1.position.set(
-    2.28,
-    2.72,
-    -2.12
+    2.3,
+    2.76,
+    -2.0
 );
 
-cat.add(
-    eye1
-);
+cat.add(eye1);
+
+const eye2=eye1.clone();
+
+eye2.position.x=2.62;
+
+cat.add(eye2);
 
 
-const eye2 =
-    eye1.clone();
+/* queue */
 
-eye2.position.x=
-    2.58;
-
-cat.add(
-    eye2
-);
-
-
-/* tail */
-
-const tail =
+const tail=
     new THREE.Mesh(
         new THREE.TorusGeometry(
-            .55,
-            .08,
+            .58,
+            .085,
             12,
-            30,
+            32,
             Math.PI*1.5
         ),
-        material(
-            0x51443d
-        )
+        mat(0x51453e)
     );
 
 tail.position.set(
-    3.9,
+    3.95,
     2.45,
-    -1.65
+    -1.5
 );
 
-tail.rotation.y=
-    Math.PI/2;
+tail.rotation.y=Math.PI/2;
 
-cat.add(
-    tail
-);
+cat.add(tail);
 
 
-/* =====================================================
-   INTERACTION SYSTEM
-===================================================== */
+/* =========================================================
+   OBJETS INTERACTIFS
+========================================================= */
 
-const raycaster =
-    new THREE.Raycaster();
+const interactive=[];
 
-const mouse =
-    new THREE.Vector2();
-
-const interactiveObjects=[];
-
-
-function register(
+function interactiveObject(
     object,
     type
 ){
 
-    object.userData.type=
-        type;
+    object.userData.type=type;
 
-    interactiveObjects.push(
-        object
-    );
+    interactive.push(object);
 
+    return object;
 }
 
-
-register(
+interactiveObject(
     catBody,
     "cat"
 );
 
-register(
+interactiveObject(
     catHead,
     "cat"
 );
 
-register(
+interactiveObject(
     cup,
     "coffee"
 );
 
-register(
-    laptop,
+interactiveObject(
+    laptopBase,
     "computer"
 );
 
-register(
-    guitar,
+interactiveObject(
+    guitarBody,
     "guitar"
 );
 
-register(
+interactiveObject(
     shade,
     "lamp"
 );
 
-
-/* =====================================================
-   CLICK
-===================================================== */
-
-renderer.domElement.addEventListener(
-    "click",
-    event => {
-
-        mouse.x=
-            (event.clientX/
-            window.innerWidth)*2-1;
-
-        mouse.y=
-            -(event.clientY/
-            window.innerHeight)*2+1;
-
-        raycaster.setFromCamera(
-            mouse,
-            camera
-        );
-
-        const hits =
-            raycaster.intersectObjects(
-                interactiveObjects,
-                true
-            );
-
-        if(
-            !hits.length
-        ) return;
-
-        const object=
-            hits[0].object;
-
-        interact(
-            object.userData.type
-        );
-
-    }
+interactiveObject(
+    book1,
+    "book"
 );
 
 
-/* =====================================================
+/* =========================================================
+   CLIC / TOUCH
+========================================================= */
+
+const raycaster=
+    new THREE.Raycaster();
+
+const pointer=
+    new THREE.Vector2();
+
+function pointerDown(event){
+
+    const rect=
+        renderer.domElement
+        .getBoundingClientRect();
+
+    const clientX=
+        event.clientX ??
+        event.touches?.[0]?.clientX;
+
+    const clientY=
+        event.clientY ??
+        event.touches?.[0]?.clientY;
+
+    if(clientX==null)return;
+
+    pointer.x=
+        ((clientX-rect.left)/rect.width)*2-1;
+
+    pointer.y=
+        -((clientY-rect.top)/rect.height)*2+1;
+
+    raycaster.setFromCamera(
+        pointer,
+        camera
+    );
+
+    const hits=
+        raycaster.intersectObjects(
+            interactive,
+            true
+        );
+
+    if(!hits.length)return;
+
+    interact(
+        hits[0].object.userData.type
+    );
+}
+
+renderer.domElement.addEventListener(
+    "pointerup",
+    pointerDown
+);
+
+
+/* =========================================================
    INTERACTIONS
-===================================================== */
+========================================================= */
 
 function interact(type){
 
     if(type==="cat"){
 
-        openPanel(
+        panel(
             "🐈 Le chat",
-            "Il s'est installé sur le canapé. Il t'a vu arriver et attend clairement quelque chose.",
+            "Le propriétaire officiel du canapé vient de te remarquer.",
             [
                 [
                     "🐾 Caresser",
                     ()=>{
-                        cat.rotation.y+=.35;
-                        toast(
-                            "😺 Prrrrrrrr..."
-                        );
+                        toast("😺 Prrrrrrrr...");
+                        catHead.position.y+=.08;
+
+                        setTimeout(()=>{
+                            catHead.position.y-=.08;
+                        },250);
                     }
                 ],
                 [
-                    "🥩 Friandise",
+                    "🥩 Donner une friandise",
                     ()=>{
-                        cat.position.x+=.15;
-                        toast(
-                            "🐈 Miam !"
-                        );
+                        toast("🐈 Il arrive immédiatement.");
+                        cat.position.x-=.15;
                     }
                 ]
             ]
@@ -1874,15 +1423,15 @@ function interact(type){
 
     if(type==="coffee"){
 
-        openPanel(
+        panel(
             "☕ Café",
-            "Une tasse attend tranquillement sur la table.",
+            "Une tasse chaude attend sur la table.",
             [
                 [
-                    "☕ Préparer",
+                    "☕ Préparer un café",
                     ()=>{
                         toast(
-                            "☕ Café en préparation..."
+                            "☕ Le café est prêt."
                         );
                     }
                 ]
@@ -1894,23 +1443,23 @@ function interact(type){
 
     if(type==="computer"){
 
-        openPanel(
+        panel(
             "💻 Ordinateur",
-            "Ton espace de travail est prêt.",
+            "Ton espace de travail donne directement sur la baie vitrée.",
             [
                 [
-                    "🖥️ Ouvrir",
+                    "💻 Travailler",
                     ()=>{
                         toast(
-                            "💻 Interface ouverte"
+                            "⌨️ Session de travail lancée."
                         );
                     }
                 ],
                 [
-                    "📷 Galerie",
+                    "🎵 Musique",
                     ()=>{
                         toast(
-                            "📷 Galerie ouverte"
+                            "🎵 Playlist lancée."
                         );
                     }
                 ]
@@ -1922,15 +1471,15 @@ function interact(type){
 
     if(type==="guitar"){
 
-        openPanel(
+        panel(
             "🎸 Guitare",
-            "Une guitare attend sur le côté de la pièce.",
+            "Une vieille guitare en bois est posée près de la bibliothèque.",
             [
                 [
                     "🎵 Jouer",
                     ()=>{
                         toast(
-                            "🎵 Quelques accords résonnent..."
+                            "🎶 Quelques accords résonnent dans la pièce."
                         );
                     }
                 ]
@@ -1942,25 +1491,41 @@ function interact(type){
 
     if(type==="lamp"){
 
-        openPanel(
+        panel(
             "💡 Lampe",
-            "L'éclairage chaud transforme complètement l'atmosphère.",
+            "Cette lampe crée une lumière chaude et transforme complètement l'ambiance.",
             [
                 [
                     "💡 Allumer",
                     ()=>{
                         lampLight.intensity=4;
-                        toast(
-                            "💡 Lumière activée"
-                        );
+                        toast("💡 Lumière allumée.");
                     }
                 ],
                 [
                     "🌑 Éteindre",
                     ()=>{
                         lampLight.intensity=0;
+                        toast("🌑 Lumière éteinte.");
+                    }
+                ]
+            ]
+        );
+
+    }
+
+
+    if(type==="book"){
+
+        panel(
+            "📖 Livre",
+            "Un livre abandonné sur la table basse.",
+            [
+                [
+                    "📖 Lire",
+                    ()=>{
                         toast(
-                            "💡 Lumière éteinte"
+                            "📚 Tu commences à lire..."
                         );
                     }
                 ]
@@ -1972,200 +1537,210 @@ function interact(type){
 }
 
 
-/* =====================================================
-   PANEL
-===================================================== */
+/* =========================================================
+   PANNEAU
+========================================================= */
 
-function openPanel(
+function panel(
     title,
     text,
-    buttons=[]
+    buttons
 ){
 
     document
-        .getElementById(
-            "panelTitle"
-        )
-        .textContent=
-        title;
+        .getElementById("panelTitle")
+        .textContent=title;
 
     document
-        .getElementById(
-            "panelText"
-        )
-        .textContent=
-        text;
+        .getElementById("panelText")
+        .textContent=text;
 
-    const container =
-        document
-        .getElementById(
-            "panelButtons"
+    const actions=
+        document.getElementById(
+            "actions"
         );
 
-    container.innerHTML="";
+    actions.innerHTML="";
 
     buttons.forEach(
         ([label,fn])=>{
 
-            const b=
+            const button=
                 document.createElement(
                     "button"
                 );
 
-            b.textContent=
-                label;
+            button.textContent=label;
 
-            b.onclick=
-                fn;
+            button.onclick=fn;
 
-            container.appendChild(
-                b
+            actions.appendChild(
+                button
             );
 
         }
     );
 
     document
-        .getElementById(
-            "panel"
-        )
-        .classList
-        .add("open");
-
+        .getElementById("panel")
+        .classList.add("open");
 }
 
 
 function closePanel(){
 
     document
-        .getElementById(
-            "panel"
-        )
-        .classList
-        .remove("open");
-
+        .getElementById("panel")
+        .classList.remove("open");
 }
 
 
-/* =====================================================
-   ENVIRONMENT
-===================================================== */
+/* =========================================================
+   TOAST
+========================================================= */
 
-function setEnvironment(
+let toastTimer;
+
+function toast(message){
+
+    const el=
+        document.getElementById(
+            "toast"
+        );
+
+    el.textContent=message;
+
+    el.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer=
+        setTimeout(()=>{
+            el.classList.remove("show");
+        },2300);
+}
+
+
+/* =========================================================
+   AMBIANCES
+========================================================= */
+
+function environment(
     mode,
     button
 ){
 
     document
         .querySelectorAll(
-            ".controls button"
+            ".modes button"
         )
         .forEach(
-            b=>
-            b.classList.remove(
-                "active"
-            )
+            b=>b.classList.remove("active")
         );
 
-    if(button)
-        button.classList.add(
-            "active"
-        );
+    button.classList.add("active");
 
 
     if(mode==="day"){
 
-        sun.intensity=4;
-
-        ambient.intensity=2.2;
-
         scene.background=
             new THREE.Color(
-                0xcaa27c
+                0xc8a982
             );
 
-        lampLight.intensity=
-            1;
+        ambient.intensity=2.4;
+
+        sun.intensity=4;
+
+        sun.color.set(
+            0xffd5a0
+        );
+
+        lampLight.intensity=1;
+
+        sunDisk.visible=true;
 
     }
 
 
     if(mode==="sunset"){
 
-        sun.intensity=2.2;
-
-        sun.color.set(
-            0xff9c5a
-        );
-
-        ambient.intensity=1.3;
-
         scene.background=
             new THREE.Color(
-                0x8b5848
+                0x825649
             );
 
-        lampLight.intensity=
-            2.5;
+        ambient.intensity=1.25;
+
+        sun.intensity=2;
+
+        sun.color.set(
+            0xff8554
+        );
+
+        lampLight.intensity=2.7;
+
+        sunDisk.visible=true;
 
     }
 
 
     if(mode==="night"){
 
-        sun.intensity=.25;
-
-        sun.color.set(
-            0x718bc4
-        );
-
-        ambient.intensity=.45;
-
         scene.background=
             new THREE.Color(
-                0x101923
+                0x0e1821
             );
 
-        lampLight.intensity=
-            3.5;
+        ambient.intensity=.5;
+
+        sun.intensity=.2;
+
+        sun.color.set(
+            0x657da9
+        );
+
+        lampLight.intensity=4;
+
+        sunDisk.visible=false;
 
     }
 
 }
 
 
-/* =====================================================
-   CAMERA
-===================================================== */
+/* =========================================================
+   RESET CAMERA
+========================================================= */
 
-let cameraMode=false;
+function resetCamera(){
 
-function toggleCamera(){
-
-    cameraMode=
-        !cameraMode;
-
-    controls.enabled=
-        !cameraMode;
-
-    toast(
-        cameraMode
-        ?
-        "🎥 Mode caméra libre"
-        :
-        "🖱️ Mode exploration"
+    camera.position.set(
+        9,
+        5.7,
+        10
     );
 
+    controls.target.set(
+        0,
+        2.2,
+        -1
+    );
+
+    controls.update();
+
+    toast(
+        "🎥 Vue de départ restaurée."
+    );
 }
 
 
-/* =====================================================
+/* =========================================================
    ANIMATION
-===================================================== */
+========================================================= */
 
-const clock =
+const clock=
     new THREE.Clock();
-
 
 function animate(){
 
@@ -2177,54 +1752,68 @@ function animate(){
         clock.getElapsedTime();
 
 
-    /* chat breathing */
+    /* respiration du chat */
 
     catBody.scale.y=
         .8+
-        Math.sin(t*2)*.015;
+        Math.sin(t*2)*.012;
 
 
-    /* tail */
+    /* queue */
 
     tail.rotation.z=
-        Math.sin(t*1.7)*.18;
+        Math.sin(t*1.8)*.12;
 
 
-    /* subtle plant movement */
+    /* légère oscillation des plantes */
 
-    /* camera */
+    scene.traverse(
+        object=>{
+
+            if(
+                object.geometry &&
+                object.geometry.type===
+                "SphereGeometry" &&
+                object!==catBody &&
+                object!==catHead
+            ){
+
+                object.rotation.z+=
+                    Math.sin(t*.5)*.00015;
+
+            }
+
+        }
+    );
+
 
     controls.update();
-
 
     renderer.render(
         scene,
         camera
     );
-
 }
-
 
 animate();
 
 
-/* =====================================================
+/* =========================================================
    RESIZE
-===================================================== */
+========================================================= */
 
 window.addEventListener(
     "resize",
     ()=>{
 
         camera.aspect=
-            window.innerWidth/
-            window.innerHeight;
+            innerWidth/innerHeight;
 
         camera.updateProjectionMatrix();
 
         renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
+            innerWidth,
+            innerHeight
         );
 
     }
