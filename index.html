@@ -4,14 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<title>Appartement–3D</title>
+<title>Appartement-3D</title>
 
 <style>
-
-/* =========================================================
-   BASE
-========================================================= */
-
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
@@ -23,1044 +18,991 @@ html,body{
     height:100%;
     overflow:hidden;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:#10131a;
+    background:#15120f;
     color:#fff;
+}
+
+body{
     touch-action:none;
 }
 
-button{
-    font:inherit;
-    border:0;
-    cursor:pointer;
-}
+/* =====================================================
+   INTERFACE
+===================================================== */
 
-
-/* =========================================================
-   INTRO
-========================================================= */
-
-#intro{
+#ui{
     position:fixed;
     inset:0;
-    z-index:1000;
-    background:
-        radial-gradient(circle at 50% 40%,#354154,#10131a 65%);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transition:opacity .8s,visibility .8s;
-}
-
-#intro.hidden{
-    opacity:0;
-    visibility:hidden;
-}
-
-.introBox{
-    text-align:center;
-    padding:35px;
-}
-
-.introIcon{
-    font-size:90px;
-    animation:float 2s ease-in-out infinite;
-}
-
-.introTitle{
-    margin-top:15px;
-    font-size:38px;
-    font-weight:900;
-    letter-spacing:-2px;
-}
-
-.introSub{
-    margin-top:10px;
-    opacity:.65;
-}
-
-.startBtn{
-    margin-top:30px;
-    padding:16px 28px;
-    border-radius:18px;
-    background:#fff;
-    color:#111;
-    font-weight:900;
-    font-size:17px;
-    box-shadow:0 12px 40px #0008;
-}
-
-.startBtn:active{
-    transform:scale(.94);
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-header{
-    position:fixed;
-    z-index:50;
-    top:18px;
-    left:18px;
-    right:18px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    z-index:100;
     pointer-events:none;
 }
 
-.logo,
-.roomName{
-    background:#ffffffee;
-    color:#151922;
-    border-radius:18px;
-    padding:14px 19px;
-    box-shadow:0 10px 30px #0003;
-    font-weight:900;
-}
-
 .logo{
-    font-size:18px;
+    position:absolute;
+    top:24px;
+    left:22px;
+    padding:15px 22px;
+    border-radius:20px;
+    background:rgba(255,250,242,.94);
+    color:#20252a;
+    font-size:19px;
+    font-weight:900;
+    letter-spacing:.3px;
+    box-shadow:0 12px 35px rgba(0,0,0,.25);
 }
 
 .roomName{
-    font-size:15px;
+    position:absolute;
+    top:24px;
+    right:22px;
+    padding:15px 21px;
+    border-radius:20px;
+    background:rgba(255,250,242,.94);
+    color:#20252a;
+    font-size:17px;
+    font-weight:800;
+    box-shadow:0 12px 35px rgba(0,0,0,.25);
 }
 
+.help{
+    position:absolute;
+    left:50%;
+    bottom:24px;
+    transform:translateX(-50%);
+    padding:12px 20px;
+    border-radius:18px;
+    background:rgba(255,250,242,.9);
+    color:#30363a;
+    font-size:13px;
+    font-weight:750;
+    white-space:nowrap;
+    box-shadow:0 10px 30px rgba(0,0,0,.22);
+}
 
-/* =========================================================
-   SCENE
-========================================================= */
+.controls{
+    position:absolute;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    pointer-events:auto;
+}
 
-#world{
+.control{
+    width:54px;
+    height:54px;
+    border:0;
+    border-radius:18px;
+    background:rgba(255,250,242,.95);
+    color:#20252a;
+    font-size:26px;
+    font-weight:800;
+    box-shadow:0 10px 28px rgba(0,0,0,.25);
+}
+
+.control:active{
+    transform:scale(.92);
+}
+
+#info{
+    position:absolute;
+    left:50%;
+    bottom:78px;
+    transform:translateX(-50%) translateY(15px);
+    min-width:230px;
+    max-width:85%;
+    padding:15px 20px;
+    text-align:center;
+    border-radius:19px;
+    background:rgba(255,250,242,.95);
+    color:#252a2d;
+    box-shadow:0 12px 35px rgba(0,0,0,.3);
+    opacity:0;
+    transition:.25s;
+}
+
+#info.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+#info strong{
+    font-size:17px;
+}
+
+#info span{
+    display:block;
+    margin-top:4px;
+    font-size:13px;
+    color:#64615b;
+}
+
+/* =====================================================
+   MONDE 3D
+===================================================== */
+
+#viewport{
     position:absolute;
     inset:0;
     overflow:hidden;
-    perspective:1000px;
+    perspective:1100px;
     background:
-        radial-gradient(
-            ellipse at 50% 20%,
-            #405066 0%,
-            #1c2430 45%,
-            #0e1218 100%
-        );
+        radial-gradient(circle at 50% 42%,#624936 0,#211a16 48%,#0d0b0a 100%);
 }
 
-
-/* lumière */
-
-#world.day{
-    background:
-        radial-gradient(
-            ellipse at 50% 10%,
-            #b9ddf1 0%,
-            #7198b0 42%,
-            #263442 100%
-        );
+#world{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:900px;
+    height:620px;
+    transform-style:preserve-3d;
+    transform:
+        translate(-50%,-46%)
+        rotateX(8deg)
+        rotateY(-18deg)
+        scale(.95);
+    transition:transform .08s linear;
 }
 
-#world.day .room{
-    filter:none;
-}
-
-
-/* =========================================================
-   ROOM
-========================================================= */
+/* =====================================================
+   PIÈCE
+===================================================== */
 
 .room{
     position:absolute;
-    width:760px;
-    height:540px;
-    left:50%;
-    top:53%;
-    transform:
-        translate(-50%,-50%)
-        rotateX(8deg)
-        rotateZ(0deg);
+    inset:0;
     transform-style:preserve-3d;
-    transition:transform .5s ease;
 }
-
 
 /* sol */
 
 .floor{
     position:absolute;
-    width:760px;
-    height:420px;
     left:0;
-    bottom:0;
+    top:300px;
+    width:900px;
+    height:620px;
     transform:
-        rotateX(70deg)
-        translateZ(-80px);
-    transform-origin:bottom;
+        rotateX(90deg)
+        translateZ(-40px);
+    transform-origin:top center;
+
     background:
         repeating-linear-gradient(
             90deg,
-            #654b3d 0px,
-            #654b3d 58px,
-            #765846 59px,
-            #765846 62px
+            rgba(100,58,32,.15) 0,
+            rgba(100,58,32,.15) 2px,
+            transparent 2px,
+            transparent 110px
+        ),
+        linear-gradient(
+            90deg,
+            #7b4f35,
+            #a06a47 50%,
+            #70462f
         );
+
     box-shadow:
-        inset 0 0 80px #0008,
-        0 20px 50px #0008;
+        inset 0 0 80px rgba(35,18,10,.55);
 }
-
-
-/* mur gauche */
-
-.wallLeft{
-    position:absolute;
-    left:0;
-    top:0;
-    width:190px;
-    height:420px;
-    transform-origin:right;
-    transform:
-        rotateY(65deg)
-        translateZ(-35px);
-    background:
-        linear-gradient(
-            90deg,
-            #242c36,
-            #4b5967
-        );
-    box-shadow:inset -30px 0 50px #0007;
-}
-
-
-/* mur droit */
-
-.wallRight{
-    position:absolute;
-    right:0;
-    top:0;
-    width:190px;
-    height:420px;
-    transform-origin:left;
-    transform:
-        rotateY(-65deg)
-        translateZ(-35px);
-    background:
-        linear-gradient(
-            90deg,
-            #4b5967,
-            #242c36
-        );
-    box-shadow:inset 30px 0 50px #0007;
-}
-
 
 /* mur arrière */
 
 .backWall{
     position:absolute;
-    left:95px;
+    left:0;
     top:0;
-    width:570px;
-    height:420px;
+    width:900px;
+    height:380px;
+    transform:translateZ(-310px);
+
+    background:
+        radial-gradient(
+            circle at 65% 45%,
+            rgba(255,195,120,.17),
+            transparent 30%
+        ),
+        linear-gradient(
+            180deg,
+            #4a3028,
+            #6d4938 55%,
+            #4a3028
+        );
+
+    box-shadow:inset 0 -40px 80px rgba(20,10,5,.45);
+}
+
+/* mur gauche */
+
+.leftWall{
+    position:absolute;
+    left:0;
+    top:0;
+    width:620px;
+    height:380px;
+    transform:
+        rotateY(90deg)
+        translateZ(-310px);
+    transform-origin:left center;
+
     background:
         linear-gradient(
             180deg,
-            #586775,
-            #394551
+            #473029,
+            #68473a
         );
-    transform:translateZ(-100px);
-    box-shadow:inset 0 -40px 70px #0005;
 }
 
+/* mur droit */
 
-/* plafond */
-
-.ceiling{
+.rightWall{
     position:absolute;
-    left:95px;
-    top:-35px;
-    width:570px;
-    height:150px;
+    right:0;
+    top:0;
+    width:620px;
+    height:380px;
     transform:
-        rotateX(70deg)
-        translateZ(20px);
-    transform-origin:top;
-    background:#677685;
+        rotateY(-90deg)
+        translateZ(-310px);
+    transform-origin:right center;
+
+    background:
+        linear-gradient(
+            180deg,
+            #4b3028,
+            #69473a
+        );
 }
 
-
-/* =========================================================
-   WINDOW
-========================================================= */
+/* =====================================================
+   FENÊTRE
+===================================================== */
 
 .window{
     position:absolute;
-    left:285px;
-    top:50px;
-    width:200px;
-    height:145px;
+    left:270px;
+    top:55px;
+    width:390px;
+    height:270px;
+    transform:translateZ(-322px);
+    border:12px solid #2d211b;
     background:
         linear-gradient(
-            135deg,
-            #8ed8ff,
-            #3e7398
+            180deg,
+            #f4a56f 0%,
+            #e7785d 35%,
+            #714f68 67%,
+            #263d55 100%
         );
-    border:10px solid #ddd5c5;
     box-shadow:
-        0 0 0 5px #2d3540,
-        0 15px 30px #0006;
-    transform:translateZ(-88px);
-}
-
-.window:before,
-.window:after{
-    content:"";
-    position:absolute;
-    background:#eee7da;
+        0 0 0 3px #9b6844,
+        0 20px 60px rgba(0,0,0,.5);
+    overflow:hidden;
 }
 
 .window:before{
-    width:8px;
-    top:0;
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
     bottom:0;
-    left:50%;
-    transform:translateX(-50%);
+    height:48%;
+    background:
+        linear-gradient(
+            160deg,
+            transparent 0 25%,
+            #24303a 25% 31%,
+            transparent 31%
+        ),
+        linear-gradient(
+            20deg,
+            transparent 0 36%,
+            #182631 36% 46%,
+            transparent 46%
+        ),
+        linear-gradient(
+            180deg,
+            transparent,
+            rgba(10,20,30,.65)
+        );
 }
 
 .window:after{
-    height:8px;
+    content:"";
+    position:absolute;
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    background:#ffd47c;
+    left:165px;
+    top:110px;
+    box-shadow:
+        0 0 35px #ffc46d,
+        0 0 70px rgba(255,160,70,.5);
+}
+
+.windowFrameV{
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:50%;
+    width:8px;
+    transform:translateX(-50%);
+    background:#3b2921;
+    z-index:5;
+}
+
+.windowFrameH{
+    position:absolute;
     left:0;
     right:0;
-    top:50%;
-    transform:translateY(-50%);
+    top:52%;
+    height:7px;
+    background:#3b2921;
+    z-index:5;
 }
 
+/* =====================================================
+   TAPIS
+===================================================== */
 
-/* =========================================================
-   PICTURES
-========================================================= */
-
-.picture{
+.rug{
     position:absolute;
-    width:75px;
-    height:95px;
-    background:#b88b58;
-    border:7px solid #30251f;
-    box-shadow:0 8px 20px #0006;
-    transform:translateZ(-90px);
+    left:260px;
+    top:370px;
+    width:430px;
+    height:250px;
+    transform:
+        rotateX(90deg)
+        translateZ(-20px);
+
+    background:
+        repeating-linear-gradient(
+            45deg,
+            rgba(255,255,255,.05) 0 8px,
+            transparent 8px 16px
+        ),
+        #a78362;
+
+    border:10px solid #4b3428;
+    border-radius:8px;
+    box-shadow:0 18px 40px rgba(0,0,0,.35);
 }
 
-.picture.one{
-    left:145px;
-    top:90px;
-}
+/* =====================================================
+   LIT
+===================================================== */
 
-.picture.two{
-    right:145px;
-    top:80px;
-    width:90px;
-    height:70px;
-}
-
-
-/* =========================================================
-   SOFA
-========================================================= */
-
-.sofa{
+.bed{
     position:absolute;
-    left:115px;
-    bottom:110px;
-    width:285px;
-    height:105px;
-    transform:translateZ(20px);
+    left:520px;
+    top:275px;
+    width:290px;
+    height:190px;
+    transform:translateZ(-80px);
     transform-style:preserve-3d;
 }
 
-.sofaBase{
+.bedFrame{
+    position:absolute;
+    width:290px;
+    height:190px;
+    background:#432d25;
+    border-radius:12px;
+    box-shadow:0 20px 30px rgba(0,0,0,.4);
+}
+
+.mattress{
+    position:absolute;
+    left:12px;
+    top:12px;
+    width:266px;
+    height:166px;
+    background:
+        linear-gradient(
+            135deg,
+            #eee5d6,
+            #d6c9b7
+        );
+    border-radius:13px;
+    transform:translateZ(17px);
+    box-shadow:inset 0 0 15px rgba(0,0,0,.12);
+}
+
+.blanket{
+    position:absolute;
+    left:18px;
+    bottom:10px;
+    width:250px;
+    height:95px;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(255,255,255,.04) 0 3px,
+            transparent 3px 7px
+        ),
+        #45564f;
+    border-radius:15px;
+    transform:translateZ(25px);
+}
+
+.pillow{
+    position:absolute;
+    top:28px;
+    width:82px;
+    height:48px;
+    background:#f5efe5;
+    border-radius:15px;
+    transform:translateZ(25px);
+    box-shadow:0 5px 10px rgba(0,0,0,.12);
+}
+
+.pillow.one{left:35px}
+.pillow.two{left:137px}
+
+/* =====================================================
+   CANAPÉ
+===================================================== */
+
+.sofa{
+    position:absolute;
+    left:65px;
+    top:300px;
+    width:270px;
+    height:125px;
+    transform:translateZ(-30px);
+    transform-style:preserve-3d;
+}
+
+.sofaSeat{
     position:absolute;
     left:0;
     bottom:0;
-    width:285px;
+    width:270px;
     height:65px;
-    background:
-        linear-gradient(
-            145deg,
-            #657b80,
-            #394a50
-        );
-    border-radius:18px;
-    box-shadow:0 18px 30px #0008;
+    border-radius:20px;
+    background:#394c4a;
+    transform:translateZ(30px);
+    box-shadow:0 20px 30px rgba(0,0,0,.4);
 }
 
 .sofaBack{
     position:absolute;
-    left:10px;
-    top:-50px;
-    width:265px;
-    height:75px;
-    background:#52676c;
+    left:0;
+    top:0;
+    width:270px;
+    height:100px;
     border-radius:22px 22px 10px 10px;
-    transform:translateZ(-10px);
-    box-shadow:0 10px 20px #0006;
+    background:#465c59;
 }
+
+.sofaArm{
+    position:absolute;
+    top:15px;
+    width:35px;
+    height:105px;
+    border-radius:15px;
+    background:#334542;
+}
+
+.sofaArm.left{left:-10px}
+.sofaArm.right{right:-10px}
 
 .cushion{
     position:absolute;
-    bottom:18px;
-    width:110px;
-    height:45px;
+    width:92px;
+    height:65px;
     border-radius:15px;
-    background:#899da0;
-    box-shadow:inset 0 -6px 10px #0002;
+    background:#9b7556;
+    transform:translateZ(42px);
+    bottom:8px;
 }
 
-.cushion.a{
-    left:25px;
-}
+.cushion.one{left:25px}
+.cushion.two{right:25px}
 
-.cushion.b{
-    right:25px;
-}
-
-
-/* =========================================================
+/* =====================================================
    TABLE
-========================================================= */
+===================================================== */
 
 .table{
     position:absolute;
-    left:350px;
-    bottom:125px;
-    width:150px;
-    height:100px;
-    transform:translateZ(70px);
+    left:345px;
+    top:370px;
+    width:180px;
+    height:115px;
+    transform:translateZ(40px);
     transform-style:preserve-3d;
 }
 
 .tableTop{
     position:absolute;
+    left:0;
     top:0;
-    width:150px;
-    height:75px;
-    border-radius:12px;
+    width:180px;
+    height:100px;
+    border-radius:50%;
     background:
-        linear-gradient(145deg,#9a6b45,#5e3e2a);
-    transform:
-        rotateX(62deg)
-        translateZ(18px);
-    box-shadow:0 20px 25px #0007;
+        radial-gradient(
+            ellipse,
+            #9b6846,
+            #68432f
+        );
+    transform:rotateX(72deg) translateZ(55px);
+    box-shadow:0 10px 15px rgba(0,0,0,.35);
 }
 
 .tableLeg{
     position:absolute;
-    width:12px;
-    height:75px;
-    bottom:0;
-    background:#493020;
+    left:86px;
+    top:38px;
+    width:10px;
+    height:105px;
+    background:#4b3024;
+    transform:translateZ(0);
 }
 
-.tableLeg.a{
-    left:15px;
-}
-
-.tableLeg.b{
-    right:15px;
-}
-
-
-/* =========================================================
-   TV
-========================================================= */
-
-.tv{
+.coffee{
     position:absolute;
-    right:120px;
-    bottom:145px;
-    width:190px;
-    height:115px;
-    transform:translateZ(35px);
+    left:67px;
+    top:5px;
+    width:43px;
+    height:43px;
+    border-radius:50%;
+    background:#e2d1b4;
+    transform:translateZ(80px);
 }
 
-.tvScreen{
+.coffee:after{
+    content:"";
     position:absolute;
-    inset:0;
-    background:
-        radial-gradient(circle at 50% 40%,#344d6b,#070b11 70%);
-    border:9px solid #111;
-    border-radius:5px;
-    box-shadow:
-        0 15px 30px #0009,
-        inset 0 0 25px #3e6386;
+    width:28px;
+    height:28px;
+    left:7px;
+    top:7px;
+    border-radius:50%;
+    background:#55321f;
 }
 
-.tvScreen:after{
-    content:"APPARTEMENT–3D";
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:12px;
-    letter-spacing:2px;
-    color:#7ea5c5;
-}
-
-.tvStand{
-    position:absolute;
-    bottom:-22px;
-    left:70px;
-    width:50px;
-    height:25px;
-    background:#161a20;
-}
-
-
-/* =========================================================
-   LAMP
-========================================================= */
-
-.lamp{
-    position:absolute;
-    left:540px;
-    bottom:125px;
-    width:45px;
-    height:170px;
-    transform:translateZ(40px);
-}
-
-.lampBase{
-    position:absolute;
-    bottom:0;
-    left:14px;
-    width:17px;
-    height:115px;
-    background:#24282d;
-}
-
-.lampShade{
-    position:absolute;
-    top:0;
-    left:-5px;
-    width:55px;
-    height:50px;
-    background:#d9a95f;
-    clip-path:polygon(15% 0,85% 0,100% 100%,0 100%);
-    box-shadow:0 0 35px #ffc96b;
-}
-
-
-/* =========================================================
-   PLANTE
-========================================================= */
+/* =====================================================
+   PLANTES
+===================================================== */
 
 .plant{
     position:absolute;
-    right:55px;
-    bottom:90px;
     width:100px;
-    height:170px;
-    transform:translateZ(20px);
+    height:180px;
+    transform-style:preserve-3d;
+}
+
+.plant.one{
+    left:40px;
+    top:100px;
+    transform:translateZ(-270px);
+}
+
+.plant.two{
+    right:30px;
+    top:90px;
+    transform:translateZ(-260px);
 }
 
 .pot{
     position:absolute;
+    left:27px;
     bottom:0;
-    left:28px;
-    width:50px;
-    height:55px;
-    background:#a96245;
-    border-radius:5px 5px 15px 15px;
+    width:48px;
+    height:52px;
+    background:
+        linear-gradient(
+            90deg,
+            #72452e,
+            #a96b47,
+            #70412c
+        );
+    border-radius:7px 7px 18px 18px;
+    transform:translateZ(20px);
 }
 
 .leaf{
     position:absolute;
-    width:65px;
-    height:25px;
-    background:#49784e;
-    border-radius:100%;
-    transform-origin:left center;
-    box-shadow:0 4px 10px #0005;
+    width:48px;
+    height:90px;
+    border-radius:100% 0 100% 0;
+    background:
+        linear-gradient(
+            135deg,
+            #78966c,
+            #263f31
+        );
+    transform-origin:bottom;
 }
 
-.leaf:nth-child(1){
-    left:30px;
-    top:75px;
-    transform:rotate(-50deg);
-}
+.leaf.a{left:5px;bottom:35px;transform:rotate(-30deg)}
+.leaf.b{left:27px;bottom:40px;transform:rotate(15deg)}
+.leaf.c{left:42px;bottom:60px;transform:rotate(40deg)}
+.leaf.d{left:12px;bottom:75px;transform:rotate(-55deg)}
+.leaf.e{left:47px;bottom:90px;transform:rotate(55deg)}
+.leaf.f{left:30px;bottom:100px;transform:rotate(5deg)}
 
-.leaf:nth-child(2){
+/* =====================================================
+   BIBLIOTHÈQUE
+===================================================== */
+
+.library{
+    position:absolute;
     left:25px;
-    top:55px;
-    transform:rotate(10deg);
+    top:65px;
+    width:175px;
+    height:240px;
+    transform:translateZ(-315px);
+    background:#38251e;
+    box-shadow:0 20px 35px rgba(0,0,0,.4);
 }
 
-.leaf:nth-child(3){
-    left:40px;
-    top:35px;
-    transform:rotate(-70deg);
+.shelf{
+    position:absolute;
+    left:12px;
+    width:151px;
+    height:8px;
+    background:#9b6543;
 }
 
-.leaf:nth-child(4){
-    left:15px;
-    top:20px;
-    transform:rotate(30deg);
-}
-
-.leaf:nth-child(5){
-    left:45px;
-    top:5px;
-    transform:rotate(-30deg);
-}
-
-
-/* =========================================================
-   TABLEAU / OBJETS
-========================================================= */
+.shelf.s1{top:70px}
+.shelf.s2{top:130px}
+.shelf.s3{top:190px}
 
 .book{
     position:absolute;
-    left:375px;
-    bottom:208px;
-    width:55px;
-    height:12px;
-    background:#6d3540;
-    transform:rotate(-5deg) translateZ(90px);
-    box-shadow:0 5px 8px #0005;
-}
-
-.cup{
-    position:absolute;
-    left:430px;
-    bottom:215px;
-    width:18px;
-    height:20px;
-    background:#e4d2af;
-    border-radius:3px 3px 7px 7px;
-    transform:translateZ(90px);
-}
-
-
-/* =========================================================
-   CHAT
-========================================================= */
-
-.cat{
-    position:absolute;
-    left:280px;
-    bottom:190px;
-    width:58px;
-    height:45px;
-    z-index:20;
-    transform:translateZ(100px);
-    transition:
-        left 1.2s ease,
-        bottom 1.2s ease;
-}
-
-.catBody{
-    position:absolute;
-    left:8px;
     bottom:0;
-    width:43px;
-    height:30px;
-    background:#20242a;
-    border-radius:50% 55% 40% 40%;
-    box-shadow:0 8px 10px #0006;
+    width:18px;
+    border-radius:2px 2px 0 0;
 }
 
-.catHead{
+.b1{height:55px;left:20px;background:#a25a45}
+.b2{height:70px;left:42px;background:#536d63}
+.b3{height:48px;left:65px;background:#c18c52}
+.b4{height:62px;left:90px;background:#705276}
+.b5{height:51px;left:116px;background:#b5a06b}
+
+/* =====================================================
+   LAMPE
+===================================================== */
+
+.lamp{
     position:absolute;
-    right:0;
-    bottom:20px;
-    width:30px;
-    height:28px;
-    background:#252a30;
+    left:735px;
+    top:185px;
+    width:90px;
+    height:180px;
+    transform:translateZ(-180px);
+}
+
+.lampShade{
+    position:absolute;
+    left:12px;
+    top:0;
+    width:68px;
+    height:50px;
+    background:#d9a765;
+    clip-path:polygon(15% 0,85% 0,100% 100%,0 100%);
+    box-shadow:0 0 35px rgba(255,180,80,.35);
+}
+
+.lampStem{
+    position:absolute;
+    left:43px;
+    top:45px;
+    width:6px;
+    height:120px;
+    background:#27221e;
+}
+
+.lampGlow{
+    position:absolute;
+    left:-30px;
+    top:-25px;
+    width:150px;
+    height:150px;
     border-radius:50%;
+    background:rgba(255,185,90,.12);
+    filter:blur(20px);
 }
 
-.catHead:before,
-.catHead:after{
-    content:"";
+/* =====================================================
+   DÉCORATIONS
+===================================================== */
+
+.frame{
     position:absolute;
-    top:-8px;
-    width:12px;
-    height:13px;
-    background:#252a30;
+    width:100px;
+    height:120px;
+    background:#b58b60;
+    border:9px solid #30221c;
+    transform:translateZ(-318px);
 }
 
-.catHead:before{
-    left:2px;
-    transform:skew(-15deg);
+.frame.one{
+    left:225px;
+    top:90px;
+    transform:translateZ(-319px) rotate(-4deg);
 }
 
-.catHead:after{
-    right:2px;
-    transform:skew(15deg);
+.frame.two{
+    left:770px;
+    top:70px;
+    width:80px;
+    height:105px;
+    transform:translateZ(-319px) rotate(5deg);
 }
 
-.catEye{
+.art{
     position:absolute;
-    top:10px;
-    width:4px;
-    height:4px;
-    border-radius:50%;
-    background:#e7cf68;
+    inset:7px;
+    background:
+        radial-gradient(circle at 30% 30%,#e9b26d 0 9%,transparent 10%),
+        radial-gradient(circle at 65% 70%,#45604f 0 15%,transparent 16%),
+        linear-gradient(135deg,#6f4b37,#d39b68);
 }
 
-.catEye.a{
-    left:8px;
+/* =====================================================
+   BOUTONS / ÉLÉMENTS INTERACTIFS
+===================================================== */
+
+.clickable{
+    cursor:pointer;
 }
 
-.catEye.b{
-    right:8px;
+.clickable:active{
+    filter:brightness(1.25);
 }
 
-.tail{
-    position:absolute;
-    left:0;
-    bottom:22px;
-    width:35px;
-    height:12px;
-    border:6px solid #20242a;
-    border-right:0;
-    border-bottom:0;
-    border-radius:30px 0 0 0;
-    transform:rotate(-20deg);
+/* =====================================================
+   MODE NUIT
+===================================================== */
+
+.night #viewport{
+    background:
+        radial-gradient(circle at 50% 45%,#241c2d,#08090d 80%);
 }
 
-
-/* =========================================================
-   HUD
-========================================================= */
-
-.hud{
-    position:fixed;
-    z-index:60;
-    left:18px;
-    bottom:18px;
-    right:18px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
+.night .backWall{
+    background:
+        linear-gradient(
+            180deg,
+            #171824,
+            #292334
+        );
 }
 
-.hint{
-    background:#ffffffec;
-    color:#18202a;
-    border-radius:16px;
-    padding:12px 15px;
-    font-size:13px;
-    font-weight:800;
-    box-shadow:0 10px 30px #0003;
-    max-width:70%;
+.night .leftWall,
+.night .rightWall{
+    background:#1d1921;
 }
 
-.actions{
-    display:flex;
-    gap:8px;
+.night .window{
+    background:
+        linear-gradient(
+            180deg,
+            #111a38,
+            #202c52 50%,
+            #080c16
+        );
 }
 
-.action{
-    width:52px;
-    height:52px;
-    border-radius:16px;
-    background:#ffffffee;
-    color:#141a22;
-    font-size:22px;
-    box-shadow:0 10px 30px #0004;
+.night .window:after{
+    background:#fff4ce;
+    box-shadow:0 0 30px #fff0ad;
 }
 
-.action:active{
-    transform:scale(.9);
+.night .lampGlow{
+    background:rgba(255,180,80,.28);
 }
 
-
-/* =========================================================
-   POPUP
-========================================================= */
-
-#popup{
-    position:fixed;
-    z-index:200;
-    left:50%;
-    bottom:95px;
-    transform:translate(-50%,20px);
-    background:#fffffff5;
-    color:#151a22;
-    border-radius:20px;
-    padding:18px 22px;
-    min-width:230px;
-    max-width:85%;
-    text-align:center;
-    box-shadow:0 20px 50px #0006;
-    opacity:0;
-    pointer-events:none;
-    transition:.3s;
-}
-
-#popup.show{
-    opacity:1;
-    transform:translate(-50%,0);
-}
-
-#popup strong{
-    display:block;
-    font-size:18px;
-    margin-bottom:5px;
-}
-
-
-/* =========================================================
-   CHAOS
-========================================================= */
-
-.chaos .sofa{
-    animation:shake .35s infinite;
-}
-
-.chaos .tv{
-    animation:shake .2s infinite;
-}
-
-.chaos .lamp{
-    animation:swing .5s infinite alternate;
-}
-
-.chaos .picture{
-    animation:shake .3s infinite;
-}
-
-.chaos .cat{
-    animation:catRun .7s infinite alternate;
-}
-
-
-/* =========================================================
-   ANIMATIONS
-========================================================= */
-
-@keyframes float{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-12px)}
-}
-
-@keyframes shake{
-    0%{transform:translateZ(40px) rotate(-2deg)}
-    50%{transform:translateZ(40px) rotate(2deg)}
-    100%{transform:translateZ(40px) rotate(-2deg)}
-}
-
-@keyframes swing{
-    from{transform:translateZ(40px) rotate(-8deg)}
-    to{transform:translateZ(40px) rotate(8deg)}
-}
-
-@keyframes catRun{
-    from{transform:translateZ(100px) translateX(-20px)}
-    to{transform:translateZ(100px) translateX(130px)}
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
+/* =====================================================
+   RESPONSIVE
+===================================================== */
 
 @media(max-width:700px){
 
-    .room{
-        width:680px;
-        height:500px;
-        top:51%;
+    #world{
+        width:760px;
+        height:560px;
         transform:
-            translate(-50%,-50%)
-            scale(.76)
-            rotateX(8deg);
+            translate(-50%,-45%)
+            rotateX(10deg)
+            rotateY(-18deg)
+            scale(.68);
     }
 
     .logo{
+        top:18px;
+        left:15px;
         font-size:15px;
-        padding:13px 15px;
+        padding:13px 16px;
     }
 
     .roomName{
-        font-size:14px;
-        padding:13px 15px;
+        top:18px;
+        right:15px;
+        font-size:15px;
+        padding:13px 16px;
     }
 
-    .hint{
-        font-size:11px;
+    .controls{
+        right:13px;
     }
 
-    .action{
-        width:48px;
-        height:48px;
+    .control{
+        width:51px;
+        height:51px;
     }
 
+    .help{
+        bottom:18px;
+        max-width:82%;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        font-size:12px;
+    }
 }
-
 </style>
 </head>
 
 <body>
 
+<div id="viewport">
 
-<!-- =====================================================
-     INTRO
-===================================================== -->
+    <div id="world">
 
-<div id="intro">
+        <div class="room">
 
-    <div class="introBox">
+            <div class="backWall"></div>
+            <div class="leftWall"></div>
+            <div class="rightWall"></div>
+            <div class="floor"></div>
 
-        <div class="introIcon">🏠</div>
+            <div class="window">
+                <div class="windowFrameV"></div>
+                <div class="windowFrameH"></div>
+            </div>
 
-        <div class="introTitle">
-            APPARTEMENT–3D
-        </div>
+            <div class="rug"></div>
 
-        <div class="introSub">
-            Un appartement complètement inutile.
-            Mais beaucoup trop amusant.
-        </div>
+            <!-- BIBLIOTHÈQUE -->
 
-        <button class="startBtn" onclick="startGame()">
-            ENTRER DANS L'APPARTEMENT
-        </button>
+            <div class="library clickable" data-name="Bibliothèque" data-text="Quelques livres, des souvenirs et beaucoup de choses à découvrir.">
+                <div class="shelf s1"></div>
+                <div class="shelf s2"></div>
+                <div class="shelf s3"></div>
 
-    </div>
+                <div class="book b1"></div>
+                <div class="book b2"></div>
+                <div class="book b3"></div>
+                <div class="book b4"></div>
+                <div class="book b5"></div>
+            </div>
 
-</div>
+            <!-- CADRES -->
 
+            <div class="frame one clickable"
+                 data-name="Photo"
+                 data-text="Une photo accrochée au mur.">
+                <div class="art"></div>
+            </div>
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
+            <div class="frame two clickable"
+                 data-name="Tableau"
+                 data-text="Une petite œuvre qui donne du caractère à la pièce.">
+                <div class="art"></div>
+            </div>
 
-<header>
+            <!-- CANAPÉ -->
 
-    <div class="logo">
-        🏠 APPARTEMENT–3D
-    </div>
+            <div class="sofa clickable"
+                 data-name="Canapé"
+                 data-text="Le coin parfait pour regarder un film.">
 
-    <div class="roomName" id="roomName">
-        Salon
-    </div>
+                <div class="sofaBack"></div>
+                <div class="sofaSeat"></div>
 
-</header>
+                <div class="sofaArm left"></div>
+                <div class="sofaArm right"></div>
 
+                <div class="cushion one"></div>
+                <div class="cushion two"></div>
+            </div>
 
-<!-- =====================================================
-     MONDE
-===================================================== -->
+            <!-- TABLE -->
 
-<div id="world">
+            <div class="table clickable"
+                 data-name="Table basse"
+                 data-text="Une table en bois avec un café encore chaud.">
 
-    <div class="room" id="room">
+                <div class="tableTop"></div>
+                <div class="tableLeg"></div>
+                <div class="coffee"></div>
 
-        <div class="backWall"></div>
+            </div>
 
-        <div class="wallLeft"></div>
+            <!-- LIT -->
 
-        <div class="wallRight"></div>
+            <div class="bed clickable"
+                 data-name="Lit"
+                 data-text="Un grand lit confortable avec une couverture toute douce.">
 
-        <div class="ceiling"></div>
+                <div class="bedFrame"></div>
+                <div class="mattress"></div>
+                <div class="blanket"></div>
 
-        <div class="floor"></div>
+                <div class="pillow one"></div>
+                <div class="pillow two"></div>
+            </div>
 
-        <div class="window"></div>
+            <!-- PLANTE 1 -->
 
-        <div class="picture one"></div>
+            <div class="plant one clickable"
+                 data-name="Monstera"
+                 data-text="Une grande plante qui donne vie à l'appartement.">
 
-        <div class="picture two"></div>
+                <div class="leaf a"></div>
+                <div class="leaf b"></div>
+                <div class="leaf c"></div>
+                <div class="leaf d"></div>
+                <div class="leaf e"></div>
+                <div class="leaf f"></div>
 
+                <div class="pot"></div>
+            </div>
 
-        <!-- CANAPE -->
+            <!-- PLANTE 2 -->
 
-        <div class="sofa">
+            <div class="plant two clickable"
+                 data-name="Plante"
+                 data-text="Une jolie plante décorative.">
 
-            <div class="sofaBack"></div>
+                <div class="leaf a"></div>
+                <div class="leaf b"></div>
+                <div class="leaf c"></div>
+                <div class="leaf d"></div>
+                <div class="leaf e"></div>
+                <div class="leaf f"></div>
 
-            <div class="sofaBase"></div>
+                <div class="pot"></div>
+            </div>
 
-            <div class="cushion a"></div>
+            <!-- LAMPE -->
 
-            <div class="cushion b"></div>
+            <div class="lamp clickable"
+                 data-name="Lampe"
+                 data-text="Une lumière chaude pour les soirées tranquilles.">
 
-        </div>
-
-
-        <!-- TABLE -->
-
-        <div class="table">
-
-            <div class="tableTop"></div>
-
-            <div class="tableLeg a"></div>
-
-            <div class="tableLeg b"></div>
-
-        </div>
-
-
-        <!-- OBJETS TABLE -->
-
-        <div class="book"></div>
-
-        <div class="cup"></div>
-
-
-        <!-- TV -->
-
-        <div class="tv">
-
-            <div class="tvScreen"></div>
-
-            <div class="tvStand"></div>
-
-        </div>
-
-
-        <!-- LAMPE -->
-
-        <div class="lamp">
-
-            <div class="lampShade"></div>
-
-            <div class="lampBase"></div>
-
-        </div>
-
-
-        <!-- PLANTE -->
-
-        <div class="plant">
-
-            <div class="leaf"></div>
-            <div class="leaf"></div>
-            <div class="leaf"></div>
-            <div class="leaf"></div>
-            <div class="leaf"></div>
-
-            <div class="pot"></div>
-
-        </div>
-
-
-        <!-- CHAT -->
-
-        <div class="cat" id="cat">
-
-            <div class="tail"></div>
-
-            <div class="catBody"></div>
-
-            <div class="catHead">
-
-                <div class="catEye a"></div>
-
-                <div class="catEye b"></div>
+                <div class="lampGlow"></div>
+                <div class="lampShade"></div>
+                <div class="lampStem"></div>
 
             </div>
 
@@ -1072,58 +1014,46 @@ header{
 
 
 <!-- =====================================================
-     POPUP
+     INTERFACE
 ===================================================== -->
 
-<div id="popup">
+<div id="ui">
 
-    <strong id="popupTitle">
-        Appartement
-    </strong>
-
-    <span id="popupText">
-        Bienvenue chez toi.
-    </span>
-
-</div>
-
-
-<!-- =====================================================
-     HUD
-===================================================== -->
-
-<div class="hud">
-
-    <div class="hint" id="hint">
-        👆 Touche les objets · 🌙 Change l'ambiance
+    <div class="logo">
+        🏠 APPARTEMENT-3D
     </div>
 
-    <div class="actions">
+    <div class="roomName" id="roomName">
+        Salon
+    </div>
 
-        <button
-            class="action"
-            onclick="toggleDay()"
-            title="Jour / nuit"
-        >
-            🌙
+    <div class="controls">
+
+        <button class="control" id="zoomIn">
+            +
         </button>
 
-        <button
-            class="action"
-            onclick="moveCat()"
-            title="Chat"
-        >
-            🐈
+        <button class="control" id="zoomOut">
+            −
         </button>
 
-        <button
-            class="action"
-            onclick="chaos()"
-            title="Chaos"
-        >
-            🌀
+        <button class="control" id="night">
+            ☀️
         </button>
 
+        <button class="control" id="reset">
+            ⌂
+        </button>
+
+    </div>
+
+    <div id="info">
+        <strong></strong>
+        <span></span>
+    </div>
+
+    <div class="help">
+        👆 Glisse pour regarder · 🤏 Pince pour zoomer · ✨ Touche les objets
     </div>
 
 </div>
@@ -1131,440 +1061,229 @@ header{
 
 <script>
 
-/* =========================================================
+/* =====================================================
    VARIABLES
-========================================================= */
+===================================================== */
 
-const world =
-    document.getElementById("world");
+const world = document.getElementById("world");
+const viewport = document.getElementById("viewport");
+const info = document.getElementById("info");
 
-const room =
-    document.getElementById("room");
+let rotationX = 8;
+let rotationY = -18;
+let zoom = .95;
 
-const popup =
-    document.getElementById("popup");
+let dragging = false;
+let lastX = 0;
+let lastY = 0;
 
-const popupTitle =
-    document.getElementById("popupTitle");
+let pinchStart = 0;
+let pinchZoom = .95;
 
-const popupText =
-    document.getElementById("popupText");
-
-const cat =
-    document.getElementById("cat");
-
-let isDay = false;
-let isChaos = false;
-let catPosition = 0;
+let nightMode = false;
 
 
-/* =========================================================
-   DEMARRAGE
-========================================================= */
+/* =====================================================
+   AFFICHAGE
+===================================================== */
 
-function startGame(){
+function updateWorld(){
 
-    document
-        .getElementById("intro")
-        .classList.add("hidden");
-
-    showPopup(
-        "Bienvenue 👋",
-        "Explore ton appartement. Touche les objets et essaie le bouton 🌀."
-    );
-
+    world.style.transform =
+        "translate(-50%,-46%) " +
+        "rotateX(" + rotationX + "deg) " +
+        "rotateY(" + rotationY + "deg) " +
+        "scale(" + zoom + ")";
 }
 
 
-/* =========================================================
-   POPUP
-========================================================= */
+/* =====================================================
+   SOURIS / TOUCH
+===================================================== */
 
-function showPopup(title,text){
+viewport.addEventListener("pointerdown",function(e){
 
-    popupTitle.textContent = title;
+    dragging = true;
 
-    popupText.textContent = text;
+    lastX = e.clientX;
+    lastY = e.clientY;
 
-    popup.classList.add("show");
-
-    clearTimeout(window.popupTimer);
-
-    window.popupTimer =
-        setTimeout(function(){
-
-            popup.classList.remove("show");
-
-        },3500);
-
-}
+    viewport.setPointerCapture(e.pointerId);
+});
 
 
-/* =========================================================
-   JOUR / NUIT
-========================================================= */
+viewport.addEventListener("pointermove",function(e){
 
-function toggleDay(){
+    if(!dragging) return;
 
-    isDay = !isDay;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
 
-    if(isDay){
+    rotationY += dx * .18;
+    rotationX -= dy * .12;
 
-        world.classList.add("day");
+    rotationX = Math.max(-8,Math.min(30,rotationX));
 
-        showPopup(
-            "☀️ Mode journée",
-            "Les volets sont ouverts. Enfin... presque."
-        );
+    lastX = e.clientX;
+    lastY = e.clientY;
 
-    }else{
-
-        world.classList.remove("day");
-
-        showPopup(
-            "🌙 Mode nuit",
-            "Ambiance beaucoup plus suspecte."
-        );
-
-    }
-
-}
+    updateWorld();
+});
 
 
-/* =========================================================
-   CHAT
-========================================================= */
+viewport.addEventListener("pointerup",function(){
 
-function moveCat(){
+    dragging = false;
 
-    catPosition++;
-
-    if(catPosition > 3){
-
-        catPosition = 0;
-
-    }
-
-    const positions = [
-
-        ["280px","190px"],
-        ["420px","160px"],
-        ["510px","230px"],
-        ["350px","120px"]
-
-    ];
-
-    cat.style.left =
-        positions[catPosition][0];
-
-    cat.style.bottom =
-        positions[catPosition][1];
-
-    const messages = [
-
-        "Le chat vient de changer de place. 🐈",
-
-        "Il cherche probablement quelque chose.",
-
-        "Il te juge silencieusement.",
-
-        "Il a décidé que cet appartement était le sien."
-
-    ];
-
-    showPopup(
-        "🐈 Peka",
-        messages[catPosition]
-    );
-
-}
+});
 
 
-/* =========================================================
-   CHAOS
-========================================================= */
+viewport.addEventListener("pointercancel",function(){
 
-function chaos(){
+    dragging = false;
 
-    isChaos = !isChaos;
-
-    if(isChaos){
-
-        document.body.classList.add("chaos");
-
-        showPopup(
-            "🌀 MODE CHAOS",
-            "Personne ne sait pourquoi. Mais maintenant tout bouge."
-        );
-
-    }else{
-
-        document.body.classList.remove("chaos");
-
-        showPopup(
-            "😌 Retour au calme",
-            "L'appartement a miraculeusement survécu."
-        );
-
-    }
-
-}
+});
 
 
-/* =========================================================
+/* =====================================================
+   ZOOM MOLETTE
+===================================================== */
+
+viewport.addEventListener("wheel",function(e){
+
+    e.preventDefault();
+
+    zoom += e.deltaY * -.0008;
+
+    zoom = Math.max(.55,Math.min(1.35,zoom));
+
+    updateWorld();
+
+},{passive:false});
+
+
+/* =====================================================
+   ZOOM BOUTONS
+===================================================== */
+
+document.getElementById("zoomIn").onclick = function(){
+
+    zoom += .1;
+
+    zoom = Math.min(1.35,zoom);
+
+    updateWorld();
+
+};
+
+
+document.getElementById("zoomOut").onclick = function(){
+
+    zoom -= .1;
+
+    zoom = Math.max(.55,zoom);
+
+    updateWorld();
+
+};
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+document.getElementById("reset").onclick = function(){
+
+    rotationX = 8;
+    rotationY = -18;
+    zoom = .95;
+
+    updateWorld();
+
+};
+
+
+/* =====================================================
+   MODE NUIT
+===================================================== */
+
+document.getElementById("night").onclick = function(){
+
+    nightMode = !nightMode;
+
+    document.body.classList.toggle("night",nightMode);
+
+    document.getElementById("night").textContent =
+        nightMode ? "🌙" : "☀️";
+
+};
+
+
+/* =====================================================
    OBJETS CLIQUABLES
-========================================================= */
+===================================================== */
 
-document
-    .querySelector(".sofa")
-    .addEventListener("click",function(){
+document.querySelectorAll(".clickable").forEach(function(object){
 
-        showPopup(
-            "🛋️ Canapé",
-            "Confort : 97%. Productivité : 0%."
-        );
+    object.addEventListener("pointerup",function(e){
 
-    });
+        if(Math.abs(e.clientX-lastX)>8) return;
 
+        const name =
+            object.dataset.name || "Objet";
 
-document
-    .querySelector(".tv")
-    .addEventListener("click",function(){
+        const text =
+            object.dataset.text || "";
 
-        showPopup(
-            "📺 Télévision",
-            "Elle ne fonctionne pas. Comme dans la vraie vie."
-        );
+        info.querySelector("strong").textContent = name;
+        info.querySelector("span").textContent = text;
 
-    });
+        info.classList.add("show");
 
+        clearTimeout(window.infoTimeout);
 
-document
-    .querySelector(".lamp")
-    .addEventListener("click",function(){
+        window.infoTimeout =
+            setTimeout(function(){
 
-        showPopup(
-            "💡 Lampe",
-            "Elle éclaire beaucoup trop pour une lampe aussi petite."
-        );
+                info.classList.remove("show");
+
+            },3500);
 
     });
 
-
-document
-    .querySelector(".plant")
-    .addEventListener("click",function(){
-
-        showPopup(
-            "🌱 Plante",
-            "Elle a survécu jusqu'ici. Respect."
-        );
-
-    });
+});
 
 
-document
-    .querySelector(".table")
-    .addEventListener("click",function(){
-
-        showPopup(
-            "☕ Table",
-            "Objet officiellement destiné à poser des trucs dessus."
-        );
-
-    });
-
-
-document
-    .querySelector(".window")
-    .addEventListener("click",function(){
-
-        showPopup(
-            "🪟 Fenêtre",
-            "Dehors : probablement encore plus cher."
-        );
-
-    });
-
-
-document
-    .querySelector(".picture.one")
-    .addEventListener("click",function(){
-
-        showPopup(
-            "🖼️ Tableau",
-            "Personne ne sait ce qu'il représente."
-        );
-
-    });
-
-
-document
-    .querySelector(".picture.two")
-    .addEventListener("click",function(){
-
-        showPopup(
-            "🖼️ Deuxième tableau",
-            "Oui, celui-là aussi est mystérieux."
-        );
-
-    });
-
-
-/* =========================================================
-   MOUVEMENT 3D
-========================================================= */
-
-let startX = null;
-let startY = null;
-
-world.addEventListener(
-    "pointerdown",
-    function(e){
-
-        startX = e.clientX;
-        startY = e.clientY;
-
-    }
-);
-
-
-world.addEventListener(
-    "pointermove",
-    function(e){
-
-        if(startX === null) return;
-
-        const dx =
-            e.clientX - startX;
-
-        const dy =
-            e.clientY - startY;
-
-        if(Math.abs(dx) < 5 &&
-           Math.abs(dy) < 5){
-
-            return;
-
-        }
-
-        const rotateY =
-            Math.max(
-                -12,
-                Math.min(12,dx / 35)
-            );
-
-        const rotateX =
-            Math.max(
-                2,
-                Math.min(15,8 - dy / 50)
-            );
-
-        room.style.transform =
-            `
-            translate(-50%,-50%)
-            rotateX(${rotateX}deg)
-            rotateY(${rotateY}deg)
-            `;
-
-    }
-);
-
-
-world.addEventListener(
-    "pointerup",
-    function(){
-
-        startX = null;
-        startY = null;
-
-    }
-);
-
-
-/* =========================================================
+/* =====================================================
    DOUBLE TAP
-========================================================= */
+===================================================== */
 
 let lastTap = 0;
 
-world.addEventListener(
-    "pointerup",
-    function(){
+viewport.addEventListener("pointerup",function(){
 
-        const now =
-            Date.now();
+    const now = Date.now();
 
-        if(now-lastTap < 300){
+    if(now-lastTap < 300){
 
-            chaos();
+        zoom += .15;
 
-        }
+        zoom = Math.min(1.35,zoom);
 
-        lastTap = now;
+        updateWorld();
 
     }
-);
+
+    lastTap = now;
+
+});
 
 
-/* =========================================================
-   HORLOGE SECRETE
-========================================================= */
+/* =====================================================
+   INITIALISATION
+===================================================== */
 
-setInterval(function(){
-
-    const now = new Date();
-
-    const hour =
-        String(now.getHours()).padStart(2,"0");
-
-    const minute =
-        String(now.getMinutes()).padStart(2,"0");
-
-    document.title =
-        "Appartement–3D · " +
-        hour +
-        ":" +
-        minute;
-
-},1000);
-
-
-/* =========================================================
-   MESSAGE RANDOM
-========================================================= */
-
-setTimeout(function(){
-
-    const messages = [
-
-        ["👀", "Tu savais qu'on pouvait toucher les meubles ?"],
-
-        ["🤨", "Pourquoi tu regardes ton appartement comme ça ?"],
-
-        ["🐈", "Le chat vient de te voir."],
-
-        ["☕", "Tu devrais probablement prendre un café."],
-
-        ["🌀", "Le bouton chaos est dangereux."],
-
-        ["🏠", "Bienvenue chez toi."]
-
-    ];
-
-    const random =
-        messages[
-            Math.floor(
-                Math.random()*messages.length
-            )
-        ];
-
-    showPopup(
-        random[0],
-        random[1]
-    );
-
-},5000);
+updateWorld();
 
 </script>
 
