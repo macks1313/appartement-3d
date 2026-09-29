@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
 <title>Appartement 03</title>
 
 <style>
@@ -18,23 +17,26 @@ html,body{
     width:100%;
     height:100%;
     overflow:hidden;
-    background:#101313;
+    background:#101312;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
-#scene{
+#app{
     position:fixed;
     inset:0;
+    overflow:hidden;
 }
 
 canvas{
-    display:block;
+    position:absolute;
+    inset:0;
     width:100%;
     height:100%;
+    touch-action:none;
 }
 
 .ui{
-    position:fixed;
+    position:absolute;
     inset:0;
     pointer-events:none;
 }
@@ -47,26 +49,26 @@ canvas{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap:10px;
 }
 
-.title{
-    padding:15px 21px;
-    border-radius:25px;
-    background:rgba(244,239,226,.92);
-    color:#18231f;
+.pill{
+    background:rgba(244,240,228,.94);
+    color:#17231e;
+    border-radius:30px;
+    padding:15px 20px;
     font-size:17px;
     font-weight:900;
-    letter-spacing:.4px;
-    box-shadow:0 10px 35px rgba(0,0,0,.2);
+    box-shadow:0 12px 35px rgba(0,0,0,.25);
 }
 
 .modes{
     display:flex;
     gap:4px;
     padding:6px;
-    border-radius:22px;
-    background:rgba(244,239,226,.92);
-    box-shadow:0 10px 35px rgba(0,0,0,.2);
+    border-radius:27px;
+    background:rgba(244,240,228,.94);
+    box-shadow:0 12px 35px rgba(0,0,0,.25);
     pointer-events:auto;
 }
 
@@ -74,48 +76,45 @@ canvas{
     width:43px;
     height:40px;
     border:0;
-    border-radius:16px;
+    border-radius:19px;
     background:transparent;
-    font-size:19px;
-    cursor:pointer;
+    font-size:20px;
 }
 
 .modes button.active{
-    background:#18231f;
+    background:#18241f;
 }
 
-.help{
+.bottom{
     position:absolute;
-    left:50%;
     bottom:20px;
+    left:50%;
     transform:translateX(-50%);
     width:max-content;
     max-width:calc(100% - 35px);
+    background:rgba(244,240,228,.94);
+    color:#17231e;
     padding:13px 20px;
-    border-radius:20px;
-    background:rgba(244,239,226,.9);
-    color:#18231f;
+    border-radius:22px;
     font-size:13px;
-    font-weight:800;
+    font-weight:850;
     text-align:center;
-    box-shadow:0 10px 35px rgba(0,0,0,.2);
+    box-shadow:0 12px 35px rgba(0,0,0,.25);
 }
 
 .panel{
     position:absolute;
     left:18px;
     right:18px;
-    bottom:85px;
-    max-width:430px;
-    margin:auto;
+    bottom:78px;
     padding:22px;
-    border-radius:27px;
-    background:rgba(24,35,31,.94);
+    border-radius:28px;
+    background:rgba(22,34,29,.96);
     color:white;
-    box-shadow:0 25px 70px rgba(0,0,0,.45);
+    box-shadow:0 25px 70px rgba(0,0,0,.5);
     border:1px solid rgba(255,255,255,.12);
-    transform:translateY(150%);
-    transition:.45s cubic-bezier(.2,.8,.2,1);
+    transform:translateY(160%);
+    transition:.4s ease;
     pointer-events:auto;
 }
 
@@ -129,20 +128,19 @@ canvas{
 }
 
 .panel p{
-    color:#d7ded8;
+    color:#d5ddd8;
     line-height:1.5;
-    margin-bottom:17px;
+    margin-bottom:16px;
 }
 
 .close{
     position:absolute;
-    right:12px;
-    top:10px;
+    top:9px;
+    right:13px;
     border:0;
     background:none;
     color:white;
-    font-size:28px;
-    cursor:pointer;
+    font-size:30px;
 }
 
 .actions{
@@ -153,26 +151,26 @@ canvas{
 
 .actions button{
     border:0;
-    padding:11px 14px;
-    border-radius:13px;
-    background:#d5b478;
-    color:#17211d;
-    font-weight:850;
-    cursor:pointer;
+    border-radius:14px;
+    padding:11px 15px;
+    background:#d6b47a;
+    color:#18221e;
+    font-weight:900;
 }
 
 .toast{
     position:absolute;
-    top:85px;
+    top:92px;
     left:50%;
     transform:translate(-50%,-15px);
+    background:#f4f0e4;
+    color:#17231e;
     padding:12px 17px;
-    border-radius:16px;
-    background:#f4efe2;
-    color:#18231f;
-    font-weight:850;
+    border-radius:17px;
+    font-weight:900;
     opacity:0;
     transition:.3s;
+    white-space:nowrap;
 }
 
 .toast.show{
@@ -187,8 +185,8 @@ canvas{
         right:10px;
     }
 
-    .title{
-        padding:12px 15px;
+    .pill{
+        padding:13px 15px;
         font-size:14px;
     }
 
@@ -199,10 +197,10 @@ canvas{
     .modes button{
         width:35px;
         height:35px;
-        font-size:16px;
+        font-size:17px;
     }
 
-    .help{
+    .bottom{
         bottom:13px;
         font-size:11px;
         padding:11px 15px;
@@ -213,33 +211,24 @@ canvas{
 
 <body>
 
-<div id="scene"></div>
+<div id="app">
+
+<canvas id="room"></canvas>
 
 <div class="ui">
 
     <div class="top">
 
-        <div class="title">
+        <div class="pill">
             🏠 APPARTEMENT 03
         </div>
 
         <div class="modes">
 
-            <button class="active" onclick="environment('day',this)">
-                ☀️
-            </button>
-
-            <button onclick="environment('sunset',this)">
-                🌅
-            </button>
-
-            <button onclick="environment('night',this)">
-                🌙
-            </button>
-
-            <button onclick="resetCamera()">
-                🎥
-            </button>
+            <button class="active" data-mode="day">☀️</button>
+            <button data-mode="sunset">🌅</button>
+            <button data-mode="night">🌙</button>
+            <button id="reset">🎥</button>
 
         </div>
 
@@ -247,13 +236,13 @@ canvas{
 
     <div id="toast" class="toast"></div>
 
-    <div class="help">
+    <div class="bottom">
         👆 Glisse pour regarder · 🤏 Pince pour zoomer · ✨ Touche les objets
     </div>
 
     <div id="panel" class="panel">
 
-        <button class="close" onclick="closePanel()">×</button>
+        <button class="close" id="close">×</button>
 
         <h2 id="panelTitle"></h2>
 
@@ -265,1559 +254,1766 @@ canvas{
 
 </div>
 
+</div>
 
-<script type="module">
 
-import * as THREE from
-"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+<script>
 
-import {OrbitControls} from
-"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
+/* =========================================================
+   APPARTEMENT 03
+   100% AUTONOME
+   Canvas + JavaScript
+========================================================= */
+
+const canvas = document.getElementById("room");
+const ctx = canvas.getContext("2d");
+
+let W = 0;
+let H = 0;
+let dpr = 1;
+
+let mode = "day";
+
+let cameraX = 0;
+let cameraY = 0;
+let zoom = 1;
+
+let targetCameraX = 0;
+let targetCameraY = 0;
+let targetZoom = 1;
+
+let pointerDown = false;
+let lastX = 0;
+let lastY = 0;
+
+let pinchDistance = null;
+
+let objects = [];
+
+let hoveredObject = null;
 
 
 /* =========================================================
-   SCÈNE
+   COULEURS
 ========================================================= */
 
-const scene = new THREE.Scene();
-
-scene.background = new THREE.Color(0xc8a982);
-
-
-/* =========================================================
-   CAMÉRA
-========================================================= */
-
-const camera = new THREE.PerspectiveCamera(
-    52,
-    innerWidth / innerHeight,
-    0.1,
-    100
-);
-
-camera.position.set(9,5.7,10);
-
-
-/* =========================================================
-   RENDERER
-========================================================= */
-
-const renderer = new THREE.WebGLRenderer({
-    antialias:true,
-    powerPreference:"high-performance"
-});
-
-renderer.setSize(innerWidth,innerHeight);
-
-renderer.setPixelRatio(
-    Math.min(devicePixelRatio,2)
-);
-
-renderer.shadowMap.enabled=true;
-
-renderer.shadowMap.type=
-    THREE.PCFSoftShadowMap;
-
-renderer.outputColorSpace=
-    THREE.SRGBColorSpace;
-
-renderer.toneMapping=
-    THREE.ACESFilmicToneMapping;
-
-renderer.toneMappingExposure=1.15;
-
-document
-    .getElementById("scene")
-    .appendChild(renderer.domElement);
-
-
-/* =========================================================
-   CAMÉRA / MOBILE
-========================================================= */
-
-const controls =
-    new OrbitControls(
-        camera,
-        renderer.domElement
-    );
-
-controls.enableDamping=true;
-controls.dampingFactor=.07;
-
-controls.minDistance=5;
-controls.maxDistance=15;
-
-controls.maxPolarAngle=
-    Math.PI*.48;
-
-controls.minPolarAngle=
-    Math.PI*.25;
-
-controls.target.set(
-    0,
-    2.2,
-    -1
-);
-
-
-/* =========================================================
-   LUMIÈRES
-========================================================= */
-
-const ambient =
-    new THREE.HemisphereLight(
-        0xffead0,
-        0x26342f,
-        2.4
-    );
-
-scene.add(ambient);
-
-
-const sun =
-    new THREE.DirectionalLight(
-        0xffd5a0,
-        4
-    );
-
-sun.position.set(
-    -5,
-    10,
-    6
-);
-
-sun.castShadow=true;
-
-sun.shadow.mapSize.width=2048;
-sun.shadow.mapSize.height=2048;
-
-sun.shadow.camera.left=-15;
-sun.shadow.camera.right=15;
-sun.shadow.camera.top=15;
-sun.shadow.camera.bottom=-15;
-
-scene.add(sun);
-
-
-/* =========================================================
-   MATÉRIAUX
-========================================================= */
-
-function mat(
-    color,
-    rough=.75,
-    metal=0
-){
-    return new THREE.MeshStandardMaterial({
-        color,
-        roughness:rough,
-        metalness:metal
-    });
-}
-
-const wall=mat(0xe5d0b0);
-const wood=mat(0x754d34);
-const darkWood=mat(0x3d3028);
-const cream=mat(0xe7decb);
-const green=mat(0x3f624d);
-const darkGreen=mat(0x263c32);
-const terracotta=mat(0xa86446);
-const gold=mat(0xb88c4c,.35,.65);
-const black=mat(0x191c1b,.4);
-const blue=mat(0x6f9caf,.5);
-
-
-/* =========================================================
-   OUTILS
-========================================================= */
-
-function cube(
-    w,h,d,
-    material,
-    x,y,z
-){
-
-    const m=
-        new THREE.Mesh(
-            new THREE.BoxGeometry(w,h,d),
-            material
-        );
-
-    m.position.set(x,y,z);
-
-    m.castShadow=true;
-    m.receiveShadow=true;
-
-    scene.add(m);
-
-    return m;
-}
-
-
-function cyl(
-    radius,
-    height,
-    material,
-    x,y,z,
-    segments=32
-){
-
-    const m=
-        new THREE.Mesh(
-            new THREE.CylinderGeometry(
-                radius,
-                radius,
-                height,
-                segments
-            ),
-            material
-        );
-
-    m.position.set(x,y,z);
-
-    m.castShadow=true;
-    m.receiveShadow=true;
-
-    scene.add(m);
-
-    return m;
-}
-
-
-/* =========================================================
-   STRUCTURE DE LA PIÈCE
-========================================================= */
-
-cube(
-    18,.3,14,
-    wood,
-    0,-.15,0
-);
-
-cube(
-    18,8,.25,
-    wall,
-    0,4,-6
-);
-
-cube(
-    .25,8,14,
-    wall,
-    -9,4,0
-);
-
-
-/* =========================================================
-   PARQUET
-========================================================= */
-
-for(let x=-8.5;x<=8.5;x+=.65){
-
-    const line=
-        cube(
-            .025,.015,13.7,
-            darkWood,
-            x,.02,0
-        );
-
-    line.material.transparent=true;
-    line.material.opacity=.35;
-}
-
-
-/* =========================================================
-   GRANDE BAIE VITRÉE
-========================================================= */
-
-cube(
-    9,.18,.25,
-    darkWood,
-    1.2,5.8,-5.75
-);
-
-cube(
-    9,.18,.25,
-    darkWood,
-    1.2,1.7,-5.75
-);
-
-cube(
-    .18,4.3,.25,
-    darkWood,
-    -3.2,3.75,-5.75
-);
-
-cube(
-    .18,4.3,.25,
-    darkWood,
-    5.6,3.75,-5.75
-);
-
-
-const glass=
-    new THREE.Mesh(
-        new THREE.PlaneGeometry(
-            8.4,
-            4
-        ),
-        new THREE.MeshBasicMaterial({
-            color:0x79aebe,
-            transparent:true,
-            opacity:.62
-        })
-    );
-
-glass.position.set(
-    1.2,
-    3.75,
-    -5.6
-);
-
-scene.add(glass);
-
-
-/* =========================================================
-   PAYSAGE
-========================================================= */
-
-function mountain(
-    x,
-    width,
-    height,
-    color,
-    z
-){
-
-    const m=
-        new THREE.Mesh(
-            new THREE.ConeGeometry(
-                width,
-                height,
-                5
-            ),
-            mat(color,1)
-        );
-
-    m.position.set(
-        x,
-        height/2+.9,
-        z
-    );
-
-    m.rotation.y=Math.random();
-
-    scene.add(m);
-}
-
-mountain(
-    -3,
-    3.5,
-    4,
-    0x5a7170,
-    -5.25
-);
-
-mountain(
-    .4,
-    4,
-    5,
-    0x425e61,
-    -5.2
-);
-
-mountain(
-    4.1,
-    3.4,
-    4.2,
-    0x526b6c,
-    -5.18
-);
-
-
-/* lac */
-
-cube(
-    12,
-    .03,
-    1.7,
-    blue,
-    1,
-    .75,
-    -5.1
-);
-
-
-/* soleil */
-
-const sunDisk=
-    new THREE.Mesh(
-        new THREE.SphereGeometry(
-            .62,32,32
-        ),
-        new THREE.MeshBasicMaterial({
-            color:0xffd487
-        })
-    );
-
-sunDisk.position.set(
-    2.4,
-    5.2,
-    -5.25
-);
-
-scene.add(sunDisk);
-
-
-/* =========================================================
-   TAPIS
-========================================================= */
-
-cube(
-    7,.06,4,
-    mat(0x765349,1),
-    0,.04,.7
-);
-
-
-/* =========================================================
-   CANAPÉ
-========================================================= */
-
-cube(
-    6.2,
-    1.25,
-    2.25,
-    cream,
-    1.7,
-    1.35,
-    -1.5
-);
-
-cube(
-    6.2,
-    2.3,
-    .55,
-    cream,
-    1.7,
-    2.65,
-    -2.35
-);
-
-
-/* accoudoirs */
-
-cube(
-    .5,
-    1.6,
-    2.2,
-    cream,
-    -1.35,
-    1.65,
-    -1.5
-);
-
-cube(
-    .5,
-    1.6,
-    2.2,
-    cream,
-    4.75,
-    1.65,
-    -1.5
-);
-
-
-/* coussins */
-
-function pillow(
-    x,
-    z,
-    color,
-    rot
-){
-
-    const p=
-        cube(
-            1.25,
-            .72,
-            .48,
-            mat(color,.95),
-            x,
-            2.05,
-            z
-        );
-
-    p.rotation.z=rot||0;
-
-    return p;
-}
-
-pillow(
-    .1,
-    -2.08,
-    0xb77c5c,
-    -.08
-);
-
-pillow(
-    1.65,
-    -2.08,
-    0x58755f,
-    .05
-);
-
-pillow(
-    3.2,
-    -2.08,
-    0xc7b08b,
-    -.04
-);
-
-
-/* =========================================================
-   TABLE BASSE
-========================================================= */
-
-cyl(
-    1.8,
-    .25,
-    wood,
-    -1,
-    1.5,
-    1.1
-);
-
-cyl(
-    .22,
-    2,
-    darkWood,
-    -1,
-    .55,
-    1.1
-);
-
-
-/* =========================================================
-   LIVRES SUR TABLE
-========================================================= */
-
-const book1=
-    cube(
-        1,
-        .18,
-        .7,
-        mat(0x5d7862),
-        -.5,
-        1.73,
-        1
-    );
-
-book1.rotation.y=.2;
-
-const book2=
-    cube(
-        1.1,
-        .18,
-        .72,
-        mat(0xa86b4d),
-        -.45,
-        1.91,
-        1
-    );
-
-book2.rotation.y=.2;
-
-
-/* =========================================================
-   BIBLIOTHÈQUE
-========================================================= */
-
-cube(
-    3.1,
-    5.3,
-    .55,
-    darkGreen,
-    -6.7,
-    2.65,
-    -4.65
-);
-
-for(
-    let y=1;
-    y<5.5;
-    y+=1
-){
-
-    cube(
-        2.7,
-        .09,
-        .65,
-        darkWood,
-        -6.7,
-        y,
-        -4.25
-    );
-
-}
-
-
-const bookColors=[
-    0xb86f4d,
-    0xc59c5c,
-    0x667c68,
-    0x805b52,
-    0xd1c3a0
-];
-
-for(
-    let row=0;
-    row<4;
-    row++
-){
-
-    for(
-        let i=0;
-        i<5;
-        i++
-    ){
-
-        const b=
-            cube(
-                .3,
-                .72,
-                .34,
-                mat(
-                    bookColors[
-                        (i+row)%
-                        bookColors.length
-                    ]
-                ),
-                -7.75+
-                i*.48,
-                1.42+row,
-                -4.18
-            );
-
-        b.rotation.z=
-            (Math.random()-.5)*.08;
-
-    }
-}
-
-
-/* =========================================================
-   PLANTES
-========================================================= */
-
-function plant(
-    x,z,s=1
-){
-
-    cyl(
-        .55*s,
-        .65*s,
-        terracotta,
-        x,
-        .32*s,
-        z
-    );
-
-    for(
-        let i=0;
-        i<9;
-        i++
-    ){
-
-        const leaf=
-            new THREE.Mesh(
-                new THREE.SphereGeometry(
-                    .34*s,
-                    16,
-                    12
-                ),
-                green
-            );
-
-        leaf.scale.y=1.8;
-
-        leaf.position.set(
-            x+
-            Math.sin(i*1.8)*.55*s,
-            .8*s+
-            (i%3)*.3*s,
-            z+
-            Math.cos(i*1.7)*.45*s
-        );
-
-        leaf.rotation.z=
-            (Math.random()-.5);
-
-        leaf.castShadow=true;
-
-        scene.add(leaf);
-    }
-}
-
-plant(
-    7,-4.1,1.5
-);
-
-
-/* =========================================================
-   LAMPE
-========================================================= */
-
-cube(
-    .1,
-    3.1,
-    .1,
-    darkWood,
-    -3.9,
-    3.2,
-    1.9
-);
-
-const shade=
-    new THREE.Mesh(
-        new THREE.ConeGeometry(
-            .75,.75,32,1,true
-        ),
-        darkGreen
-    );
-
-shade.position.set(
-    -3.9,
-    5,
-    1.9
-);
-
-shade.castShadow=true;
-
-scene.add(shade);
-
-
-const lampLight=
-    new THREE.PointLight(
-        0xffd58d,
-        2.3,
-        7
-    );
-
-lampLight.position.set(
-    -3.9,
-    4.5,
-    1.9
-);
-
-scene.add(lampLight);
-
-
-/* =========================================================
-   GUITARE
-========================================================= */
-
-const guitar=
-    new THREE.Group();
-
-scene.add(guitar);
-
-
-const guitarBody=
-    new THREE.Mesh(
-        new THREE.SphereGeometry(
-            .75,32,20
-        ),
-        mat(0xa95f3f,.75)
-    );
-
-guitarBody.scale.set(
-    .85,
-    1.15,
-    .4
-);
-
-guitarBody.position.set(
-    -4.8,
-    1,
-    .4
-);
-
-guitar.add(guitarBody);
-
-
-const guitarNeck=
-    cube(
-        .22,
-        3.3,
-        .12,
-        darkWood,
-        -4.8,
-        2.25,
-        .4
-    );
-
-guitarNeck.rotation.z=-.1;
-
-guitar.add(guitarNeck);
-
-
-/* =========================================================
-   ORDINATEUR
-========================================================= */
-
-const laptop=
-    new THREE.Group();
-
-scene.add(laptop);
-
-
-const laptopBase=
-    cube(
-        1.55,
-        .08,
-        .95,
-        mat(0x222523,.35,.5),
-        -1,
-        1.82,
-        1
-    );
-
-laptopBase.rotation.x=-.04;
-
-laptop.add(laptopBase);
-
-
-const screen=
-    cube(
-        1.4,
-        .85,
-        .07,
-        black,
-        -1,
-        2.25,
-        .6
-    );
-
-screen.rotation.x=-.05;
-
-laptop.add(screen);
-
-
-/* écran lumineux */
-
-const screenGlow=
-    new THREE.Mesh(
-        new THREE.PlaneGeometry(
-            1.15,.58
-        ),
-        new THREE.MeshBasicMaterial({
-            color:0x8baaa1
-        })
-    );
-
-screenGlow.position.set(
-    -1,
-    2.25,
-    .555
-);
-
-screenGlow.rotation.x=-.05;
-
-scene.add(screenGlow);
-
-
-/* =========================================================
-   TASSE
-========================================================= */
-
-const cup=
-    cyl(
-        .25,
-        .27,
-        cream,
-        -.2,
-        1.82,
-        1
-    );
-
-
-/* =========================================================
-   CHAT
-========================================================= */
-
-const cat=
-    new THREE.Group();
-
-scene.add(cat);
-
-
-/* corps */
-
-const catBody=
-    new THREE.Mesh(
-        new THREE.SphereGeometry(
-            .65,24,18
-        ),
-        mat(0x51453e,.96)
-    );
-
-catBody.scale.set(
-    1.4,
-    .8,
-    .8
-);
-
-catBody.position.set(
-    3.1,
-    2.35,
-    -1.55
-);
-
-cat.add(catBody);
-
-
-/* tête */
-
-const catHead=
-    new THREE.Mesh(
-        new THREE.SphereGeometry(
-            .48,24,18
-        ),
-        mat(0x5c4c43,.96)
-    );
-
-catHead.position.set(
-    2.5,
-    2.7,
-    -1.55
-);
-
-cat.add(catHead);
-
-
-/* oreilles */
-
-function ear(x){
-
-    const e=
-        new THREE.Mesh(
-            new THREE.ConeGeometry(
-                .2,.45,4
-            ),
-            mat(0x5c4c43)
-        );
-
-    e.position.set(
-        x,
-        3.08,
-        -1.55
-    );
-
-    cat.add(e);
-}
-
-ear(2.25);
-ear(2.75);
-
-
-/* yeux */
-
-const eyeMat=
-    new THREE.MeshBasicMaterial({
-        color:0xd7b45e
-    });
-
-const eye1=
-    new THREE.Mesh(
-        new THREE.SphereGeometry(
-            .055,12,12
-        ),
-        eyeMat
-    );
-
-eye1.position.set(
-    2.3,
-    2.76,
-    -2.0
-);
-
-cat.add(eye1);
-
-const eye2=eye1.clone();
-
-eye2.position.x=2.62;
-
-cat.add(eye2);
-
-
-/* queue */
-
-const tail=
-    new THREE.Mesh(
-        new THREE.TorusGeometry(
-            .58,
-            .085,
-            12,
-            32,
-            Math.PI*1.5
-        ),
-        mat(0x51453e)
-    );
-
-tail.position.set(
-    3.95,
-    2.45,
-    -1.5
-);
-
-tail.rotation.y=Math.PI/2;
-
-cat.add(tail);
-
-
-/* =========================================================
-   OBJETS INTERACTIFS
-========================================================= */
-
-const interactive=[];
-
-function interactiveObject(
-    object,
-    type
-){
-
-    object.userData.type=type;
-
-    interactive.push(object);
-
-    return object;
-}
-
-interactiveObject(
-    catBody,
-    "cat"
-);
-
-interactiveObject(
-    catHead,
-    "cat"
-);
-
-interactiveObject(
-    cup,
-    "coffee"
-);
-
-interactiveObject(
-    laptopBase,
-    "computer"
-);
-
-interactiveObject(
-    guitarBody,
-    "guitar"
-);
-
-interactiveObject(
-    shade,
-    "lamp"
-);
-
-interactiveObject(
-    book1,
-    "book"
-);
-
-
-/* =========================================================
-   CLIC / TOUCH
-========================================================= */
-
-const raycaster=
-    new THREE.Raycaster();
-
-const pointer=
-    new THREE.Vector2();
-
-function pointerDown(event){
-
-    const rect=
-        renderer.domElement
-        .getBoundingClientRect();
-
-    const clientX=
-        event.clientX ??
-        event.touches?.[0]?.clientX;
-
-    const clientY=
-        event.clientY ??
-        event.touches?.[0]?.clientY;
-
-    if(clientX==null)return;
-
-    pointer.x=
-        ((clientX-rect.left)/rect.width)*2-1;
-
-    pointer.y=
-        -((clientY-rect.top)/rect.height)*2+1;
-
-    raycaster.setFromCamera(
-        pointer,
-        camera
-    );
-
-    const hits=
-        raycaster.intersectObjects(
-            interactive,
-            true
-        );
-
-    if(!hits.length)return;
-
-    interact(
-        hits[0].object.userData.type
-    );
-}
-
-renderer.domElement.addEventListener(
-    "pointerup",
-    pointerDown
-);
-
-
-/* =========================================================
-   INTERACTIONS
-========================================================= */
-
-function interact(type){
-
-    if(type==="cat"){
-
-        panel(
-            "🐈 Le chat",
-            "Le propriétaire officiel du canapé vient de te remarquer.",
-            [
-                [
-                    "🐾 Caresser",
-                    ()=>{
-                        toast("😺 Prrrrrrrr...");
-                        catHead.position.y+=.08;
-
-                        setTimeout(()=>{
-                            catHead.position.y-=.08;
-                        },250);
-                    }
-                ],
-                [
-                    "🥩 Donner une friandise",
-                    ()=>{
-                        toast("🐈 Il arrive immédiatement.");
-                        cat.position.x-=.15;
-                    }
-                ]
-            ]
-        );
-
+const themes = {
+
+    day:{
+        sky:"#9bb9bd",
+        sky2:"#efb183",
+        wall:"#e5d0ad",
+        floor:"#b9875f",
+        floor2:"#956544",
+        wood:"#62432f",
+        dark:"#26342f",
+        green:"#4e6e58",
+        cream:"#eee5d2",
+        gold:"#c79b55",
+        light:"#ffd59c",
+        mountain:"#526969"
+    },
+
+    sunset:{
+        sky:"#654d58",
+        sky2:"#d77b58",
+        wall:"#cfae8b",
+        floor:"#8b5e4c",
+        floor2:"#664337",
+        wood:"#50352a",
+        dark:"#252522",
+        green:"#435a4a",
+        cream:"#d8cbb6",
+        gold:"#bd844b",
+        light:"#ffad6c",
+        mountain:"#3f5154"
+    },
+
+    night:{
+        sky:"#101d2b",
+        sky2:"#243346",
+        wall:"#393733",
+        floor:"#423a34",
+        floor2:"#302a26",
+        wood:"#30251f",
+        dark:"#17221f",
+        green:"#314b3c",
+        cream:"#aaa391",
+        gold:"#a67c43",
+        light:"#f2bd70",
+        mountain:"#202f3b"
     }
 
+};
 
-    if(type==="coffee"){
-
-        panel(
-            "☕ Café",
-            "Une tasse chaude attend sur la table.",
-            [
-                [
-                    "☕ Préparer un café",
-                    ()=>{
-                        toast(
-                            "☕ Le café est prêt."
-                        );
-                    }
-                ]
-            ]
-        );
-
-    }
-
-
-    if(type==="computer"){
-
-        panel(
-            "💻 Ordinateur",
-            "Ton espace de travail donne directement sur la baie vitrée.",
-            [
-                [
-                    "💻 Travailler",
-                    ()=>{
-                        toast(
-                            "⌨️ Session de travail lancée."
-                        );
-                    }
-                ],
-                [
-                    "🎵 Musique",
-                    ()=>{
-                        toast(
-                            "🎵 Playlist lancée."
-                        );
-                    }
-                ]
-            ]
-        );
-
-    }
-
-
-    if(type==="guitar"){
-
-        panel(
-            "🎸 Guitare",
-            "Une vieille guitare en bois est posée près de la bibliothèque.",
-            [
-                [
-                    "🎵 Jouer",
-                    ()=>{
-                        toast(
-                            "🎶 Quelques accords résonnent dans la pièce."
-                        );
-                    }
-                ]
-            ]
-        );
-
-    }
-
-
-    if(type==="lamp"){
-
-        panel(
-            "💡 Lampe",
-            "Cette lampe crée une lumière chaude et transforme complètement l'ambiance.",
-            [
-                [
-                    "💡 Allumer",
-                    ()=>{
-                        lampLight.intensity=4;
-                        toast("💡 Lumière allumée.");
-                    }
-                ],
-                [
-                    "🌑 Éteindre",
-                    ()=>{
-                        lampLight.intensity=0;
-                        toast("🌑 Lumière éteinte.");
-                    }
-                ]
-            ]
-        );
-
-    }
-
-
-    if(type==="book"){
-
-        panel(
-            "📖 Livre",
-            "Un livre abandonné sur la table basse.",
-            [
-                [
-                    "📖 Lire",
-                    ()=>{
-                        toast(
-                            "📚 Tu commences à lire..."
-                        );
-                    }
-                ]
-            ]
-        );
-
-    }
-
+function T(){
+    return themes[mode];
 }
-
-
-/* =========================================================
-   PANNEAU
-========================================================= */
-
-function panel(
-    title,
-    text,
-    buttons
-){
-
-    document
-        .getElementById("panelTitle")
-        .textContent=title;
-
-    document
-        .getElementById("panelText")
-        .textContent=text;
-
-    const actions=
-        document.getElementById(
-            "actions"
-        );
-
-    actions.innerHTML="";
-
-    buttons.forEach(
-        ([label,fn])=>{
-
-            const button=
-                document.createElement(
-                    "button"
-                );
-
-            button.textContent=label;
-
-            button.onclick=fn;
-
-            actions.appendChild(
-                button
-            );
-
-        }
-    );
-
-    document
-        .getElementById("panel")
-        .classList.add("open");
-}
-
-
-function closePanel(){
-
-    document
-        .getElementById("panel")
-        .classList.remove("open");
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-let toastTimer;
-
-function toast(message){
-
-    const el=
-        document.getElementById(
-            "toast"
-        );
-
-    el.textContent=message;
-
-    el.classList.add("show");
-
-    clearTimeout(toastTimer);
-
-    toastTimer=
-        setTimeout(()=>{
-            el.classList.remove("show");
-        },2300);
-}
-
-
-/* =========================================================
-   AMBIANCES
-========================================================= */
-
-function environment(
-    mode,
-    button
-){
-
-    document
-        .querySelectorAll(
-            ".modes button"
-        )
-        .forEach(
-            b=>b.classList.remove("active")
-        );
-
-    button.classList.add("active");
-
-
-    if(mode==="day"){
-
-        scene.background=
-            new THREE.Color(
-                0xc8a982
-            );
-
-        ambient.intensity=2.4;
-
-        sun.intensity=4;
-
-        sun.color.set(
-            0xffd5a0
-        );
-
-        lampLight.intensity=1;
-
-        sunDisk.visible=true;
-
-    }
-
-
-    if(mode==="sunset"){
-
-        scene.background=
-            new THREE.Color(
-                0x825649
-            );
-
-        ambient.intensity=1.25;
-
-        sun.intensity=2;
-
-        sun.color.set(
-            0xff8554
-        );
-
-        lampLight.intensity=2.7;
-
-        sunDisk.visible=true;
-
-    }
-
-
-    if(mode==="night"){
-
-        scene.background=
-            new THREE.Color(
-                0x0e1821
-            );
-
-        ambient.intensity=.5;
-
-        sun.intensity=.2;
-
-        sun.color.set(
-            0x657da9
-        );
-
-        lampLight.intensity=4;
-
-        sunDisk.visible=false;
-
-    }
-
-}
-
-
-/* =========================================================
-   RESET CAMERA
-========================================================= */
-
-function resetCamera(){
-
-    camera.position.set(
-        9,
-        5.7,
-        10
-    );
-
-    controls.target.set(
-        0,
-        2.2,
-        -1
-    );
-
-    controls.update();
-
-    toast(
-        "🎥 Vue de départ restaurée."
-    );
-}
-
-
-/* =========================================================
-   ANIMATION
-========================================================= */
-
-const clock=
-    new THREE.Clock();
-
-function animate(){
-
-    requestAnimationFrame(
-        animate
-    );
-
-    const t=
-        clock.getElapsedTime();
-
-
-    /* respiration du chat */
-
-    catBody.scale.y=
-        .8+
-        Math.sin(t*2)*.012;
-
-
-    /* queue */
-
-    tail.rotation.z=
-        Math.sin(t*1.8)*.12;
-
-
-    /* légère oscillation des plantes */
-
-    scene.traverse(
-        object=>{
-
-            if(
-                object.geometry &&
-                object.geometry.type===
-                "SphereGeometry" &&
-                object!==catBody &&
-                object!==catHead
-            ){
-
-                object.rotation.z+=
-                    Math.sin(t*.5)*.00015;
-
-            }
-
-        }
-    );
-
-
-    controls.update();
-
-    renderer.render(
-        scene,
-        camera
-    );
-}
-
-animate();
 
 
 /* =========================================================
    RESIZE
 ========================================================= */
 
-window.addEventListener(
-    "resize",
-    ()=>{
+function resize(){
 
-        camera.aspect=
-            innerWidth/innerHeight;
+    dpr = Math.min(window.devicePixelRatio || 1,2);
 
-        camera.updateProjectionMatrix();
+    W = window.innerWidth;
+    H = window.innerHeight;
 
-        renderer.setSize(
-            innerWidth,
-            innerHeight
+    canvas.width = W*dpr;
+    canvas.height = H*dpr;
+
+    canvas.style.width = W+"px";
+    canvas.style.height = H+"px";
+
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+window.addEventListener("resize",resize);
+
+resize();
+
+
+/* =========================================================
+   UTILS
+========================================================= */
+
+function lerp(a,b,t){
+    return a+(b-a)*t;
+}
+
+function clamp(v,min,max){
+    return Math.max(min,Math.min(max,v));
+}
+
+function roundRect(ctx,x,y,w,h,r){
+
+    ctx.beginPath();
+
+    ctx.roundRect(x,y,w,h,r);
+
+    ctx.fill();
+}
+
+function polygon(points,fill,stroke){
+
+    ctx.beginPath();
+
+    ctx.moveTo(points[0][0],points[0][1]);
+
+    for(let i=1;i<points.length;i++){
+        ctx.lineTo(points[i][0],points[i][1]);
+    }
+
+    ctx.closePath();
+
+    if(fill){
+        ctx.fillStyle=fill;
+        ctx.fill();
+    }
+
+    if(stroke){
+        ctx.strokeStyle=stroke;
+        ctx.stroke();
+    }
+}
+
+
+/* =========================================================
+   PERSPECTIVE
+========================================================= */
+
+function P(x,y,z){
+
+    const horizon = H*.39;
+
+    const depth = 1/(1+z*.075);
+
+    const sx =
+        W/2 +
+        (x-cameraX)*depth*zoom;
+
+    const sy =
+        horizon +
+        (y-cameraY)*depth*zoom;
+
+    return [sx,sy,depth];
+}
+
+
+/* =========================================================
+   DRAW SKY
+========================================================= */
+
+function drawSky(){
+
+    const g =
+        ctx.createLinearGradient(
+            0,0,
+            0,H*.65
         );
+
+    g.addColorStop(
+        0,
+        T().sky
+    );
+
+    g.addColorStop(
+        1,
+        T().sky2
+    );
+
+    ctx.fillStyle=g;
+
+    ctx.fillRect(
+        0,0,W,H
+    );
+
+}
+
+
+/* =========================================================
+   MOUNTAINS
+========================================================= */
+
+function drawMountains(){
+
+    polygon([
+        [0,H*.49],
+        [W*.15,H*.35],
+        [W*.29,H*.46],
+        [W*.43,H*.31],
+        [W*.58,H*.45],
+        [W*.73,H*.32],
+        [W*.87,H*.45],
+        [W,H*.34],
+        [W,H*.58],
+        [0,H*.58]
+    ],T().mountain);
+
+    polygon([
+        [0,H*.53],
+        [W*.19,H*.42],
+        [W*.34,H*.51],
+        [W*.51,H*.39],
+        [W*.68,H*.51],
+        [W*.82,H*.41],
+        [W,H*.49],
+        [W,H*.6],
+        [0,H*.6]
+    ],"#435b5c");
+
+}
+
+
+/* =========================================================
+   SUN
+========================================================= */
+
+function drawSun(){
+
+    if(mode==="night") return;
+
+    const x =
+        mode==="sunset"
+        ? W*.72
+        : W*.76;
+
+    const y =
+        mode==="sunset"
+        ? H*.38
+        : H*.27;
+
+    const r = 45;
+
+    const glow =
+        ctx.createRadialGradient(
+            x,y,5,
+            x,y,110
+        );
+
+    glow.addColorStop(
+        0,
+        "rgba(255,230,150,.85)"
+    );
+
+    glow.addColorStop(
+        1,
+        "rgba(255,180,100,0)"
+    );
+
+    ctx.fillStyle=glow;
+
+    ctx.beginPath();
+    ctx.arc(x,y,110,0,Math.PI*2);
+    ctx.fill();
+
+    ctx.fillStyle="#ffd37e";
+
+    ctx.beginPath();
+    ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fill();
+}
+
+
+/* =========================================================
+   ROOM
+========================================================= */
+
+function drawRoom(){
+
+    const horizon = H*.42;
+
+    /* back wall */
+
+    ctx.fillStyle=T().wall;
+
+    ctx.fillRect(
+        0,
+        horizon,
+        W,
+        H*.4
+    );
+
+
+    /* floor */
+
+    polygon([
+        [0,H*.73],
+        [W,H*.73],
+        [W,H],
+        [0,H]
+    ],T().floor);
+
+
+    /* floor perspective lines */
+
+    ctx.strokeStyle=
+        "rgba(65,42,29,.23)";
+
+    ctx.lineWidth=1;
+
+    for(let i=0;i<13;i++){
+
+        const x=i*W/12;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            W/2+(x-W/2)*.25,
+            H*.73
+        );
+
+        ctx.lineTo(
+            x,
+            H
+        );
+
+        ctx.stroke();
+    }
+
+    for(let i=0;i<5;i++){
+
+        const y=
+            H*.73+
+            i*(H*.27/5);
+
+        ctx.beginPath();
+
+        ctx.moveTo(0,y);
+        ctx.lineTo(W,y);
+
+        ctx.stroke();
+    }
+
+}
+
+
+/* =========================================================
+   WINDOW
+========================================================= */
+
+function drawWindow(){
+
+    const x=W*.16;
+    const y=H*.24;
+    const w=W*.68;
+    const h=H*.38;
+
+    /* frame */
+
+    ctx.fillStyle=T().wood;
+
+    roundRect(
+        ctx,
+        x-10,
+        y-10,
+        w+20,
+        h+20,
+        5
+    );
+
+
+    /* glass */
+
+    const g=
+        ctx.createLinearGradient(
+            0,y,
+            0,y+h
+        );
+
+    g.addColorStop(
+        0,
+        mode==="night"
+        ? "#142437"
+        : mode==="sunset"
+        ? "#6d5261"
+        : "#71949e"
+    );
+
+    g.addColorStop(
+        1,
+        mode==="night"
+        ? "#263449"
+        : mode==="sunset"
+        ? "#db8561"
+        : "#edb083"
+    );
+
+    ctx.fillStyle=g;
+
+    ctx.fillRect(
+        x,
+        y,
+        w,
+        h
+    );
+
+
+    /* outside landscape */
+
+    polygon([
+        [x,y+h*.73],
+        [x+w*.18,y+h*.45],
+        [x+w*.34,y+h*.7],
+        [x+w*.48,y+h*.4],
+        [x+w*.65,y+h*.72],
+        [x+w*.82,y+h*.5],
+        [x+w,y+h*.72],
+        [x+w,y+h],
+        [x,y+h]
+    ],T().mountain);
+
+
+    /* lake */
+
+    ctx.fillStyle=
+        mode==="night"
+        ? "#253c4b"
+        : "#6e9fa8";
+
+    ctx.fillRect(
+        x,
+        y+h*.72,
+        w,
+        h*.28
+    );
+
+
+    /* frame bars */
+
+    ctx.fillStyle=T().wood;
+
+    ctx.fillRect(
+        x+w*.49,
+        y,
+        7,
+        h
+    );
+
+    ctx.fillRect(
+        x,
+        y+h*.72,
+        w,
+        7
+    );
+
+}
+
+
+/* =========================================================
+   CURTAINS
+========================================================= */
+
+function drawCurtains(){
+
+    ctx.fillStyle=
+        mode==="night"
+        ? "#282821"
+        : "#d6c3a5";
+
+    polygon([
+        [W*.10,H*.20],
+        [W*.18,H*.23],
+        [W*.18,H*.63],
+        [W*.10,H*.68]
+    ],T().cream);
+
+    polygon([
+        [W*.90,H*.20],
+        [W*.82,H*.23],
+        [W*.82,H*.63],
+        [W*.90,H*.68]
+    ],T().cream);
+
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+function drawTable(){
+
+    const cx=W*.50;
+    const cy=H*.69;
+
+    ctx.fillStyle=T().wood;
+
+    roundRect(
+        ctx,
+        cx-95,
+        cy-17,
+        190,
+        34,
+        9
+    );
+
+    ctx.fillRect(
+        cx-75,
+        cy+10,
+        10,
+        105
+    );
+
+    ctx.fillRect(
+        cx+65,
+        cy+10,
+        10,
+        105
+    );
+
+
+    /* laptop */
+
+    ctx.fillStyle="#202625";
+
+    polygon([
+        [cx-40,cy-50],
+        [cx+12,cy-50],
+        [cx+24,cy-17],
+        [cx-50,cy-17]
+    ],"#252a28");
+
+    ctx.fillStyle="#789a99";
+
+    ctx.fillRect(
+        cx-35,
+        cy-45,
+        42,
+        22
+    );
+
+    ctx.fillStyle="#303532";
+
+    polygon([
+        [cx-50,cy-16],
+        [cx+24,cy-16],
+        [cx+38,cy-8],
+        [cx-62,cy-8]
+    ],"#303532");
+
+
+    /* coffee */
+
+    ctx.fillStyle=T().cream;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        cx+63,
+        cy-2,
+        13,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.fillStyle="#79533b";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        cx+63,
+        cy-3,
+        9,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* book */
+
+    ctx.fillStyle="#536b59";
+
+    roundRect(
+        ctx,
+        cx-20,
+        cy-3,
+        42,
+        8,
+        2
+    );
+
+}
+
+
+/* =========================================================
+   SOFA
+========================================================= */
+
+function drawSofa(){
+
+    const x=W*.38;
+    const y=H*.64;
+
+    /* body */
+
+    ctx.fillStyle=T().cream;
+
+    roundRect(
+        ctx,
+        x-135,
+        y,
+        270,
+        105,
+        22
+    );
+
+    /* back */
+
+    roundRect(
+        ctx,
+        x-135,
+        y-75,
+        270,
+        90,
+        24
+    );
+
+    /* arms */
+
+    roundRect(
+        ctx,
+        x-153,
+        y-35,
+        35,
+        105,
+        18
+    );
+
+    roundRect(
+        ctx,
+        x+118,
+        y-35,
+        35,
+        105,
+        18
+    );
+
+
+    /* cushions */
+
+    ctx.fillStyle="#b77759";
+
+    roundRect(
+        ctx,
+        x-95,
+        y-48,
+        62,
+        47,
+        13
+    );
+
+    ctx.fillStyle="#55705e";
+
+    roundRect(
+        ctx,
+        x-25,
+        y-48,
+        62,
+        47,
+        13
+    );
+
+    ctx.fillStyle="#c3a982";
+
+    roundRect(
+        ctx,
+        x+45,
+        y-48,
+        62,
+        47,
+        13
+    );
+
+}
+
+
+/* =========================================================
+   RUG
+========================================================= */
+
+function drawRug(){
+
+    ctx.fillStyle="#79564a";
+
+    roundRect(
+        ctx,
+        W*.24,
+        H*.72,
+        W*.52,
+        H*.18,
+        15
+    );
+
+    ctx.strokeStyle=
+        "rgba(225,190,140,.5)";
+
+    ctx.lineWidth=3;
+
+    for(let i=0;i<7;i++){
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            W*.27,
+            H*.74+i*22
+        );
+
+        ctx.lineTo(
+            W*.73,
+            H*.74+i*22
+        );
+
+        ctx.stroke();
+
+    }
+
+}
+
+
+/* =========================================================
+   LIBRARY
+========================================================= */
+
+function drawLibrary(){
+
+    const x=W*.035;
+    const y=H*.42;
+    const w=W*.20;
+    const h=H*.36;
+
+    ctx.fillStyle=T().dark;
+
+    roundRect(
+        ctx,
+        x,
+        y,
+        w,
+        h,
+        5
+    );
+
+    for(let row=0;row<4;row++){
+
+        const yy=
+            y+35+
+            row*(h-50)/4;
+
+        ctx.fillStyle=T().wood;
+
+        ctx.fillRect(
+            x+8,
+            yy,
+            w-16,
+            5
+        );
+
+        const colors=[
+            "#ad6b50",
+            "#ba965d",
+            "#526b59",
+            "#80605a",
+            "#c8b38c"
+        ];
+
+        for(let i=0;i<5;i++){
+
+            ctx.fillStyle=
+                colors[(i+row)%colors.length];
+
+            const bh=
+                27+
+                (i%3)*8;
+
+            ctx.fillRect(
+                x+15+i*19,
+                yy-bh,
+                14,
+                bh
+            );
+        }
+    }
+
+}
+
+
+/* =========================================================
+   PLANT
+========================================================= */
+
+function drawPlant(){
+
+    const x=W*.87;
+    const y=H*.74;
+
+    ctx.fillStyle="#a56448";
+
+    roundRect(
+        ctx,
+        x-25,
+        y,
+        50,
+        45,
+        7
+    );
+
+    const leaves=[
+        [-50,-90,-.5],
+        [-25,-115,-.2],
+        [0,-130,0],
+        [25,-110,.2],
+        [50,-85,.5],
+        [-65,-45,-.8],
+        [65,-48,.8]
+    ];
+
+    leaves.forEach(l=>{
+
+        ctx.save();
+
+        ctx.translate(
+            x+l[0],
+            y+l[1]
+        );
+
+        ctx.rotate(l[2]);
+
+        ctx.fillStyle=T().green;
+
+        ctx.beginPath();
+
+        ctx.ellipse(
+            0,
+            0,
+            18,
+            42,
+            0,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+        ctx.restore();
+
+    });
+
+}
+
+
+/* =========================================================
+   LAMPE
+========================================================= */
+
+function drawLamp(){
+
+    const x=W*.72;
+    const y=H*.42;
+
+    ctx.strokeStyle=T().wood;
+    ctx.lineWidth=5;
+
+    ctx.beginPath();
+
+    ctx.moveTo(x,y-90);
+    ctx.lineTo(x,y-10);
+
+    ctx.stroke();
+
+    ctx.fillStyle=T().dark;
+
+    ctx.beginPath();
+
+    ctx.moveTo(x-30,y-12);
+    ctx.lineTo(x+30,y-12);
+    ctx.lineTo(x+20,y+18);
+    ctx.lineTo(x-20,y+18);
+    ctx.closePath();
+
+    ctx.fill();
+
+    if(mode!=="night"){
+
+        const glow=
+            ctx.createRadialGradient(
+                x,y+15,3,
+                x,y+15,110
+            );
+
+        glow.addColorStop(
+            0,
+            "rgba(255,210,130,.22)"
+        );
+
+        glow.addColorStop(
+            1,
+            "rgba(255,210,130,0)"
+        );
+
+        ctx.fillStyle=glow;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y+15,
+            110,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =========================================================
+   GUITARE
+========================================================= */
+
+function drawGuitar(){
+
+    const x=W*.27;
+    const y=H*.70;
+
+    ctx.save();
+
+    ctx.translate(x,y);
+    ctx.rotate(-.12);
+
+    ctx.fillStyle="#a76042";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        0,
+        25,
+        38,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.fillStyle="#6b432f";
+
+    ctx.fillRect(
+        -5,
+        -85,
+        10,
+        70
+    );
+
+    ctx.strokeStyle="#e6d4b0";
+    ctx.lineWidth=1;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -4,
+        -80
+    );
+
+    ctx.lineTo(
+        -4,
+        25
+    );
+
+    ctx.moveTo(
+        4,
+        -80
+    );
+
+    ctx.lineTo(
+        4,
+        25
+    );
+
+    ctx.stroke();
+
+    ctx.restore();
+
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+let catBob=0;
+let catTail=0;
+
+function drawCat(){
+
+    const x=W*.66;
+    const y=H*.67+catBob;
+
+    /* queue */
+
+    ctx.save();
+
+    ctx.translate(
+        x+60,
+        y+8
+    );
+
+    ctx.rotate(
+        Math.sin(catTail)*.25
+    );
+
+    ctx.strokeStyle="#4a403a";
+    ctx.lineWidth=13;
+    ctx.lineCap="round";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        40,
+        -1.2,
+        1.5
+    );
+
+    ctx.stroke();
+
+    ctx.restore();
+
+
+    /* corps */
+
+    ctx.fillStyle="#544943";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        x,
+        y+15,
+        70,
+        42,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* tête */
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x-48,
+        y-12,
+        38,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* oreilles */
+
+    polygon([
+        [x-76,y-38],
+        [x-68,y-77],
+        [x-47,y-47]
+    ],"#544943");
+
+    polygon([
+        [x-43,y-47],
+        [x-22,y-78],
+        [x-18,y-32]
+    ],"#544943");
+
+
+    /* yeux */
+
+    ctx.fillStyle="#d7b65c";
+
+    ctx.beginPath();
+    ctx.arc(x-60,y-14,5,0,Math.PI*2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(x-38,y-14,5,0,Math.PI*2);
+    ctx.fill();
+
+
+    /* nez */
+
+    ctx.fillStyle="#d28d82";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x-49,
+        y,
+        4,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+}
+
+
+/* =========================================================
+   WALL ART
+========================================================= */
+
+function drawArt(){
+
+    const x=W*.77;
+    const y=H*.50;
+    const w=W*.12;
+    const h=H*.13;
+
+    ctx.fillStyle="#d8c6a7";
+
+    ctx.fillRect(
+        x,
+        y,
+        w,
+        h
+    );
+
+    ctx.strokeStyle=T().wood;
+    ctx.lineWidth=5;
+
+    ctx.strokeRect(
+        x,
+        y,
+        w,
+        h
+    );
+
+    ctx.fillStyle=T().wood;
+
+    ctx.font="bold 15px sans-serif";
+
+    ctx.textAlign="center";
+
+    ctx.fillText(
+        "BONHEUR",
+        x+w/2,
+        y+25
+    );
+
+    ctx.font="32px serif";
+
+    ctx.fillText(
+        "⌁",
+        x+w/2,
+        y+70
+    );
+
+}
+
+
+/* =========================================================
+   DECORATIONS
+========================================================= */
+
+function drawDecor(){
+
+    /* vase */
+
+    const x=W*.15;
+    const y=H*.72;
+
+    ctx.fillStyle="#b78358";
+
+    ctx.beginPath();
+
+    ctx.moveTo(x-20,y);
+    ctx.lineTo(x+20,y);
+    ctx.lineTo(x+13,y+45);
+    ctx.lineTo(x-13,y+45);
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    /* flowers */
+
+    ctx.strokeStyle=T().green;
+    ctx.lineWidth=3;
+
+    for(let i=0;i<5;i++){
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            y
+        );
+
+        ctx.lineTo(
+            x-35+i*17,
+            y-55-(i%2)*15
+        );
+
+        ctx.stroke();
+
+        ctx.fillStyle=
+            i%2
+            ? "#e7d9c0"
+            : "#c9836b";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x-35+i*17,
+            y-55-(i%2)*15,
+            8,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =========================================================
+   HOTSPOTS
+========================================================= */
+
+function buildObjects(){
+
+    objects=[
+
+        {
+            id:"cat",
+            x:W*.66,
+            y:H*.67,
+            r:85,
+            title:"🐈 Le chat",
+            text:"Le propriétaire officiel du canapé vient de te remarquer.",
+            actions:[
+                ["🐾 Caresser",()=>{
+                    toast("😺 Prrrrrrrr...");
+                    catBob=-5;
+                    setTimeout(()=>{
+                        catBob=0;
+                    },350);
+                }],
+                ["🥩 Friandise",()=>{
+                    toast("🐈 Il arrive immédiatement.");
+                }]
+            ]
+        },
+
+        {
+            id:"coffee",
+            x:W*.68,
+            y:H*.70,
+            r:45,
+            title:"☕ Le café",
+            text:"Une tasse chaude attend sur la table.",
+            actions:[
+                ["☕ Boire",()=>{
+                    toast("☕ Mmmh... parfait.");
+                }]
+            ]
+        },
+
+        {
+            id:"laptop",
+            x:W*.50,
+            y:H*.69,
+            r:60,
+            title:"💻 Ordinateur",
+            text:"Ton espace de travail donne directement sur la baie vitrée.",
+            actions:[
+                ["💻 Travailler",()=>{
+                    toast("⌨️ Session de travail lancée.");
+                }],
+                ["🎵 Musique",()=>{
+                    toast("🎵 Playlist lancée.");
+                }]
+            ]
+        },
+
+        {
+            id:"guitar",
+            x:W*.27,
+            y:H*.68,
+            r:55,
+            title:"🎸 Guitare",
+            text:"Une guitare en bois attend près de la bibliothèque.",
+            actions:[
+                ["🎵 Jouer",()=>{
+                    toast("🎶 Quelques accords résonnent.");
+                }]
+            ]
+        },
+
+        {
+            id:"lamp",
+            x:W*.72,
+            y:H*.43,
+            r:60,
+            title:"💡 Lampe",
+            text:"Une lumière chaude transforme l'ambiance de la pièce.",
+            actions:[
+                ["✨ Ambiance",()=>{
+                    toast("✨ Ambiance chaleureuse.");
+                }]
+            ]
+        },
+
+        {
+            id:"window",
+            x:W*.50,
+            y:H*.43,
+            r:W*.30,
+            title:"🌄 Baie vitrée",
+            text:"Une grande fenêtre donne sur les montagnes et le lac.",
+            actions:[
+                ["🌅 Admirer la vue",()=>{
+                    toast("🏔️ Magnifique.");
+                }]
+            ]
+        },
+
+        {
+            id:"books",
+            x:W*.12,
+            y:H*.56,
+            r:65,
+            title:"📚 Bibliothèque",
+            text:"Des livres, des voyages et quelques objets oubliés.",
+            actions:[
+                ["📖 Lire",()=>{
+                    toast("📚 Tu choisis un livre.");
+                }]
+            ]
+        }
+
+    ];
+
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+function openPanel(obj){
+
+    document.getElementById("panelTitle").textContent=obj.title;
+
+    document.getElementById("panelText").textContent=obj.text;
+
+    const actions=
+        document.getElementById("actions");
+
+    actions.innerHTML="";
+
+    obj.actions.forEach(a=>{
+
+        const b=
+            document.createElement("button");
+
+        b.textContent=a[0];
+
+        b.onclick=a[1];
+
+        actions.appendChild(b);
+
+    });
+
+    document
+        .getElementById("panel")
+        .classList.add("open");
+}
+
+document
+    .getElementById("close")
+    .onclick=()=>{
+        document
+            .getElementById("panel")
+            .classList.remove("open");
+    };
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimeout;
+
+function toast(text){
+
+    const el=
+        document.getElementById("toast");
+
+    el.textContent=text;
+
+    el.classList.add("show");
+
+    clearTimeout(toastTimeout);
+
+    toastTimeout=setTimeout(()=>{
+        el.classList.remove("show");
+    },2200);
+
+}
+
+
+/* =========================================================
+   TOUCH / SOURIS
+========================================================= */
+
+function distance(a,b){
+
+    return Math.hypot(
+        a.clientX-b.clientX,
+        a.clientY-b.clientY
+    );
+}
+
+canvas.addEventListener(
+    "pointerdown",
+    e=>{
+
+        pointerDown=true;
+
+        lastX=e.clientX;
+        lastY=e.clientY;
+
+        canvas.setPointerCapture(e.pointerId);
 
     }
 );
+
+
+canvas.addEventListener(
+    "pointermove",
+    e=>{
+
+        if(!pointerDown)return;
+
+        const dx=e.clientX-lastX;
+        const dy=e.clientY-lastY;
+
+        targetCameraX -= dx*0.75;
+
+        targetCameraY -= dy*0.45;
+
+        targetCameraX=
+            clamp(
+                targetCameraX,
+                -180,
+                180
+            );
+
+        targetCameraY=
+            clamp(
+                targetCameraY,
+                -80,
+                100
+            );
+
+        lastX=e.clientX;
+        lastY=e.clientY;
+
+    }
+);
+
+
+canvas.addEventListener(
+    "pointerup",
+    e=>{
+
+        pointerDown=false;
+
+        const moved=
+            Math.abs(
+                e.clientX-lastX
+            )+
+            Math.abs(
+                e.clientY-lastY
+            );
+
+        /* recherche de l'objet touché */
+
+        const rect=
+            canvas.getBoundingClientRect();
+
+        const x=e.clientX-rect.left;
+        const y=e.clientY-rect.top;
+
+        let nearest=null;
+        let nearestDistance=Infinity;
+
+        objects.forEach(obj=>{
+
+            const dx=x-obj.x;
+            const dy=y-obj.y;
+
+            const d=Math.sqrt(
+                dx*dx+dy*dy
+            );
+
+            if(
+                d<obj.r &&
+                d<nearestDistance
+            ){
+                nearest=obj;
+                nearestDistance=d;
+            }
+
+        });
+
+        if(nearest){
+
+            openPanel(nearest);
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ZOOM
+========================================================= */
+
+canvas.addEventListener(
+    "wheel",
+    e=>{
+
+        e.preventDefault();
+
+        targetZoom +=
+            e.deltaY<0
+            ? .08
+            : -.08;
+
+        targetZoom=
+            clamp(
+                targetZoom,
+                .75,
+                1.45
+            );
+
+    },
+    {passive:false}
+);
+
+
+/* =========================================================
+   MODE
+========================================================= */
+
+document
+    .querySelectorAll(".modes button[data-mode]")
+    .forEach(button=>{
+
+        button.addEventListener(
+            "click",
+            ()=>{
+
+                mode=
+                    button.dataset.mode;
+
+                document
+                    .querySelectorAll(
+                        ".modes button"
+                    )
+                    .forEach(
+                        b=>b.classList.remove("active")
+                    );
+
+                button.classList.add("active");
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+document
+    .getElementById("reset")
+    .onclick=()=>{
+
+        targetCameraX=0;
+        targetCameraY=0;
+        targetZoom=1;
+
+        toast(
+            "🎥 Vue initiale restaurée."
+        );
+
+    };
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+let time=0;
+
+function animate(){
+
+    time+=.016;
+
+    cameraX=
+        lerp(
+            cameraX,
+            targetCameraX,
+            .08
+        );
+
+    cameraY=
+        lerp(
+            cameraY,
+            targetCameraY,
+            .08
+        );
+
+    zoom=
+        lerp(
+            zoom,
+            targetZoom,
+            .08
+        );
+
+
+    catBob=
+        Math.sin(time*2)*1.5;
+
+    catTail=
+        time;
+
+
+    draw();
+
+    requestAnimationFrame(
+        animate
+    );
+
+}
+
+
+/* =========================================================
+   DRAW
+========================================================= */
+
+function draw(){
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+    drawSky();
+
+    drawSun();
+
+    drawMountains();
+
+    drawRoom();
+
+    drawWindow();
+
+    drawCurtains();
+
+    drawRug();
+
+    drawLibrary();
+
+    drawSofa();
+
+    drawTable();
+
+    drawPlant();
+
+    drawLamp();
+
+    drawGuitar();
+
+    drawDecor();
+
+    drawArt();
+
+    drawCat();
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+buildObjects();
+
+animate();
 
 </script>
 
