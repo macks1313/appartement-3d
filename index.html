@@ -2,11 +2,16 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<title>Appartement 3D</title>
+<title>Appartement–3D</title>
 
 <style>
+
+/* =========================================================
+   BASE
+========================================================= */
+
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
@@ -18,922 +23,1044 @@ html,body{
     height:100%;
     overflow:hidden;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:#111827;
+    background:#10131a;
+    color:#fff;
+    touch-action:none;
 }
 
-body{
-    color:#18212b;
+button{
+    font:inherit;
+    border:0;
+    cursor:pointer;
 }
 
-/* =========================
-   APP
-========================= */
 
-#app{
-    width:100%;
-    height:100%;
-    position:relative;
-    overflow:hidden;
+/* =========================================================
+   INTRO
+========================================================= */
+
+#intro{
+    position:fixed;
+    inset:0;
+    z-index:1000;
     background:
-        radial-gradient(circle at 50% 20%,#dff5ff 0%,#a7d0df 48%,#7597a5 100%);
-    transition:.5s;
+        radial-gradient(circle at 50% 40%,#354154,#10131a 65%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:opacity .8s,visibility .8s;
 }
 
-#app.night{
-    background:
-        radial-gradient(circle at 50% 15%,#273b5b 0%,#101827 55%,#080c13 100%);
+#intro.hidden{
+    opacity:0;
+    visibility:hidden;
 }
 
-/* =========================
+.introBox{
+    text-align:center;
+    padding:35px;
+}
+
+.introIcon{
+    font-size:90px;
+    animation:float 2s ease-in-out infinite;
+}
+
+.introTitle{
+    margin-top:15px;
+    font-size:38px;
+    font-weight:900;
+    letter-spacing:-2px;
+}
+
+.introSub{
+    margin-top:10px;
+    opacity:.65;
+}
+
+.startBtn{
+    margin-top:30px;
+    padding:16px 28px;
+    border-radius:18px;
+    background:#fff;
+    color:#111;
+    font-weight:900;
+    font-size:17px;
+    box-shadow:0 12px 40px #0008;
+}
+
+.startBtn:active{
+    transform:scale(.94);
+}
+
+
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
 header{
-    position:absolute;
-    z-index:20;
-    top:20px;
-    left:20px;
-    right:20px;
+    position:fixed;
+    z-index:50;
+    top:18px;
+    left:18px;
+    right:18px;
     display:flex;
     justify-content:space-between;
     align-items:center;
+    pointer-events:none;
 }
 
 .logo,
 .roomName{
-    background:rgba(255,255,255,.94);
-    box-shadow:0 15px 40px rgba(0,0,0,.18);
-    border-radius:24px;
-    backdrop-filter:blur(15px);
+    background:#ffffffee;
+    color:#151922;
+    border-radius:18px;
+    padding:14px 19px;
+    box-shadow:0 10px 30px #0003;
+    font-weight:900;
 }
 
 .logo{
-    padding:17px 24px;
-    font-size:22px;
-    font-weight:900;
-    letter-spacing:-.5px;
+    font-size:18px;
 }
 
 .roomName{
-    padding:17px 23px;
-    font-weight:800;
-    font-size:17px;
+    font-size:15px;
 }
 
-/* =========================
+
+/* =========================================================
    SCENE
-========================= */
+========================================================= */
 
-.scene{
+#world{
     position:absolute;
-    left:50%;
-    top:52%;
-    width:850px;
-    height:560px;
-    transform:
-        translate(-50%,-50%)
-        perspective(1100px)
-        rotateX(58deg)
-        rotateZ(-1deg);
-    transform-style:preserve-3d;
-    transition:.5s;
-}
-
-.floor{
-    position:absolute;
-    left:0;
-    top:0;
-    width:850px;
-    height:560px;
-
+    inset:0;
+    overflow:hidden;
+    perspective:1000px;
     background:
-        linear-gradient(90deg,
-            rgba(0,0,0,.04) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            rgba(0,0,0,.04) 1px,
-            transparent 1px
-        ),
-        #c99765;
-
-    background-size:42px 42px;
-    border:12px solid #eee9df;
-
-    box-shadow:
-        0 35px 60px rgba(0,0,0,.3),
-        inset 0 0 50px rgba(0,0,0,.1);
-
-    transform-style:preserve-3d;
+        radial-gradient(
+            ellipse at 50% 20%,
+            #405066 0%,
+            #1c2430 45%,
+            #0e1218 100%
+        );
 }
 
-/* =========================
-   ROOMS
-========================= */
+
+/* lumière */
+
+#world.day{
+    background:
+        radial-gradient(
+            ellipse at 50% 10%,
+            #b9ddf1 0%,
+            #7198b0 42%,
+            #263442 100%
+        );
+}
+
+#world.day .room{
+    filter:none;
+}
+
+
+/* =========================================================
+   ROOM
+========================================================= */
 
 .room{
     position:absolute;
-    background:#eee9df;
-    border:6px solid #ddd6c9;
-    box-shadow:inset 0 0 30px rgba(0,0,0,.06);
+    width:760px;
+    height:540px;
+    left:50%;
+    top:53%;
+    transform:
+        translate(-50%,-50%)
+        rotateX(8deg)
+        rotateZ(0deg);
+    transform-style:preserve-3d;
+    transition:transform .5s ease;
 }
 
-.roomLabel{
+
+/* sol */
+
+.floor{
     position:absolute;
-    left:18px;
-    top:15px;
-    padding:7px 14px;
-    border-radius:12px;
-    background:rgba(255,255,255,.88);
-    font-size:13px;
-    font-weight:900;
-    letter-spacing:1px;
-    color:#596570;
-}
-
-/* salon */
-
-.living{
-    left:20px;
-    top:20px;
-    width:480px;
-    height:300px;
-}
-
-/* chambre */
-
-.bedroom{
-    right:20px;
-    top:20px;
-    width:310px;
-    height:300px;
-}
-
-/* cuisine */
-
-.kitchen{
-    left:20px;
-    bottom:20px;
-    width:300px;
-    height:200px;
-}
-
-/* salle de bain */
-
-.bathroom{
-    right:20px;
-    bottom:20px;
-    width:310px;
-    height:200px;
-}
-
-/* =========================
-   WALLS
-========================= */
-
-.wall{
-    position:absolute;
-    background:#f7f3eb;
-    box-shadow:0 8px 15px rgba(0,0,0,.12);
-}
-
-.wall.back{
+    width:760px;
+    height:420px;
     left:0;
-    top:-18px;
-    width:100%;
-    height:18px;
+    bottom:0;
+    transform:
+        rotateX(70deg)
+        translateZ(-80px);
+    transform-origin:bottom;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #654b3d 0px,
+            #654b3d 58px,
+            #765846 59px,
+            #765846 62px
+        );
+    box-shadow:
+        inset 0 0 80px #0008,
+        0 20px 50px #0008;
 }
 
-.wall.left{
-    left:-18px;
+
+/* mur gauche */
+
+.wallLeft{
+    position:absolute;
+    left:0;
     top:0;
-    width:18px;
-    height:100%;
+    width:190px;
+    height:420px;
+    transform-origin:right;
+    transform:
+        rotateY(65deg)
+        translateZ(-35px);
+    background:
+        linear-gradient(
+            90deg,
+            #242c36,
+            #4b5967
+        );
+    box-shadow:inset -30px 0 50px #0007;
 }
 
-/* =========================
+
+/* mur droit */
+
+.wallRight{
+    position:absolute;
+    right:0;
+    top:0;
+    width:190px;
+    height:420px;
+    transform-origin:left;
+    transform:
+        rotateY(-65deg)
+        translateZ(-35px);
+    background:
+        linear-gradient(
+            90deg,
+            #4b5967,
+            #242c36
+        );
+    box-shadow:inset 30px 0 50px #0007;
+}
+
+
+/* mur arrière */
+
+.backWall{
+    position:absolute;
+    left:95px;
+    top:0;
+    width:570px;
+    height:420px;
+    background:
+        linear-gradient(
+            180deg,
+            #586775,
+            #394551
+        );
+    transform:translateZ(-100px);
+    box-shadow:inset 0 -40px 70px #0005;
+}
+
+
+/* plafond */
+
+.ceiling{
+    position:absolute;
+    left:95px;
+    top:-35px;
+    width:570px;
+    height:150px;
+    transform:
+        rotateX(70deg)
+        translateZ(20px);
+    transform-origin:top;
+    background:#677685;
+}
+
+
+/* =========================================================
+   WINDOW
+========================================================= */
+
+.window{
+    position:absolute;
+    left:285px;
+    top:50px;
+    width:200px;
+    height:145px;
+    background:
+        linear-gradient(
+            135deg,
+            #8ed8ff,
+            #3e7398
+        );
+    border:10px solid #ddd5c5;
+    box-shadow:
+        0 0 0 5px #2d3540,
+        0 15px 30px #0006;
+    transform:translateZ(-88px);
+}
+
+.window:before,
+.window:after{
+    content:"";
+    position:absolute;
+    background:#eee7da;
+}
+
+.window:before{
+    width:8px;
+    top:0;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+}
+
+.window:after{
+    height:8px;
+    left:0;
+    right:0;
+    top:50%;
+    transform:translateY(-50%);
+}
+
+
+/* =========================================================
+   PICTURES
+========================================================= */
+
+.picture{
+    position:absolute;
+    width:75px;
+    height:95px;
+    background:#b88b58;
+    border:7px solid #30251f;
+    box-shadow:0 8px 20px #0006;
+    transform:translateZ(-90px);
+}
+
+.picture.one{
+    left:145px;
+    top:90px;
+}
+
+.picture.two{
+    right:145px;
+    top:80px;
+    width:90px;
+    height:70px;
+}
+
+
+/* =========================================================
    SOFA
-========================= */
+========================================================= */
 
 .sofa{
     position:absolute;
-    left:70px;
-    bottom:55px;
-    width:245px;
+    left:115px;
+    bottom:110px;
+    width:285px;
     height:105px;
-    cursor:pointer;
     transform:translateZ(20px);
+    transform-style:preserve-3d;
 }
 
-.sofaSeat{
+.sofaBase{
     position:absolute;
     left:0;
     bottom:0;
-    width:245px;
-    height:55px;
-    border-radius:14px;
+    width:285px;
+    height:65px;
     background:
-        linear-gradient(#697d82,#4d6166);
-    box-shadow:0 12px 15px rgba(0,0,0,.25);
+        linear-gradient(
+            145deg,
+            #657b80,
+            #394a50
+        );
+    border-radius:18px;
+    box-shadow:0 18px 30px #0008;
 }
 
 .sofaBack{
     position:absolute;
-    left:12px;
-    top:0;
-    width:220px;
-    height:55px;
-    border-radius:18px 18px 8px 8px;
-    background:#5b7075;
-}
-
-.arm{
-    position:absolute;
-    top:30px;
-    width:24px;
-    height:65px;
-    background:#4d6166;
-    border-radius:10px;
-}
-
-.arm.left{
-    left:-8px;
-}
-
-.arm.right{
-    right:-8px;
+    left:10px;
+    top:-50px;
+    width:265px;
+    height:75px;
+    background:#52676c;
+    border-radius:22px 22px 10px 10px;
+    transform:translateZ(-10px);
+    box-shadow:0 10px 20px #0006;
 }
 
 .cushion{
     position:absolute;
-    bottom:13px;
-    width:70px;
-    height:38px;
-    border-radius:10px;
-    background:#82999d;
+    bottom:18px;
+    width:110px;
+    height:45px;
+    border-radius:15px;
+    background:#899da0;
+    box-shadow:inset 0 -6px 10px #0002;
 }
 
-.cushion.one{left:25px}
-.cushion.two{left:105px}
-.cushion.three{left:180px}
+.cushion.a{
+    left:25px;
+}
 
-/* =========================
-   COFFEE TABLE
-========================= */
+.cushion.b{
+    right:25px;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
 
 .table{
     position:absolute;
-    left:170px;
-    bottom:20px;
-    width:145px;
-    height:75px;
-    cursor:pointer;
+    left:350px;
+    bottom:125px;
+    width:150px;
+    height:100px;
+    transform:translateZ(70px);
+    transform-style:preserve-3d;
 }
 
 .tableTop{
     position:absolute;
-    width:145px;
-    height:48px;
-    border-radius:8px;
+    top:0;
+    width:150px;
+    height:75px;
+    border-radius:12px;
     background:
-        linear-gradient(135deg,#9b6541,#70472f);
-    box-shadow:0 12px 14px rgba(0,0,0,.25);
+        linear-gradient(145deg,#9a6b45,#5e3e2a);
+    transform:
+        rotateX(62deg)
+        translateZ(18px);
+    box-shadow:0 20px 25px #0007;
 }
 
 .tableLeg{
     position:absolute;
-    top:38px;
     width:12px;
-    height:38px;
-    background:#503522;
+    height:75px;
+    bottom:0;
+    background:#493020;
 }
 
-.tableLeg.a{left:14px}
-.tableLeg.b{right:14px}
+.tableLeg.a{
+    left:15px;
+}
 
-/* =========================
+.tableLeg.b{
+    right:15px;
+}
+
+
+/* =========================================================
    TV
-========================= */
+========================================================= */
 
 .tv{
     position:absolute;
-    right:35px;
-    top:62px;
-    width:155px;
-    height:90px;
-    cursor:pointer;
+    right:120px;
+    bottom:145px;
+    width:190px;
+    height:115px;
+    transform:translateZ(35px);
 }
 
 .tvScreen{
     position:absolute;
-    width:155px;
-    height:82px;
-    border:7px solid #242a2e;
-    border-radius:6px;
+    inset:0;
     background:
-        radial-gradient(circle at 60% 40%,#305a78,#101b27 70%);
+        radial-gradient(circle at 50% 40%,#344d6b,#070b11 70%);
+    border:9px solid #111;
+    border-radius:5px;
     box-shadow:
-        0 10px 20px rgba(0,0,0,.35),
-        inset 0 0 20px #000;
+        0 15px 30px #0009,
+        inset 0 0 25px #3e6386;
+}
+
+.tvScreen:after{
+    content:"APPARTEMENT–3D";
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    letter-spacing:2px;
+    color:#7ea5c5;
 }
 
 .tvStand{
     position:absolute;
-    bottom:-14px;
-    left:55px;
-    width:45px;
-    height:15px;
-    background:#242a2e;
+    bottom:-22px;
+    left:70px;
+    width:50px;
+    height:25px;
+    background:#161a20;
 }
 
-/* =========================
-   PLANT
-========================= */
+
+/* =========================================================
+   LAMP
+========================================================= */
+
+.lamp{
+    position:absolute;
+    left:540px;
+    bottom:125px;
+    width:45px;
+    height:170px;
+    transform:translateZ(40px);
+}
+
+.lampBase{
+    position:absolute;
+    bottom:0;
+    left:14px;
+    width:17px;
+    height:115px;
+    background:#24282d;
+}
+
+.lampShade{
+    position:absolute;
+    top:0;
+    left:-5px;
+    width:55px;
+    height:50px;
+    background:#d9a95f;
+    clip-path:polygon(15% 0,85% 0,100% 100%,0 100%);
+    box-shadow:0 0 35px #ffc96b;
+}
+
+
+/* =========================================================
+   PLANTE
+========================================================= */
 
 .plant{
     position:absolute;
-    cursor:pointer;
-    width:65px;
-    height:105px;
-    left:20px;
-    top:45px;
+    right:55px;
+    bottom:90px;
+    width:100px;
+    height:170px;
+    transform:translateZ(20px);
 }
 
 .pot{
     position:absolute;
     bottom:0;
-    left:14px;
-    width:38px;
-    height:42px;
-    background:
-        linear-gradient(90deg,#8b5138,#bd7651,#874c35);
-    clip-path:polygon(8% 0,92% 0,80% 100%,20% 100%);
+    left:28px;
+    width:50px;
+    height:55px;
+    background:#a96245;
+    border-radius:5px 5px 15px 15px;
 }
 
 .leaf{
     position:absolute;
-    width:32px;
-    height:48px;
-    border-radius:50% 5px 50% 5px;
-    background:linear-gradient(135deg,#4e8a5a,#225338);
-    transform-origin:bottom;
+    width:65px;
+    height:25px;
+    background:#49784e;
+    border-radius:100%;
+    transform-origin:left center;
+    box-shadow:0 4px 10px #0005;
 }
 
 .leaf:nth-child(1){
-    left:15px;
-    top:8px;
-    transform:rotate(-28deg);
-}
-.leaf:nth-child(2){
     left:30px;
-    top:0;
-    transform:rotate(12deg);
+    top:75px;
+    transform:rotate(-50deg);
 }
+
+.leaf:nth-child(2){
+    left:25px;
+    top:55px;
+    transform:rotate(10deg);
+}
+
 .leaf:nth-child(3){
-    left:4px;
-    top:25px;
-    transform:rotate(-48deg);
-}
-.leaf:nth-child(4){
-    left:34px;
-    top:28px;
-    transform:rotate(45deg);
-}
-
-/* =========================
-   BED
-========================= */
-
-.bed{
-    position:absolute;
     left:40px;
-    top:65px;
-    width:225px;
-    height:165px;
-    cursor:pointer;
+    top:35px;
+    transform:rotate(-70deg);
 }
 
-.headboard{
+.leaf:nth-child(4){
+    left:15px;
+    top:20px;
+    transform:rotate(30deg);
+}
+
+.leaf:nth-child(5){
+    left:45px;
+    top:5px;
+    transform:rotate(-30deg);
+}
+
+
+/* =========================================================
+   TABLEAU / OBJETS
+========================================================= */
+
+.book{
     position:absolute;
-    left:0;
-    top:0;
-    width:225px;
-    height:28px;
-    border-radius:10px 10px 3px 3px;
-    background:#654534;
+    left:375px;
+    bottom:208px;
+    width:55px;
+    height:12px;
+    background:#6d3540;
+    transform:rotate(-5deg) translateZ(90px);
+    box-shadow:0 5px 8px #0005;
 }
 
-.mattress{
+.cup{
+    position:absolute;
+    left:430px;
+    bottom:215px;
+    width:18px;
+    height:20px;
+    background:#e4d2af;
+    border-radius:3px 3px 7px 7px;
+    transform:translateZ(90px);
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+.cat{
+    position:absolute;
+    left:280px;
+    bottom:190px;
+    width:58px;
+    height:45px;
+    z-index:20;
+    transform:translateZ(100px);
+    transition:
+        left 1.2s ease,
+        bottom 1.2s ease;
+}
+
+.catBody{
     position:absolute;
     left:8px;
-    top:23px;
-    width:209px;
-    height:130px;
-    border-radius:12px;
-    background:#f5f2eb;
-    box-shadow:0 12px 18px rgba(0,0,0,.18);
+    bottom:0;
+    width:43px;
+    height:30px;
+    background:#20242a;
+    border-radius:50% 55% 40% 40%;
+    box-shadow:0 8px 10px #0006;
 }
 
-.blanket{
+.catHead{
     position:absolute;
-    right:8px;
-    top:65px;
-    width:130px;
-    height:88px;
-    border-radius:0 0 10px 0;
-    background:
-        linear-gradient(135deg,#78949a,#9cb2b5);
+    right:0;
+    bottom:20px;
+    width:30px;
+    height:28px;
+    background:#252a30;
+    border-radius:50%;
 }
 
-.pillow{
-    position:absolute;
-    top:36px;
-    width:75px;
-    height:38px;
-    border-radius:12px;
-    background:#fff;
-    box-shadow:0 3px 7px rgba(0,0,0,.1);
-}
-
-.pillow.one{left:25px}
-.pillow.two{left:115px}
-
-/* =========================
-   KITCHEN
-========================= */
-
-.counter{
-    position:absolute;
-    left:18px;
-    bottom:25px;
-    width:260px;
-    height:75px;
-    background:#76513b;
-    border-radius:8px;
-    box-shadow:0 12px 18px rgba(0,0,0,.25);
-    cursor:pointer;
-}
-
-.counterTop{
-    position:absolute;
-    left:-5px;
-    top:-10px;
-    width:270px;
-    height:16px;
-    border-radius:6px;
-    background:#eeeae1;
-}
-
-.cabinet{
-    position:absolute;
-    top:15px;
-    width:55px;
-    height:48px;
-    border:2px solid #573b2c;
-    background:#80583d;
-}
-
-.cabinet:nth-child(1){left:12px}
-.cabinet:nth-child(2){left:75px}
-.cabinet:nth-child(3){left:138px}
-.cabinet:nth-child(4){left:201px}
-
-.handle{
-    position:absolute;
-    left:23px;
-    top:21px;
-    width:9px;
-    height:3px;
-    border-radius:3px;
-    background:#d4b27c;
-}
-
-/* fridge */
-
-.fridge{
-    position:absolute;
-    right:18px;
-    top:32px;
-    width:65px;
-    height:120px;
-    background:linear-gradient(90deg,#c9d0d4,#eef2f3,#c2cbd0);
-    border-radius:6px;
-    box-shadow:0 10px 15px rgba(0,0,0,.2);
-    cursor:pointer;
-}
-
-.fridge:after{
+.catHead:before,
+.catHead:after{
     content:"";
     position:absolute;
+    top:-8px;
+    width:12px;
+    height:13px;
+    background:#252a30;
+}
+
+.catHead:before{
+    left:2px;
+    transform:skew(-15deg);
+}
+
+.catHead:after{
+    right:2px;
+    transform:skew(15deg);
+}
+
+.catEye{
+    position:absolute;
+    top:10px;
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:#e7cf68;
+}
+
+.catEye.a{
     left:8px;
-    top:58px;
-    width:3px;
-    height:35px;
-    background:#707b82;
 }
 
-/* =========================
-   BATHROOM
-========================= */
+.catEye.b{
+    right:8px;
+}
 
-.bath{
+.tail{
     position:absolute;
-    left:28px;
-    top:58px;
-    width:245px;
-    height:95px;
-    border-radius:45px;
-    background:#d9dde0;
-    box-shadow:0 10px 20px rgba(0,0,0,.2);
-    cursor:pointer;
-}
-
-.water{
-    position:absolute;
-    left:15px;
-    top:15px;
-    width:215px;
-    height:65px;
-    border-radius:35px;
-    background:
-        radial-gradient(circle at 30% 30%,#d7f9ff,#83cde1);
-}
-
-/* =========================
-   WINDOWS
-========================= */
-
-.window{
-    position:absolute;
-    top:25px;
-    width:150px;
-    height:85px;
-    border:8px solid #f8f7f1;
-    background:
-        linear-gradient(
-            90deg,
-            transparent 48%,
-            #fff 48%,
-            #fff 52%,
-            transparent 52%
-        ),
-        linear-gradient(
-            transparent 47%,
-            #fff 47%,
-            #fff 53%,
-            transparent 53%
-        ),
-        linear-gradient(#78c8e7,#c8efff);
-    box-shadow:0 7px 15px rgba(0,0,0,.18);
-}
-
-.window.one{
-    left:35px;
-}
-
-.window.two{
-    right:30px;
-}
-
-/* =========================
-   LIGHT
-========================= */
-
-.lightGlow{
-    position:absolute;
-    pointer-events:none;
     left:0;
-    top:0;
-    width:100%;
-    height:100%;
-    opacity:0;
-    background:
-        radial-gradient(
-            circle at 35% 48%,
-            rgba(255,224,145,.35),
-            transparent 45%
-        );
-    transition:.5s;
+    bottom:22px;
+    width:35px;
+    height:12px;
+    border:6px solid #20242a;
+    border-right:0;
+    border-bottom:0;
+    border-radius:30px 0 0 0;
+    transform:rotate(-20deg);
 }
 
-#app.night .lightGlow{
-    opacity:1;
+
+/* =========================================================
+   HUD
+========================================================= */
+
+.hud{
+    position:fixed;
+    z-index:60;
+    left:18px;
+    bottom:18px;
+    right:18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
 }
 
-/* =========================
-   OBJECT POPUP
-========================= */
+.hint{
+    background:#ffffffec;
+    color:#18202a;
+    border-radius:16px;
+    padding:12px 15px;
+    font-size:13px;
+    font-weight:800;
+    box-shadow:0 10px 30px #0003;
+    max-width:70%;
+}
+
+.actions{
+    display:flex;
+    gap:8px;
+}
+
+.action{
+    width:52px;
+    height:52px;
+    border-radius:16px;
+    background:#ffffffee;
+    color:#141a22;
+    font-size:22px;
+    box-shadow:0 10px 30px #0004;
+}
+
+.action:active{
+    transform:scale(.9);
+}
+
+
+/* =========================================================
+   POPUP
+========================================================= */
 
 #popup{
-    position:absolute;
-    z-index:50;
+    position:fixed;
+    z-index:200;
     left:50%;
-    bottom:100px;
-    transform:translateX(-50%) translateY(20px);
-    min-width:260px;
+    bottom:95px;
+    transform:translate(-50%,20px);
+    background:#fffffff5;
+    color:#151a22;
+    border-radius:20px;
+    padding:18px 22px;
+    min-width:230px;
     max-width:85%;
-    padding:18px 24px;
     text-align:center;
-    background:rgba(255,255,255,.96);
-    border-radius:22px;
-    box-shadow:0 20px 50px rgba(0,0,0,.25);
+    box-shadow:0 20px 50px #0006;
     opacity:0;
     pointer-events:none;
-    transition:.25s;
+    transition:.3s;
 }
 
 #popup.show{
     opacity:1;
-    transform:translateX(-50%) translateY(0);
+    transform:translate(-50%,0);
 }
 
-#popupTitle{
-    font-size:19px;
-    font-weight:900;
+#popup strong{
+    display:block;
+    font-size:18px;
     margin-bottom:5px;
 }
 
-#popupText{
-    color:#66727c;
-    font-weight:600;
+
+/* =========================================================
+   CHAOS
+========================================================= */
+
+.chaos .sofa{
+    animation:shake .35s infinite;
 }
 
-/* =========================
-   CONTROLS
-========================= */
-
-.controls{
-    position:absolute;
-    z-index:30;
-    right:20px;
-    bottom:105px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
+.chaos .tv{
+    animation:shake .2s infinite;
 }
 
-button{
-    border:0;
-    cursor:pointer;
-    -webkit-appearance:none;
+.chaos .lamp{
+    animation:swing .5s infinite alternate;
 }
 
-.control{
-    width:58px;
-    height:58px;
-    border-radius:20px;
-    background:rgba(255,255,255,.95);
-    box-shadow:0 12px 30px rgba(0,0,0,.2);
-    font-size:25px;
-    font-weight:900;
-    color:#1e2935;
-    transition:.15s;
+.chaos .picture{
+    animation:shake .3s infinite;
 }
 
-.control:active{
-    transform:scale(.9);
+.chaos .cat{
+    animation:catRun .7s infinite alternate;
 }
 
-/* =========================
-   BOTTOM
-========================= */
 
-.help{
-    position:absolute;
-    z-index:20;
-    left:50%;
-    bottom:25px;
-    transform:translateX(-50%);
-    padding:13px 20px;
-    border-radius:18px;
-    background:rgba(255,255,255,.92);
-    box-shadow:0 10px 30px rgba(0,0,0,.15);
-    font-size:14px;
-    font-weight:700;
-    color:#56636e;
-    white-space:nowrap;
-    max-width:90%;
-    overflow:hidden;
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-12px)}
 }
 
-/* =========================
+@keyframes shake{
+    0%{transform:translateZ(40px) rotate(-2deg)}
+    50%{transform:translateZ(40px) rotate(2deg)}
+    100%{transform:translateZ(40px) rotate(-2deg)}
+}
+
+@keyframes swing{
+    from{transform:translateZ(40px) rotate(-8deg)}
+    to{transform:translateZ(40px) rotate(8deg)}
+}
+
+@keyframes catRun{
+    from{transform:translateZ(100px) translateX(-20px)}
+    to{transform:translateZ(100px) translateX(130px)}
+}
+
+
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
 @media(max-width:700px){
 
-    header{
-        top:15px;
-        left:14px;
-        right:14px;
+    .room{
+        width:680px;
+        height:500px;
+        top:51%;
+        transform:
+            translate(-50%,-50%)
+            scale(.76)
+            rotateX(8deg);
     }
 
     .logo{
-        font-size:17px;
-        padding:15px 17px;
+        font-size:15px;
+        padding:13px 15px;
     }
 
     .roomName{
-        font-size:15px;
-        padding:15px 17px;
+        font-size:14px;
+        padding:13px 15px;
     }
 
-    .scene{
-        transform:
-            translate(-50%,-50%)
-            scale(.72)
-            perspective(1100px)
-            rotateX(58deg)
-            rotateZ(-1deg);
+    .hint{
+        font-size:11px;
     }
 
-    .controls{
-        right:15px;
-        bottom:100px;
+    .action{
+        width:48px;
+        height:48px;
     }
 
-    .control{
-        width:55px;
-        height:55px;
-    }
-
-    .help{
-        bottom:22px;
-        font-size:12px;
-    }
-
-    #popup{
-        bottom:90px;
-    }
 }
 
-@media(max-height:700px){
-
-    .scene{
-        transform:
-            translate(-50%,-50%)
-            scale(.58)
-            perspective(1100px)
-            rotateX(58deg)
-            rotateZ(-1deg);
-    }
-
-    .controls{
-        bottom:75px;
-    }
-}
 </style>
 </head>
 
 <body>
 
-<div id="app">
 
-    <header>
-        <div class="logo">🏠 MON APPARTEMENT</div>
-        <div class="roomName" id="roomName">Vue générale</div>
-    </header>
+<!-- =====================================================
+     INTRO
+===================================================== -->
 
-    <div class="scene">
+<div id="intro">
 
-        <div class="floor">
+    <div class="introBox">
 
-            <div class="wall back"></div>
-            <div class="wall left"></div>
+        <div class="introIcon">🏠</div>
 
-            <!-- SALON -->
+        <div class="introTitle">
+            APPARTEMENT–3D
+        </div>
 
-            <div class="room living" data-room="Salon">
+        <div class="introSub">
+            Un appartement complètement inutile.
+            Mais beaucoup trop amusant.
+        </div>
 
-                <div class="roomLabel">SALON</div>
+        <button class="startBtn" onclick="startGame()">
+            ENTRER DANS L'APPARTEMENT
+        </button>
 
-                <div class="window one"></div>
+    </div>
 
-                <div
-                    class="tv object"
-                    data-title="Télévision"
-                    data-text="Une grande TV pour les soirées canapé."
-                >
-                    <div class="tvScreen"></div>
-                    <div class="tvStand"></div>
-                </div>
-
-                <div
-                    class="sofa object"
-                    data-title="Canapé"
-                    data-text="Un grand canapé confortable."
-                >
-                    <div class="sofaBack"></div>
-                    <div class="sofaSeat"></div>
-
-                    <div class="arm left"></div>
-                    <div class="arm right"></div>
-
-                    <div class="cushion one"></div>
-                    <div class="cushion two"></div>
-                    <div class="cushion three"></div>
-                </div>
-
-                <div
-                    class="table object"
-                    data-title="Table basse"
-                    data-text="Une petite table basse en bois."
-                >
-                    <div class="tableTop"></div>
-                    <div class="tableLeg a"></div>
-                    <div class="tableLeg b"></div>
-                </div>
-
-                <div
-                    class="plant object"
-                    data-title="Plante"
-                    data-text="Une jolie plante décorative."
-                >
-                    <div class="leaf"></div>
-                    <div class="leaf"></div>
-                    <div class="leaf"></div>
-                    <div class="leaf"></div>
-                    <div class="pot"></div>
-                </div>
-
-            </div>
+</div>
 
 
-            <!-- CHAMBRE -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
-            <div class="room bedroom" data-room="Chambre">
+<header>
 
-                <div class="roomLabel">CHAMBRE</div>
+    <div class="logo">
+        🏠 APPARTEMENT–3D
+    </div>
 
-                <div class="window two"></div>
+    <div class="roomName" id="roomName">
+        Salon
+    </div>
 
-                <div
-                    class="bed object"
-                    data-title="Lit"
-                    data-text="Un grand lit double bien confortable."
-                >
-                    <div class="headboard"></div>
-                    <div class="mattress"></div>
-                    <div class="blanket"></div>
-                    <div class="pillow one"></div>
-                    <div class="pillow two"></div>
-                </div>
-
-            </div>
+</header>
 
 
-            <!-- CUISINE -->
+<!-- =====================================================
+     MONDE
+===================================================== -->
 
-            <div class="room kitchen" data-room="Cuisine">
+<div id="world">
 
-                <div class="roomLabel">CUISINE</div>
+    <div class="room" id="room">
 
-                <div
-                    class="counter object"
-                    data-title="Cuisine"
-                    data-text="Une cuisine avec plusieurs rangements."
-                >
-                    <div class="counterTop"></div>
+        <div class="backWall"></div>
 
-                    <div class="cabinet">
-                        <div class="handle"></div>
-                    </div>
+        <div class="wallLeft"></div>
 
-                    <div class="cabinet">
-                        <div class="handle"></div>
-                    </div>
+        <div class="wallRight"></div>
 
-                    <div class="cabinet">
-                        <div class="handle"></div>
-                    </div>
+        <div class="ceiling"></div>
 
-                    <div class="cabinet">
-                        <div class="handle"></div>
-                    </div>
-                </div>
+        <div class="floor"></div>
 
-                <div
-                    class="fridge object"
-                    data-title="Réfrigérateur"
-                    data-text="Le frigo de l'appartement."
-                ></div>
+        <div class="window"></div>
 
-            </div>
+        <div class="picture one"></div>
+
+        <div class="picture two"></div>
 
 
-            <!-- SALLE DE BAIN -->
+        <!-- CANAPE -->
 
-            <div class="room bathroom" data-room="Salle de bain">
+        <div class="sofa">
 
-                <div class="roomLabel">SALLE DE BAIN</div>
+            <div class="sofaBack"></div>
 
-                <div
-                    class="bath object"
-                    data-title="Baignoire"
-                    data-text="Une grande baignoire avec eau bleue."
-                >
-                    <div class="water"></div>
-                </div>
+            <div class="sofaBase"></div>
+
+            <div class="cushion a"></div>
+
+            <div class="cushion b"></div>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="table">
+
+            <div class="tableTop"></div>
+
+            <div class="tableLeg a"></div>
+
+            <div class="tableLeg b"></div>
+
+        </div>
+
+
+        <!-- OBJETS TABLE -->
+
+        <div class="book"></div>
+
+        <div class="cup"></div>
+
+
+        <!-- TV -->
+
+        <div class="tv">
+
+            <div class="tvScreen"></div>
+
+            <div class="tvStand"></div>
+
+        </div>
+
+
+        <!-- LAMPE -->
+
+        <div class="lamp">
+
+            <div class="lampShade"></div>
+
+            <div class="lampBase"></div>
+
+        </div>
+
+
+        <!-- PLANTE -->
+
+        <div class="plant">
+
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+            <div class="leaf"></div>
+
+            <div class="pot"></div>
+
+        </div>
+
+
+        <!-- CHAT -->
+
+        <div class="cat" id="cat">
+
+            <div class="tail"></div>
+
+            <div class="catBody"></div>
+
+            <div class="catHead">
+
+                <div class="catEye a"></div>
+
+                <div class="catEye b"></div>
 
             </div>
 
@@ -941,49 +1068,62 @@ button{
 
     </div>
 
-    <div class="lightGlow"></div>
+</div>
 
 
-    <div class="controls">
+<!-- =====================================================
+     POPUP
+===================================================== -->
 
-        <button
-            class="control"
-            id="zoomIn"
-            aria-label="Zoom avant"
-        >＋</button>
+<div id="popup">
 
-        <button
-            class="control"
-            id="zoomOut"
-            aria-label="Zoom arrière"
-        >−</button>
+    <strong id="popupTitle">
+        Appartement
+    </strong>
 
-        <button
-            class="control"
-            id="night"
-            aria-label="Changer la lumière"
-        >☀️</button>
+    <span id="popupText">
+        Bienvenue chez toi.
+    </span>
 
-        <button
-            class="control"
-            id="reset"
-            aria-label="Réinitialiser"
-        >⌂</button>
+</div>
 
+
+<!-- =====================================================
+     HUD
+===================================================== -->
+
+<div class="hud">
+
+    <div class="hint" id="hint">
+        👆 Touche les objets · 🌙 Change l'ambiance
     </div>
 
+    <div class="actions">
 
-    <div id="popup">
+        <button
+            class="action"
+            onclick="toggleDay()"
+            title="Jour / nuit"
+        >
+            🌙
+        </button>
 
-        <div id="popupTitle"></div>
+        <button
+            class="action"
+            onclick="moveCat()"
+            title="Chat"
+        >
+            🐈
+        </button>
 
-        <div id="popupText"></div>
+        <button
+            class="action"
+            onclick="chaos()"
+            title="Chaos"
+        >
+            🌀
+        </button>
 
-    </div>
-
-
-    <div class="help">
-        👆 Touche les meubles · 🌙 Change l'ambiance avec ☀️
     </div>
 
 </div>
@@ -991,12 +1131,15 @@ button{
 
 <script>
 
-const app = document.getElementById("app");
+/* =========================================================
+   VARIABLES
+========================================================= */
 
-const scene = document.querySelector(".scene");
+const world =
+    document.getElementById("world");
 
-const roomName =
-    document.getElementById("roomName");
+const room =
+    document.getElementById("room");
 
 const popup =
     document.getElementById("popup");
@@ -1007,227 +1150,421 @@ const popupTitle =
 const popupText =
     document.getElementById("popupText");
 
-let scale = 1;
+const cat =
+    document.getElementById("cat");
+
+let isDay = false;
+let isChaos = false;
+let catPosition = 0;
 
 
-/* =========================
-   OBJETS
-========================= */
+/* =========================================================
+   DEMARRAGE
+========================================================= */
 
-document
-.querySelectorAll(".object")
-.forEach(object => {
+function startGame(){
 
-    object.addEventListener(
-        "click",
-        function(event){
+    document
+        .getElementById("intro")
+        .classList.add("hidden");
 
-            event.stopPropagation();
-
-            const title =
-                this.dataset.title;
-
-            const text =
-                this.dataset.text;
-
-            popupTitle.textContent =
-                title;
-
-            popupText.textContent =
-                text;
-
-            popup.classList.add("show");
-
-            clearTimeout(window.popupTimer);
-
-            window.popupTimer =
-                setTimeout(() => {
-
-                    popup.classList.remove("show");
-
-                },3000);
-
-        }
+    showPopup(
+        "Bienvenue 👋",
+        "Explore ton appartement. Touche les objets et essaie le bouton 🌀."
     );
-
-});
-
-
-/* =========================
-   PIECES
-========================= */
-
-document
-.querySelectorAll(".room")
-.forEach(room => {
-
-    room.addEventListener(
-        "click",
-        function(){
-
-            roomName.textContent =
-                this.dataset.room;
-
-        }
-    );
-
-});
-
-
-/* =========================
-   NUIT
-========================= */
-
-document
-.getElementById("night")
-.addEventListener(
-    "click",
-    function(){
-
-        app.classList.toggle("night");
-
-        if(
-            app.classList.contains("night")
-        ){
-
-            this.textContent = "🌙";
-
-        }else{
-
-            this.textContent = "☀️";
-
-        }
-
-    }
-);
-
-
-/* =========================
-   ZOOM
-========================= */
-
-function updateZoom(){
-
-    let mobile =
-        window.innerWidth <= 700;
-
-    let base =
-        mobile ? .72 : 1;
-
-    if(window.innerHeight <= 700){
-        base = .58;
-    }
-
-    scene.style.transform =
-        `
-        translate(-50%,-50%)
-        scale(${base * scale})
-        perspective(1100px)
-        rotateX(58deg)
-        rotateZ(-1deg)
-        `;
 
 }
 
 
-document
-.getElementById("zoomIn")
-.addEventListener(
-    "click",
-    () => {
+/* =========================================================
+   POPUP
+========================================================= */
 
-        scale += .12;
+function showPopup(title,text){
 
-        if(scale > 1.7)
-            scale = 1.7;
+    popupTitle.textContent = title;
 
-        updateZoom();
+    popupText.textContent = text;
 
-    }
-);
+    popup.classList.add("show");
 
+    clearTimeout(window.popupTimer);
 
-document
-.getElementById("zoomOut")
-.addEventListener(
-    "click",
-    () => {
+    window.popupTimer =
+        setTimeout(function(){
 
-        scale -= .12;
+            popup.classList.remove("show");
 
-        if(scale < .55)
-            scale = .55;
+        },3500);
 
-        updateZoom();
-
-    }
-);
+}
 
 
-/* =========================
-   RESET
-========================= */
+/* =========================================================
+   JOUR / NUIT
+========================================================= */
 
-document
-.getElementById("reset")
-.addEventListener(
-    "click",
-    () => {
+function toggleDay(){
 
-        scale = 1;
+    isDay = !isDay;
 
-        app.classList.remove("night");
+    if(isDay){
 
-        document
-        .getElementById("night")
-        .textContent = "☀️";
+        world.classList.add("day");
 
-        roomName.textContent =
-            "Vue générale";
+        showPopup(
+            "☀️ Mode journée",
+            "Les volets sont ouverts. Enfin... presque."
+        );
 
-        popup.classList.remove("show");
+    }else{
 
-        updateZoom();
+        world.classList.remove("day");
+
+        showPopup(
+            "🌙 Mode nuit",
+            "Ambiance beaucoup plus suspecte."
+        );
 
     }
-);
+
+}
 
 
-/* =========================
-   RESIZE
-========================= */
+/* =========================================================
+   CHAT
+========================================================= */
 
-window.addEventListener(
-    "resize",
-    updateZoom
-);
+function moveCat(){
 
-updateZoom();
+    catPosition++;
+
+    if(catPosition > 3){
+
+        catPosition = 0;
+
+    }
+
+    const positions = [
+
+        ["280px","190px"],
+        ["420px","160px"],
+        ["510px","230px"],
+        ["350px","120px"]
+
+    ];
+
+    cat.style.left =
+        positions[catPosition][0];
+
+    cat.style.bottom =
+        positions[catPosition][1];
+
+    const messages = [
+
+        "Le chat vient de changer de place. 🐈",
+
+        "Il cherche probablement quelque chose.",
+
+        "Il te juge silencieusement.",
+
+        "Il a décidé que cet appartement était le sien."
+
+    ];
+
+    showPopup(
+        "🐈 Peka",
+        messages[catPosition]
+    );
+
+}
 
 
-/* =========================
-   PETITE ANIMATION
-========================= */
+/* =========================================================
+   CHAOS
+========================================================= */
 
-let angle = 0;
+function chaos(){
 
-setInterval(() => {
+    isChaos = !isChaos;
 
-    angle += .25;
+    if(isChaos){
 
-    document
-    .querySelectorAll(".leaf")
-    .forEach((leaf,index) => {
+        document.body.classList.add("chaos");
 
-        const direction =
-            index % 2 === 0 ? 1 : -1;
+        showPopup(
+            "🌀 MODE CHAOS",
+            "Personne ne sait pourquoi. Mais maintenant tout bouge."
+        );
 
-        leaf.style.transform +=
-            ` rotate(${Math.sin(angle / 8) * direction}deg)`;
+    }else{
+
+        document.body.classList.remove("chaos");
+
+        showPopup(
+            "😌 Retour au calme",
+            "L'appartement a miraculeusement survécu."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   OBJETS CLIQUABLES
+========================================================= */
+
+document
+    .querySelector(".sofa")
+    .addEventListener("click",function(){
+
+        showPopup(
+            "🛋️ Canapé",
+            "Confort : 97%. Productivité : 0%."
+        );
 
     });
 
-},100);
+
+document
+    .querySelector(".tv")
+    .addEventListener("click",function(){
+
+        showPopup(
+            "📺 Télévision",
+            "Elle ne fonctionne pas. Comme dans la vraie vie."
+        );
+
+    });
+
+
+document
+    .querySelector(".lamp")
+    .addEventListener("click",function(){
+
+        showPopup(
+            "💡 Lampe",
+            "Elle éclaire beaucoup trop pour une lampe aussi petite."
+        );
+
+    });
+
+
+document
+    .querySelector(".plant")
+    .addEventListener("click",function(){
+
+        showPopup(
+            "🌱 Plante",
+            "Elle a survécu jusqu'ici. Respect."
+        );
+
+    });
+
+
+document
+    .querySelector(".table")
+    .addEventListener("click",function(){
+
+        showPopup(
+            "☕ Table",
+            "Objet officiellement destiné à poser des trucs dessus."
+        );
+
+    });
+
+
+document
+    .querySelector(".window")
+    .addEventListener("click",function(){
+
+        showPopup(
+            "🪟 Fenêtre",
+            "Dehors : probablement encore plus cher."
+        );
+
+    });
+
+
+document
+    .querySelector(".picture.one")
+    .addEventListener("click",function(){
+
+        showPopup(
+            "🖼️ Tableau",
+            "Personne ne sait ce qu'il représente."
+        );
+
+    });
+
+
+document
+    .querySelector(".picture.two")
+    .addEventListener("click",function(){
+
+        showPopup(
+            "🖼️ Deuxième tableau",
+            "Oui, celui-là aussi est mystérieux."
+        );
+
+    });
+
+
+/* =========================================================
+   MOUVEMENT 3D
+========================================================= */
+
+let startX = null;
+let startY = null;
+
+world.addEventListener(
+    "pointerdown",
+    function(e){
+
+        startX = e.clientX;
+        startY = e.clientY;
+
+    }
+);
+
+
+world.addEventListener(
+    "pointermove",
+    function(e){
+
+        if(startX === null) return;
+
+        const dx =
+            e.clientX - startX;
+
+        const dy =
+            e.clientY - startY;
+
+        if(Math.abs(dx) < 5 &&
+           Math.abs(dy) < 5){
+
+            return;
+
+        }
+
+        const rotateY =
+            Math.max(
+                -12,
+                Math.min(12,dx / 35)
+            );
+
+        const rotateX =
+            Math.max(
+                2,
+                Math.min(15,8 - dy / 50)
+            );
+
+        room.style.transform =
+            `
+            translate(-50%,-50%)
+            rotateX(${rotateX}deg)
+            rotateY(${rotateY}deg)
+            `;
+
+    }
+);
+
+
+world.addEventListener(
+    "pointerup",
+    function(){
+
+        startX = null;
+        startY = null;
+
+    }
+);
+
+
+/* =========================================================
+   DOUBLE TAP
+========================================================= */
+
+let lastTap = 0;
+
+world.addEventListener(
+    "pointerup",
+    function(){
+
+        const now =
+            Date.now();
+
+        if(now-lastTap < 300){
+
+            chaos();
+
+        }
+
+        lastTap = now;
+
+    }
+);
+
+
+/* =========================================================
+   HORLOGE SECRETE
+========================================================= */
+
+setInterval(function(){
+
+    const now = new Date();
+
+    const hour =
+        String(now.getHours()).padStart(2,"0");
+
+    const minute =
+        String(now.getMinutes()).padStart(2,"0");
+
+    document.title =
+        "Appartement–3D · " +
+        hour +
+        ":" +
+        minute;
+
+},1000);
+
+
+/* =========================================================
+   MESSAGE RANDOM
+========================================================= */
+
+setTimeout(function(){
+
+    const messages = [
+
+        ["👀", "Tu savais qu'on pouvait toucher les meubles ?"],
+
+        ["🤨", "Pourquoi tu regardes ton appartement comme ça ?"],
+
+        ["🐈", "Le chat vient de te voir."],
+
+        ["☕", "Tu devrais probablement prendre un café."],
+
+        ["🌀", "Le bouton chaos est dangereux."],
+
+        ["🏠", "Bienvenue chez toi."]
+
+    ];
+
+    const random =
+        messages[
+            Math.floor(
+                Math.random()*messages.length
+            )
+        ];
+
+    showPopup(
+        random[0],
+        random[1]
+    );
+
+},5000);
 
 </script>
 
