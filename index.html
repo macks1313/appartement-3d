@@ -2,1192 +2,1292 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Appartement 03</title>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no">
+
+<title>Kitchen Timer</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+:root {
+    --bg: #111315;
+    --panel: #1b1e21;
+    --panel2: #24282c;
+    --text: #ffffff;
+    --muted: #9ca3aa;
+    --accent: #ff9f1c;
+    --green: #36d399;
+    --red: #ff4d4d;
+    --blue: #4da3ff;
+    --border: #30353a;
 }
 
-:root{
-    --cream:#eee9dc;
-    --dark:#18201d;
-    --wood:#76543e;
-    --green:#3f5b4d;
-    --gold:#c79b55;
-    --text:#17201d;
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    font-family:Arial,Helvetica,sans-serif;
-    background:#101311;
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    min-height: 100vh;
 }
 
-body{
-    color:var(--text);
+button {
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    touch-action: manipulation;
 }
 
-/* =========================
-   APP
-========================= */
+header {
+    padding: 18px 20px;
+    background: #0c0e10;
+    border-bottom: 1px solid var(--border);
 
-#app{
-    position:fixed;
-    inset:0;
-    overflow:hidden;
-    background:#101311;
-}
-
-#topbar{
-    position:absolute;
-    z-index:100;
-    top:20px;
-    left:20px;
-    right:20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    pointer-events:none;
-}
-
-.pill{
-    pointer-events:auto;
-    border:0;
-    background:rgba(244,241,230,.96);
-    color:#17201d;
-    border-radius:50px;
-    padding:16px 25px;
-    font-size:18px;
-    font-weight:900;
-    letter-spacing:.5px;
-    box-shadow:0 8px 30px rgba(0,0,0,.2);
-    backdrop-filter:blur(12px);
-}
-
-#controls{
-    display:flex;
-    gap:8px;
-}
-
-.control{
-    width:54px;
-    height:54px;
-    padding:0;
-    display:grid;
-    place-items:center;
-    font-size:25px;
-    cursor:pointer;
-}
-
-.control.active{
-    background:#192a24;
-    color:white;
-}
-
-/* =========================
-   ROOM
-========================= */
-
-#viewport{
-    position:absolute;
-    inset:0;
-    overflow:hidden;
-    touch-action:none;
-}
-
-#world{
-    position:absolute;
-    width:1200px;
-    height:850px;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%) scale(1);
-    transform-origin:center center;
-    transition:transform .12s ease-out;
-}
-
-/* light atmosphere */
-
-#room{
-    position:absolute;
-    inset:0;
-    overflow:hidden;
-    background:
-        radial-gradient(circle at 72% 27%,rgba(255,211,132,.85),transparent 19%),
-        linear-gradient(#b8c7c4 0%,#d7c7b0 45%,#d19d72 100%);
-}
-
-#room.night{
-    background:
-        radial-gradient(circle at 70% 28%,rgba(255,180,70,.15),transparent 20%),
-        linear-gradient(#111d2b,#292b31 45%,#241d1b);
-}
-
-#room.sunset{
-    background:
-        radial-gradient(circle at 70% 30%,#ffd17a,transparent 18%),
-        linear-gradient(#8b7582,#d69770 42%,#8d5748 100%);
-}
-
-/* wall */
-
-.wall{
-    position:absolute;
-    left:0;
-    right:0;
-    top:0;
-    height:570px;
-    background:
-        linear-gradient(90deg,rgba(255,255,255,.18),transparent 30%,rgba(0,0,0,.04)),
-        #d9c5a9;
-}
-
-#room.night .wall{
-    background:#30302d;
-}
-
-/* floor */
-
-.floor{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    height:310px;
-    background:
-        repeating-linear-gradient(
-            90deg,
-            transparent 0 118px,
-            rgba(83,53,37,.18) 119px 121px
-        ),
-        repeating-linear-gradient(
-            0deg,
-            #a87552 0 76px,
-            #8e634a 77px 79px
-        );
-    transform:perspective(500px) rotateX(35deg);
-    transform-origin:bottom;
-}
-
-#room.night .floor{
-    background:
-        repeating-linear-gradient(90deg,transparent 0 118px,rgba(0,0,0,.2) 119px 121px),
-        repeating-linear-gradient(0deg,#604936 0 76px,#503b30 77px 79px);
-}
-
-/* =========================
-   WINDOW
-========================= */
-
-.window{
-    position:absolute;
-    left:255px;
-    top:105px;
-    width:690px;
-    height:390px;
-    background:
-        linear-gradient(to bottom,
-        #9ac6d5 0%,
-        #a7c8c8 52%,
-        #dfaa7b 100%);
-    border:18px solid #5b3c2d;
-    box-shadow:0 15px 40px rgba(0,0,0,.22);
-}
-
-.window:before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:
-        linear-gradient(150deg,transparent 48%,rgba(255,255,255,.12) 49%,transparent 51%);
-}
-
-#room.night .window{
-    background:
-        radial-gradient(circle at 75% 22%,#eee3a1 0 7px,transparent 8px),
-        linear-gradient(#172638,#263847 65%,#4a3532);
-}
-
-.window-frame-v{
-    position:absolute;
-    left:50%;
-    top:0;
-    bottom:0;
-    width:14px;
-    background:#5b3c2d;
-    transform:translateX(-50%);
-}
-
-.window-frame-h{
-    position:absolute;
-    left:0;
-    right:0;
-    top:55%;
-    height:13px;
-    background:#5b3c2d;
-}
-
-/* mountains */
-
-.mountain{
-    position:absolute;
-    bottom:0;
-    width:0;
-    height:0;
-    border-left:120px solid transparent;
-    border-right:120px solid transparent;
-    border-bottom:180px solid #607879;
-}
-
-.m1{left:40px}
-.m2{left:220px;border-bottom-color:#4c696d;border-left-width:150px;border-right-width:150px}
-.m3{left:420px;border-bottom-color:#718080}
-.m4{left:570px;border-bottom-color:#52696a;border-left-width:170px;border-right-width:170px}
-
-.water{
-    position:absolute;
-    bottom:0;
-    left:0;
-    right:0;
-    height:85px;
-    background:linear-gradient(#809da0,#68878c);
-}
-
-/* =========================
-   DECORATION
-========================= */
-
-.rug{
-    position:absolute;
-    left:370px;
-    bottom:78px;
-    width:460px;
-    height:220px;
-    background:
-        repeating-linear-gradient(
-            45deg,
-            #8b5d48 0 15px,
-            #bd906b 15px 30px,
-            #725b4b 30px 42px
-        );
-    transform:skew(-5deg);
-    border-radius:6px;
-    box-shadow:0 20px 25px rgba(0,0,0,.2);
-}
-
-.sofa{
-    position:absolute;
-    left:385px;
-    top:455px;
-    width:475px;
-    height:180px;
-    background:#eee7d6;
-    border-radius:28px 28px 18px 18px;
-    box-shadow:0 20px 35px rgba(0,0,0,.2);
-}
-
-.sofa:before{
-    content:"";
-    position:absolute;
-    left:20px;
-    right:20px;
-    top:-50px;
-    height:105px;
-    background:#eee7d6;
-    border-radius:35px 35px 10px 10px;
-}
-
-.cushion{
-    position:absolute;
-    width:105px;
-    height:75px;
-    border-radius:18px;
-    top:-23px;
-    z-index:3;
-}
-
-.c1{left:45px;background:#536e60}
-.c2{left:185px;background:#b86f50}
-.c3{right:50px;background:#d6b47d}
-
-.blanket{
-    position:absolute;
-    right:45px;
-    top:510px;
-    width:130px;
-    height:170px;
-    background:
-        repeating-linear-gradient(45deg,#735b48 0 12px,#94735a 12px 24px);
-    transform:rotate(12deg);
-    border-radius:20px;
-    z-index:5;
-}
-
-/* table */
-
-.table{
-    position:absolute;
-    left:510px;
-    top:585px;
-    width:270px;
-    height:120px;
-    background:#795237;
-    border-radius:18px;
-    z-index:10;
-    box-shadow:0 18px 30px rgba(0,0,0,.28);
-}
-
-.table:before,
-.table:after{
-    content:"";
-    position:absolute;
-    width:20px;
-    height:145px;
-    background:#5a3d2d;
-    top:75px;
-}
-
-.table:before{left:35px}
-.table:after{right:35px}
-
-/* coffee */
-
-.cup{
-    position:absolute;
-    left:55px;
-    top:25px;
-    width:42px;
-    height:35px;
-    border-radius:5px 5px 15px 15px;
-    background:#eee5d3;
-    cursor:pointer;
-}
-
-.cup:after{
-    content:"";
-    position:absolute;
-    right:-15px;
-    top:7px;
-    width:17px;
-    height:18px;
-    border:5px solid #eee5d3;
-    border-left:0;
-    border-radius:0 12px 12px 0;
-}
-
-/* book stack */
-
-.books{
-    position:absolute;
-    right:38px;
-    top:28px;
-    width:65px;
-    height:60px;
-    cursor:pointer;
-}
-
-.book{
-    position:absolute;
-    width:70px;
-    height:18px;
-    border-radius:3px;
-    color:white;
-    font-size:8px;
-    font-weight:bold;
-    padding:4px;
-}
-
-.b1{bottom:0;background:#344e45}
-.b2{bottom:17px;background:#9b634c;transform:rotate(-3deg)}
-.b3{bottom:34px;background:#c59c5e;transform:rotate(2deg)}
-
-/* plant */
-
-.plant{
-    position:absolute;
-    left:65px;
-    top:445px;
-    width:120px;
-    height:190px;
-    z-index:8;
-}
-
-.pot{
-    position:absolute;
-    bottom:0;
-    left:30px;
-    width:65px;
-    height:70px;
-    background:#b77d50;
-    clip-path:polygon(10% 0,90% 0,75% 100%,25% 100%);
-}
-
-.leaf{
-    position:absolute;
-    width:70px;
-    height:105px;
-    background:#3f6550;
-    border-radius:100% 0 100% 0;
-    transform-origin:bottom;
-}
-
-.l1{left:45px;bottom:55px;transform:rotate(-30deg)}
-.l2{left:65px;bottom:55px;transform:rotate(25deg)}
-.l3{left:10px;bottom:60px;transform:rotate(-60deg)}
-.l4{left:35px;bottom:75px;transform:rotate(10deg)}
-
-/* lamp */
-
-.lamp{
-    position:absolute;
-    right:90px;
-    top:330px;
-    width:100px;
-    height:180px;
-    z-index:20;
-    cursor:pointer;
-}
-
-.lamp-shade{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100px;
-    height:55px;
-    background:#343d32;
-    clip-path:polygon(20% 0,80% 0,100% 100%,0 100%);
-}
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-.lamp-stem{
-    position:absolute;
-    top:55px;
-    left:47px;
-    width:7px;
-    height:100px;
-    background:#4d4036;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
-.lamp-light{
-    position:absolute;
-    top:-45px;
-    left:-60px;
-    width:220px;
-    height:220px;
-    background:radial-gradient(circle,rgba(255,213,106,.65),transparent 65%);
-    opacity:0;
-    pointer-events:none;
+.logo {
+    font-size: 22px;
+    font-weight: 800;
 }
 
-.lamp.on .lamp-light{
-    opacity:1;
+.logo span {
+    color: var(--accent);
 }
 
-/* =========================
-   CAT
-========================= */
-
-.cat{
-    position:absolute;
-    left:760px;
-    top:470px;
-    width:145px;
-    height:125px;
-    z-index:30;
-    cursor:pointer;
-    transition:transform .35s;
-}
-
-.cat:hover{
-    transform:translateY(-8px);
-}
-
-.cat-body{
-    position:absolute;
-    left:20px;
-    bottom:5px;
-    width:110px;
-    height:80px;
-    background:#413b39;
-    border-radius:55% 55% 45% 45%;
-}
-
-.cat-head{
-    position:absolute;
-    left:18px;
-    top:0;
-    width:85px;
-    height:80px;
-    background:#4b4441;
-    border-radius:50%;
-}
-
-.ear{
-    position:absolute;
-    top:-20px;
-    width:34px;
-    height:42px;
-    background:#4b4441;
-    clip-path:polygon(50% 0,100% 100%,0 100%);
-}
-
-.ear.left{left:4px}
-.ear.right{right:4px}
-
-.eye{
-    position:absolute;
-    top:31px;
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:#e8bd51;
-}
-
-.eye.left{left:22px}
-.eye.right{right:22px}
-
-.nose{
-    position:absolute;
-    top:49px;
-    left:39px;
-    width:10px;
-    height:8px;
-    border-radius:50%;
-    background:#d88d86;
+.clock {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--muted);
 }
 
-.tail{
-    position:absolute;
-    right:-38px;
-    bottom:25px;
-    width:75px;
-    height:100px;
-    border:17px solid #413b39;
-    border-left:0;
-    border-radius:0 70px 70px 0;
-    transform:rotate(-15deg);
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
 }
 
-.cat.sleep .eye{
-    height:2px;
-    top:36px;
-    border-radius:0;
+h1 {
+    margin: 5px 0 5px;
+    font-size: 30px;
 }
 
-.cat.happy{
-    animation:catBounce .45s ease;
+.subtitle {
+    color: var(--muted);
+    margin-bottom: 22px;
 }
 
-@keyframes catBounce{
-    50%{transform:translateY(-25px) rotate(-3deg)}
-}
-
-/* =========================
-   WALL ART
-========================= */
-
-.art{
-    position:absolute;
-    cursor:pointer;
-    transition:transform .25s;
-}
-
-.art:hover{
-    transform:scale(1.06) rotate(-1deg);
-}
-
-.art-frame{
-    width:125px;
-    height:150px;
-    background:#704e3b;
-    padding:9px;
-    box-shadow:0 12px 20px rgba(0,0,0,.18);
-}
+/* GRID */
 
-.art-inner{
-    width:100%;
-    height:100%;
-    background:
-        radial-gradient(circle at 50% 70%,#d78a61 0 16%,transparent 17%),
-        linear-gradient(150deg,#596e69,#e0a477);
-    position:relative;
-    overflow:hidden;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
 }
 
-.art-inner:after{
-    content:"BONHEUR";
-    position:absolute;
-    bottom:12px;
-    left:0;
-    right:0;
-    text-align:center;
-    font-family:Georgia,serif;
-    font-weight:bold;
-    color:#51382e;
-    font-size:12px;
+@media(max-width: 700px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
 }
 
-.art1{left:950px;top:160px}
-.art2{left:95px;top:180px;transform:rotate(-4deg)}
+/* CARDS */
 
-/* shelf */
-
-.shelf{
-    position:absolute;
-    left:40px;
-    top:310px;
-    width:190px;
-    height:185px;
-    z-index:15;
-}
-
-.shelf-board{
-    position:absolute;
-    left:0;
-    width:190px;
-    height:14px;
-    background:#684936;
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 18px;
 }
-
-.sb1{top:0}
-.sb2{top:72px}
-.sb3{top:145px}
 
-.book-small{
-    position:absolute;
-    bottom:14px;
-    width:27px;
-    height:65px;
-    border-radius:2px 2px 0 0;
+.card-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 14px;
 }
 
-.bs1{left:12px;background:#9b634c}
-.bs2{left:42px;height:75px;background:#b78c4e}
-.bs3{left:73px;height:58px;background:#496254}
-.bs4{left:105px;height:78px;background:#805c55}
-.bs5{left:140px;height:68px;background:#b99d6b}
-
-/* =========================
-   UI
-========================= */
-
-#hint{
-    position:absolute;
-    z-index:90;
-    bottom:24px;
-    left:50%;
-    transform:translateX(-50%);
-    width:min(90%,760px);
-    background:rgba(244,241,230,.94);
-    border-radius:28px;
-    padding:16px 22px;
-    text-align:center;
-    font-weight:800;
-    font-size:16px;
-    box-shadow:0 10px 30px rgba(0,0,0,.18);
+.card-title small {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 3px;
+    font-weight: 500;
 }
 
-#toast{
-    position:absolute;
-    z-index:200;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%) scale(.8);
-    width:min(88%,420px);
-    padding:28px;
-    border-radius:25px;
-    background:rgba(24,32,29,.95);
-    color:white;
-    box-shadow:0 25px 70px rgba(0,0,0,.4);
-    opacity:0;
-    pointer-events:none;
-    transition:.25s;
-    text-align:center;
-}
+/* BIG TIMER */
 
-#toast.show{
-    opacity:1;
-    transform:translate(-50%,-50%) scale(1);
+.main-timer {
+    text-align: center;
+    padding: 25px;
 }
 
-#toast h2{
-    margin:0 0 10px;
-    font-size:24px;
+.timer-name {
+    font-size: 20px;
+    font-weight: 800;
 }
 
-#toast p{
-    margin:0;
-    line-height:1.5;
-    color:#d7ddd8;
+.timer-display {
+    font-size: 70px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin: 10px 0 18px;
 }
 
-.close{
-    position:absolute;
-    top:12px;
-    right:15px;
-    border:0;
-    background:none;
-    color:white;
-    font-size:25px;
+.timer-display.finished {
+    color: var(--red);
+    animation: pulse 0.8s infinite alternate;
 }
-
-/* mobile */
 
-@media(max-width:700px){
-    #topbar{
-        top:16px;
-        left:14px;
-        right:14px;
+@keyframes pulse {
+    from {
+        transform: scale(1);
     }
 
-    .pill{
-        padding:14px 18px;
-        font-size:15px;
+    to {
+        transform: scale(1.06);
     }
+}
 
-    .control{
-        width:45px;
-        height:45px;
-        font-size:20px;
-    }
+.big-button {
+    width: 100%;
+    min-height: 65px;
+    border-radius: 14px;
+    background: var(--accent);
+    color: #111;
+    font-size: 21px;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
 
-    #controls{
-        gap:5px;
-    }
+.big-button:active {
+    transform: scale(.98);
+}
 
-    #hint{
-        bottom:18px;
-        font-size:14px;
-        padding:14px;
-    }
+.secondary-button {
+    background: var(--panel2);
+    color: white;
+    border: 1px solid var(--border);
+}
+
+/* QUICK BUTTONS */
+
+.quick-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+}
+
+.quick-button {
+    min-height: 58px;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.quick-button:active {
+    background: var(--accent);
+    color: black;
+}
+
+/* STEAK */
+
+.steak-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.steak-button {
+    min-height: 90px;
+    border-radius: 14px;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    color: white;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.steak-button span {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.steak-button:active {
+    background: var(--accent);
+    color: black;
+}
+
+.steak-button:active span {
+    color: black;
+}
+
+/* ACTIVE TIMERS */
+
+.timer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.timer-row {
+    background: var(--panel2);
+    border-radius: 14px;
+    padding: 14px;
+
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 10px;
+}
+
+.timer-row.finished {
+    background: #4b1515;
+    border: 2px solid var(--red);
+}
+
+.timer-row-name {
+    font-weight: 800;
+}
+
+.timer-row-time {
+    font-size: 27px;
+    font-weight: 900;
+}
+
+.timer-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.small-btn {
+    min-width: 48px;
+    min-height: 45px;
+    border-radius: 10px;
+    background: #343a40;
+    color: white;
+    font-weight: 800;
+}
+
+.small-btn.red {
+    background: var(--red);
+}
+
+.small-btn.green {
+    background: var(--green);
+    color: #07130d;
+}
+
+/* INPUT */
+
+.input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+input,
+select {
+    width: 100%;
+    background: #101214;
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 16px;
+    outline: none;
+}
+
+.add-button {
+    background: var(--green);
+    color: #07130d;
+    border-radius: 10px;
+    padding: 0 18px;
+    font-weight: 900;
+}
+
+/* NOTES */
+
+textarea {
+    width: 100%;
+    min-height: 130px;
+    resize: vertical;
+    background: #101214;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: white;
+    padding: 14px;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+/* CHECKLIST */
+
+.checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.check {
+    background: var(--panel2);
+    padding: 14px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+}
+
+.check input {
+    width: 25px;
+    height: 25px;
+}
+
+.check.done {
+    opacity: .5;
+    text-decoration: line-through;
+}
+
+/* ALERT */
+
+#alarmOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(120,0,0,.94);
+
+    display: none;
+    z-index: 100;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    padding: 25px;
+}
+
+#alarmOverlay.active {
+    display: flex;
+}
+
+.alarm-box {
+    width: 100%;
+    max-width: 600px;
+}
+
+.alarm-icon {
+    font-size: 90px;
+}
+
+.alarm-title {
+    font-size: 50px;
+    font-weight: 1000;
+}
+
+.alarm-name {
+    font-size: 30px;
+    margin: 15px 0 30px;
+}
+
+.stop-alarm {
+    width: 100%;
+    min-height: 80px;
+    border-radius: 18px;
+    background: white;
+    color: #900;
+    font-size: 25px;
+    font-weight: 1000;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    color: var(--muted);
+    padding: 30px;
+    font-size: 13px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="app">
+<header>
+    <div class="logo">KITCHEN<span>OS</span></div>
+    <div class="clock" id="clock">--:--</div>
+</header>
 
-    <div id="topbar">
-        <button class="pill" onclick="showInfo('Appartement 03','Bienvenue chez toi. Explore la pièce, touche les objets et change complètement l’ambiance.')">
-            🏠 APPARTEMENT 03
-        </button>
+<main>
 
-        <div id="controls">
-            <button class="pill control active" id="dayBtn" onclick="setMood('day')">☀️</button>
-            <button class="pill control" onclick="setMood('sunset')">🌅</button>
-            <button class="pill control" onclick="setMood('night')">🌙</button>
-            <button class="pill control" onclick="resetCamera()">🎥</button>
-        </div>
+    <h1>Poste cuisine</h1>
+    <div class="subtitle">
+        Minuteurs, cuissons et outils rapides
     </div>
 
-    <div id="viewport">
+    <div class="grid">
 
-        <div id="world">
+        <!-- FRITES -->
 
-            <div id="room">
+        <section class="card main-timer">
 
-                <div class="wall"></div>
+            <div class="timer-name">
+                🍟 Frites
+            </div>
 
-                <div class="window">
-                    <div class="mountain m1"></div>
-                    <div class="mountain m2"></div>
-                    <div class="mountain m3"></div>
-                    <div class="mountain m4"></div>
-                    <div class="water"></div>
-                    <div class="window-frame-v"></div>
-                    <div class="window-frame-h"></div>
-                </div>
+            <div class="timer-display" id="friesDisplay">
+                03:00
+            </div>
 
-                <div class="art art1" onclick="showInfo('Vue sur le lac','Une grande fenêtre ouverte sur les montagnes. Clique sur les modes ☀️ 🌅 🌙 pour changer la lumière.')">
-                    <div class="art-frame">
-                        <div class="art-inner"></div>
-                    </div>
-                </div>
+            <button class="big-button" onclick="startFries()">
+                ▶ DÉMARRER 3:00
+            </button>
 
-                <div class="art art2" onclick="showInfo('Souvenir','Quelques photos et souvenirs donnent à l’appartement son caractère.')">
-                    <div class="art-frame">
-                        <div class="art-inner"></div>
-                    </div>
-                </div>
+            <button class="big-button secondary-button"
+                    onclick="resetFries()">
+                ↻ REMETTRE À ZÉRO
+            </button>
 
-                <div class="shelf">
-                    <div class="shelf-board sb1"></div>
-                    <div class="shelf-board sb2"></div>
-                    <div class="shelf-board sb3"></div>
+        </section>
 
-                    <div class="book-small bs1"></div>
-                    <div class="book-small bs2"></div>
-                    <div class="book-small bs3"></div>
-                    <div class="book-small bs4"></div>
-                    <div class="book-small bs5"></div>
-                </div>
 
-                <div class="plant">
-                    <div class="leaf l1"></div>
-                    <div class="leaf l2"></div>
-                    <div class="leaf l3"></div>
-                    <div class="leaf l4"></div>
-                    <div class="pot"></div>
-                </div>
+        <!-- STEAK -->
 
-                <div class="sofa">
-                    <div class="cushion c1"></div>
-                    <div class="cushion c2"></div>
-                    <div class="cushion c3"></div>
-                </div>
+        <section class="card">
 
-                <div class="blanket"></div>
+            <div class="card-title">
+                🥩 Steak haché
+                <small>
+                    Choisir la cuisson
+                </small>
+            </div>
 
-                <div class="rug"></div>
+            <div class="steak-grid">
 
-                <div class="table">
+                <button class="steak-button"
+                        onclick="startSteak('Bleu', 120)">
+                    🔵 Bleu
+                    <span>2:00</span>
+                </button>
 
-                    <div class="cup"
-                         onclick="showInfo('Café','Un café fraîchement préparé. ☕')">
-                    </div>
+                <button class="steak-button"
+                        onclick="startSteak('Saignant', 180)">
+                    🔴 Saignant
+                    <span>3:00</span>
+                </button>
 
-                    <div class="books"
-                         onclick="showInfo('Livres','Voyage, cuisine, photographie… Quelques livres traînent sur la table.')">
-                        <div class="book b1">VOYAGES</div>
-                        <div class="book b2">CUISINE</div>
-                        <div class="book b3">DESIGN</div>
-                    </div>
+                <button class="steak-button"
+                        onclick="startSteak('À point', 240)">
+                    🟠 À point
+                    <span>4:00</span>
+                </button>
 
-                </div>
-
-                <div class="lamp"
-                     onclick="toggleLamp()">
-                    <div class="lamp-light"></div>
-                    <div class="lamp-shade"></div>
-                    <div class="lamp-stem"></div>
-                </div>
-
-                <div class="cat"
-                     id="cat"
-                     onclick="catInteraction()">
-
-                    <div class="tail"></div>
-
-                    <div class="cat-body"></div>
-
-                    <div class="cat-head">
-                        <div class="ear left"></div>
-                        <div class="ear right"></div>
-                        <div class="eye left"></div>
-                        <div class="eye right"></div>
-                        <div class="nose"></div>
-                    </div>
-
-                </div>
-
-                <div class="floor"></div>
+                <button class="steak-button"
+                        onclick="startSteak('Bien cuit', 300)">
+                    🟤 Bien cuit
+                    <span>5:00</span>
+                </button>
 
             </div>
 
+        </section>
+
+
+        <!-- MINUTEURS RAPIDES -->
+
+        <section class="card">
+
+            <div class="card-title">
+                ⏱ Minuteurs rapides
+            </div>
+
+            <div class="quick-grid">
+
+                <button class="quick-button"
+                        onclick="addTimer(30)">
+                    30 sec
+                </button>
+
+                <button class="quick-button"
+                        onclick="addTimer(60)">
+                    1 min
+                </button>
+
+                <button class="quick-button"
+                        onclick="addTimer(120)">
+                    2 min
+                </button>
+
+                <button class="quick-button"
+                        onclick="addTimer(180)">
+                    3 min
+                </button>
+
+                <button class="quick-button"
+                        onclick="addTimer(300)">
+                    5 min
+                </button>
+
+                <button class="quick-button"
+                        onclick="addTimer(600)">
+                    10 min
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- MINUTEUR PERSONNALISÉ -->
+
+        <section class="card">
+
+            <div class="card-title">
+                ➕ Nouveau minuteur
+            </div>
+
+            <div class="input-row">
+
+                <input
+                    id="customName"
+                    type="text"
+                    placeholder="Nom : poulet, sauce..."
+                >
+
+            </div>
+
+            <div class="input-row">
+
+                <input
+                    id="customMinutes"
+                    type="number"
+                    min="0"
+                    placeholder="Minutes"
+                >
+
+                <input
+                    id="customSeconds"
+                    type="number"
+                    min="0"
+                    max="59"
+                    placeholder="Secondes"
+                >
+
+                <button
+                    class="add-button"
+                    onclick="createCustomTimer()">
+                    +
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- TIMERS -->
+
+        <section class="card">
+
+            <div class="card-title">
+                🔥 Minuteurs en cours
+            </div>
+
+            <div
+                id="timerList"
+                class="timer-list">
+
+                <div style="color:#888;">
+                    Aucun minuteur en cours
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- NOTES -->
+
+        <section class="card">
+
+            <div class="card-title">
+                📝 Notes cuisine
+                <small>
+                    Visible par l'équipe
+                </small>
+            </div>
+
+            <textarea
+                id="notes"
+                placeholder="Exemple :
+Attention allergènes
+Commande table 12
+Préparer sauce burger
+Stock tomates à vérifier">
+            </textarea>
+
+        </section>
+
+
+        <!-- CHECKLIST -->
+
+        <section class="card">
+
+            <div class="card-title">
+                🧽 Checklist
+            </div>
+
+            <div class="checklist">
+
+                <label class="check">
+                    <input type="checkbox"
+                           onchange="toggleCheck(this)">
+                    Plan de travail propre
+                </label>
+
+                <label class="check">
+                    <input type="checkbox"
+                           onchange="toggleCheck(this)">
+                    Friteuse vérifiée
+                </label>
+
+                <label class="check">
+                    <input type="checkbox"
+                           onchange="toggleCheck(this)">
+                    Viande préparée
+                </label>
+
+                <label class="check">
+                    <input type="checkbox"
+                           onchange="toggleCheck(this)">
+                    Sauces disponibles
+                </label>
+
+                <label class="check">
+                    <input type="checkbox"
+                           onchange="toggleCheck(this)">
+                    Stock vérifié
+                </label>
+
+            </div>
+
+        </section>
+
+
+        <!-- SON -->
+
+        <section class="card">
+
+            <div class="card-title">
+                🔊 Sonnerie
+                <small>
+                    Tester avant le service
+                </small>
+            </div>
+
+            <button
+                class="big-button"
+                onclick="testSound()">
+                🔊 TESTER L'ALARME
+            </button>
+
+        </section>
+
+    </div>
+
+</main>
+
+<footer>
+    KitchenOS — outil de cuisine
+</footer>
+
+
+<!-- ALARM -->
+
+<div id="alarmOverlay">
+
+    <div class="alarm-box">
+
+        <div class="alarm-icon">
+            🚨
         </div>
 
-    </div>
+        <div class="alarm-title">
+            TERMINÉ !
+        </div>
 
-    <div id="hint">
-        👆 Glisse pour regarder · 🤏 Pince pour zoomer · ✨ Touche les objets
-    </div>
+        <div
+            class="alarm-name"
+            id="alarmName">
+            Minuteur
+        </div>
 
-    <div id="toast">
-        <button class="close" onclick="closeInfo()">×</button>
-        <h2 id="toastTitle"></h2>
-        <p id="toastText"></p>
+        <button
+            class="stop-alarm"
+            onclick="stopAlarm()">
+            ARRÊTER L'ALARME
+        </button>
+
     </div>
 
 </div>
 
+
 <script>
 
-/* =====================================================
-   CAMERA
-===================================================== */
+/* =========================
+   CLOCK
+========================= */
 
-const world = document.getElementById("world");
+function updateClock() {
 
-let scale = 1;
-let posX = 0;
-let posY = 0;
+    const now = new Date();
 
-let dragging = false;
-let startX = 0;
-let startY = 0;
-let initialX = 0;
-let initialY = 0;
+    const h = String(now.getHours()).padStart(2, "0");
+    const m = String(now.getMinutes()).padStart(2, "0");
 
-function updateCamera(){
-
-    scale = Math.max(.75,Math.min(1.7,scale));
-
-    world.style.transform =
-        `translate(calc(-50% + ${posX}px),calc(-50% + ${posY}px)) scale(${scale})`;
+    document.getElementById("clock").textContent =
+        h + ":" + m;
 }
 
-const viewport = document.getElementById("viewport");
-
-viewport.addEventListener("pointerdown",e=>{
-
-    if(e.target.closest("button,.cat,.cup,.books,.lamp,.art")) return;
-
-    dragging=true;
-
-    startX=e.clientX;
-    startY=e.clientY;
-
-    initialX=posX;
-    initialY=posY;
-
-    viewport.setPointerCapture(e.pointerId);
-});
-
-viewport.addEventListener("pointermove",e=>{
-
-    if(!dragging)return;
-
-    posX=initialX+(e.clientX-startX);
-    posY=initialY+(e.clientY-startY);
-
-    updateCamera();
-});
-
-viewport.addEventListener("pointerup",()=>{
-    dragging=false;
-});
-
-viewport.addEventListener("wheel",e=>{
-
-    e.preventDefault();
-
-    scale += e.deltaY < 0 ? .08 : -.08;
-
-    updateCamera();
-
-},{passive:false});
+setInterval(updateClock, 1000);
+updateClock();
 
 
-/* =====================================================
-   PINCH ZOOM MOBILE
-===================================================== */
+/* =========================
+   AUDIO
+========================= */
 
-let pinchDistance=null;
-let pinchScale=1;
+let audioContext = null;
+let alarmInterval = null;
 
-viewport.addEventListener("touchstart",e=>{
+function initAudio() {
 
-    if(e.touches.length===2){
-
-        pinchDistance=Math.hypot(
-            e.touches[0].clientX-e.touches[1].clientX,
-            e.touches[0].clientY-e.touches[1].clientY
-        );
-
-        pinchScale=scale;
+    if (!audioContext) {
+        audioContext =
+            new (window.AudioContext ||
+                 window.webkitAudioContext)();
     }
 
-},{passive:true});
+    if (audioContext.state === "suspended") {
+        audioContext.resume();
+    }
+}
 
+function beep() {
 
-viewport.addEventListener("touchmove",e=>{
+    initAudio();
 
-    if(e.touches.length!==2)return;
+    const oscillator =
+        audioContext.createOscillator();
 
-    const distance=Math.hypot(
-        e.touches[0].clientX-e.touches[1].clientX,
-        e.touches[0].clientY-e.touches[1].clientY
+    const gain =
+        audioContext.createGain();
+
+    oscillator.type = "square";
+    oscillator.frequency.value = 880;
+
+    gain.gain.setValueAtTime(
+        0.001,
+        audioContext.currentTime
     );
 
-    if(pinchDistance){
+    gain.gain.exponentialRampToValueAtTime(
+        0.5,
+        audioContext.currentTime + 0.02
+    );
 
-        scale=pinchScale*(distance/pinchDistance);
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        audioContext.currentTime + 0.5
+    );
 
-        updateCamera();
-    }
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
 
-},{passive:true});
-
-
-viewport.addEventListener("touchend",()=>{
-    pinchDistance=null;
-});
-
-
-function resetCamera(){
-
-    scale=1;
-    posX=0;
-    posY=0;
-
-    updateCamera();
-
-    showInfo(
-        "Mode caméra",
-        "La vue est revenue au centre. Sur ordinateur, utilise la molette. Sur téléphone, pince pour zoomer et glisse pour explorer."
+    oscillator.start();
+    oscillator.stop(
+        audioContext.currentTime + 0.5
     );
 }
 
+function testSound() {
 
-/* =====================================================
-   AMBIANCE
-===================================================== */
+    initAudio();
 
-const room=document.getElementById("room");
-const dayBtn=document.getElementById("dayBtn");
+    beep();
 
-function setMood(mood){
+    setTimeout(beep, 600);
+    setTimeout(beep, 1200);
+}
 
-    room.classList.remove("night","sunset");
 
-    document.querySelectorAll(".control").forEach(b=>{
-        b.classList.remove("active");
+/* =========================
+   ALARM
+========================= */
+
+function triggerAlarm(name) {
+
+    initAudio();
+
+    document.getElementById("alarmName")
+        .textContent = name;
+
+    document.getElementById("alarmOverlay")
+        .classList.add("active");
+
+    beep();
+
+    alarmInterval =
+        setInterval(beep, 1300);
+
+    if (navigator.vibrate) {
+        navigator.vibrate([
+            500, 300, 500, 300, 1000
+        ]);
+    }
+}
+
+function stopAlarm() {
+
+    clearInterval(alarmInterval);
+
+    alarmInterval = null;
+
+    document.getElementById("alarmOverlay")
+        .classList.remove("active");
+
+    if (navigator.vibrate) {
+        navigator.vibrate(0);
+    }
+}
+
+
+/* =========================
+   FORMAT TIME
+========================= */
+
+function formatTime(seconds) {
+
+    const min =
+        Math.floor(seconds / 60);
+
+    const sec =
+        seconds % 60;
+
+    return String(min).padStart(2, "0")
+        + ":"
+        + String(sec).padStart(2, "0");
+}
+
+
+/* =========================
+   FRIES TIMER
+========================= */
+
+let friesRemaining = 180;
+let friesInterval = null;
+let friesRunning = false;
+
+function startFries() {
+
+    initAudio();
+
+    if (friesRunning) return;
+
+    if (friesRemaining <= 0) {
+        friesRemaining = 180;
+    }
+
+    friesRunning = true;
+
+    friesInterval =
+        setInterval(() => {
+
+            friesRemaining--;
+
+            updateFriesDisplay();
+
+            if (friesRemaining <= 0) {
+
+                clearInterval(friesInterval);
+
+                friesRunning = false;
+
+                triggerAlarm("🍟 FRITES TERMINÉES");
+            }
+
+        }, 1000);
+}
+
+function resetFries() {
+
+    clearInterval(friesInterval);
+
+    friesRunning = false;
+    friesRemaining = 180;
+
+    updateFriesDisplay();
+
+    document.getElementById("friesDisplay")
+        .classList.remove("finished");
+}
+
+function updateFriesDisplay() {
+
+    const display =
+        document.getElementById("friesDisplay");
+
+    display.textContent =
+        formatTime(Math.max(0, friesRemaining));
+
+    if (friesRemaining <= 0) {
+        display.classList.add("finished");
+    }
+}
+
+
+/* =========================
+   STEAK
+========================= */
+
+function startSteak(name, seconds) {
+
+    createTimer(
+        "🥩 Steak " + name,
+        seconds
+    );
+}
+
+
+/* =========================
+   GENERIC TIMERS
+========================= */
+
+let timers = [];
+let timerId = 0;
+
+function createTimer(name, seconds) {
+
+    initAudio();
+
+    const timer = {
+        id: ++timerId,
+        name: name,
+        remaining: seconds,
+        running: true,
+        interval: null,
+        finished: false
+    };
+
+    timer.interval =
+        setInterval(() => {
+
+            if (!timer.running) return;
+
+            timer.remaining--;
+
+            renderTimers();
+
+            if (timer.remaining <= 0) {
+
+                clearInterval(timer.interval);
+
+                timer.finished = true;
+                timer.running = false;
+
+                renderTimers();
+
+                triggerAlarm(timer.name);
+            }
+
+        }, 1000);
+
+    timers.push(timer);
+
+    renderTimers();
+}
+
+
+function addTimer(seconds) {
+
+    createTimer(
+        "Minuteur " + formatTime(seconds),
+        seconds
+    );
+}
+
+
+function createCustomTimer() {
+
+    const name =
+        document.getElementById("customName")
+            .value.trim() || "Minuteur";
+
+    const minutes =
+        Number(
+            document.getElementById("customMinutes")
+                .value
+        ) || 0;
+
+    const seconds =
+        Number(
+            document.getElementById("customSeconds")
+                .value
+        ) || 0;
+
+    const total =
+        minutes * 60 + seconds;
+
+    if (total <= 0) {
+        alert("Indique une durée.");
+        return;
+    }
+
+    createTimer(name, total);
+
+    document.getElementById("customName")
+        .value = "";
+
+    document.getElementById("customMinutes")
+        .value = "";
+
+    document.getElementById("customSeconds")
+        .value = "";
+}
+
+
+/* =========================
+   TIMER CONTROLS
+========================= */
+
+function toggleTimer(id) {
+
+    const timer =
+        timers.find(t => t.id === id);
+
+    if (!timer || timer.finished) return;
+
+    timer.running = !timer.running;
+
+    renderTimers();
+}
+
+
+function addTime(id, seconds) {
+
+    const timer =
+        timers.find(t => t.id === id);
+
+    if (!timer) return;
+
+    timer.remaining += seconds;
+
+    if (timer.finished) {
+
+        timer.finished = false;
+        timer.running = true;
+
+        timer.interval =
+            setInterval(() => {
+
+                if (!timer.running) return;
+
+                timer.remaining--;
+
+                renderTimers();
+
+                if (timer.remaining <= 0) {
+
+                    clearInterval(timer.interval);
+
+                    timer.finished = true;
+                    timer.running = false;
+
+                    renderTimers();
+
+                    triggerAlarm(timer.name);
+                }
+
+            }, 1000);
+    }
+
+    renderTimers();
+}
+
+
+function deleteTimer(id) {
+
+    const index =
+        timers.findIndex(t => t.id === id);
+
+    if (index === -1) return;
+
+    clearInterval(
+        timers[index].interval
+    );
+
+    timers.splice(index, 1);
+
+    renderTimers();
+}
+
+
+/* =========================
+   RENDER TIMERS
+========================= */
+
+function renderTimers() {
+
+    const container =
+        document.getElementById("timerList");
+
+    if (timers.length === 0) {
+
+        container.innerHTML =
+            `<div style="color:#888;">
+                Aucun minuteur en cours
+            </div>`;
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    timers.forEach(timer => {
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "timer-row"
+            + (timer.finished ? " finished" : "");
+
+        row.innerHTML = `
+
+            <div>
+
+                <div class="timer-row-name">
+                    ${escapeHTML(timer.name)}
+                </div>
+
+                <div class="timer-row-time">
+                    ${formatTime(
+                        Math.max(0, timer.remaining)
+                    )}
+                </div>
+
+            </div>
+
+            <div class="timer-actions">
+
+                ${
+                    timer.finished
+                    ?
+                    `<button
+                        class="small-btn green"
+                        onclick="addTime(${timer.id}, 60)">
+                        +1m
+                    </button>`
+                    :
+                    `<button
+                        class="small-btn"
+                        onclick="toggleTimer(${timer.id})">
+                        ${timer.running ? "Ⅱ" : "▶"}
+                    </button>`
+                }
+
+                <button
+                    class="small-btn"
+                    onclick="addTime(${timer.id}, 30)">
+                    +30s
+                </button>
+
+                <button
+                    class="small-btn red"
+                    onclick="deleteTimer(${timer.id})">
+                    ×
+                </button>
+
+            </div>
+        `;
+
+        container.appendChild(row);
     });
+}
 
-    if(mood==="night"){
-        room.classList.add("night");
-        document.querySelectorAll(".control")[2].classList.add("active");
-    }
 
-    if(mood==="sunset"){
-        room.classList.add("sunset");
-        document.querySelectorAll(".control")[1].classList.add("active");
-    }
+/* =========================
+   SECURITY
+========================= */
 
-    if(mood==="day"){
-        dayBtn.classList.add("active");
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+
+/* =========================
+   CHECKLIST
+========================= */
+
+function toggleCheck(input) {
+
+    const parent =
+        input.closest(".check");
+
+    if (input.checked) {
+        parent.classList.add("done");
+    } else {
+        parent.classList.remove("done");
     }
 }
 
 
-/* =====================================================
-   LAMPE
-===================================================== */
+/* =========================
+   NOTES SAVE
+========================= */
 
-function toggleLamp(){
+const notes =
+    document.getElementById("notes");
 
-    const lamp=document.querySelector(".lamp");
+notes.value =
+    localStorage.getItem("kitchenNotes") || "";
 
-    lamp.classList.toggle("on");
+notes.addEventListener("input", () => {
 
-    if(lamp.classList.contains("on")){
-
-        showInfo(
-            "Lampe allumée",
-            "La lumière chaude change l’ambiance de la pièce."
-        );
-
-    }else{
-
-        showInfo(
-            "Lampe éteinte",
-            "La pièce retrouve uniquement sa lumière naturelle."
-        );
-    }
-}
-
-
-/* =====================================================
-   CHAT
-===================================================== */
-
-let catClicks=0;
-
-function catInteraction(){
-
-    const cat=document.getElementById("cat");
-
-    cat.classList.remove("happy");
-
-    void cat.offsetWidth;
-
-    cat.classList.add("happy");
-
-    catClicks++;
-
-    const messages=[
-        "Miaou. 🐈",
-        "Le chat te regarde.",
-        "Il vient de bouger.",
-        "Bon… apparemment il veut des caresses.",
-        "Miaou encore. 😼"
-    ];
-
-    showInfo(
-        "Le chat",
-        messages[Math.min(catClicks-1,messages.length-1)]
+    localStorage.setItem(
+        "kitchenNotes",
+        notes.value
     );
-
-    setTimeout(()=>{
-        cat.classList.remove("happy");
-    },600);
-}
-
-
-/* =====================================================
-   POPUPS
-===================================================== */
-
-function showInfo(title,text){
-
-    document.getElementById("toastTitle").textContent=title;
-    document.getElementById("toastText").textContent=text;
-
-    document.getElementById("toast").classList.add("show");
-}
-
-function closeInfo(){
-
-    document.getElementById("toast").classList.remove("show");
-}
-
-
-/* =====================================================
-   AUTO LIGHT
-===================================================== */
-
-setInterval(()=>{
-
-    const cat=document.getElementById("cat");
-
-    if(Math.random()>.65){
-
-        cat.style.transform="translateX(5px)";
-
-        setTimeout(()=>{
-            cat.style.transform="";
-        },700);
-    }
-
-},4500);
-
-
-/* =====================================================
-   DOUBLE CLICK RESET
-===================================================== */
-
-world.addEventListener("dblclick",()=>{
-
-    scale=1.15;
-    posX=0;
-    posY=0;
-
-    updateCamera();
 
 });
 
 
-/* =====================================================
-   INITIAL
-===================================================== */
+/* =========================
+   INITIALIZATION
+========================= */
 
-updateCamera();
+updateFriesDisplay();
+renderTimers();
 
 </script>
 
