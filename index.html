@@ -1,373 +1,1983 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#16324f">
-<title>KitchenFlow – Centre de contrôle cuisine</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>KitchenFlow V3</title>
+
 <style>
 :root{
-  --bg:#e9eeec; --paper:#fbfaf6; --ink:#16324f; --muted:#5b6f80; --line:#c3cfd2;
-  --accent:#16324f; --on-accent:#fff; --ok:#2f8f5b; --warn:#e9a800; --bad:#d62839;
-  --r:16px;
-  font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --bg:#111315;
+    --panel:#191c20;
+    --panel2:#22262b;
+    --border:#30353b;
+    --text:#f5f5f5;
+    --muted:#9da3aa;
+    --yellow:#ffb000;
+    --orange:#ff7a00;
+    --red:#ff4545;
+    --green:#39d98a;
+    --blue:#4da3ff;
+    --radius:20px;
 }
-:root[data-theme="dark"]{
-  --bg:#0f1c2b; --paper:#182a3d; --ink:#eaf1f5; --muted:#93a7b6; --line:#2c4157;
-  --accent:#f2c94c; --on-accent:#16212d; --ok:#56c98a; --warn:#f2c94c; --bad:#ff6b78;
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0f1c2b; --paper:#182a3d; --ink:#eaf1f5; --muted:#93a7b6; --line:#2c4157;
-    --accent:#f2c94c; --on-accent:#16212d; --ok:#56c98a; --warn:#f2c94c; --bad:#ff6b78;
-  }
+
+html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    min-height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
-*{box-sizing:border-box}
-html{scroll-padding-top:120px}
-body{margin:0;background:var(--bg);color:var(--ink);font-size:17px;line-height:1.45;
-  padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 24px)}
-button,input{font:inherit;color:inherit}
-button{cursor:pointer;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:.55em 1em;min-height:44px}
-button:focus-visible,input:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
-input{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:.6em .8em;min-height:44px;min-width:0}
 
-.top{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;
-  gap:12px;padding:12px 16px;background:#16324f;color:#fff}
-:root[data-theme="dark"] .top{background:#0a141f}
-.brand{display:flex;align-items:center;gap:12px}
-.brand small{display:block;opacity:.7;font-size:.75rem}
-.logo{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#f2c94c;color:#16212d;font-weight:800}
-.tools{display:flex;gap:8px}
-.tools button{padding:.3em .8em;background:rgba(255,255,255,.12);border-color:transparent;color:#fff}
+body{
+    overflow-x:hidden;
+}
 
-.tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;scrollbar-width:none}
-.tabs button{white-space:nowrap}
-.tabs button[aria-current="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+button,input{
+    font:inherit;
+}
 
-main{padding:0 16px;max-width:760px;margin:0 auto}
-.view{display:none}
-.view.on{display:block}
-h1{font-size:clamp(2.6rem,12vw,4.5rem);line-height:.95;letter-spacing:-.04em;font-weight:800;margin:.4em 0 .2em}
-h2{font-size:1.05rem;margin:1.8em 0 .6em;font-weight:600;color:var(--muted)}
-.lead{color:var(--muted);margin:0 0 1.2em}
+button{
+    border:0;
+    cursor:pointer;
+}
 
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.stats div{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px}
-.stats b{display:block;font-size:2rem;line-height:1.1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.stats span{color:var(--muted);font-size:.9rem}
+.app{
+    max-width:1200px;
+    margin:auto;
+    min-height:100vh;
+    padding-bottom:90px;
+}
 
-.quick{display:grid;gap:10px}
-.quick button{display:flex;flex-direction:column;align-items:flex-start;border-radius:var(--r);padding:14px 16px;text-align:left}
-.quick span{color:var(--muted);font-size:.9rem}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
+/* HEADER */
 
-.row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.row input:first-child{flex:1 1 180px}
-.row input[type=number],.row input[placeholder="Qté"]{flex:0 1 90px}
-.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
+.header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 18px;
+    background:rgba(17,19,21,.94);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+}
 
-/* Minuteurs façon bon de commande */
-.tickets{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.ticket{position:relative;background:var(--paper);border:1px solid var(--line);border-left:8px solid var(--accent);
-  border-radius:var(--r);padding:14px 16px}
-.ticket .top2{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.ticket .t-time{font-size:3rem;font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
-.ticket .bar{height:6px;background:var(--line);border-radius:9px;margin:10px 0;overflow:hidden}
-.ticket .bar i{display:block;height:100%;width:100%;background:var(--accent);transition:width .5s linear}
-.ticket .act{display:flex;gap:8px;border-top:2px dashed var(--line);padding-top:10px}
-.ticket.paused{border-left-color:var(--warn)}
-.ticket.done{border-left-color:var(--bad);animation:pulse 1s ease-in-out infinite}
-.ticket.done .t-time{color:var(--bad)}
-@keyframes pulse{50%{background:color-mix(in srgb,var(--bad) 14%,var(--paper))}}
-.empty{color:var(--muted);padding:12px 0}
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:21px;
+    font-weight:900;
+}
 
-.plist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.plist li{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
-.plist .grow{flex:1;min-width:0}
-.plist small{color:var(--muted)}
-.tag{font-size:.8rem;font-weight:600;padding:.2em .7em;border-radius:999px;background:var(--line)}
-.tag.ok{background:color-mix(in srgb,var(--ok) 25%,transparent);color:var(--ok)}
-.tag.warn{background:color-mix(in srgb,var(--warn) 30%,transparent)}
-.tag.bad{background:var(--bad);color:#fff}
+.logoIcon{
+    width:40px;
+    height:40px;
+    border-radius:13px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,var(--yellow),var(--orange));
+    color:#111;
+    font-size:21px;
+}
 
-.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
-.card h3{margin:0;font-size:1.3rem}
-.card .meta{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.prog{height:8px;background:var(--line);border-radius:9px;margin:10px 0;overflow:hidden}
-.prog i{display:block;height:100%;background:var(--ok);transition:width .3s}
-.card label{display:flex;gap:12px;align-items:center;min-height:44px;border-bottom:1px solid var(--line)}
-.card input[type=checkbox]{width:22px;height:22px;min-height:0;accent-color:var(--ok)}
-.card input:checked+span{text-decoration:line-through;color:var(--muted)}
-.card form{display:flex;gap:8px;margin-top:12px}
-.card form input{flex:1}
-.x{padding:.2em .7em;min-height:36px;color:var(--bad)}
+.headerActions{
+    display:flex;
+    gap:8px;
+}
 
-@media (min-width:640px){.stats{grid-template-columns:repeat(4,1fr)}.quick{grid-template-columns:repeat(3,1fr)}}
-@media (prefers-reduced-motion:reduce){.ticket.done{animation:none}.ticket .bar i,.prog i{transition:none}}
+.iconBtn{
+    width:44px;
+    height:44px;
+    border-radius:13px;
+    background:var(--panel2);
+    color:white;
+    border:1px solid var(--border);
+    font-size:20px;
+}
 
-#err{position:fixed;left:8px;right:8px;bottom:8px;z-index:99;background:#d62839;color:#fff;padding:10px 12px;border-radius:12px;font-size:14px}</style>
+.iconBtn:active,
+.actionBtn:active,
+.timerCard:active{
+    transform:scale(.97);
+}
+
+/* NAV */
+
+.nav{
+    display:flex;
+    gap:8px;
+    padding:14px 16px 4px;
+}
+
+.nav button{
+    flex:1;
+    padding:13px 8px;
+    border-radius:14px;
+    background:var(--panel);
+    color:var(--muted);
+    border:1px solid var(--border);
+    font-weight:800;
+}
+
+.nav button.active{
+    color:#111;
+    background:var(--yellow);
+    border-color:var(--yellow);
+}
+
+/* CONTENT */
+
+.page{
+    padding:18px 16px;
+}
+
+.pageTitle{
+    margin:3px 0 5px;
+    font-size:30px;
+    font-weight:900;
+}
+
+.pageSubtitle{
+    color:var(--muted);
+    margin-bottom:20px;
+}
+
+/* TIMER GRID */
+
+.timerGrid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+}
+
+@media(max-width:650px){
+    .timerGrid{
+        grid-template-columns:1fr;
+    }
+}
+
+/* TIMER CARD */
+
+.timerCard{
+    position:relative;
+    min-height:190px;
+    padding:18px;
+    border-radius:var(--radius);
+    background:linear-gradient(145deg,#202429,#171a1d);
+    border:1px solid var(--border);
+    box-shadow:0 8px 25px rgba(0,0,0,.18);
+    transition:.12s;
+    overflow:hidden;
+}
+
+.timerCard.running{
+    border-color:var(--yellow);
+    box-shadow:0 0 0 1px rgba(255,176,0,.15),0 10px 30px rgba(255,176,0,.08);
+}
+
+.timerCard.finished{
+    background:linear-gradient(145deg,#4a1515,#241315);
+    border-color:var(--red);
+    animation:pulseCard 1s infinite;
+}
+
+@keyframes pulseCard{
+    50%{
+        box-shadow:0 0 0 5px rgba(255,69,69,.12);
+    }
+}
+
+.cardTop{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+
+.cardName{
+    font-size:19px;
+    font-weight:900;
+}
+
+.cardCategory{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:3px;
+}
+
+.cardMenu{
+    display:flex;
+    gap:5px;
+}
+
+.smallBtn{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    background:#2b3036;
+    color:white;
+}
+
+.time{
+    text-align:center;
+    font-size:51px;
+    font-weight:900;
+    letter-spacing:-2px;
+    margin:18px 0 12px;
+}
+
+.cardButtons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.actionBtn{
+    min-height:48px;
+    border-radius:13px;
+    background:#2a2f35;
+    color:white;
+    font-weight:900;
+    border:1px solid #373d44;
+}
+
+.actionBtn.primary{
+    background:var(--yellow);
+    color:#111;
+    border-color:var(--yellow);
+}
+
+.actionBtn.stop{
+    background:#392020;
+    color:#ff7474;
+    border-color:#613232;
+}
+
+/* QUICK COOKS */
+
+.sectionTitle{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:28px 0 12px;
+    font-size:20px;
+    font-weight:900;
+}
+
+.quickGrid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+@media(max-width:650px){
+    .quickGrid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+.quickCook{
+    padding:15px 10px;
+    border-radius:16px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:white;
+    text-align:center;
+}
+
+.quickCook strong{
+    display:block;
+    margin-bottom:4px;
+}
+
+.quickCook span{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.quickCook:active{
+    background:#292e34;
+}
+
+/* CHECKLIST */
+
+.checklistTabs{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding-bottom:5px;
+}
+
+.checklistTab{
+    white-space:nowrap;
+    padding:12px 15px;
+    border-radius:13px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--muted);
+    font-weight:800;
+}
+
+.checklistTab.active{
+    background:var(--yellow);
+    color:#111;
+}
+
+.checklistBox{
+    margin-top:15px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.checklistHeader{
+    padding:17px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+}
+
+.checklistHeader h2{
+    margin:0;
+}
+
+.checkItem{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:15px 17px;
+    border-bottom:1px solid #292d32;
+}
+
+.checkItem:last-child{
+    border-bottom:0;
+}
+
+.checkBox{
+    width:28px;
+    height:28px;
+    border-radius:8px;
+    border:2px solid #59616a;
+    display:grid;
+    place-items:center;
+    flex-shrink:0;
+    color:#111;
+    font-weight:900;
+}
+
+.checkItem.done .checkBox{
+    background:var(--green);
+    border-color:var(--green);
+}
+
+.checkItem.done .itemText{
+    text-decoration:line-through;
+    color:#737a82;
+}
+
+.itemText{
+    flex:1;
+    font-weight:700;
+}
+
+.itemActions{
+    display:flex;
+    gap:5px;
+}
+
+/* SETTINGS */
+
+.settingCard{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:18px;
+    margin-bottom:14px;
+}
+
+.settingCard h2{
+    margin:0 0 15px;
+}
+
+.formRow{
+    display:flex;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+input{
+    width:100%;
+    padding:13px 14px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:#111315;
+    color:white;
+    outline:none;
+}
+
+input:focus{
+    border-color:var(--yellow);
+}
+
+.primaryBtn{
+    padding:13px 17px;
+    border-radius:12px;
+    background:var(--yellow);
+    color:#111;
+    font-weight:900;
+}
+
+.secondaryBtn{
+    padding:13px 17px;
+    border-radius:12px;
+    background:var(--panel2);
+    color:white;
+    border:1px solid var(--border);
+    font-weight:800;
+}
+
+.dangerBtn{
+    padding:13px 17px;
+    border-radius:12px;
+    background:#381d1d;
+    color:#ff7777;
+    font-weight:800;
+}
+
+/* MODAL */
+
+.modalOverlay{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(7px);
+}
+
+.modalOverlay.open{
+    display:flex;
+}
+
+.modal{
+    width:min(500px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#1b1e22;
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:20px;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+
+.modal h2{
+    margin-top:0;
+}
+
+.modalActions{
+    display:flex;
+    gap:8px;
+    margin-top:16px;
+}
+
+.modalActions button{
+    flex:1;
+}
+
+/* ALERT */
+
+.alertOverlay{
+    position:fixed;
+    inset:0;
+    z-index:200;
+    display:none;
+    place-items:center;
+    background:rgba(80,0,0,.9);
+    animation:alertFlash .7s infinite alternate;
+}
+
+.alertOverlay.show{
+    display:grid;
+}
+
+@keyframes alertFlash{
+    from{background:rgba(90,0,0,.94)}
+    to{background:rgba(190,20,20,.94)}
+}
+
+.alertBox{
+    text-align:center;
+    padding:25px;
+}
+
+.alertIcon{
+    font-size:70px;
+}
+
+.alertTitle{
+    font-size:42px;
+    font-weight:1000;
+}
+
+.alertName{
+    font-size:27px;
+    margin:10px 0 25px;
+}
+
+.stopAlarm{
+    min-width:220px;
+    min-height:65px;
+    border-radius:17px;
+    background:white;
+    color:#111;
+    font-size:20px;
+    font-weight:1000;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    z-index:300;
+    transform:translateX(-50%) translateY(30px);
+    opacity:0;
+    pointer-events:none;
+    background:#272c31;
+    border:1px solid #414850;
+    padding:13px 18px;
+    border-radius:14px;
+    font-weight:800;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* EMPTY */
+
+.empty{
+    text-align:center;
+    padding:35px 15px;
+    color:var(--muted);
+}
+
+.hidden{
+    display:none!important;
+}
+</style>
 </head>
+
 <body>
-<header class="top">
-  <div class="brand">
-    <span class="logo">KF</span>
-    <div><b>KitchenFlow</b><small>Centre de contrôle cuisine</small></div>
-  </div>
-  <div class="tools">
-    <button id="sound" aria-label="Activer ou couper le son">🔊</button>
-    <button id="theme" aria-label="Changer de thème">◐</button>
-  </div>
+
+<div class="app">
+
+<header class="header">
+    <div class="logo">
+        <div class="logoIcon">🔥</div>
+        KitchenFlow
+    </div>
+
+    <div class="headerActions">
+        <button class="iconBtn" onclick="openNewTimer()">＋</button>
+        <button class="iconBtn" onclick="showPage('settings')">⚙️</button>
+    </div>
 </header>
 
-<nav class="tabs" aria-label="Sections">
-  <button data-tab="service">⚡ Service</button>
-  <button data-tab="timers">⏱️ Minuteurs</button>
-  <button data-tab="products">🥫 Produits</button>
-  <button data-tab="lists">✅ Checklists</button>
+<nav class="nav">
+    <button id="navTimers" class="active" onclick="showPage('timers')">
+        ⏱️ Minuteurs
+    </button>
+
+    <button id="navChecklist" onclick="showPage('checklist')">
+        📋 Checklists
+    </button>
+
+    <button id="navSettings" onclick="showPage('settings')">
+        ⚙️ Réglages
+    </button>
 </nav>
 
-<main>
-  <section id="service" class="view">
-    <h1>Poste de travail</h1>
-    <p class="lead">Tout ce dont tu as besoin, au même endroit.</p>
-    <div class="stats">
-      <div><b id="st-clock">--:--</b><span id="st-date"></span></div>
-      <div><b id="st-timers">0</b><span>minuteurs actifs</span></div>
-      <div><b id="st-tasks">0</b><span>tâches terminées</span></div>
-      <div><b id="st-prods">0</b><span>produits enregistrés</span></div>
+<!-- TIMERS -->
+
+<section id="pageTimers" class="page">
+
+    <h1 class="pageTitle">Minuteurs</h1>
+    <div class="pageSubtitle">
+        Lance tes cuissons sans toucher aux réglages.
     </div>
-    <h2>En cours</h2>
-    <ul id="mini" class="tickets"></ul>
-    <h2>Actions rapides</h2>
-    <div class="quick">
-      <button data-go="timers"><b>Nouveau minuteur</b><span>Lancer une cuisson</span></button>
-      <button data-go="products"><b>Produits</b><span>Préparations et sauces</span></button>
-      <button data-go="lists"><b>Checklist</b><span>Mise en place</span></button>
+
+    <div id="timerGrid" class="timerGrid"></div>
+
+    <div class="sectionTitle">
+        Cuissons rapides
     </div>
-    <h2>À refaire</h2>
-    <div id="recent" class="chips"></div>
-  </section>
 
-  <section id="timers" class="view">
-    <h1>Cuissons</h1>
-    <p class="lead">Lance un minuteur, on te prévient quand c'est prêt.</p>
-    <form id="f-timer" class="row">
-      <input name="n" placeholder="Nom (ex. Pâtes)" required maxlength="30">
-      <input name="m" type="number" min="1" max="600" placeholder="Min" required inputmode="numeric">
-      <button class="primary">Lancer</button>
-    </form>
-    <ul id="t-list" class="tickets"></ul>
-  </section>
+    <div class="quickGrid">
 
-  <section id="products" class="view">
-    <h1>Produits</h1>
-    <p class="lead">Suis tes préparations et leurs dates limites.</p>
-    <form id="f-prod" class="row">
-      <input name="n" placeholder="Produit (ex. Sauce tomate)" required maxlength="40">
-      <input name="q" placeholder="Qté" maxlength="12">
-      <input name="d" type="date" aria-label="Date limite">
-      <button class="primary">Ajouter</button>
-    </form>
-    <ul id="p-list" class="plist"></ul>
-  </section>
+        <button class="quickCook" onclick="quickSteak('Bleu')">
+            🥩
+            <strong>Bleu</strong>
+            <span id="quickBleu">2:00</span>
+        </button>
 
-  <section id="lists" class="view">
-    <h1>Checklists</h1>
-    <p class="lead">Coche au fur et à mesure, rien ne passe à la trappe.</p>
-    <div id="l-wrap"></div>
-  </section>
-</main>
-<div id="err" hidden></div>
-<script>window.onerror=function(m,s,l){var e=document.getElementById("err");e.hidden=false;e.textContent="Erreur : "+m+" (ligne "+l+")"}</script>
+        <button class="quickCook" onclick="quickSteak('Saignant')">
+            🥩
+            <strong>Saignant</strong>
+            <span id="quickSaignant">3:00</span>
+        </button>
+
+        <button class="quickCook" onclick="quickSteak('À point')">
+            🥩
+            <strong>À point</strong>
+            <span id="quickPoint">4:00</span>
+        </button>
+
+        <button class="quickCook" onclick="quickSteak('Bien cuit')">
+            🥩
+            <strong>Bien cuit</strong>
+            <span id="quickBien">6:00</span>
+        </button>
+
+    </div>
+
+</section>
+
+<!-- CHECKLIST -->
+
+<section id="pageChecklist" class="page hidden">
+
+    <h1 class="pageTitle">Checklists</h1>
+
+    <div class="pageSubtitle">
+        Crée tes propres listes d'ouverture, fermeture, préparation...
+    </div>
+
+    <div id="checklistTabs" class="checklistTabs"></div>
+
+    <div id="checklistContent"></div>
+
+</section>
+
+<!-- SETTINGS -->
+
+<section id="pageSettings" class="page hidden">
+
+    <h1 class="pageTitle">Réglages</h1>
+
+    <div class="pageSubtitle">
+        Personnalise KitchenFlow selon ta cuisine.
+    </div>
+
+    <div class="settingCard">
+
+        <h2>🥩 Cuissons steak</h2>
+
+        <div class="formRow">
+            <input id="bleuInput" type="number" min="1">
+            <span style="padding:13px 0">sec</span>
+        </div>
+
+        <div class="formRow">
+            <input id="saignantInput" type="number" min="1">
+            <span style="padding:13px 0">sec</span>
+        </div>
+
+        <div class="formRow">
+            <input id="pointInput" type="number" min="1">
+            <span style="padding:13px 0">sec</span>
+        </div>
+
+        <div class="formRow">
+            <input id="bienInput" type="number" min="1">
+            <span style="padding:13px 0">sec</span>
+        </div>
+
+        <button class="primaryBtn" onclick="saveSteakTimes()">
+            Enregistrer
+        </button>
+
+    </div>
+
+    <div class="settingCard">
+
+        <h2>🍟 Minuteurs</h2>
+
+        <button class="primaryBtn" onclick="openNewTimer()">
+            ＋ Ajouter un minuteur
+        </button>
+
+    </div>
+
+    <div class="settingCard">
+
+        <h2>📋 Checklists</h2>
+
+        <div class="formRow">
+            <input id="newChecklistName"
+                   placeholder="Nom de la checklist">
+            <button class="primaryBtn" onclick="addChecklist()">
+                Ajouter
+            </button>
+        </div>
+
+    </div>
+
+    <div class="settingCard">
+
+        <h2>💾 Données</h2>
+
+        <p style="color:var(--muted)">
+            Les réglages sont enregistrés automatiquement sur cet appareil.
+        </p>
+
+        <button class="dangerBtn" onclick="resetApp()">
+            Réinitialiser l'application
+        </button>
+
+    </div>
+
+</section>
+
+</div>
+
+<!-- TIMER MODAL -->
+
+<div id="timerModal" class="modalOverlay">
+
+    <div class="modal">
+
+        <h2 id="timerModalTitle">Nouveau minuteur</h2>
+
+        <input id="timerNameInput"
+               placeholder="Nom du minuteur">
+
+        <div style="height:10px"></div>
+
+        <input id="timerSecondsInput"
+               type="number"
+               min="1"
+               placeholder="Temps en secondes">
+
+        <div class="modalActions">
+
+            <button class="secondaryBtn"
+                    onclick="closeModal('timerModal')">
+                Annuler
+            </button>
+
+            <button class="primaryBtn"
+                    onclick="saveTimerModal()">
+                Enregistrer
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- CHECKLIST MODAL -->
+
+<div id="checkModal" class="modalOverlay">
+
+    <div class="modal">
+
+        <h2>Nouvelle tâche</h2>
+
+        <input id="checkTextInput"
+               placeholder="Ex : Vérifier la friteuse">
+
+        <div class="modalActions">
+
+            <button class="secondaryBtn"
+                    onclick="closeModal('checkModal')">
+                Annuler
+            </button>
+
+            <button class="primaryBtn"
+                    onclick="saveChecklistItem()">
+                Ajouter
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ALARM -->
+
+<div id="alertOverlay" class="alertOverlay">
+
+    <div class="alertBox">
+
+        <div class="alertIcon">🔔</div>
+
+        <div class="alertTitle">
+            TERMINÉ !
+        </div>
+
+        <div id="alertName" class="alertName">
+            Minuteur terminé
+        </div>
+
+        <button class="stopAlarm" onclick="stopAlarm()">
+            ARRÊTER L'ALARME
+        </button>
+
+    </div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
 <script>
-const $ = (s, r = document) => r.querySelector(s);
-const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const KEY = 'kitchenflow:v2';
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const uid = () => Math.random().toString(36).slice(2, 9);
-const items = arr => arr.map(t => ({ t, d: false }));
+/* =========================================================
+   DATA
+========================================================= */
 
-const DEFAULT = {
-  timers: [], products: [], sound: true, theme: null,
-  recent: [{ n: 'Pâtes', m: 9 }, { n: 'Riz', m: 12 }, { n: 'Œufs mollets', m: 6 }, { n: 'Fond brun', m: 45 }],
-  lists: [
-    { id: 'mep', name: 'Mise en place', items: items(['Vérifier les températures des frigos', 'Sortir et affûter les couteaux', 'Préparer les sauces de base', 'Étiqueter les bacs (nom et date)', 'Nettoyer le plan de travail']) },
-    { id: 'close', name: 'Fermeture', items: items(['Couper les feux et le gaz', 'Filmer et ranger les produits', 'Vider les poubelles', 'Nettoyer les sols']) }
-  ]
-};
+const DEFAULT_DATA = {
+    timers: [
+        {
+            id:"fries",
+            name:"Frites",
+            category:"Cuisson",
+            seconds:180
+        },
+        {
+            id:"steak-bleu",
+            name:"Steak — Bleu",
+            category:"Viande",
+            seconds:120
+        },
+        {
+            id:"steak-saignant",
+            name:"Steak — Saignant",
+            category:"Viande",
+            seconds:180
+        },
+        {
+            id:"steak-point",
+            name:"Steak — À point",
+            category:"Viande",
+            seconds:240
+        },
+        {
+            id:"steak-bien",
+            name:"Steak — Bien cuit",
+            category:"Viande",
+            seconds:360
+        }
+    ],
 
-let S;
-try { S = { ...structuredClone(DEFAULT), ...JSON.parse(localStorage.getItem(KEY) || '{}') }; } catch { S = structuredClone(DEFAULT); }
-['timers', 'products', 'recent', 'lists'].forEach(k => { if (!Array.isArray(S[k])) S[k] = structuredClone(DEFAULT)[k]; });
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} };
+    checklists:[
+        {
+            id:"ouverture",
+            name:"Ouverture",
+            items:[
+                {id:1,text:"Allumer les équipements",done:false},
+                {id:2,text:"Vérifier les friteuses",done:false},
+                {id:3,text:"Préparer les postes",done:false},
+                {id:4,text:"Vérifier les stocks",done:false}
+            ]
+        },
+        {
+            id:"fermeture",
+            name:"Fermeture",
+            items:[
+                {id:1,text:"Nettoyer les postes",done:false},
+                {id:2,text:"Nettoyer les friteuses",done:false},
+                {id:3,text:"Ranger les produits",done:false},
+                {id:4,text:"Éteindre les équipements",done:false}
+            ]
+        }
+    ],
 
-/* ---------- Navigation ---------- */
-function show(tab) {
-  if (!$('#' + tab)) tab = 'service';
-  $$('.view').forEach(v => v.classList.toggle('on', v.id === tab));
-  $$('[data-tab]').forEach(b => b.setAttribute('aria-current', b.dataset.tab === tab));
-  history.replaceState(null, '', '#' + tab);
-  scrollTo({ top: 0 });
-}
-document.addEventListener('click', e => {
-  const t = e.target.closest('[data-tab],[data-go]');
-  if (t) show(t.dataset.tab || t.dataset.go);
-});
-
-/* ---------- Thème et son ---------- */
-function applyTheme() {
-  if (S.theme) document.documentElement.dataset.theme = S.theme; else delete document.documentElement.dataset.theme;
-  $('#sound').textContent = S.sound ? '🔊' : '🔇';
-}
-$('#theme').onclick = () => {
-  const dark = S.theme ? S.theme === 'dark' : matchMedia('(prefers-color-scheme:dark)').matches;
-  S.theme = dark ? 'light' : 'dark'; save(); applyTheme();
-};
-$('#sound').onclick = () => { S.sound = !S.sound; save(); applyTheme(); if (S.sound) beep(1); };
-
-let ctx;
-addEventListener('pointerdown', () => { try { ctx = ctx || new AudioContext(); ctx.resume(); } catch {} }, { once: true });
-function beep(n = 3) {
-  if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-  if (!S.sound || !ctx) return;
-  for (let i = 0; i < n; i++) {
-    const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + i * .4;
-    o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
-    g.gain.setValueAtTime(.25, t); g.gain.exponentialRampToValueAtTime(.001, t + .3);
-    o.start(t); o.stop(t + .3);
-  }
-}
-
-/* ---------- Minuteurs ---------- */
-const left = t => t.paused ? t.left : Math.max(0, t.end - Date.now());
-const fmt = ms => {
-  const s = Math.ceil(ms / 1000), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), ss = String(s % 60).padStart(2, '0');
-  return h ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${String(m).padStart(2, '0')}:${ss}`;
-};
-function addTimer(n, m) {
-  m = Math.max(1, Math.min(600, +m || 1));
-  S.timers.unshift({ id: uid(), n, total: m * 6e4, end: Date.now() + m * 6e4, paused: false, left: 0, done: false });
-  S.recent = [{ n, m }, ...S.recent.filter(r => !(r.n === n && r.m === m))].slice(0, 6);
-  save(); render();
-}
-function ticketHTML(t) {
-  const cls = t.done ? 'done' : t.paused ? 'paused' : '';
-  return `<li class="ticket ${cls}" data-id="${t.id}">
-    <div class="top2"><b>${esc(t.n)}</b><small>${Math.round(t.total / 6e4)} min</small></div>
-    <div class="t-time" data-t>${fmt(left(t))}</div>
-    <div class="bar"><i data-b style="width:${left(t) / t.total * 100}%"></i></div>
-    <div class="act">
-      ${t.done ? '' : `<button data-a="pause">${t.paused ? 'Reprendre' : 'Pause'}</button>`}
-      <button data-a="plus">+1 min</button>
-      <button data-a="del" class="x">${t.done ? 'Terminé' : 'Arrêter'}</button>
-    </div></li>`;
-}
-function renderTimers() {
-  const html = S.timers.length ? S.timers.map(ticketHTML).join('') : '<li class="empty">Aucun minuteur. Lance une cuisson ci-dessus.</li>';
-  $('#t-list').innerHTML = html;
-  $('#mini').innerHTML = S.timers.length ? html : '<li class="empty">Rien en cours pour le moment.</li>';
-}
-document.addEventListener('click', e => {
-  const b = e.target.closest('[data-a]'); if (!b) return;
-  const t = S.timers.find(x => x.id === b.closest('[data-id]').dataset.id); if (!t) return;
-  if (b.dataset.a === 'del') S.timers = S.timers.filter(x => x !== t);
-  if (b.dataset.a === 'plus') { t.total += 6e4; if (t.paused) t.left += 6e4; else t.end += 6e4; t.done = false; }
-  if (b.dataset.a === 'pause') {
-    if (t.paused) { t.end = Date.now() + t.left; t.paused = false; } else { t.left = left(t); t.paused = true; }
-  }
-  save(); render();
-});
-$('#f-timer').onsubmit = e => {
-  e.preventDefault(); const f = e.target;
-  addTimer(f.n.value.trim(), f.m.value); f.reset(); f.n.focus();
-};
-function tick() {
-  let changed = false;
-  S.timers.forEach(t => {
-    if (!t.done && !t.paused && left(t) <= 0) { t.done = true; changed = true; beep(); }
-    $$(`[data-id="${t.id}"]`).forEach(el => {
-      $('[data-t]', el).textContent = fmt(left(t));
-      $('[data-b]', el).style.width = left(t) / t.total * 100 + '%';
-    });
-  });
-  if (changed) { save(); render(); }
-  const d = new Date();
-  $('#st-clock').textContent = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-  $('#st-date').textContent = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-}
-
-/* ---------- Produits ---------- */
-const dayDiff = d => Math.round((new Date(d + 'T00:00') - new Date(new Date().toDateString())) / 864e5);
-function renderProducts() {
-  const list = [...S.products].sort((a, b) => (a.d || '9') < (b.d || '9') ? -1 : 1);
-  $('#p-list').innerHTML = list.length ? list.map(p => {
-    let tag = '<span class="tag">Sans date</span>';
-    if (p.d) {
-      const n = dayDiff(p.d);
-      tag = n < 0 ? '<span class="tag bad">Périmé</span>' : n === 0 ? '<span class="tag bad">Aujourd\'hui</span>'
-        : n <= 2 ? `<span class="tag warn">J-${n}</span>` : `<span class="tag ok">J-${n}</span>`;
+    steakTimes:{
+        bleu:120,
+        saignant:180,
+        point:240,
+        bien:360
     }
-    return `<li><div class="grow"><b>${esc(p.n)}</b> ${p.q ? `<small>· ${esc(p.q)}</small>` : ''}</div>${tag}
-      <button class="x" data-p="${p.id}" aria-label="Supprimer ${esc(p.n)}">✕</button></li>`;
-  }).join('') : '<li class="empty">Aucun produit. Ajoute ta première préparation.</li>';
-}
-$('#f-prod').onsubmit = e => {
-  e.preventDefault(); const f = e.target;
-  S.products.push({ id: uid(), n: f.n.value.trim(), q: f.q.value.trim(), d: f.d.value });
-  save(); f.reset(); render();
-};
-$('#p-list').onclick = e => {
-  const b = e.target.closest('[data-p]'); if (!b) return;
-  S.products = S.products.filter(p => p.id !== b.dataset.p); save(); render();
 };
 
-/* ---------- Checklists ---------- */
-function renderLists() {
-  $('#l-wrap').innerHTML = S.lists.map(l => {
-    const done = l.items.filter(i => i.d).length, pct = l.items.length ? done / l.items.length * 100 : 0;
-    return `<div class="card" data-l="${l.id}">
-      <div class="meta"><h3>${esc(l.name)}</h3><span>${done}/${l.items.length}</span></div>
-      <div class="prog"><i style="width:${pct}%"></i></div>
-      ${l.items.map((i, k) => `<label><input type="checkbox" data-k="${k}" ${i.d ? 'checked' : ''}><span>${esc(i.t)}</span></label>`).join('')}
-      <form><input name="t" placeholder="Ajouter une tâche" required maxlength="60"><button class="primary">Ajouter</button></form>
-      <p><button data-reset>Tout décocher</button></p></div>`;
-  }).join('');
+let data = loadData();
+
+let activePage = "timers";
+let activeChecklist = data.checklists[0]?.id;
+
+let runningTimers = {};
+let editingTimerId = null;
+
+let alarmInterval = null;
+let audioContext = null;
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function loadData(){
+
+    try{
+
+        const saved = localStorage.getItem("kitchenflow_v3");
+
+        if(saved){
+            const parsed = JSON.parse(saved);
+
+            return {
+                ...DEFAULT_DATA,
+                ...parsed
+            };
+        }
+
+    }catch(e){
+        console.error(e);
+    }
+
+    return JSON.parse(JSON.stringify(DEFAULT_DATA));
 }
-$('#l-wrap').addEventListener('change', e => {
-  const l = S.lists.find(x => x.id === e.target.closest('[data-l]').dataset.l);
-  l.items[e.target.dataset.k].d = e.target.checked; save(); render();
-});
-$('#l-wrap').addEventListener('submit', e => {
-  e.preventDefault();
-  const l = S.lists.find(x => x.id === e.target.closest('[data-l]').dataset.l);
-  l.items.push({ t: e.target.t.value.trim(), d: false }); save(); render();
-});
-$('#l-wrap').addEventListener('click', e => {
-  if (!e.target.closest('[data-reset]')) return;
-  const l = S.lists.find(x => x.id === e.target.closest('[data-l]').dataset.l);
-  l.items.forEach(i => i.d = false); save(); render();
-});
 
-/* ---------- Accueil ---------- */
-function renderHome() {
-  $('#st-timers').textContent = S.timers.filter(t => !t.done).length;
-  $('#st-tasks').textContent = S.lists.reduce((n, l) => n + l.items.filter(i => i.d).length, 0);
-  $('#st-prods').textContent = S.products.length;
-  $('#recent').innerHTML = S.recent.map((r, i) => `<button data-r="${i}">${esc(r.n)} · ${r.m} min</button>`).join('');
+function saveData(){
+
+    localStorage.setItem(
+        "kitchenflow_v3",
+        JSON.stringify(data)
+    );
 }
-$('#recent').onclick = e => {
-  const b = e.target.closest('[data-r]'); if (!b) return;
-  const r = S.recent[b.dataset.r]; addTimer(r.n, r.m); show('timers');
-};
 
-function render() { renderTimers(); renderProducts(); renderLists(); renderHome(); }
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
-show(location.hash.slice(1) || 'service');
-applyTheme(); render(); tick(); setInterval(tick, 500);
+function showPage(page){
 
+    activePage = page;
+
+    document.getElementById("pageTimers")
+        .classList.toggle("hidden",page!=="timers");
+
+    document.getElementById("pageChecklist")
+        .classList.toggle("hidden",page!=="checklist");
+
+    document.getElementById("pageSettings")
+        .classList.toggle("hidden",page!=="settings");
+
+    document.getElementById("navTimers")
+        .classList.toggle("active",page==="timers");
+
+    document.getElementById("navChecklist")
+        .classList.toggle("active",page==="checklist");
+
+    document.getElementById("navSettings")
+        .classList.toggle("active",page==="settings");
+
+    if(page==="timers") renderTimers();
+
+    if(page==="checklist") renderChecklists();
+
+    if(page==="settings") renderSettings();
+}
+
+/* =========================================================
+   TIMERS
+========================================================= */
+
+function renderTimers(){
+
+    const grid = document.getElementById("timerGrid");
+
+    grid.innerHTML = "";
+
+    if(data.timers.length===0){
+
+        grid.innerHTML = `
+            <div class="empty">
+                Aucun minuteur.<br>
+                Appuie sur ＋ pour en créer un.
+            </div>
+        `;
+
+        return;
+    }
+
+    data.timers.forEach(timer=>{
+
+        const state = runningTimers[timer.id];
+
+        const remaining =
+            state
+                ? state.remaining
+                : timer.seconds;
+
+        const finished =
+            state?.finished;
+
+        const running =
+            state && !finished;
+
+        const card = document.createElement("div");
+
+        card.className =
+            "timerCard " +
+            (running ? "running " : "") +
+            (finished ? "finished" : "");
+
+        card.innerHTML = `
+
+            <div class="cardTop">
+
+                <div>
+                    <div class="cardName">
+                        ${escapeHTML(timer.name)}
+                    </div>
+
+                    <div class="cardCategory">
+                        ${escapeHTML(timer.category || "Minuteur")}
+                    </div>
+                </div>
+
+                <div class="cardMenu">
+
+                    <button class="smallBtn"
+                            onclick="editTimer('${timer.id}')">
+                        ✏️
+                    </button>
+
+                    <button class="smallBtn"
+                            onclick="deleteTimer('${timer.id}')">
+                        🗑️
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="time">
+                ${formatTime(remaining)}
+            </div>
+
+            <div class="cardButtons">
+
+                ${
+                    running
+                    ?
+                    `
+                    <button class="actionBtn stop"
+                            onclick="pauseTimer('${timer.id}')">
+                        ⏸ Pause
+                    </button>
+
+                    <button class="actionBtn"
+                            onclick="resetTimer('${timer.id}')">
+                        ↺ Reset
+                    </button>
+                    `
+                    :
+                    `
+                    <button class="actionBtn primary"
+                            onclick="startTimer('${timer.id}')">
+                        ▶ Démarrer
+                    </button>
+
+                    <button class="actionBtn"
+                            onclick="resetTimer('${timer.id}')">
+                        ↺ Reset
+                    </button>
+                    `
+                }
+
+            </div>
+        `;
+
+        grid.appendChild(card);
+    });
+}
+
+function startTimer(id){
+
+    unlockAudio();
+
+    const timer = data.timers.find(t=>t.id===id);
+
+    if(!timer) return;
+
+    if(runningTimers[id]?.finished){
+
+        resetTimer(id);
+    }
+
+    if(!runningTimers[id]){
+
+        runningTimers[id]={
+            remaining:timer.seconds,
+            finished:false,
+            interval:null
+        };
+    }
+
+    if(runningTimers[id].interval) return;
+
+    runningTimers[id].interval=setInterval(()=>{
+
+        const state=runningTimers[id];
+
+        if(!state) return;
+
+        state.remaining--;
+
+        if(state.remaining<=0){
+
+            state.remaining=0;
+
+            clearInterval(state.interval);
+
+            state.interval=null;
+            state.finished=true;
+
+            triggerAlarm(timer.name);
+        }
+
+        renderTimers();
+
+    },1000);
+
+    renderTimers();
+}
+
+function pauseTimer(id){
+
+    const state=runningTimers[id];
+
+    if(!state) return;
+
+    clearInterval(state.interval);
+
+    state.interval=null;
+
+    renderTimers();
+}
+
+function resetTimer(id){
+
+    const state=runningTimers[id];
+
+    if(state?.interval){
+        clearInterval(state.interval);
+    }
+
+    delete runningTimers[id];
+
+    renderTimers();
+}
+
+function quickSteak(type){
+
+    let id="";
+
+    if(type==="Bleu") id="steak-bleu";
+    if(type==="Saignant") id="steak-saignant";
+    if(type==="À point") id="steak-point";
+    if(type==="Bien cuit") id="steak-bien";
+
+    if(data.timers.some(t=>t.id===id)){
+
+        startTimer(id);
+
+        showToast("Minuteur lancé : "+type);
+
+    }else{
+
+        showToast("Minuteur introuvable");
+    }
+}
+
+/* =========================================================
+   TIMER MODAL
+========================================================= */
+
+function openNewTimer(){
+
+    editingTimerId=null;
+
+    document.getElementById("timerModalTitle")
+        .textContent="Nouveau minuteur";
+
+    document.getElementById("timerNameInput").value="";
+
+    document.getElementById("timerSecondsInput").value="180";
+
+    document.getElementById("timerModal")
+        .classList.add("open");
+}
+
+function editTimer(id){
+
+    const timer=data.timers.find(t=>t.id===id);
+
+    if(!timer) return;
+
+    editingTimerId=id;
+
+    document.getElementById("timerModalTitle")
+        .textContent="Modifier le minuteur";
+
+    document.getElementById("timerNameInput").value=timer.name;
+
+    document.getElementById("timerSecondsInput").value=timer.seconds;
+
+    document.getElementById("timerModal")
+        .classList.add("open");
+}
+
+function saveTimerModal(){
+
+    const name=
+        document.getElementById("timerNameInput")
+        .value.trim();
+
+    const seconds=
+        Number(
+            document.getElementById("timerSecondsInput")
+            .value
+        );
+
+    if(!name){
+
+        showToast("Donne un nom au minuteur.");
+
+        return;
+    }
+
+    if(!seconds || seconds<1){
+
+        showToast("Temps invalide.");
+
+        return;
+    }
+
+    if(editingTimerId){
+
+        const timer=
+            data.timers.find(t=>t.id===editingTimerId);
+
+        if(timer){
+
+            timer.name=name;
+            timer.seconds=seconds;
+
+            resetTimer(editingTimerId);
+        }
+
+    }else{
+
+        data.timers.push({
+            id:"timer-"+Date.now(),
+            name,
+            category:"Personnalisé",
+            seconds
+        });
+    }
+
+    saveData();
+
+    closeModal("timerModal");
+
+    renderTimers();
+
+    showToast("Minuteur enregistré.");
+}
+
+function deleteTimer(id){
+
+    const timer=data.timers.find(t=>t.id===id);
+
+    if(!timer) return;
+
+    if(!confirm("Supprimer « "+timer.name+" » ?")){
+        return;
+    }
+
+    resetTimer(id);
+
+    data.timers=
+        data.timers.filter(t=>t.id!==id);
+
+    saveData();
+
+    renderTimers();
+
+    showToast("Minuteur supprimé.");
+}
+
+/* =========================================================
+   CHECKLISTS
+========================================================= */
+
+function renderChecklists(){
+
+    const tabs=
+        document.getElementById("checklistTabs");
+
+    tabs.innerHTML="";
+
+    data.checklists.forEach(list=>{
+
+        const btn=document.createElement("button");
+
+        btn.className=
+            "checklistTab "+
+            (list.id===activeChecklist ? "active":"");
+
+        btn.textContent=list.name;
+
+        btn.onclick=()=>{
+
+            activeChecklist=list.id;
+
+            renderChecklists();
+        };
+
+        tabs.appendChild(btn);
+    });
+
+    const add=document.createElement("button");
+
+    add.className="checklistTab";
+
+    add.textContent="＋ Nouvelle";
+
+    add.onclick=()=>{
+
+        showPage("settings");
+
+        document.getElementById("newChecklistName")
+            .focus();
+    };
+
+    tabs.appendChild(add);
+
+    const list=
+        data.checklists.find(
+            x=>x.id===activeChecklist
+        );
+
+    const content=
+        document.getElementById("checklistContent");
+
+    if(!list){
+
+        content.innerHTML=`
+            <div class="empty">
+                Crée une checklist pour commencer.
+            </div>
+        `;
+
+        return;
+    }
+
+    content.innerHTML=`
+
+        <div class="checklistBox">
+
+            <div class="checklistHeader">
+
+                <div>
+                    <h2>${escapeHTML(list.name)}</h2>
+
+                    <small style="color:var(--muted)">
+                        ${list.items.filter(x=>x.done).length}
+                        /
+                        ${list.items.length}
+                        terminées
+                    </small>
+                </div>
+
+                <div class="itemActions">
+
+                    <button class="smallBtn"
+                            onclick="renameChecklist('${list.id}')">
+                        ✏️
+                    </button>
+
+                    <button class="smallBtn"
+                            onclick="deleteChecklist('${list.id}')">
+                        🗑️
+                    </button>
+
+                    <button class="smallBtn"
+                            onclick="openCheckModal()">
+                        ＋
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div id="checkItems"></div>
+
+        </div>
+    `;
+
+    const items=
+        document.getElementById("checkItems");
+
+    if(list.items.length===0){
+
+        items.innerHTML=`
+            <div class="empty">
+                Aucune tâche.
+            </div>
+        `;
+
+        return;
+    }
+
+    list.items.forEach(item=>{
+
+        const row=document.createElement("div");
+
+        row.className=
+            "checkItem "+
+            (item.done ? "done":"");
+
+        row.innerHTML=`
+
+            <button class="checkBox"
+                    onclick="toggleCheck(${item.id})">
+                ${item.done ? "✓":""}
+            </button>
+
+            <div class="itemText">
+                ${escapeHTML(item.text)}
+            </div>
+
+            <div class="itemActions">
+
+                <button class="smallBtn"
+                        onclick="editCheck(${item.id})">
+                    ✏️
+                </button>
+
+                <button class="smallBtn"
+                        onclick="deleteCheck(${item.id})">
+                    🗑️
+                </button>
+
+            </div>
+        `;
+
+        items.appendChild(row);
+    });
+}
+
+function openCheckModal(){
+
+    document.getElementById("checkTextInput").value="";
+
+    document.getElementById("checkModal")
+        .classList.add("open");
+
+    setTimeout(()=>{
+        document.getElementById("checkTextInput").focus();
+    },100);
+}
+
+function saveChecklistItem(){
+
+    const input=
+        document.getElementById("checkTextInput");
+
+    const text=input.value.trim();
+
+    if(!text){
+
+        showToast("Écris une tâche.");
+
+        return;
+    }
+
+    const list=
+        data.checklists.find(
+            x=>x.id===activeChecklist
+        );
+
+    if(!list) return;
+
+    list.items.push({
+        id:Date.now(),
+        text,
+        done:false
+    });
+
+    saveData();
+
+    closeModal("checkModal");
+
+    renderChecklists();
+
+    showToast("Tâche ajoutée.");
+}
+
+function toggleCheck(id){
+
+    const list=
+        data.checklists.find(
+            x=>x.id===activeChecklist
+        );
+
+    const item=
+        list?.items.find(x=>x.id===id);
+
+    if(!item) return;
+
+    item.done=!item.done;
+
+    saveData();
+
+    renderChecklists();
+}
+
+function deleteCheck(id){
+
+    const list=
+        data.checklists.find(
+            x=>x.id===activeChecklist
+        );
+
+    if(!list) return;
+
+    list.items=
+        list.items.filter(x=>x.id!==id);
+
+    saveData();
+
+    renderChecklists();
+}
+
+function editCheck(id){
+
+    const list=
+        data.checklists.find(
+            x=>x.id===activeChecklist
+        );
+
+    const item=
+        list?.items.find(x=>x.id===id);
+
+    if(!item) return;
+
+    const text=
+        prompt("Modifier la tâche :",item.text);
+
+    if(text===null) return;
+
+    const cleaned=text.trim();
+
+    if(!cleaned) return;
+
+    item.text=cleaned;
+
+    saveData();
+
+    renderChecklists();
+}
+
+function addChecklist(){
+
+    const input=
+        document.getElementById("newChecklistName");
+
+    const name=input.value.trim();
+
+    if(!name){
+
+        showToast("Donne un nom à la checklist.");
+
+        return;
+    }
+
+    const id=
+        "list-"+Date.now();
+
+    data.checklists.push({
+        id,
+        name,
+        items:[]
+    });
+
+    activeChecklist=id;
+
+    input.value="";
+
+    saveData();
+
+    renderChecklists();
+
+    showToast("Checklist créée.");
+}
+
+function renameChecklist(id){
+
+    const list=
+        data.checklists.find(x=>x.id===id);
+
+    if(!list) return;
+
+    const name=
+        prompt("Nouveau nom :",list.name);
+
+    if(name===null) return;
+
+    const cleaned=name.trim();
+
+    if(!cleaned) return;
+
+    list.name=cleaned;
+
+    saveData();
+
+    renderChecklists();
+}
+
+function deleteChecklist(id){
+
+    if(data.checklists.length<=1){
+
+        showToast("Il faut garder au moins une checklist.");
+
+        return;
+    }
+
+    const list=
+        data.checklists.find(x=>x.id===id);
+
+    if(!list) return;
+
+    if(!confirm("Supprimer « "+list.name+" » ?")){
+        return;
+    }
+
+    data.checklists=
+        data.checklists.filter(x=>x.id!==id);
+
+    activeChecklist=data.checklists[0].id;
+
+    saveData();
+
+    renderChecklists();
+}
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function renderSettings(){
+
+    document.getElementById("bleuInput").value=
+        data.steakTimes.bleu;
+
+    document.getElementById("saignantInput").value=
+        data.steakTimes.saignant;
+
+    document.getElementById("pointInput").value=
+        data.steakTimes.point;
+
+    document.getElementById("bienInput").value=
+        data.steakTimes.bien;
+
+    updateQuickLabels();
+}
+
+function saveSteakTimes(){
+
+    data.steakTimes.bleu=
+        Number(document.getElementById("bleuInput").value);
+
+    data.steakTimes.saignant=
+        Number(document.getElementById("saignantInput").value);
+
+    data.steakTimes.point=
+        Number(document.getElementById("pointInput").value);
+
+    data.steakTimes.bien=
+        Number(document.getElementById("bienInput").value);
+
+    const values=[
+        ["steak-bleu",data.steakTimes.bleu],
+        ["steak-saignant",data.steakTimes.saignant],
+        ["steak-point",data.steakTimes.point],
+        ["steak-bien",data.steakTimes.bien]
+    ];
+
+    values.forEach(([id,time])=>{
+
+        const timer=
+            data.timers.find(x=>x.id===id);
+
+        if(timer){
+
+            timer.seconds=time;
+
+            resetTimer(id);
+        }
+    });
+
+    saveData();
+
+    updateQuickLabels();
+
+    renderTimers();
+
+    showToast("Temps de cuisson enregistrés.");
+}
+
+function updateQuickLabels(){
+
+    document.getElementById("quickBleu").textContent=
+        formatTime(data.steakTimes.bleu);
+
+    document.getElementById("quickSaignant").textContent=
+        formatTime(data.steakTimes.saignant);
+
+    document.getElementById("quickPoint").textContent=
+        formatTime(data.steakTimes.point);
+
+    document.getElementById("quickBien").textContent=
+        formatTime(data.steakTimes.bien);
+}
+
+/* =========================================================
+   ALARM
+========================================================= */
+
+function unlockAudio(){
+
+    try{
+
+        if(!audioContext){
+
+            audioContext=
+                new (window.AudioContext ||
+                     window.webkitAudioContext)();
+        }
+
+        if(audioContext.state==="suspended"){
+            audioContext.resume();
+        }
+
+    }catch(e){
+        console.log(e);
+    }
+}
+
+function beep(){
+
+    try{
+
+        unlockAudio();
+
+        const oscillator=
+            audioContext.createOscillator();
+
+        const gain=
+            audioContext.createGain();
+
+        oscillator.type="square";
+
+        oscillator.frequency.value=850;
+
+        gain.gain.value=.12;
+
+        oscillator.connect(gain);
+
+        gain.connect(audioContext.destination);
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime+.45
+        );
+
+    }catch(e){
+        console.log(e);
+    }
+}
+
+function triggerAlarm(name){
+
+    document.getElementById("alertName")
+        .textContent=name;
+
+    document.getElementById("alertOverlay")
+        .classList.add("show");
+
+    beep();
+
+    if(alarmInterval){
+        clearInterval(alarmInterval);
+    }
+
+    alarmInterval=
+        setInterval(beep,900);
+
+    if(navigator.vibrate){
+
+        navigator.vibrate([
+            500,200,500,200,500
+        ]);
+    }
+}
+
+function stopAlarm(){
+
+    document.getElementById("alertOverlay")
+        .classList.remove("show");
+
+    if(alarmInterval){
+
+        clearInterval(alarmInterval);
+
+        alarmInterval=null;
+    }
+
+    if(navigator.vibrate){
+        navigator.vibrate(0);
+    }
+}
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function formatTime(seconds){
+
+    seconds=Math.max(0,Math.floor(seconds));
+
+    const min=
+        Math.floor(seconds/60);
+
+    const sec=
+        seconds%60;
+
+    return (
+        String(min).padStart(2,"0")+
+        ":"+
+        String(sec).padStart(2,"0")
+    );
+}
+
+function closeModal(id){
+
+    document.getElementById(id)
+        .classList.remove("open");
+}
+
+function showToast(message){
+
+    const toast=
+        document.getElementById("toast");
+
+    toast.textContent=message;
+
+    toast.classList.add("show");
+
+    clearTimeout(window.toastTimeout);
+
+    window.toastTimeout=
+        setTimeout(()=>{
+            toast.classList.remove("show");
+        },2200);
+}
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+function resetApp(){
+
+    if(!confirm(
+        "Cela supprimera tes minuteurs et tes checklists personnalisés. Continuer ?"
+    )){
+        return;
+    }
+
+    localStorage.removeItem("kitchenflow_v3");
+
+    location.reload();
+}
+
+/* =========================================================
+   MODAL OUTSIDE CLICK
+========================================================= */
+
+document.querySelectorAll(".modalOverlay")
+.forEach(modal=>{
+
+    modal.addEventListener("click",e=>{
+
+        if(e.target===modal){
+            modal.classList.remove("open");
+        }
+
+    });
+});
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener("keydown",e=>{
+
+    if(e.key==="Escape"){
+
+        document.querySelectorAll(".modalOverlay.open")
+            .forEach(x=>x.classList.remove("open"));
+    }
+
+    if(
+        e.key===" " &&
+        activePage==="timers" &&
+        !e.target.matches("input")
+    ){
+
+        e.preventDefault();
+    }
+});
+
+/* =========================================================
+   START
+========================================================= */
+
+renderTimers();
+updateQuickLabels();
 </script>
+
 </body>
 </html>
