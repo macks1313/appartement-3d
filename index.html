@@ -1,2940 +1,373 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111315">
-<title>KitchenFlow</title>
-
+<meta name="theme-color" content="#16324f">
+<title>KitchenFlow – Centre de contrôle cuisine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
-body{
-  margin:0;
-  background:#f3f4f2;
-  color:#17191b;
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
-  padding-bottom:95px;
-}
-
-button,input,select{
-  font:inherit;
-}
-
-button{
-  border:0;
-  cursor:pointer;
-}
-
-.header{
-  position:sticky;
-  top:0;
-  z-index:50;
-  background:rgba(243,244,242,.94);
-  backdrop-filter:blur(18px);
-  border-bottom:1px solid #dedfdd;
-  padding:16px 18px;
-  padding-top:calc(16px + env(safe-area-inset-top));
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.logo{
-  font-size:25px;
-  font-weight:950;
-  letter-spacing:-1.4px;
-}
-
-.logo span{
-  color:#ef6244;
-}
-
-.service-status{
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:2px;
-  color:#85888c;
-  margin-top:3px;
-}
-
-.header-button{
-  width:46px;
-  height:46px;
-  border-radius:15px;
-  background:#fff;
-  font-size:21px;
-}
-
-main{
-  max-width:900px;
-  margin:auto;
-  padding:0 16px;
-}
-
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
-
-.hero{
-  padding:34px 0 20px;
-}
-
-.hero-label{
-  color:#85888c;
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:2.5px;
-  margin-bottom:9px;
-}
-
-.hero h1{
-  margin:0;
-  font-size:43px;
-  line-height:.95;
-  letter-spacing:-2.5px;
-}
-
-.hero h1 span{
-  color:#ef6244;
-}
-
-.running-area{
-  margin:20px 0 25px;
-}
-
-.running-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:11px;
-}
-
-.running-title strong{
-  font-size:20px;
-}
-
-.counter{
-  background:#17191b;
-  color:#fff;
-  padding:5px 10px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:900;
-}
-
-.running-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.running-empty{
-  background:#fff;
-  border-radius:19px;
-  padding:18px;
-  color:#888;
-  text-align:center;
-}
-
-.running-card{
-  background:#fff;
-  border-radius:21px;
-  padding:15px;
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  gap:13px;
-  align-items:center;
-  box-shadow:0 5px 18px rgba(0,0,0,.055);
-}
-
-.running-emoji{
-  width:48px;
-  height:48px;
-  border-radius:15px;
-  background:#f0f1ef;
-  display:grid;
-  place-items:center;
-  font-size:25px;
-}
-
-.running-name{
-  font-weight:900;
-  font-size:16px;
-}
-
-.running-time{
-  font-size:28px;
-  font-weight:950;
-  font-variant-numeric:tabular-nums;
-  letter-spacing:-1px;
-}
-
-.running-bar{
-  height:5px;
-  background:#e7e8e7;
-  border-radius:10px;
-  overflow:hidden;
-  margin-top:7px;
-}
-
-.running-progress{
-  height:100%;
-  background:#ef6244;
-  border-radius:10px;
-}
-
-.stop-button{
-  background:#ffe4df;
-  color:#c84232;
-  width:43px;
-  height:43px;
-  border-radius:13px;
-  font-size:18px;
-}
-
-.category{
-  margin:27px 0;
-}
-
-.category-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:13px;
-}
-
-.category-name{
-  font-size:21px;
-  font-weight:950;
-  letter-spacing:-.7px;
-}
-
-.category-actions{
-  display:flex;
-  gap:6px;
-}
-
-.mini-button{
-  width:35px;
-  height:35px;
-  border-radius:11px;
-  background:#e8e9e7;
-}
-
-.product-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:11px;
-}
-
-.product{
-  min-height:142px;
-  padding:17px;
-  border-radius:21px;
-  background:#fff;
-  box-shadow:0 7px 22px rgba(0,0,0,.055);
-  text-align:left;
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  transition:.12s;
-}
-
-.product:active{
-  transform:scale(.96);
-}
-
-.product-emoji{
-  font-size:33px;
-}
-
-.product-name{
-  font-size:18px;
-  font-weight:950;
-  line-height:1.05;
-}
-
-.product-time{
-  color:#7e8287;
-  font-size:13px;
-  font-weight:800;
-  margin-top:5px;
-}
-
-.refaire{
-  margin-top:35px;
-  padding-bottom:15px;
-}
-
-.refaire-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:end;
-  margin-bottom:13px;
-}
-
-.refaire-title{
-  font-size:27px;
-  font-weight:950;
-  letter-spacing:-1.2px;
-}
-
-.refaire-sub{
-  color:#85888c;
-  font-size:12px;
-  margin-top:3px;
-}
-
-.refaire-list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.refaire-item{
-  background:#fff;
-  border-radius:17px;
-  padding:13px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.refaire-emoji{
-  font-size:27px;
-}
-
-.refaire-name{
-  flex:1;
-  font-weight:850;
-}
-
-.refaire-done{
-  background:#e7f4e9;
-  color:#378047;
-  border-radius:11px;
-  padding:9px 11px;
-  font-size:12px;
-  font-weight:900;
-}
-
-.empty-refaire{
-  background:#fff;
-  border-radius:18px;
-  padding:22px;
-  text-align:center;
-  color:#85888c;
-}
-
-.bottom{
-  position:fixed;
-  z-index:100;
-  bottom:0;
-  left:0;
-  right:0;
-  height:80px;
-  padding-bottom:env(safe-area-inset-bottom);
-  background:rgba(255,255,255,.95);
-  backdrop-filter:blur(18px);
-  border-top:1px solid #ddd;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-}
-
-.bottom button{
-  background:transparent;
-  color:#85888c;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:4px;
-  font-size:10px;
-  font-weight:900;
-}
-
-.bottom button.active{
-  color:#ef6244;
-}
-
-.bottom-icon{
-  font-size:23px;
-}
-
-.page-title{
-  padding:30px 0 22px;
-}
-
-.page-title small{
-  display:block;
-  color:#85888c;
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:2.5px;
-  margin-bottom:8px;
-}
-
-.page-title h2{
-  margin:0;
-  font-size:39px;
-  letter-spacing:-2px;
-}
-
-.config-section{
-  background:#fff;
-  border-radius:23px;
-  padding:18px;
-  margin-bottom:14px;
-}
-
-.config-section-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:15px;
-}
-
-.config-section-title strong{
-  font-size:19px;
-}
-
-.config-item{
-  padding:13px 0;
-  border-top:1px solid #e6e7e6;
-  display:flex;
-  align-items:center;
-  gap:11px;
-}
-
-.config-item:first-child{
-  border-top:0;
-}
-
-.config-emoji{
-  font-size:25px;
-}
-
-.config-info{
-  flex:1;
-}
-
-.config-info strong{
-  display:block;
-}
-
-.config-info small{
-  color:#85888c;
-}
-
-.edit-button{
-  width:39px;
-  height:39px;
-  border-radius:11px;
-  background:#eceeec;
-}
-
-.delete-button{
-  width:39px;
-  height:39px;
-  border-radius:11px;
-  background:#ffe4df;
-  color:#c84232;
-}
-
-.primary{
-  width:100%;
-  background:#ef6244;
-  color:#fff;
-  border-radius:16px;
-  padding:15px;
-  font-weight:900;
-  box-shadow:0 7px 18px rgba(239,98,68,.2);
-}
-
-.secondary{
-  background:#e8e9e7;
-  color:#17191b;
-  border-radius:13px;
-  padding:11px 14px;
-  font-weight:850;
-}
-
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:200;
-  background:rgba(0,0,0,.5);
-  display:none;
-  align-items:flex-end;
-}
-
-.modal.open{
-  display:flex;
-}
-
-.modal-box{
-  background:#fff;
-  width:100%;
-  max-width:750px;
-  margin:auto;
-  border-radius:28px 28px 0 0;
-  padding:23px;
-  max-height:92vh;
-  overflow-y:auto;
-}
-
-.modal-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:22px;
-}
-
-.modal-header h3{
-  margin:0;
-  font-size:25px;
-}
-
-.close{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:#eceeec;
-  font-size:23px;
-}
-
-.field{
-  margin-bottom:17px;
-}
-
-.field label{
-  display:block;
-  font-size:12px;
-  font-weight:900;
-  color:#707479;
-  margin-bottom:7px;
-}
-
-.field input,
-.field select{
-  width:100%;
-  border:2px solid #e0e2df;
-  background:#f5f6f4;
-  border-radius:14px;
-  padding:13px;
-  outline:none;
-}
-
-.field input:focus,
-.field select:focus{
-  border-color:#ef6244;
-}
-
-.emoji-grid{
-  display:grid;
-  grid-template-columns:repeat(8,1fr);
-  gap:6px;
-  max-height:190px;
-  overflow:auto;
-}
-
-.emoji-choice{
-  aspect-ratio:1;
-  border-radius:11px;
-  background:#f1f2f0;
-  font-size:22px;
-}
-
-.emoji-choice.selected{
-  background:#ef6244;
-}
-
-.form-buttons{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-top:20px;
-}
-
-.warning{
-  background:#fff1ed;
-  color:#a94031;
-  padding:12px;
-  border-radius:13px;
-  font-size:13px;
-  margin-bottom:15px;
-}
-
-@media(min-width:700px){
-  .product-grid{
-    grid-template-columns:repeat(4,1fr);
-  }
-
-  .bottom{
-    max-width:650px;
-    left:50%;
-    transform:translateX(-50%);
-    border-radius:24px 24px 0 0;
+:root{
+  --bg:#e9eeec; --paper:#fbfaf6; --ink:#16324f; --muted:#5b6f80; --line:#c3cfd2;
+  --accent:#16324f; --on-accent:#fff; --ok:#2f8f5b; --warn:#e9a800; --bad:#d62839;
+  --r:16px;
+  font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+:root[data-theme="dark"]{
+  --bg:#0f1c2b; --paper:#182a3d; --ink:#eaf1f5; --muted:#93a7b6; --line:#2c4157;
+  --accent:#f2c94c; --on-accent:#16212d; --ok:#56c98a; --warn:#f2c94c; --bad:#ff6b78;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1c2b; --paper:#182a3d; --ink:#eaf1f5; --muted:#93a7b6; --line:#2c4157;
+    --accent:#f2c94c; --on-accent:#16212d; --ok:#56c98a; --warn:#f2c94c; --bad:#ff6b78;
   }
 }
+*{box-sizing:border-box}
+html{scroll-padding-top:120px}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:17px;line-height:1.45;
+  padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 24px)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:.55em 1em;min-height:44px}
+button:focus-visible,input:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+input{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:.6em .8em;min-height:44px;min-width:0}
 
-body.dark{
-  background:#111315;
-  color:#f5f5f5;
-}
+.top{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;
+  gap:12px;padding:12px 16px;background:#16324f;color:#fff}
+:root[data-theme="dark"] .top{background:#0a141f}
+.brand{display:flex;align-items:center;gap:12px}
+.brand small{display:block;opacity:.7;font-size:.75rem}
+.logo{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#f2c94c;color:#16212d;font-weight:800}
+.tools{display:flex;gap:8px}
+.tools button{padding:.3em .8em;background:rgba(255,255,255,.12);border-color:transparent;color:#fff}
 
-body.dark .header{
-  background:rgba(17,19,21,.94);
-  border-color:#292d30;
-}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;scrollbar-width:none}
+.tabs button{white-space:nowrap}
+.tabs button[aria-current="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 
-body.dark .header-button,
-body.dark .product,
-body.dark .running-card,
-body.dark .running-empty,
-body.dark .refaire-item,
-body.dark .empty-refaire,
-body.dark .config-section,
-body.dark .modal-box{
-  background:#1b1e21;
-  color:#f5f5f5;
-}
+main{padding:0 16px;max-width:760px;margin:0 auto}
+.view{display:none}
+.view.on{display:block}
+h1{font-size:clamp(2.6rem,12vw,4.5rem);line-height:.95;letter-spacing:-.04em;font-weight:800;margin:.4em 0 .2em}
+h2{font-size:1.05rem;margin:1.8em 0 .6em;font-weight:600;color:var(--muted)}
+.lead{color:var(--muted);margin:0 0 1.2em}
 
-body.dark .product-time,
-body.dark .refaire-sub,
-body.dark .config-info small{
-  color:#a2a5a8;
-}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stats div{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.stats b{display:block;font-size:2rem;line-height:1.1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stats span{color:var(--muted);font-size:.9rem}
 
-body.dark .product-emoji,
-body.dark .running-emoji{
-  background:#282c30;
-}
+.quick{display:grid;gap:10px}
+.quick button{display:flex;flex-direction:column;align-items:flex-start;border-radius:var(--r);padding:14px 16px;text-align:left}
+.quick span{color:var(--muted);font-size:.9rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
 
-body.dark .secondary,
-body.dark .mini-button,
-body.dark .edit-button,
-body.dark .close,
-body.dark .emoji-choice{
-  background:#292d31;
-  color:#fff;
-}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.row input:first-child{flex:1 1 180px}
+.row input[type=number],.row input[placeholder="Qté"]{flex:0 1 90px}
+.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
 
-body.dark .bottom{
-  background:rgba(22,24,27,.96);
-  border-color:#292d30;
-}
+/* Minuteurs façon bon de commande */
+.tickets{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.ticket{position:relative;background:var(--paper);border:1px solid var(--line);border-left:8px solid var(--accent);
+  border-radius:var(--r);padding:14px 16px}
+.ticket .top2{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.ticket .t-time{font-size:3rem;font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.ticket .bar{height:6px;background:var(--line);border-radius:9px;margin:10px 0;overflow:hidden}
+.ticket .bar i{display:block;height:100%;width:100%;background:var(--accent);transition:width .5s linear}
+.ticket .act{display:flex;gap:8px;border-top:2px dashed var(--line);padding-top:10px}
+.ticket.paused{border-left-color:var(--warn)}
+.ticket.done{border-left-color:var(--bad);animation:pulse 1s ease-in-out infinite}
+.ticket.done .t-time{color:var(--bad)}
+@keyframes pulse{50%{background:color-mix(in srgb,var(--bad) 14%,var(--paper))}}
+.empty{color:var(--muted);padding:12px 0}
 
-body.dark .field input,
-body.dark .field select{
-  background:#25292d;
-  color:#fff;
-  border-color:#383d41;
-}
+.plist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.plist li{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.plist .grow{flex:1;min-width:0}
+.plist small{color:var(--muted)}
+.tag{font-size:.8rem;font-weight:600;padding:.2em .7em;border-radius:999px;background:var(--line)}
+.tag.ok{background:color-mix(in srgb,var(--ok) 25%,transparent);color:var(--ok)}
+.tag.warn{background:color-mix(in srgb,var(--warn) 30%,transparent)}
+.tag.bad{background:var(--bad);color:#fff}
 
-body.dark .config-item{
-  border-color:#303438;
-}
-</style>
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.card h3{margin:0;font-size:1.3rem}
+.card .meta{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.prog{height:8px;background:var(--line);border-radius:9px;margin:10px 0;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--ok);transition:width .3s}
+.card label{display:flex;gap:12px;align-items:center;min-height:44px;border-bottom:1px solid var(--line)}
+.card input[type=checkbox]{width:22px;height:22px;min-height:0;accent-color:var(--ok)}
+.card input:checked+span{text-decoration:line-through;color:var(--muted)}
+.card form{display:flex;gap:8px;margin-top:12px}
+.card form input{flex:1}
+.x{padding:.2em .7em;min-height:36px;color:var(--bad)}
+
+@media (min-width:640px){.stats{grid-template-columns:repeat(4,1fr)}.quick{grid-template-columns:repeat(3,1fr)}}
+@media (prefers-reduced-motion:reduce){.ticket.done{animation:none}.ticket .bar i,.prog i{transition:none}}
+
+#err{position:fixed;left:8px;right:8px;bottom:8px;z-index:99;background:#d62839;color:#fff;padding:10px 12px;border-radius:12px;font-size:14px}</style>
 </head>
-
 <body>
-
-<header class="header">
-  <div>
-    <div class="logo">Kitchen<span>Flow</span></div>
-    <div class="service-status">SERVICE • MODE CUISINE</div>
+<header class="top">
+  <div class="brand">
+    <span class="logo">KF</span>
+    <div><b>KitchenFlow</b><small>Centre de contrôle cuisine</small></div>
   </div>
-
-  <button class="header-button" onclick="toggleDark()">🌙</button>
+  <div class="tools">
+    <button id="sound" aria-label="Activer ou couper le son">🔊</button>
+    <button id="theme" aria-label="Changer de thème">◐</button>
+  </div>
 </header>
 
-
-<main>
-
-<!-- ================= SERVICE ================= -->
-
-<section id="servicePage" class="page active">
-
-  <div class="hero">
-    <div class="hero-label">AUJOURD'HUI</div>
-    <h1>
-      Commande<br>
-      <span>rapide.</span>
-    </h1>
-  </div>
-
-
-  <!-- MINUTEURS EN COURS -->
-
-  <div class="running-area">
-
-    <div class="running-title">
-      <strong>⏱️ En cours</strong>
-      <span id="runningCounter" class="counter">0</span>
-    </div>
-
-    <div id="runningList" class="running-list"></div>
-
-  </div>
-
-
-  <!-- PRODUITS -->
-
-  <div id="productsArea"></div>
-
-
-  <!-- À REFAIRE -->
-
-  <div class="refaire">
-
-    <div class="refaire-header">
-
-      <div>
-        <div class="refaire-title">🔄 À refaire</div>
-        <div class="refaire-sub">
-          Préparations à refaire pendant la pause
-        </div>
-      </div>
-
-      <button
-        class="secondary"
-        onclick="clearRefaire()"
-      >
-        Tout vider
-      </button>
-
-    </div>
-
-    <div id="refaireList" class="refaire-list"></div>
-
-  </div>
-
-</section>
-
-
-<!-- ================= CONFIGURATION ================= -->
-
-<section id="configPage" class="page">
-
-  <div class="page-title">
-    <small>PERSONNALISATION</small>
-    <h2>Configuration</h2>
-  </div>
-
-
-  <div class="config-section">
-
-    <div class="config-section-title">
-      <strong>🔥 Catégories</strong>
-
-      <button
-        class="secondary"
-        onclick="openCategoryModal()"
-      >
-        + Ajouter
-      </button>
-    </div>
-
-    <div id="categoryConfig"></div>
-
-  </div>
-
-
-  <div class="config-section">
-
-    <div class="config-section-title">
-      <strong>🔔 Minuteurs</strong>
-
-      <button
-        class="secondary"
-        onclick="openProductModal()"
-      >
-        + Ajouter
-      </button>
-    </div>
-
-    <div id="productConfig"></div>
-
-  </div>
-
-
-  <div class="config-section">
-
-    <strong>💡 Fonctionnement</strong>
-
-    <p style="color:#777;line-height:1.5">
-      Tout ce que tu crées ici reste enregistré sur
-      cet appareil. La cuisinière peut donc adapter
-      KitchenFlow à sa propre cuisine : produits,
-      emojis, catégories et temps de cuisson.
-    </p>
-
-  </div>
-
-</section>
-
-
-<!-- ================= REFAIRE ================= -->
-
-<section id="refairePage" class="page">
-
-  <div class="page-title">
-    <small>PRODUCTION</small>
-    <h2>À refaire</h2>
-  </div>
-
-  <div id="refaireFull"></div>
-
-</section>
-
-</main>
-
-
-<!-- ================= NAVIGATION ================= -->
-
-<nav class="bottom">
-
-  <button
-    id="navService"
-    class="active"
-    onclick="showPage('service')"
-  >
-    <span class="bottom-icon">👨‍🍳</span>
-    Service
-  </button>
-
-  <button
-    id="navConfig"
-    onclick="showPage('config')"
-  >
-    <span class="bottom-icon">⚙️</span>
-    Configurer
-  </button>
-
-  <button
-    id="navRefaire"
-    onclick="showPage('refaire')"
-  >
-    <span class="bottom-icon">🔄</span>
-    À refaire
-  </button>
-
+<nav class="tabs" aria-label="Sections">
+  <button data-tab="service">⚡ Service</button>
+  <button data-tab="timers">⏱️ Minuteurs</button>
+  <button data-tab="products">🥫 Produits</button>
+  <button data-tab="lists">✅ Checklists</button>
 </nav>
 
-
-<!-- ================= MODALE PRODUIT ================= -->
-
-<div
-  id="productModal"
-  class="modal"
-  onclick="outsideClose(event,'productModal')"
->
-
-  <div class="modal-box">
-
-    <div class="modal-header">
-      <h3 id="productModalTitle">
-        Nouveau bouton
-      </h3>
-
-      <button
-        class="close"
-        onclick="closeModal('productModal')"
-      >
-        ×
-      </button>
+<main>
+  <section id="service" class="view">
+    <h1>Poste de travail</h1>
+    <p class="lead">Tout ce dont tu as besoin, au même endroit.</p>
+    <div class="stats">
+      <div><b id="st-clock">--:--</b><span id="st-date"></span></div>
+      <div><b id="st-timers">0</b><span>minuteurs actifs</span></div>
+      <div><b id="st-tasks">0</b><span>tâches terminées</span></div>
+      <div><b id="st-prods">0</b><span>produits enregistrés</span></div>
     </div>
-
-
-    <div class="field">
-      <label>NOM DU BOUTON</label>
-
-      <input
-        id="productName"
-        placeholder="Ex : Frites"
-      >
+    <h2>En cours</h2>
+    <ul id="mini" class="tickets"></ul>
+    <h2>Actions rapides</h2>
+    <div class="quick">
+      <button data-go="timers"><b>Nouveau minuteur</b><span>Lancer une cuisson</span></button>
+      <button data-go="products"><b>Produits</b><span>Préparations et sauces</span></button>
+      <button data-go="lists"><b>Checklist</b><span>Mise en place</span></button>
     </div>
+    <h2>À refaire</h2>
+    <div id="recent" class="chips"></div>
+  </section>
 
+  <section id="timers" class="view">
+    <h1>Cuissons</h1>
+    <p class="lead">Lance un minuteur, on te prévient quand c'est prêt.</p>
+    <form id="f-timer" class="row">
+      <input name="n" placeholder="Nom (ex. Pâtes)" required maxlength="30">
+      <input name="m" type="number" min="1" max="600" placeholder="Min" required inputmode="numeric">
+      <button class="primary">Lancer</button>
+    </form>
+    <ul id="t-list" class="tickets"></ul>
+  </section>
 
-    <div class="field">
-      <label>DURÉE</label>
+  <section id="products" class="view">
+    <h1>Produits</h1>
+    <p class="lead">Suis tes préparations et leurs dates limites.</p>
+    <form id="f-prod" class="row">
+      <input name="n" placeholder="Produit (ex. Sauce tomate)" required maxlength="40">
+      <input name="q" placeholder="Qté" maxlength="12">
+      <input name="d" type="date" aria-label="Date limite">
+      <button class="primary">Ajouter</button>
+    </form>
+    <ul id="p-list" class="plist"></ul>
+  </section>
 
-      <div style="
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:9px;
-      ">
-
-        <input
-          id="productMinutes"
-          type="number"
-          min="0"
-          placeholder="Minutes"
-        >
-
-        <input
-          id="productSeconds"
-          type="number"
-          min="0"
-          max="59"
-          placeholder="Secondes"
-        >
-
-      </div>
-    </div>
-
-
-    <div class="field">
-      <label>CATÉGORIE</label>
-
-      <select id="productCategory"></select>
-    </div>
-
-
-    <div class="field">
-      <label>EMOJI</label>
-
-      <div
-        id="emojiGrid"
-        class="emoji-grid"
-      ></div>
-    </div>
-
-
-    <div class="field">
-
-      <label>TYPE DE BOUTON</label>
-
-      <select id="productType">
-
-        <option value="timer">
-          ⏱️ Minuteur — lance une cuisson
-        </option>
-
-        <option value="refaire">
-          🔄 À refaire — ajoute à la liste
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <div class="form-buttons">
-
-      <button
-        class="secondary"
-        onclick="closeModal('productModal')"
-      >
-        Annuler
-      </button>
-
-      <button
-        class="primary"
-        onclick="saveProduct()"
-      >
-        Enregistrer
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ================= MODALE CATÉGORIE ================= -->
-
-<div
-  id="categoryModal"
-  class="modal"
-  onclick="outsideClose(event,'categoryModal')"
->
-
-  <div class="modal-box">
-
-    <div class="modal-header">
-      <h3>Nouvelle catégorie</h3>
-
-      <button
-        class="close"
-        onclick="closeModal('categoryModal')"
-      >
-        ×
-      </button>
-    </div>
-
-
-    <div class="field">
-
-      <label>NOM</label>
-
-      <input
-        id="categoryName"
-        placeholder="Ex : Viandes"
-      >
-
-    </div>
-
-
-    <div class="field">
-
-      <label>EMOJI</label>
-
-      <div
-        id="categoryEmojiGrid"
-        class="emoji-grid"
-      ></div>
-
-    </div>
-
-
-    <div class="form-buttons">
-
-      <button
-        class="secondary"
-        onclick="closeModal('categoryModal')"
-      >
-        Annuler
-      </button>
-
-      <button
-        class="primary"
-        onclick="saveCategory()"
-      >
-        Enregistrer
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
+  <section id="lists" class="view">
+    <h1>Checklists</h1>
+    <p class="lead">Coche au fur et à mesure, rien ne passe à la trappe.</p>
+    <div id="l-wrap"></div>
+  </section>
+</main>
+<div id="err" hidden></div>
+<script>window.onerror=function(m,s,l){var e=document.getElementById("err");e.hidden=false;e.textContent="Erreur : "+m+" (ligne "+l+")"}</script>
 <script>
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const KEY = 'kitchenflow:v2';
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Math.random().toString(36).slice(2, 9);
+const items = arr => arr.map(t => ({ t, d: false }));
 
-/* =========================================================
-   DONNÉES PAR DÉFAUT
-========================================================= */
+const DEFAULT = {
+  timers: [], products: [], sound: true, theme: null,
+  recent: [{ n: 'Pâtes', m: 9 }, { n: 'Riz', m: 12 }, { n: 'Œufs mollets', m: 6 }, { n: 'Fond brun', m: 45 }],
+  lists: [
+    { id: 'mep', name: 'Mise en place', items: items(['Vérifier les températures des frigos', 'Sortir et affûter les couteaux', 'Préparer les sauces de base', 'Étiqueter les bacs (nom et date)', 'Nettoyer le plan de travail']) },
+    { id: 'close', name: 'Fermeture', items: items(['Couper les feux et le gaz', 'Filmer et ranger les produits', 'Vider les poubelles', 'Nettoyer les sols']) }
+  ]
+};
 
-const defaultCategories = [
+let S;
+try { S = { ...structuredClone(DEFAULT), ...JSON.parse(localStorage.getItem(KEY) || '{}') }; } catch { S = structuredClone(DEFAULT); }
+['timers', 'products', 'recent', 'lists'].forEach(k => { if (!Array.isArray(S[k])) S[k] = structuredClone(DEFAULT)[k]; });
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} };
 
-  {
-    id:"frites",
-    name:"Frites",
-    emoji:"🍟"
-  },
+/* ---------- Navigation ---------- */
+function show(tab) {
+  if (!$('#' + tab)) tab = 'service';
+  $$('.view').forEach(v => v.classList.toggle('on', v.id === tab));
+  $$('[data-tab]').forEach(b => b.setAttribute('aria-current', b.dataset.tab === tab));
+  history.replaceState(null, '', '#' + tab);
+  scrollTo({ top: 0 });
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab],[data-go]');
+  if (t) show(t.dataset.tab || t.dataset.go);
+});
 
-  {
-    id:"viandes",
-    name:"Viandes",
-    emoji:"🥩"
-  },
+/* ---------- Thème et son ---------- */
+function applyTheme() {
+  if (S.theme) document.documentElement.dataset.theme = S.theme; else delete document.documentElement.dataset.theme;
+  $('#sound').textContent = S.sound ? '🔊' : '🔇';
+}
+$('#theme').onclick = () => {
+  const dark = S.theme ? S.theme === 'dark' : matchMedia('(prefers-color-scheme:dark)').matches;
+  S.theme = dark ? 'light' : 'dark'; save(); applyTheme();
+};
+$('#sound').onclick = () => { S.sound = !S.sound; save(); applyTheme(); if (S.sound) beep(1); };
 
-  {
-    id:"escargots",
-    name:"Escargots",
-    emoji:"🐌"
-  },
-
-  {
-    id:"sauces",
-    name:"Sauces",
-    emoji:"🥫"
+let ctx;
+addEventListener('pointerdown', () => { try { ctx = ctx || new AudioContext(); ctx.resume(); } catch {} }, { once: true });
+function beep(n = 3) {
+  if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+  if (!S.sound || !ctx) return;
+  for (let i = 0; i < n; i++) {
+    const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + i * .4;
+    o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(.25, t); g.gain.exponentialRampToValueAtTime(.001, t + .3);
+    o.start(t); o.stop(t + .3);
   }
-
-];
-
-
-const defaultProducts = [
-
-  {
-    id:"frites",
-    name:"Frites",
-    emoji:"🍟",
-    minutes:4,
-    seconds:0,
-    category:"frites",
-    type:"timer"
-  },
-
-  {
-    id:"bleu",
-    name:"Bleu",
-    emoji:"🥩",
-    minutes:2,
-    seconds:0,
-    category:"viandes",
-    type:"timer"
-  },
-
-  {
-    id:"saignant",
-    name:"Saignant",
-    emoji:"🥩",
-    minutes:3,
-    seconds:0,
-    category:"viandes",
-    type:"timer"
-  },
-
-  {
-    id:"point",
-    name:"À point",
-    emoji:"🥩",
-    minutes:4,
-    seconds:0,
-    category:"viandes",
-    type:"timer"
-  },
-
-  {
-    id:"biencuit",
-    name:"Bien cuit",
-    emoji:"🔥",
-    minutes:6,
-    seconds:0,
-    category:"viandes",
-    type:"timer"
-  },
-
-  {
-    id:"escargots",
-    name:"Escargots",
-    emoji:"🐌",
-    minutes:8,
-    seconds:0,
-    category:"escargots",
-    type:"timer"
-  },
-
-  {
-    id:"barbecue",
-    name:"Sauce barbecue",
-    emoji:"🥫",
-    minutes:0,
-    seconds:0,
-    category:"sauces",
-    type:"refaire"
-  },
-
-  {
-    id:"maison",
-    name:"Sauce maison",
-    emoji:"🧄",
-    minutes:0,
-    seconds:0,
-    category:"sauces",
-    type:"refaire"
-  }
-
-];
-
-
-let categories =
-  JSON.parse(
-    localStorage.getItem("kf_categories")
-  ) || defaultCategories;
-
-
-let products =
-  JSON.parse(
-    localStorage.getItem("kf_products")
-  ) || defaultProducts;
-
-
-let runningTimers =
-  JSON.parse(
-    localStorage.getItem("kf_running")
-  ) || [];
-
-
-let refaire =
-  JSON.parse(
-    localStorage.getItem("kf_refaire")
-  ) || [];
-
-
-let editingProductId = null;
-
-let editingCategoryId = null;
-
-let selectedEmoji = "🍟";
-
-let selectedCategoryEmoji = "🔥";
-
-
-const emojis = [
-
-  "🍟","🥩","🍔","🍗","🍖","🌭","🥓","🍳",
-  "🐌","🐟","🍤","🦐","🦑","🐙","🍕","🍝",
-  "🥔","🥕","🌽","🥦","🥬","🍅","🧅","🧄",
-  "🥒","🍆","🫑","🥑","🍚","🍜","🍲","🥣",
-  "🥫","🧀","🥖","🍞","🥐","🧈","🥚","🍰",
-  "🍪","🍩","🍫","🍯","🍎","🍋","🍊","🍓",
-  "🔥","❄️","⚡","⭐","❤️","💥","🌶️","🧂",
-  "👨‍🍳","👩‍🍳","🍽️","⏱️","🔔","🔄","✨","💡"
-
-];
-
-
-/* =========================================================
-   SAUVEGARDE
-========================================================= */
-
-function saveAll(){
-
-  localStorage.setItem(
-    "kf_categories",
-    JSON.stringify(categories)
-  );
-
-  localStorage.setItem(
-    "kf_products",
-    JSON.stringify(products)
-  );
-
-  localStorage.setItem(
-    "kf_running",
-    JSON.stringify(runningTimers)
-  );
-
-  localStorage.setItem(
-    "kf_refaire",
-    JSON.stringify(refaire)
-  );
-
 }
 
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function showPage(page){
-
-  document
-    .querySelectorAll(".page")
-    .forEach(x => x.classList.remove("active"));
-
-  document
-    .getElementById(page + "Page")
-    .classList.add("active");
-
-
-  document
-    .querySelectorAll(".bottom button")
-    .forEach(x => x.classList.remove("active"));
-
-
-  if(page === "service"){
-    document
-      .getElementById("navService")
-      .classList.add("active");
-  }
-
-  if(page === "config"){
-    document
-      .getElementById("navConfig")
-      .classList.add("active");
-  }
-
-  if(page === "refaire"){
-    document
-      .getElementById("navRefaire")
-      .classList.add("active");
-  }
-
-
-  renderEverything();
-
-  window.scrollTo(0,0);
-
+/* ---------- Minuteurs ---------- */
+const left = t => t.paused ? t.left : Math.max(0, t.end - Date.now());
+const fmt = ms => {
+  const s = Math.ceil(ms / 1000), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), ss = String(s % 60).padStart(2, '0');
+  return h ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${String(m).padStart(2, '0')}:${ss}`;
+};
+function addTimer(n, m) {
+  m = Math.max(1, Math.min(600, +m || 1));
+  S.timers.unshift({ id: uid(), n, total: m * 6e4, end: Date.now() + m * 6e4, paused: false, left: 0, done: false });
+  S.recent = [{ n, m }, ...S.recent.filter(r => !(r.n === n && r.m === m))].slice(0, 6);
+  save(); render();
 }
-
-
-/* =========================================================
-   PRODUITS
-========================================================= */
-
-function renderProducts(){
-
-  const area =
-    document.getElementById(
-      "productsArea"
-    );
-
-
-  area.innerHTML = "";
-
-
-  categories.forEach(category => {
-
-    const categoryProducts =
-      products.filter(
-        p => p.category === category.id
-      );
-
-
-    if(
-      categoryProducts.length === 0
-    ){
-      return;
-    }
-
-
-    const section =
-      document.createElement("div");
-
-    section.className = "category";
-
-
-    section.innerHTML = `
-
-      <div class="category-header">
-
-        <div class="category-name">
-          ${category.emoji}
-          ${escapeHTML(category.name)}
-        </div>
-
-        <div class="category-actions">
-
-          <button
-            class="mini-button"
-            onclick="openProductModalForCategory('${category.id}')"
-          >
-            +
-          </button>
-
-        </div>
-
-      </div>
-
-      <div class="product-grid"></div>
-
-    `;
-
-
-    const grid =
-      section.querySelector(
-        ".product-grid"
-      );
-
-
-    categoryProducts.forEach(product => {
-
-      const button =
-        document.createElement("button");
-
-      button.className = "product";
-
-
-      const time =
-        product.minutes * 60 +
-        product.seconds;
-
-
-      button.innerHTML = `
-
-        <div class="product-emoji">
-          ${product.emoji}
-        </div>
-
-        <div>
-
-          <div class="product-name">
-            ${escapeHTML(product.name)}
-          </div>
-
-          <div class="product-time">
-
-            ${
-              product.type === "timer"
-
-              ? "⏱️ " + formatTime(time)
-
-              : "🔄 Ajouter à refaire"
-
-            }
-
-          </div>
-
-        </div>
-
-      `;
-
-
-      button.onclick = () =>
-        activateProduct(product.id);
-
-
-      grid.appendChild(button);
-
-    });
-
-
-    area.appendChild(section);
-
-  });
-
-
-  if(!area.children.length){
-
-    area.innerHTML = `
-
-      <div class="running-empty">
-
-        Aucun produit configuré.
-
-        <br><br>
-
-        Va dans ⚙️ Configurer pour
-        ajouter ton premier bouton.
-
-      </div>
-
-    `;
-
+function ticketHTML(t) {
+  const cls = t.done ? 'done' : t.paused ? 'paused' : '';
+  return `<li class="ticket ${cls}" data-id="${t.id}">
+    <div class="top2"><b>${esc(t.n)}</b><small>${Math.round(t.total / 6e4)} min</small></div>
+    <div class="t-time" data-t>${fmt(left(t))}</div>
+    <div class="bar"><i data-b style="width:${left(t) / t.total * 100}%"></i></div>
+    <div class="act">
+      ${t.done ? '' : `<button data-a="pause">${t.paused ? 'Reprendre' : 'Pause'}</button>`}
+      <button data-a="plus">+1 min</button>
+      <button data-a="del" class="x">${t.done ? 'Terminé' : 'Arrêter'}</button>
+    </div></li>`;
+}
+function renderTimers() {
+  const html = S.timers.length ? S.timers.map(ticketHTML).join('') : '<li class="empty">Aucun minuteur. Lance une cuisson ci-dessus.</li>';
+  $('#t-list').innerHTML = html;
+  $('#mini').innerHTML = S.timers.length ? html : '<li class="empty">Rien en cours pour le moment.</li>';
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-a]'); if (!b) return;
+  const t = S.timers.find(x => x.id === b.closest('[data-id]').dataset.id); if (!t) return;
+  if (b.dataset.a === 'del') S.timers = S.timers.filter(x => x !== t);
+  if (b.dataset.a === 'plus') { t.total += 6e4; if (t.paused) t.left += 6e4; else t.end += 6e4; t.done = false; }
+  if (b.dataset.a === 'pause') {
+    if (t.paused) { t.end = Date.now() + t.left; t.paused = false; } else { t.left = left(t); t.paused = true; }
   }
-
-}
-
-
-/* =========================================================
-   ACTION D'UN PRODUIT
-========================================================= */
-
-function activateProduct(id){
-
-  const product =
-    products.find(
-      p => p.id === id
-    );
-
-
-  if(!product) return;
-
-
-  if(product.type === "refaire"){
-
-    addRefaire(product);
-
-    return;
-
-  }
-
-
-  const total =
-    product.minutes * 60 +
-    product.seconds;
-
-
-  if(total <= 0){
-
-    alert(
-      "Ce minuteur n'a pas de durée."
-    );
-
-    return;
-
-  }
-
-
-  startTimer(product);
-
-}
-
-
-/* =========================================================
-   MINUTEURS
-========================================================= */
-
-function startTimer(product){
-
-  const timer = {
-
-    id:
-      Date.now() +
-      Math.random(),
-
-    productId:
-      product.id,
-
-    name:
-      product.name,
-
-    emoji:
-      product.emoji,
-
-    total:
-      product.minutes * 60 +
-      product.seconds,
-
-    remaining:
-      product.minutes * 60 +
-      product.seconds,
-
-    started:
-      Date.now(),
-
-    last:
-      Date.now(),
-
-    running:
-      true
-
-  };
-
-
-  runningTimers.push(timer);
-
-  saveAll();
-
-  renderRunning();
-
-}
-
-
-function stopTimer(id){
-
-  runningTimers =
-    runningTimers.filter(
-      x => x.id !== id
-    );
-
-
-  saveAll();
-
-  renderRunning();
-
-}
-
-
-function formatTime(seconds){
-
-  seconds =
-    Math.max(
-      0,
-      Math.floor(seconds)
-    );
-
-
-  const m =
-    Math.floor(
-      seconds / 60
-    );
-
-  const s =
-    seconds % 60;
-
-
-  return (
-    String(m).padStart(2,"0")
-    +
-    ":"
-    +
-    String(s).padStart(2,"0")
-  );
-
-}
-
-
-function updateTimers(){
-
+  save(); render();
+});
+$('#f-timer').onsubmit = e => {
+  e.preventDefault(); const f = e.target;
+  addTimer(f.n.value.trim(), f.m.value); f.reset(); f.n.focus();
+};
+function tick() {
   let changed = false;
-
-
-  runningTimers.forEach(timer => {
-
-    if(!timer.running) return;
-
-
-    const now =
-      Date.now();
-
-
-    const elapsed =
-      Math.floor(
-        (now - timer.last) / 1000
-      );
-
-
-    if(elapsed < 1) return;
-
-
-    timer.remaining =
-      Math.max(
-        0,
-        timer.remaining - elapsed
-      );
-
-
-    timer.last =
-      now;
-
-
-    changed = true;
-
-
-    if(
-      timer.remaining <= 0
-    ){
-
-      timer.running = false;
-
-      playAlarm();
-
-      if(
-        navigator.vibrate
-      ){
-        navigator.vibrate([
-          300,
-          150,
-          300,
-          150,
-          500
-        ]);
-      }
-
-    }
-
-  });
-
-
-  if(changed){
-
-    saveAll();
-
-    renderRunning();
-
-  }
-
-}
-
-
-setInterval(
-  updateTimers,
-  500
-);
-
-
-/* =========================================================
-   AFFICHAGE MINUTEURS
-========================================================= */
-
-function renderRunning(){
-
-  const container =
-    document.getElementById(
-      "runningList"
-    );
-
-
-  const active =
-    runningTimers.filter(
-      x => x.remaining > 0
-    );
-
-
-  document.getElementById(
-    "runningCounter"
-  ).textContent =
-    active.length;
-
-
-  if(!active.length){
-
-    container.innerHTML = `
-
-      <div class="running-empty">
-        Aucun minuteur en cours.
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML = "";
-
-
-  runningTimers
-    .slice()
-    .reverse()
-    .forEach(timer => {
-
-      if(timer.remaining <= 0){
-
-        const finished =
-          document.createElement("div");
-
-        finished.className =
-          "running-card";
-
-        finished.innerHTML = `
-
-          <div class="running-emoji">
-            ${timer.emoji}
-          </div>
-
-          <div>
-
-            <div class="running-name">
-              ${escapeHTML(timer.name)}
-            </div>
-
-            <div
-              style="
-                color:#ef6244;
-                font-weight:900;
-              "
-            >
-              🔔 TERMINÉ
-            </div>
-
-          </div>
-
-          <button
-            class="stop-button"
-            onclick="stopTimer(${timer.id})"
-          >
-            ✓
-          </button>
-
-        `;
-
-        container.appendChild(
-          finished
-        );
-
-        return;
-
-      }
-
-
-      const card =
-        document.createElement("div");
-
-      card.className =
-        "running-card";
-
-
-      const percent =
-        (
-          (
-            timer.total -
-            timer.remaining
-          )
-          /
-          timer.total
-        ) * 100;
-
-
-      card.innerHTML = `
-
-        <div class="running-emoji">
-          ${timer.emoji}
-        </div>
-
-        <div>
-
-          <div class="running-name">
-            ${escapeHTML(timer.name)}
-          </div>
-
-          <div class="running-time">
-            ${formatTime(timer.remaining)}
-          </div>
-
-          <div class="running-bar">
-
-            <div
-              class="running-progress"
-              style="
-                width:${percent}%
-              "
-            ></div>
-
-          </div>
-
-        </div>
-
-        <button
-          class="stop-button"
-          onclick="stopTimer(${timer.id})"
-        >
-          ×
-        </button>
-
-      `;
-
-
-      container.appendChild(card);
-
+  S.timers.forEach(t => {
+    if (!t.done && !t.paused && left(t) <= 0) { t.done = true; changed = true; beep(); }
+    $$(`[data-id="${t.id}"]`).forEach(el => {
+      $('[data-t]', el).textContent = fmt(left(t));
+      $('[data-b]', el).style.width = left(t) / t.total * 100 + '%';
     });
-
-}
-
-
-/* =========================================================
-   À REFAIRE
-========================================================= */
-
-function addRefaire(product){
-
-  const already =
-    refaire.find(
-      x => x.productId === product.id
-    );
-
-
-  if(already){
-
-    already.quantity++;
-
-  }else{
-
-    refaire.push({
-
-      id:
-        Date.now() +
-        Math.random(),
-
-      productId:
-        product.id,
-
-      name:
-        product.name,
-
-      emoji:
-        product.emoji,
-
-      quantity:
-        1
-
-    });
-
-  }
-
-
-  saveAll();
-
-  renderRefaire();
-
-}
-
-
-function removeRefaire(id){
-
-  refaire =
-    refaire.filter(
-      x => x.id !== id
-    );
-
-
-  saveAll();
-
-  renderRefaire();
-
-}
-
-
-function clearRefaire(){
-
-  if(!refaire.length) return;
-
-
-  if(
-    confirm(
-      "Vider toute la liste À refaire ?"
-    )
-  ){
-
-    refaire = [];
-
-    saveAll();
-
-    renderRefaire();
-
-  }
-
-}
-
-
-function renderRefaire(){
-
-  const containers = [
-
-    document.getElementById(
-      "refaireList"
-    ),
-
-    document.getElementById(
-      "refaireFull"
-    )
-
-  ];
-
-
-  containers.forEach(container => {
-
-    if(!container) return;
-
-
-    if(!refaire.length){
-
-      container.innerHTML = `
-
-        <div class="empty-refaire">
-          ✅ Rien à refaire pour le moment.
-        </div>
-
-      `;
-
-      return;
-
-    }
-
-
-    container.innerHTML = "";
-
-
-    refaire.forEach(item => {
-
-      const row =
-        document.createElement("div");
-
-      row.className =
-        "refaire-item";
-
-
-      row.innerHTML = `
-
-        <div class="refaire-emoji">
-          ${item.emoji}
-        </div>
-
-        <div class="refaire-name">
-
-          ${escapeHTML(item.name)}
-
-          ${
-            item.quantity > 1
-              ? " × " + item.quantity
-              : ""
-          }
-
-        </div>
-
-        <button
-          class="refaire-done"
-          onclick="removeRefaire(${item.id})"
-        >
-          ✓ Fait
-        </button>
-
-      `;
-
-
-      container.appendChild(row);
-
-    });
-
   });
-
+  if (changed) { save(); render(); }
+  const d = new Date();
+  $('#st-clock').textContent = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  $('#st-date').textContent = d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
 }
 
-
-/* =========================================================
-   CONFIGURATION
-========================================================= */
-
-function renderConfig(){
-
-  const categoryContainer =
-    document.getElementById(
-      "categoryConfig"
-    );
-
-
-  categoryContainer.innerHTML = "";
-
-
-  categories.forEach(category => {
-
-    const row =
-      document.createElement("div");
-
-    row.className =
-      "config-item";
-
-
-    row.innerHTML = `
-
-      <div class="config-emoji">
-        ${category.emoji}
-      </div>
-
-      <div class="config-info">
-
-        <strong>
-          ${escapeHTML(category.name)}
-        </strong>
-
-        <small>
-          ${
-            products.filter(
-              p => p.category === category.id
-            ).length
-          } bouton(s)
-        </small>
-
-      </div>
-
-      <button
-        class="edit-button"
-        onclick="editCategory('${category.id}')"
-      >
-        ✏️
-      </button>
-
-      <button
-        class="delete-button"
-        onclick="deleteCategory('${category.id}')"
-      >
-        🗑️
-      </button>
-
-    `;
-
-
-    categoryContainer.appendChild(row);
-
-  });
-
-
-  const productContainer =
-    document.getElementById(
-      "productConfig"
-    );
-
-
-  productContainer.innerHTML = "";
-
-
-  products.forEach(product => {
-
-    const category =
-      categories.find(
-        c => c.id === product.category
-      );
-
-
-    const row =
-      document.createElement("div");
-
-
-    row.className =
-      "config-item";
-
-
-    const total =
-      product.minutes * 60 +
-      product.seconds;
-
-
-    row.innerHTML = `
-
-      <div class="config-emoji">
-        ${product.emoji}
-      </div>
-
-      <div class="config-info">
-
-        <strong>
-          ${escapeHTML(product.name)}
-        </strong>
-
-        <small>
-
-          ${
-            category
-              ? category.emoji +
-                " " +
-                escapeHTML(category.name)
-              : ""
-          }
-
-          •
-
-          ${
-            product.type === "timer"
-              ? "⏱️ " + formatTime(total)
-              : "🔄 À refaire"
-          }
-
-        </small>
-
-      </div>
-
-      <button
-        class="edit-button"
-        onclick="editProduct('${product.id}')"
-      >
-        ✏️
-      </button>
-
-      <button
-        class="delete-button"
-        onclick="deleteProduct('${product.id}')"
-      >
-        🗑️
-      </button>
-
-    `;
-
-
-    productContainer.appendChild(row);
-
-  });
-
-}
-
-
-/* =========================================================
-   MODALE PRODUIT
-========================================================= */
-
-function openProductModal(){
-
-  editingProductId = null;
-
-  document.getElementById(
-    "productModalTitle"
-  ).textContent =
-    "Nouveau bouton";
-
-
-  document.getElementById(
-    "productName"
-  ).value = "";
-
-
-  document.getElementById(
-    "productMinutes"
-  ).value = "4";
-
-
-  document.getElementById(
-    "productSeconds"
-  ).value = "0";
-
-
-  document.getElementById(
-    "productType"
-  ).value = "timer";
-
-
-  selectedEmoji = "🍟";
-
-
-  fillCategorySelect();
-
-  renderEmojiGrid();
-
-
-  openModal(
-    "productModal"
-  );
-
-}
-
-
-function openProductModalForCategory(
-  categoryId
-){
-
-  openProductModal();
-
-  document.getElementById(
-    "productCategory"
-  ).value =
-    categoryId;
-
-}
-
-
-function editProduct(id){
-
-  const product =
-    products.find(
-      p => p.id === id
-    );
-
-
-  if(!product) return;
-
-
-  editingProductId = id;
-
-
-  document.getElementById(
-    "productModalTitle"
-  ).textContent =
-    "Modifier le bouton";
-
-
-  document.getElementById(
-    "productName"
-  ).value =
-    product.name;
-
-
-  document.getElementById(
-    "productMinutes"
-  ).value =
-    product.minutes;
-
-
-  document.getElementById(
-    "productSeconds"
-  ).value =
-    product.seconds;
-
-
-  document.getElementById(
-    "productType"
-  ).value =
-    product.type;
-
-
-  selectedEmoji =
-    product.emoji;
-
-
-  fillCategorySelect();
-
-
-  document.getElementById(
-    "productCategory"
-  ).value =
-    product.category;
-
-
-  renderEmojiGrid();
-
-
-  openModal(
-    "productModal"
-  );
-
-}
-
-
-function saveProduct(){
-
-  const name =
-    document.getElementById(
-      "productName"
-    ).value.trim();
-
-
-  if(!name){
-
-    alert(
-      "Il faut donner un nom au bouton."
-    );
-
-    return;
-
-  }
-
-
-  let minutes =
-    Number(
-      document.getElementById(
-        "productMinutes"
-      ).value
-    ) || 0;
-
-
-  let seconds =
-    Number(
-      document.getElementById(
-        "productSeconds"
-      ).value
-    ) || 0;
-
-
-  if(seconds > 59){
-
-    minutes +=
-      Math.floor(seconds / 60);
-
-    seconds =
-      seconds % 60;
-
-  }
-
-
-  const category =
-    document.getElementById(
-      "productCategory"
-    ).value;
-
-
-  const type =
-    document.getElementById(
-      "productType"
-    ).value;
-
-
-  if(editingProductId){
-
-    const product =
-      products.find(
-        p => p.id === editingProductId
-      );
-
-
-    if(product){
-
-      product.name =
-        name;
-
-      product.minutes =
-        minutes;
-
-      product.seconds =
-        seconds;
-
-      product.category =
-        category;
-
-      product.emoji =
-        selectedEmoji;
-
-      product.type =
-        type;
-
+/* ---------- Produits ---------- */
+const dayDiff = d => Math.round((new Date(d + 'T00:00') - new Date(new Date().toDateString())) / 864e5);
+function renderProducts() {
+  const list = [...S.products].sort((a, b) => (a.d || '9') < (b.d || '9') ? -1 : 1);
+  $('#p-list').innerHTML = list.length ? list.map(p => {
+    let tag = '<span class="tag">Sans date</span>';
+    if (p.d) {
+      const n = dayDiff(p.d);
+      tag = n < 0 ? '<span class="tag bad">Périmé</span>' : n === 0 ? '<span class="tag bad">Aujourd\'hui</span>'
+        : n <= 2 ? `<span class="tag warn">J-${n}</span>` : `<span class="tag ok">J-${n}</span>`;
     }
-
-  }else{
-
-    products.push({
-
-      id:
-        "product-" +
-        Date.now(),
-
-      name:
-        name,
-
-      emoji:
-        selectedEmoji,
-
-      minutes:
-        minutes,
-
-      seconds:
-        seconds,
-
-      category:
-        category,
-
-      type:
-        type
-
-    });
-
-  }
-
-
-  saveAll();
-
-  closeModal(
-    "productModal"
-  );
-
-  renderEverything();
-
+    return `<li><div class="grow"><b>${esc(p.n)}</b> ${p.q ? `<small>· ${esc(p.q)}</small>` : ''}</div>${tag}
+      <button class="x" data-p="${p.id}" aria-label="Supprimer ${esc(p.n)}">✕</button></li>`;
+  }).join('') : '<li class="empty">Aucun produit. Ajoute ta première préparation.</li>';
 }
+$('#f-prod').onsubmit = e => {
+  e.preventDefault(); const f = e.target;
+  S.products.push({ id: uid(), n: f.n.value.trim(), q: f.q.value.trim(), d: f.d.value });
+  save(); f.reset(); render();
+};
+$('#p-list').onclick = e => {
+  const b = e.target.closest('[data-p]'); if (!b) return;
+  S.products = S.products.filter(p => p.id !== b.dataset.p); save(); render();
+};
 
-
-/* =========================================================
-   CATÉGORIES
-========================================================= */
-
-function fillCategorySelect(){
-
-  const select =
-    document.getElementById(
-      "productCategory"
-    );
-
-
-  select.innerHTML =
-    categories.map(
-      c => `
-
-        <option value="${c.id}">
-          ${c.emoji} ${escapeHTML(c.name)}
-        </option>
-
-      `
-    ).join("");
-
+/* ---------- Checklists ---------- */
+function renderLists() {
+  $('#l-wrap').innerHTML = S.lists.map(l => {
+    const done = l.items.filter(i => i.d).length, pct = l.items.length ? done / l.items.length * 100 : 0;
+    return `<div class="card" data-l="${l.id}">
+      <div class="meta"><h3>${esc(l.name)}</h3><span>${done}/${l.items.length}</span></div>
+      <div class="prog"><i style="width:${pct}%"></i></div>
+      ${l.items.map((i, k) => `<label><input type="checkbox" data-k="${k}" ${i.d ? 'checked' : ''}><span>${esc(i.t)}</span></label>`).join('')}
+      <form><input name="t" placeholder="Ajouter une tâche" required maxlength="60"><button class="primary">Ajouter</button></form>
+      <p><button data-reset>Tout décocher</button></p></div>`;
+  }).join('');
 }
+$('#l-wrap').addEventListener('change', e => {
+  const l = S.lists.find(x => x.id === e.target.closest('[data-l]').dataset.l);
+  l.items[e.target.dataset.k].d = e.target.checked; save(); render();
+});
+$('#l-wrap').addEventListener('submit', e => {
+  e.preventDefault();
+  const l = S.lists.find(x => x.id === e.target.closest('[data-l]').dataset.l);
+  l.items.push({ t: e.target.t.value.trim(), d: false }); save(); render();
+});
+$('#l-wrap').addEventListener('click', e => {
+  if (!e.target.closest('[data-reset]')) return;
+  const l = S.lists.find(x => x.id === e.target.closest('[data-l]').dataset.l);
+  l.items.forEach(i => i.d = false); save(); render();
+});
 
-
-function openCategoryModal(){
-
-  editingCategoryId = null;
-
-  document.getElementById(
-    "categoryName"
-  ).value = "";
-
-
-  selectedCategoryEmoji =
-    "🔥";
-
-
-  renderCategoryEmojiGrid();
-
-
-  openModal(
-    "categoryModal"
-  );
-
+/* ---------- Accueil ---------- */
+function renderHome() {
+  $('#st-timers').textContent = S.timers.filter(t => !t.done).length;
+  $('#st-tasks').textContent = S.lists.reduce((n, l) => n + l.items.filter(i => i.d).length, 0);
+  $('#st-prods').textContent = S.products.length;
+  $('#recent').innerHTML = S.recent.map((r, i) => `<button data-r="${i}">${esc(r.n)} · ${r.m} min</button>`).join('');
 }
-
-
-function editCategory(id){
-
-  const category =
-    categories.find(
-      c => c.id === id
-    );
-
-
-  if(!category) return;
-
-
-  editingCategoryId =
-    id;
-
-
-  document.getElementById(
-    "categoryName"
-  ).value =
-    category.name;
-
-
-  selectedCategoryEmoji =
-    category.emoji;
-
-
-  renderCategoryEmojiGrid();
-
-
-  openModal(
-    "categoryModal"
-  );
-
-}
-
-
-function saveCategory(){
-
-  const name =
-    document.getElementById(
-      "categoryName"
-    ).value.trim();
-
-
-  if(!name){
-
-    alert(
-      "Il faut donner un nom."
-    );
-
-    return;
-
-  }
-
-
-  if(editingCategoryId){
-
-    const category =
-      categories.find(
-        c => c.id === editingCategoryId
-      );
-
-
-    if(category){
-
-      category.name =
-        name;
-
-      category.emoji =
-        selectedCategoryEmoji;
-
-    }
-
-  }else{
-
-    categories.push({
-
-      id:
-        "category-" +
-        Date.now(),
-
-      name:
-        name,
-
-      emoji:
-        selectedCategoryEmoji
-
-    });
-
-  }
-
-
-  saveAll();
-
-  closeModal(
-    "categoryModal"
-  );
-
-  renderEverything();
-
-}
-
-
-function deleteCategory(id){
-
-  const category =
-    categories.find(
-      c => c.id === id
-    );
-
-
-  if(!category) return;
-
-
-  const count =
-    products.filter(
-      p => p.category === id
-    ).length;
-
-
-  if(count > 0){
-
-    alert(
-      "Impossible de supprimer cette catégorie : elle contient encore des boutons."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    confirm(
-      "Supprimer la catégorie " +
-      category.name +
-      " ?"
-    )
-  ){
-
-    categories =
-      categories.filter(
-        c => c.id !== id
-      );
-
-
-    saveAll();
-
-    renderEverything();
-
-  }
-
-}
-
-
-/* =========================================================
-   SUPPRESSION PRODUIT
-========================================================= */
-
-function deleteProduct(id){
-
-  const product =
-    products.find(
-      p => p.id === id
-    );
-
-
-  if(!product) return;
-
-
-  if(
-    !confirm(
-      "Supprimer « " +
-      product.name +
-      " » ?"
-    )
-  ){
-    return;
-  }
-
-
-  products =
-    products.filter(
-      p => p.id !== id
-    );
-
-
-  saveAll();
-
-  renderEverything();
-
-}
-
-
-/* =========================================================
-   EMOJIS
-========================================================= */
-
-function renderEmojiGrid(){
-
-  const grid =
-    document.getElementById(
-      "emojiGrid"
-    );
-
-
-  grid.innerHTML = "";
-
-
-  emojis.forEach(emoji => {
-
-    const button =
-      document.createElement("button");
-
-
-    button.className =
-      "emoji-choice" +
-      (
-        emoji === selectedEmoji
-          ? " selected"
-          : ""
-      );
-
-
-    button.textContent =
-      emoji;
-
-
-    button.onclick = () => {
-
-      selectedEmoji =
-        emoji;
-
-      renderEmojiGrid();
-
-    };
-
-
-    grid.appendChild(button);
-
-  });
-
-}
-
-
-function renderCategoryEmojiGrid(){
-
-  const grid =
-    document.getElementById(
-      "categoryEmojiGrid"
-    );
-
-
-  grid.innerHTML = "";
-
-
-  emojis.forEach(emoji => {
-
-    const button =
-      document.createElement("button");
-
-
-    button.className =
-      "emoji-choice" +
-      (
-        emoji === selectedCategoryEmoji
-          ? " selected"
-          : ""
-      );
-
-
-    button.textContent =
-      emoji;
-
-
-    button.onclick = () => {
-
-      selectedCategoryEmoji =
-        emoji;
-
-      renderCategoryEmojiGrid();
-
-    };
-
-
-    grid.appendChild(button);
-
-  });
-
-}
-
-
-/* =========================================================
-   MODALES
-========================================================= */
-
-function openModal(id){
-
-  document
-    .getElementById(id)
-    .classList.add("open");
-
-}
-
-
-function closeModal(id){
-
-  document
-    .getElementById(id)
-    .classList.remove("open");
-
-}
-
-
-function outsideClose(event,id){
-
-  if(
-    event.target.id === id
-  ){
-
-    closeModal(id);
-
-  }
-
-}
-
-
-/* =========================================================
-   SONNERIE
-========================================================= */
-
-let audioContext = null;
-
-
-function playAlarm(){
-
-  try{
-
-    if(!audioContext){
-
-      audioContext =
-        new (
-          window.AudioContext ||
-          window.webkitAudioContext
-        )();
-
-    }
-
-
-    if(
-      audioContext.state ===
-      "suspended"
-    ){
-
-      audioContext.resume();
-
-    }
-
-
-    const start =
-      audioContext.currentTime;
-
-
-    for(
-      let i=0;
-      i<7;
-      i++
-    ){
-
-      const osc =
-        audioContext.createOscillator();
-
-
-      const gain =
-        audioContext.createGain();
-
-
-      osc.type =
-        "square";
-
-
-      osc.frequency.value =
-        i % 2 === 0
-          ? 880
-          : 660;
-
-
-      gain.gain.setValueAtTime(
-        .001,
-        start + i*.28
-      );
-
-
-      gain.gain.exponentialRampToValueAtTime(
-        .35,
-        start + i*.28 + .03
-      );
-
-
-      gain.gain.exponentialRampToValueAtTime(
-        .001,
-        start + i*.28 + .22
-      );
-
-
-      osc.connect(gain);
-
-      gain.connect(
-        audioContext.destination
-      );
-
-
-      osc.start(
-        start + i*.28
-      );
-
-
-      osc.stop(
-        start + i*.28 + .23
-      );
-
-    }
-
-  }catch(e){
-
-    console.log(
-      "Son non disponible",
-      e
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   MODE SOMBRE
-========================================================= */
-
-function toggleDark(){
-
-  document.body.classList.toggle(
-    "dark"
-  );
-
-
-  localStorage.setItem(
-    "kf_dark",
-    document.body.classList.contains(
-      "dark"
-    )
-  );
-
-}
-
-
-/* =========================================================
-   AFFICHAGE GLOBAL
-========================================================= */
-
-function renderEverything(){
-
-  renderProducts();
-
-  renderRunning();
-
-  renderRefaire();
-
-  renderConfig();
-
-}
-
-
-/* =========================================================
-   SÉCURITÉ HTML
-========================================================= */
-
-function escapeHTML(value){
-
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
-/* =========================================================
-   INITIALISATION
-========================================================= */
-
-if(
-  localStorage.getItem(
-    "kf_dark"
-  ) === "true"
-){
-
-  document.body.classList.add(
-    "dark"
-  );
-
-}
-
-
-renderEmojiGrid();
-
-renderCategoryEmojiGrid();
-
-renderEverything();
+$('#recent').onclick = e => {
+  const b = e.target.closest('[data-r]'); if (!b) return;
+  const r = S.recent[b.dataset.r]; addTimer(r.n, r.m); show('timers');
+};
+
+function render() { renderTimers(); renderProducts(); renderLists(); renderHome(); }
+
+show(location.hash.slice(1) || 'service');
+applyTheme(); render(); tick(); setInterval(tick, 500);
 
 </script>
-
 </body>
 </html>
