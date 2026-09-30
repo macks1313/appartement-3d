@@ -1,3027 +1,3180 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#111214">
 
-<title>Kitchen Copilot</title>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#f4f4f1">
+
+<title>KitchenFlow</title>
+
 
 <style>
-*{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+
+/* =========================================================
+   KITCHENFLOW
+   UN SEUL FICHIER
+========================================================= */
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-body{
-    margin:0;
-    background:#101114;
-    color:#fff;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+html {
+  scroll-behavior: smooth;
 }
 
-button,input,textarea,select{
-    font:inherit;
+body {
+  margin: 0;
+  background: #f4f4f1;
+  color: #111214;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  padding-bottom: 105px;
 }
 
-button{
-    cursor:pointer;
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  padding:
+    calc(18px + env(safe-area-inset-top))
+    20px
+    16px;
+
+  background: rgba(244,244,241,.94);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border-bottom: 1px solid #dedfdd;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.app{
-    max-width:900px;
-    margin:auto;
-    min-height:100vh;
-    padding-bottom:100px;
+.logo {
+  font-size: 30px;
+  font-weight: 950;
+  letter-spacing: -1.8px;
 }
 
-/* HEADER */
-
-header{
-    position:sticky;
-    top:0;
-    z-index:50;
-    background:rgba(16,17,20,.95);
-    backdrop-filter:blur(18px);
-    border-bottom:1px solid #292c31;
-    padding:15px;
+.logo span {
+  color: #ef6244;
 }
 
-.header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+.sublogo {
+  margin-top: 4px;
+
+  color: #777b82;
+
+  font-size: 11px;
+  font-weight: 900;
+
+  letter-spacing: 3px;
 }
 
-.logo{
-    font-size:24px;
-    font-weight:950;
+.theme {
+  width: 52px;
+  height: 52px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: white;
+
+  box-shadow:
+    0 5px 20px rgba(0,0,0,.08);
+
+  font-size: 22px;
 }
 
-.logo span{
-    color:#ff7900;
+
+/* =========================
+   CONTENU
+========================= */
+
+main {
+  max-width: 850px;
+  margin: auto;
+  padding: 0 18px;
 }
 
-.restaurant{
-    color:#8f939c;
-    font-size:13px;
-    margin-top:2px;
+.page {
+  display: none;
 }
 
-/* NAV */
-
-.nav{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:7px;
-    padding:10px 14px;
+.page.active {
+  display: block;
 }
 
-.nav button{
-    border:0;
-    border-radius:13px;
-    padding:11px 4px;
-    background:#202328;
-    color:#999da5;
-    font-weight:850;
+
+/* =========================
+   TITRES
+========================= */
+
+.hero {
+  padding: 48px 0 35px;
 }
 
-.nav button.active{
-    background:#ff7900;
-    color:white;
+.label {
+  color: #7b7f86;
+
+  font-size: 12px;
+  font-weight: 900;
+
+  letter-spacing: 3px;
+
+  margin-bottom: 12px;
 }
 
-/* GENERAL */
+h1 {
+  margin: 0;
 
-.content{
-    padding:4px 15px 20px;
+  font-size: clamp(46px, 13vw, 78px);
+
+  line-height: .9;
+
+  letter-spacing: -4px;
+
+  font-weight: 950;
 }
 
-.sectionHeader{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    margin:18px 0 12px;
+h1 span {
+  color: #ef6244;
 }
 
-.sectionHeader h2{
-    margin:0;
-    font-size:19px;
+h2 {
+  margin: 0;
+
+  font-size: 32px;
+
+  letter-spacing: -1.5px;
+
+  font-weight: 900;
 }
 
-.smallButton{
-    border:0;
-    border-radius:11px;
-    background:#272a30;
-    color:#fff;
-    padding:9px 12px;
-    font-weight:800;
+h3 {
+  margin: 0;
+
+  font-size: 21px;
+
+  font-weight: 900;
 }
 
-/* QUICK GRID */
 
-.quickGrid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
+/* =========================
+   BOUTONS
+========================= */
+
+button {
+  border: none;
+
+  font-family: inherit;
+
+  cursor: pointer;
 }
 
-/* TIMER BUTTONS */
+.primary {
+  background: #ef6244;
 
-.timerButton{
-    border:1px solid #30343b;
-    background:linear-gradient(145deg,#202329,#181a1e);
-    color:#fff;
-    border-radius:19px;
-    min-height:145px;
-    padding:15px;
-    text-align:left;
-    position:relative;
+  color: white;
+
+  padding: 16px 20px;
+
+  border-radius: 17px;
+
+  font-size: 16px;
+
+  font-weight: 850;
+
+  box-shadow:
+    0 8px 20px rgba(239,98,68,.22);
 }
 
-.timerButton:active{
-    transform:scale(.98);
+.primary:active {
+  transform: scale(.97);
 }
 
-.timerEmoji{
-    font-size:42px;
+.large-button {
+  width: 100%;
+
+  margin-top: 25px;
+
+  font-size: 18px;
+
+  padding: 20px;
 }
 
-.timerName{
-    font-size:17px;
-    font-weight:950;
-    margin-top:5px;
+.secondary {
+  background: #e9eaec;
+
+  color: #111214;
+
+  padding: 13px 17px;
+
+  border-radius: 14px;
+
+  font-weight: 800;
 }
 
-.timerDuration{
-    color:#92969f;
-    font-size:13px;
-    margin-top:3px;
+.delete {
+  background: #ffe5e2;
+
+  color: #c83f32;
+
+  padding: 12px 15px;
+
+  border-radius: 13px;
+
+  font-weight: 800;
 }
 
-.editIcon{
-    position:absolute;
-    top:10px;
-    right:10px;
-    border:0;
-    background:#2c2f35;
-    color:#fff;
-    width:34px;
-    height:34px;
-    border-radius:10px;
+
+/* =========================
+   SECTION
+========================= */
+
+.section {
+  margin: 35px 0;
 }
 
-/* ACTIVE TIMER */
+.section-title {
+  display: flex;
 
-.activeGrid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 18px;
 }
 
-.activeCard{
-    background:#181a1e;
-    border:1px solid #34373e;
-    border-radius:18px;
-    padding:14px;
+
+/* =========================
+   OUTILS
+========================= */
+
+.tools {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 13px;
 }
 
-.activeTop{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+.tool {
+  min-height: 175px;
+
+  background: white;
+
+  border-radius: 26px;
+
+  padding: 21px;
+
+  text-align: left;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.055);
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
 }
 
-.activeEmoji{
-    font-size:30px;
+.tool:active {
+  transform: scale(.97);
 }
 
-.activeName{
-    font-weight:900;
-    margin-top:4px;
+.tool-icon {
+  width: 54px;
+  height: 54px;
+
+  background: #f0f1f2;
+
+  border-radius: 17px;
+
+  display: grid;
+
+  place-items: center;
+
+  font-size: 27px;
 }
 
-.activeTime{
-    font-size:37px;
-    font-weight:950;
-    margin:8px 0;
+.tool strong {
+  font-size: 20px;
 }
 
-.activeActions{
-    display:flex;
-    gap:7px;
+.tool small {
+  color: #777b82;
+
+  font-size: 14px;
+
+  margin-top: 5px;
 }
 
-.activeActions button{
-    flex:1;
-    border:0;
-    border-radius:10px;
-    padding:9px;
-    background:#2b2e34;
-    color:#fff;
-    font-weight:800;
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.page-header {
+  padding: 40px 0 25px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: end;
+
+  gap: 15px;
 }
 
-/* PRODUCTS */
 
-.productGrid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:9px;
+/* =========================
+   MINUTEURS
+========================= */
+
+.timer-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
 }
 
-.productCard{
-    background:#1b1d21;
-    border:1px solid #2c2f35;
-    border-radius:17px;
-    padding:13px;
-    position:relative;
+.timer {
+  background: white;
+
+  border-radius: 25px;
+
+  padding: 21px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.06);
 }
 
-.productEmoji{
-    font-size:30px;
+.timer.finished {
+  border: 3px solid #ef6244;
 }
 
-.productName{
-    font-weight:900;
-    margin:4px 0 10px;
+.timer-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: start;
 }
 
-.productActions{
-    display:flex;
-    gap:6px;
+.timer-name {
+  font-size: 21px;
+
+  font-weight: 900;
 }
 
-.refillButton{
-    flex:1;
-    border:0;
-    border-radius:10px;
-    padding:9px 5px;
-    background:#292c32;
-    color:#fff;
-    font-weight:850;
+.timer-status {
+  margin-top: 4px;
+
+  color: #7b7f86;
+
+  font-size: 11px;
+
+  font-weight: 900;
+
+  letter-spacing: 2px;
 }
 
-.productEdit{
-    border:0;
-    border-radius:10px;
-    background:#292c32;
-    color:#fff;
-    width:42px;
+.timer-display {
+  margin: 16px 0;
+
+  font-size: 54px;
+
+  line-height: 1;
+
+  font-weight: 950;
+
+  letter-spacing: -3px;
+
+  font-variant-numeric: tabular-nums;
 }
 
-/* TO DO LIST */
-
-.todoList{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
+.timer.finished .timer-display {
+  color: #ef6244;
 }
 
-.todoItem{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    background:#1b1d21;
-    border:1px solid #2d3036;
-    border-radius:14px;
-    padding:11px;
+.progress-background {
+  width: 100%;
+
+  height: 8px;
+
+  background: #e9eaec;
+
+  border-radius: 20px;
+
+  overflow: hidden;
 }
 
-.todoEmoji{
-    font-size:25px;
+.progress {
+  height: 100%;
+
+  background: #ef6244;
+
+  width: 0%;
+
+  transition: width .5s linear;
 }
 
-.todoName{
-    flex:1;
-    font-weight:850;
+.timer-buttons {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 9px;
+
+  margin-top: 17px;
 }
 
-.doneButton{
-    border:0;
-    background:#263c2b;
-    color:#7cf09c;
-    border-radius:9px;
-    padding:8px 10px;
-    font-weight:850;
+.timer-buttons button {
+  padding: 14px;
+
+  border-radius: 13px;
+
+  background: #e9eaec;
+
+  font-weight: 850;
 }
 
-/* CHECKLIST */
+.timer-buttons .remove {
+  background: #ffe5e2;
 
-.checklist{
-    background:#191b1f;
-    border:1px solid #2b2e34;
-    border-radius:18px;
-    padding:14px;
-    margin-bottom:10px;
+  color: #c83f32;
 }
 
-.checkHeader{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:8px;
+
+/* =========================
+   PRESETS
+========================= */
+
+.presets {
+  display: flex;
+
+  gap: 9px;
+
+  overflow-x: auto;
+
+  padding-bottom: 8px;
 }
 
-.checkHeader strong{
-    font-size:17px;
+.preset {
+  min-width: 130px;
+
+  padding: 17px;
+
+  background: white;
+
+  border-radius: 19px;
+
+  box-shadow:
+    0 7px 20px rgba(0,0,0,.05);
+
+  text-align: left;
 }
 
-.task{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    border-bottom:1px solid #292c31;
-    padding:11px 0;
+.preset-icon {
+  font-size: 25px;
+
+  margin-bottom: 10px;
 }
 
-.task:last-child{
-    border-bottom:0;
+.preset strong {
+  display: block;
+
+  font-size: 15px;
 }
 
-.checkbox{
-    width:26px;
-    height:26px;
-    border:2px solid #666a72;
-    border-radius:8px;
-    display:grid;
-    place-items:center;
-    flex:none;
+.preset small {
+  color: #777b82;
 }
 
-.task.checked .checkbox{
-    background:#ff7900;
-    border-color:#ff7900;
+
+/* =========================
+   CARTES
+========================= */
+
+.card {
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 21px;
+
+  margin-bottom: 14px;
+
+  box-shadow:
+    0 9px 28px rgba(0,0,0,.055);
 }
 
-.task.checked .taskText{
-    color:#777;
-    text-decoration:line-through;
+.card p {
+  color: #777b82;
+
+  line-height: 1.5;
 }
 
-.taskText{
-    flex:1;
+
+/* =========================
+   CHECKLIST
+========================= */
+
+.task {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 14px 0;
+
+  border-bottom: 1px solid #e5e6e5;
 }
 
-/* RECIPES */
-
-.recipe{
-    background:#191b1f;
-    border:1px solid #2b2e34;
-    border-radius:18px;
-    padding:15px;
-    margin-bottom:10px;
+.task:last-child {
+  border-bottom: none;
 }
 
-.recipeHeader{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+.task input {
+  width: 23px;
+  height: 23px;
+
+  accent-color: #ef6244;
 }
 
-.recipeName{
-    font-size:17px;
-    font-weight:900;
+.task.done span {
+  text-decoration: line-through;
+
+  color: #888;
 }
 
-.recipeText{
-    color:#999da5;
-    margin-top:10px;
-    line-height:1.5;
-    white-space:pre-wrap;
+.add-task {
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 15px;
 }
 
-/* MODAL */
-
-.modal{
-    position:fixed;
-    inset:0;
-    background:#000b;
-    display:none;
-    align-items:flex-end;
-    z-index:100;
+.add-task input {
+  flex: 1;
 }
 
-.modal.show{
-    display:flex;
-}
 
-.sheet{
-    width:100%;
-    max-width:900px;
-    margin:auto;
-    max-height:93vh;
-    overflow:auto;
-    background:#1b1d21;
-    border-radius:25px 25px 0 0;
-    padding:20px;
-}
-
-.sheet h2{
-    margin:0 0 18px;
-}
-
-.field{
-    margin-bottom:14px;
-}
-
-.field label{
-    display:block;
-    color:#a0a4ac;
-    font-size:13px;
-    margin-bottom:6px;
-}
+/* =========================
+   FORM
+========================= */
 
 input,
 textarea,
-select{
-    width:100%;
-    border:1px solid #383b43;
-    border-radius:11px;
-    background:#101114;
-    color:white;
-    padding:12px;
-    outline:none;
+select {
+  width: 100%;
+
+  margin-top: 7px;
+
+  padding: 14px;
+
+  border: 2px solid #e1e2e3;
+
+  border-radius: 14px;
+
+  background: #f6f6f4;
+
+  color: #111214;
+
+  font-size: 16px;
+
+  outline: none;
 }
 
-textarea{
-    min-height:120px;
+input:focus,
+textarea:focus {
+  border-color: #ef6244;
 }
 
-.primary{
-    width:100%;
-    border:0;
-    border-radius:12px;
-    background:#ff7900;
-    color:white;
-    padding:13px;
-    font-weight:900;
+.form-label {
+  display: block;
+
+  margin-bottom: 17px;
+
+  font-size: 14px;
+
+  font-weight: 850;
 }
 
-.secondary{
-    width:100%;
-    border:0;
-    border-radius:12px;
-    background:#2a2d33;
-    color:white;
-    padding:12px;
-    margin-top:8px;
-    font-weight:800;
+.two-columns {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
 }
 
-.danger{
-    width:100%;
-    border:0;
-    border-radius:12px;
-    background:#45201e;
-    color:#ff7770;
-    padding:12px;
-    margin-top:8px;
-    font-weight:800;
+
+/* =========================
+   MODALE
+========================= */
+
+.modal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 100;
+
+  background: rgba(0,0,0,.48);
+
+  display: none;
+
+  align-items: end;
 }
 
-/* FAB */
-
-.fab{
-    position:fixed;
-    right:20px;
-    bottom:20px;
-    z-index:80;
-    width:62px;
-    height:62px;
-    border:0;
-    border-radius:50%;
-    background:#ff7900;
-    color:white;
-    font-size:32px;
-    box-shadow:0 8px 30px #000c;
+.modal.open {
+  display: flex;
 }
 
-/* TOAST */
+.modal-content {
+  width: 100%;
 
-.toast{
-    position:fixed;
-    left:50%;
-    bottom:95px;
-    transform:translateX(-50%);
-    background:white;
-    color:#111;
-    border-radius:12px;
-    padding:11px 16px;
-    font-weight:850;
-    display:none;
-    z-index:200;
+  max-width: 700px;
+
+  margin: auto;
+
+  background: white;
+
+  border-radius: 30px 30px 0 0;
+
+  padding: 25px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
 }
 
-/* EMPTY */
+.modal-title {
+  display: flex;
 
-.empty{
-    padding:30px 15px;
-    text-align:center;
-    color:#777b84;
-    background:#191b1f;
-    border-radius:17px;
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 25px;
 }
 
-/* MOBILE */
+.close {
+  width: 40px;
+  height: 40px;
 
-@media(max-width:520px){
+  border-radius: 50%;
 
-    .quickGrid,
-    .activeGrid{
-        grid-template-columns:1fr 1fr;
-    }
+  background: #ececee;
 
-    .productGrid{
-        grid-template-columns:1fr 1fr;
-    }
+  font-size: 24px;
+}
 
-    .timerButton{
-        min-height:135px;
-    }
 
-    .timerEmoji{
-        font-size:35px;
-    }
+/* =========================
+   NAVIGATION
+========================= */
 
-    .activeTime{
-        font-size:31px;
-    }
+.bottom-nav {
+  position: fixed;
 
-    .nav button{
-        font-size:11px;
-    }
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  z-index: 80;
+
+  height: 84px;
+
+  padding-bottom: env(safe-area-inset-bottom);
+
+  background: rgba(255,255,255,.95);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border-top: 1px solid #dedfdf;
+
+  display: grid;
+
+  grid-template-columns: repeat(5,1fr);
+}
+
+.nav {
+  background: transparent;
+
+  color: #777b82;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 4px;
+
+  border-radius: 15px;
+}
+
+.nav-icon {
+  font-size: 22px;
+}
+
+.nav small {
+  font-weight: 800;
+
+  font-size: 10px;
+}
+
+.nav.active {
+  color: #ef6244;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty {
+  padding: 40px 20px;
+
+  border: 2px dashed #dedfdf;
+
+  border-radius: 22px;
+
+  text-align: center;
+
+  color: #777b82;
+}
+
+.empty-icon {
+  font-size: 35px;
+
+  margin-bottom: 10px;
+}
+
+
+/* =========================
+   RÉGLAGES
+========================= */
+
+.setting {
+  background: white;
+
+  border-radius: 22px;
+
+  padding: 19px;
+
+  margin-bottom: 12px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.setting small {
+  display: block;
+
+  color: #777b82;
+
+  margin-top: 4px;
+}
+
+.switch {
+  width: 55px;
+  height: 31px;
+
+  background: #c8c9cb;
+
+  border-radius: 30px;
+
+  padding: 3px;
+}
+
+.switch span {
+  display: block;
+
+  width: 25px;
+  height: 25px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  transition: .2s;
+}
+
+.switch.on {
+  background: #ef6244;
+}
+
+.switch.on span {
+  transform: translateX(24px);
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark {
+  background: #111214;
+
+  color: #f5f5f5;
+}
+
+body.dark header {
+  background: rgba(17,18,20,.94);
+
+  border-color: #292b30;
+}
+
+body.dark .theme,
+body.dark .tool,
+body.dark .timer,
+body.dark .card,
+body.dark .preset,
+body.dark .setting,
+body.dark .modal-content {
+  background: #1b1d21;
+
+  color: #f5f5f5;
+}
+
+body.dark input,
+body.dark textarea,
+body.dark select {
+  background: #25272c;
+
+  color: white;
+
+  border-color: #363940;
+}
+
+body.dark .tool-icon,
+body.dark .secondary,
+body.dark .timer-buttons button,
+body.dark .close {
+  background: #292c32;
+
+  color: white;
+}
+
+body.dark .bottom-nav {
+  background: rgba(17,18,20,.95);
+
+  border-color: #292b30;
+}
+
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media (min-width: 700px) {
+
+  main {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .tools {
+    grid-template-columns:
+      repeat(4,1fr);
+  }
+
+  .tool {
+    min-height: 210px;
+  }
+
+  .bottom-nav {
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: min(700px,100%);
+
+    border-radius: 25px 25px 0 0;
+  }
 
 }
 
-@media(min-width:700px){
-
-    .quickGrid{
-        grid-template-columns:repeat(3,1fr);
-    }
-
-    .productGrid{
-        grid-template-columns:repeat(4,1fr);
-    }
-}
 </style>
+
 </head>
+
 
 <body>
 
-<div class="app">
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header>
 
-<div class="header">
+  <div>
 
-<div>
+    <div class="logo">
+      Kitchen<span>Flow</span>
+    </div>
 
-<div class="logo">
-Kitchen <span>Copilot</span>
-</div>
+    <div class="sublogo">
+      KITCHEN CONTROL
+    </div>
 
-<div class="restaurant" id="restaurantName">
-Cuisine · Anastasiia
-</div>
+  </div>
 
-</div>
-
-<button
-class="smallButton"
-onclick="openSettings()"
->
-⚙️
-</button>
-
-</div>
+  <button
+    class="theme"
+    onclick="toggleTheme()"
+  >
+    ☀️
+  </button>
 
 </header>
 
 
-<nav class="nav">
 
-<button
-class="active"
-onclick="page('service',this)"
->
-🔥 Service
-</button>
-
-<button
-onclick="page('products',this)"
->
-🛒 Produits
-</button>
-
-<button
-onclick="page('lists',this)"
->
-📋 Checklists
-</button>
-
-<button
-onclick="page('recipes',this)"
->
-🍳 Prépas
-</button>
-
-</nav>
+<main>
 
 
-<main class="content">
-
-
-<!-- ==================================================
-SERVICE
-================================================== -->
-
-<section id="service">
-
-<div class="sectionHeader">
-
-<h2>⚡ Cuissons rapides</h2>
-
-<button
-class="smallButton"
-onclick="editTimer()"
->
-＋ Ajouter
-</button>
-
-</div>
-
-<div
-id="timerButtons"
-class="quickGrid"
-></div>
-
-
-<div class="sectionHeader">
-
-<h2>⏱️ En cours</h2>
-
-</div>
-
-<div
-id="activeTimers"
-class="activeGrid"
-></div>
-
-</section>
-
-
-<!-- ==================================================
-PRODUITS
-================================================== -->
+<!-- =====================================================
+     ACCUEIL
+===================================================== -->
 
 <section
-id="products"
-style="display:none"
+  id="home"
+  class="page active"
 >
 
-<div class="sectionHeader">
+  <div class="hero">
 
-<h2>🛒 Produits</h2>
+    <div class="label">
+      SERVICE
+    </div>
 
-<button
-class="smallButton"
-onclick="editProduct()"
->
-＋ Produit
-</button>
+    <h1>
+      Ta cuisine.<br>
+      <span>Ton rythme.</span>
+    </h1>
 
-</div>
+    <p style="
+      color:#777b82;
+      font-size:18px;
+      line-height:1.5;
+      margin-top:20px;
+    ">
+      Tous tes outils de cuisine réunis
+      au même endroit.
+    </p>
+
+    <button
+      class="primary large-button"
+      onclick="openTimerModal()"
+    >
+      ⏱️ Nouveau minuteur
+    </button>
+
+  </div>
 
 
-<div
-id="productsGrid"
-class="productGrid"
-></div>
+  <!-- MINUTEURS ACTIFS -->
+
+  <div class="section">
+
+    <div class="section-title">
+
+      <div>
+
+        <div class="label">
+          EN COURS
+        </div>
+
+        <h2>
+          Minuteurs
+        </h2>
+
+      </div>
+
+      <strong id="activeCount">
+        0
+      </strong>
+
+    </div>
+
+    <div id="homeTimers">
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          ⏱️
+        </div>
+
+        Aucun minuteur actif.
+
+      </div>
+
+    </div>
+
+  </div>
 
 
-<div class="sectionHeader">
 
-<h2>🔴 À refaire</h2>
+  <!-- OUTILS -->
 
-</div>
+  <div class="section">
 
-<div
-id="refillList"
-class="todoList"
-></div>
+    <div class="label">
+      ACCÈS RAPIDE
+    </div>
+
+    <h2>
+      Mes outils
+    </h2>
+
+    <div class="tools">
+
+      <button
+        class="tool"
+        onclick="go('timers')"
+      >
+
+        <div class="tool-icon">
+          ⏱️
+        </div>
+
+        <div>
+
+          <strong>
+            Minuteurs
+          </strong>
+
+          <small>
+            Cuissons & temps
+          </small>
+
+        </div>
+
+      </button>
+
+
+      <button
+        class="tool"
+        onclick="go('preparations')"
+      >
+
+        <div class="tool-icon">
+          📋
+        </div>
+
+        <div>
+
+          <strong>
+            Préparations
+          </strong>
+
+          <small>
+            Recettes & procédures
+          </small>
+
+        </div>
+
+      </button>
+
+
+      <button
+        class="tool"
+        onclick="go('lists')"
+      >
+
+        <div class="tool-icon">
+          ✓
+        </div>
+
+        <div>
+
+          <strong>
+            Listes
+          </strong>
+
+          <small>
+            Mise en place
+          </small>
+
+        </div>
+
+      </button>
+
+
+      <button
+        class="tool"
+        onclick="go('settings')"
+      >
+
+        <div class="tool-icon">
+          ⚙️
+        </div>
+
+        <div>
+
+          <strong>
+            Réglages
+          </strong>
+
+          <small>
+            Personnaliser
+          </small>
+
+        </div>
+
+      </button>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- ==================================================
-CHECKLISTS
-================================================== -->
+
+<!-- =====================================================
+     MINUTEURS
+===================================================== -->
 
 <section
-id="lists"
-style="display:none"
+  id="timers"
+  class="page"
 >
 
-<div class="sectionHeader">
+  <div class="page-header">
 
-<h2>📋 Checklists</h2>
+    <div>
 
-<button
-class="smallButton"
-onclick="editChecklist()"
->
-＋ Liste
-</button>
+      <div class="label">
+        CUISSONS
+      </div>
 
-</div>
+      <h1>
+        Minuteurs
+      </h1>
 
-<div
-id="checklists"
-></div>
+    </div>
+
+    <button
+      class="primary"
+      onclick="openTimerModal()"
+    >
+      + Ajouter
+    </button>
+
+  </div>
+
+
+  <div class="section">
+
+    <div class="label">
+      RAPIDES
+    </div>
+
+    <div class="presets">
+
+
+      <button
+        class="preset"
+        onclick="quickTimer('Frites',180)"
+      >
+
+        <div class="preset-icon">
+          🍟
+        </div>
+
+        <strong>
+          Frites
+        </strong>
+
+        <small>
+          3 min
+        </small>
+
+      </button>
+
+
+      <button
+        class="preset"
+        onclick="quickTimer('Burger bleu',120)"
+      >
+
+        <div class="preset-icon">
+          🍔
+        </div>
+
+        <strong>
+          Burger bleu
+        </strong>
+
+        <small>
+          2 min
+        </small>
+
+      </button>
+
+
+      <button
+        class="preset"
+        onclick="quickTimer('Burger saignant',180)"
+      >
+
+        <div class="preset-icon">
+          🍔
+        </div>
+
+        <strong>
+          Saignant
+        </strong>
+
+        <small>
+          3 min
+        </small>
+
+      </button>
+
+
+      <button
+        class="preset"
+        onclick="quickTimer('Burger à point',240)"
+      >
+
+        <div class="preset-icon">
+          🍔
+        </div>
+
+        <strong>
+          À point
+        </strong>
+
+        <small>
+          4 min
+        </small>
+
+      </button>
+
+
+      <button
+        class="preset"
+        onclick="quickTimer('Burger bien cuit',360)"
+      >
+
+        <div class="preset-icon">
+          🍔
+        </div>
+
+        <strong>
+          Bien cuit
+        </strong>
+
+        <small>
+          6 min
+        </small>
+
+      </button>
+
+
+    </div>
+
+  </div>
+
+
+  <div id="timerPageList"></div>
 
 </section>
 
 
-<!-- ==================================================
-RECETTES
-================================================== -->
+
+<!-- =====================================================
+     PRÉPARATIONS
+===================================================== -->
 
 <section
-id="recipes"
-style="display:none"
+  id="preparations"
+  class="page"
 >
 
-<div class="sectionHeader">
+  <div class="page-header">
 
-<h2>🍳 Préparations</h2>
+    <div>
 
-<button
-class="smallButton"
-onclick="editRecipe()"
->
-＋ Prépa
-</button>
+      <div class="label">
+        PRODUCTION
+      </div>
 
-</div>
+      <h1>
+        Préparations
+      </h1>
 
-<div
-id="recipesContainer"
-></div>
+    </div>
+
+    <button
+      class="primary"
+      onclick="openPrepModal()"
+    >
+      + Ajouter
+    </button>
+
+  </div>
+
+
+  <div id="preparationList"></div>
 
 </section>
+
+
+
+<!-- =====================================================
+     LISTES
+===================================================== -->
+
+<section
+  id="lists"
+  class="page"
+>
+
+  <div class="page-header">
+
+    <div>
+
+      <div class="label">
+        MISE EN PLACE
+      </div>
+
+      <h1>
+        Mes listes
+      </h1>
+
+    </div>
+
+    <button
+      class="primary"
+      onclick="createList()"
+    >
+      + Liste
+    </button>
+
+  </div>
+
+
+  <div id="listsContainer"></div>
+
+</section>
+
+
+
+<!-- =====================================================
+     RÉGLAGES
+===================================================== -->
+
+<section
+  id="settings"
+  class="page"
+>
+
+  <div class="page-header">
+
+    <div>
+
+      <div class="label">
+        CONFIGURATION
+      </div>
+
+      <h1>
+        Réglages
+      </h1>
+
+    </div>
+
+  </div>
+
+
+  <div class="setting">
+
+    <div>
+
+      <strong>
+        🔔 Son des minuteurs
+      </strong>
+
+      <small>
+        Sonnerie lorsque la cuisson est terminée.
+      </small>
+
+    </div>
+
+    <button
+      id="soundSwitch"
+      class="switch on"
+      onclick="toggleSound()"
+    >
+
+      <span></span>
+
+    </button>
+
+  </div>
+
+
+  <div class="setting">
+
+    <div>
+
+      <strong>
+        🌙 Mode sombre
+      </strong>
+
+      <small>
+        Adapter l'écran aux services du soir.
+      </small>
+
+    </div>
+
+    <button
+      class="secondary"
+      onclick="toggleTheme()"
+    >
+      Changer
+    </button>
+
+  </div>
+
+
+  <div class="setting">
+
+    <div>
+
+      <strong>
+        🔔 Tester la sonnerie
+      </strong>
+
+      <small>
+        Vérifier que le son fonctionne.
+      </small>
+
+    </div>
+
+    <button
+      class="secondary"
+      onclick="alarm()"
+    >
+      Tester
+    </button>
+
+  </div>
+
+
+  <div class="setting">
+
+    <div>
+
+      <strong>
+        🗑️ Données
+      </strong>
+
+      <small>
+        Supprimer toutes les données locales.
+      </small>
+
+    </div>
+
+    <button
+      class="delete"
+      onclick="resetEverything()"
+    >
+      Réinitialiser
+    </button>
+
+  </div>
+
+</section>
+
 
 </main>
 
 
-<button
-class="fab"
-onclick="quickAdd()"
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<nav class="bottom-nav">
+
+  <button
+    class="nav active"
+    onclick="go('home')"
+    data-nav="home"
+  >
+
+    <span class="nav-icon">
+      ⌂
+    </span>
+
+    <small>
+      Accueil
+    </small>
+
+  </button>
+
+
+  <button
+    class="nav"
+    onclick="go('timers')"
+    data-nav="timers"
+  >
+
+    <span class="nav-icon">
+      ⏱
+    </span>
+
+    <small>
+      Minuteurs
+    </small>
+
+  </button>
+
+
+  <button
+    class="nav"
+    onclick="go('preparations')"
+    data-nav="preparations"
+  >
+
+    <span class="nav-icon">
+      ▣
+    </span>
+
+    <small>
+      Préparations
+    </small>
+
+  </button>
+
+
+  <button
+    class="nav"
+    onclick="go('lists')"
+    data-nav="lists"
+  >
+
+    <span class="nav-icon">
+      ✓
+    </span>
+
+    <small>
+      Listes
+    </small>
+
+  </button>
+
+
+  <button
+    class="nav"
+    onclick="go('settings')"
+    data-nav="settings"
+  >
+
+    <span class="nav-icon">
+      ⚙
+    </span>
+
+    <small>
+      Réglages
+    </small>
+
+  </button>
+
+</nav>
+
+
+
+<!-- =====================================================
+     MODALE MINUTEUR
+===================================================== -->
+
+<div
+  id="timerModal"
+  class="modal"
+  onclick="closeOutside(event,'timerModal')"
 >
-+
-</button>
+
+  <div class="modal-content">
+
+    <div class="modal-title">
+
+      <h2>
+        Nouveau minuteur
+      </h2>
+
+      <button
+        class="close"
+        onclick="closeModal('timerModal')"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <label class="form-label">
+
+      Nom du minuteur
+
+      <input
+        id="timerName"
+        placeholder="Ex : Sauce tomate"
+      >
+
+    </label>
+
+
+    <div class="two-columns">
+
+      <label class="form-label">
+
+        Minutes
+
+        <input
+          id="timerMinutes"
+          type="number"
+          min="0"
+          value="5"
+        >
+
+      </label>
+
+
+      <label class="form-label">
+
+        Secondes
+
+        <input
+          id="timerSeconds"
+          type="number"
+          min="0"
+          max="59"
+          value="0"
+        >
+
+      </label>
+
+    </div>
+
+
+    <div class="presets">
+
+      <button
+        class="preset"
+        onclick="setTime(60)"
+      >
+        1 min
+      </button>
+
+      <button
+        class="preset"
+        onclick="setTime(180)"
+      >
+        3 min
+      </button>
+
+      <button
+        class="preset"
+        onclick="setTime(300)"
+      >
+        5 min
+      </button>
+
+      <button
+        class="preset"
+        onclick="setTime(600)"
+      >
+        10 min
+      </button>
+
+      <button
+        class="preset"
+        onclick="setTime(900)"
+      >
+        15 min
+      </button>
+
+    </div>
+
+
+    <button
+      class="primary large-button"
+      onclick="startCustomTimer()"
+    >
+      ▶ Démarrer
+    </button>
+
+  </div>
 
 </div>
 
 
+
+<!-- =====================================================
+     MODALE PRÉPARATION
+===================================================== -->
+
 <div
-id="modal"
-class="modal"
+  id="prepModal"
+  class="modal"
+  onclick="closeOutside(event,'prepModal')"
 >
-<div
-id="sheet"
-class="sheet"
-></div>
+
+  <div class="modal-content">
+
+    <div class="modal-title">
+
+      <h2>
+        Nouvelle préparation
+      </h2>
+
+      <button
+        class="close"
+        onclick="closeModal('prepModal')"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <label class="form-label">
+
+      Nom
+
+      <input
+        id="prepName"
+        placeholder="Ex : Sauce maison"
+      >
+
+    </label>
+
+
+    <label class="form-label">
+
+      Étapes
+
+      <textarea
+        id="prepSteps"
+        rows="7"
+        placeholder="Une étape par ligne..."
+      ></textarea>
+
+    </label>
+
+
+    <button
+      class="primary large-button"
+      onclick="savePreparation()"
+    >
+      Créer la préparation
+    </button>
+
+  </div>
+
 </div>
 
-
-<div
-id="toast"
-class="toast"
-></div>
 
 
 <script>
 
-/* ======================================================
-DONNÉES
-====================================================== */
-
-const STORAGE_KEY =
-"kitchen_copilot_anastasiia_v3";
+/* =========================================================
+   KITCHENFLOW
+   JAVASCRIPT INTÉGRÉ DIRECTEMENT DANS INDEX.HTML
+========================================================= */
 
 
-const DEFAULT_DATA = {
+/* =========================================================
+   DONNÉES
+========================================================= */
 
-settings:{
-    name:"Anastasiia",
-    subtitle:"Cuisine"
-},
+let timers =
+  JSON.parse(
+    localStorage.getItem("kf_timers") || "[]"
+  );
 
+let preparations =
+  JSON.parse(
+    localStorage.getItem("kf_preparations") || "[]"
+  );
 
-timers:[
+let lists =
+  JSON.parse(
+    localStorage.getItem("kf_lists") || "[]"
+  );
 
-{
-    id:"t1",
-    emoji:"🥩",
-    name:"Steak saignant",
-    duration:180,
-    alarms:[
-        {before:60,sound:"double"},
-        {before:0,sound:"long"}
-    ]
-},
+let sound =
+  localStorage.getItem("kf_sound") !== "false";
 
-{
-    id:"t2",
-    emoji:"🍟",
-    name:"Frites",
-    duration:210,
-    alarms:[
-        {before:30,sound:"double"},
-        {before:0,sound:"long"}
-    ]
-},
-
-{
-    id:"t3",
-    emoji:"🍔",
-    name:"Burger",
-    duration:300,
-    alarms:[
-        {before:60,sound:"beep"},
-        {before:0,sound:"long"}
-    ]
-},
-
-{
-    id:"t4",
-    emoji:"🍗",
-    name:"Poulet",
-    duration:480,
-    alarms:[
-        {before:60,sound:"double"},
-        {before:0,sound:"long"}
-    ]
-},
-
-{
-    id:"t5",
-    emoji:"🥚",
-    name:"Œuf mollet",
-    duration:360,
-    alarms:[
-        {before:30,sound:"beep"},
-        {before:0,sound:"long"}
-    ]
-},
-
-{
-    id:"t6",
-    emoji:"🥓",
-    name:"Bacon",
-    duration:240,
-    alarms:[
-        {before:30,sound:"beep"},
-        {before:0,sound:"long"}
-    ]
-}
-
-],
+let dark =
+  localStorage.getItem("kf_dark") === "true";
 
 
-products:[
+/* =========================================================
+   SAUVEGARDE
+========================================================= */
 
-{
-    id:"p1",
-    emoji:"🥫",
-    name:"Sauce 1",
-    refill:false
-},
+function save() {
 
-{
-    id:"p2",
-    emoji:"🥫",
-    name:"Sauce 2",
-    refill:false
-},
+  localStorage.setItem(
+    "kf_timers",
+    JSON.stringify(timers)
+  );
 
-{
-    id:"p3",
-    emoji:"🥫",
-    name:"Sauce 3",
-    refill:false
-},
+  localStorage.setItem(
+    "kf_preparations",
+    JSON.stringify(preparations)
+  );
 
-{
-    id:"p4",
-    emoji:"🥫",
-    name:"Sauce 4",
-    refill:false
-},
+  localStorage.setItem(
+    "kf_lists",
+    JSON.stringify(lists)
+  );
 
-{
-    id:"p5",
-    emoji:"🍅",
-    name:"Sauce tomate",
-    refill:false
-},
+  localStorage.setItem(
+    "kf_sound",
+    sound
+  );
 
-{
-    id:"p6",
-    emoji:"🌶️",
-    name:"Sauce piquante",
-    refill:false
-},
-
-{
-    id:"p7",
-    emoji:"🧅",
-    name:"Oignons",
-    refill:false
-},
-
-{
-    id:"p8",
-    emoji:"🥒",
-    name:"Pickles",
-    refill:false
-}
-
-],
-
-
-checklists:[
-
-{
-    id:"c1",
-    name:"🌅 Ouverture",
-    tasks:[
-        {id:"1",text:"Allumer les fours",done:false},
-        {id:"2",text:"Vérifier les frigos",done:false},
-        {id:"3",text:"Préparer la mise en place",done:false},
-        {id:"4",text:"Sortir les sauces",done:false}
-    ]
-},
-
-{
-    id:"c2",
-    name:"🌙 Fermeture",
-    tasks:[
-        {id:"1",text:"Nettoyer le plan de travail",done:false},
-        {id:"2",text:"Nettoyer la friteuse",done:false},
-        {id:"3",text:"Ranger les produits",done:false},
-        {id:"4",text:"Sortir les poubelles",done:false},
-        {id:"5",text:"Éteindre les appareils",done:false}
-    ]
-}
-
-],
-
-
-recipes:[
-
-{
-    id:"r1",
-    emoji:"🥫",
-    name:"Sauce maison",
-    notes:"Ajouter ici les ingrédients et la méthode."
-}
-
-],
-
-
-active:[]
-
-};
-
-
-let data =
-JSON.parse(
-    localStorage.getItem(STORAGE_KEY)
-)
-||
-structuredClone(DEFAULT_DATA);
-
-
-let audioContext = null;
-
-
-/* ======================================================
-UTILITAIRES
-====================================================== */
-
-function $(id){
-    return document.getElementById(id);
-}
-
-
-function uid(){
-    return Date.now().toString(36)
-    +
-    Math.random()
-    .toString(36)
-    .slice(2);
-}
-
-
-function save(){
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(data)
-    );
-}
-
-
-function escapeHTML(value){
-
-    return String(value ?? "")
-    .replace(/[&<>"']/g,function(char){
-
-        return {
-            "&":"&amp;",
-            "<":"&lt;",
-            ">":"&gt;",
-            '"':"&quot;",
-            "'":"&#039;"
-        }[char];
-
-    });
+  localStorage.setItem(
+    "kf_dark",
+    dark
+  );
 
 }
 
 
-function formatTime(seconds){
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
-    seconds=Math.max(
-        0,
-        Math.ceil(seconds)
-    );
+function go(page) {
 
-    return String(
-        Math.floor(seconds/60)
-    ).padStart(2,"0")
-    +
-    ":"
-    +
-    String(
-        seconds%60
-    ).padStart(2,"0");
-}
+  document
+    .querySelectorAll(".page")
+    .forEach(p => {
 
-
-function toast(message){
-
-    $("toast").textContent=message;
-
-    $("toast").style.display="block";
-
-    setTimeout(function(){
-
-        $("toast").style.display="none";
-
-    },1800);
-
-}
-
-
-/* ======================================================
-NAVIGATION
-====================================================== */
-
-function page(id,button){
-
-    [
-        "service",
-        "products",
-        "lists",
-        "recipes"
-    ]
-    .forEach(function(section){
-
-        $(section).style.display =
-        section===id
-        ?
-        "block"
-        :
-        "none";
+      p.classList.remove("active");
 
     });
 
 
+  const target =
+    document.getElementById(page);
+
+  if (target) {
+
+    target.classList.add("active");
+
+  }
+
+
+  document
+    .querySelectorAll(".nav")
+    .forEach(n => {
+
+      n.classList.toggle(
+        "active",
+        n.dataset.nav === page
+      );
+
+    });
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+
+  if (page === "home") {
+    renderHome();
+  }
+
+  if (page === "timers") {
+    renderTimers();
+  }
+
+  if (page === "preparations") {
+    renderPreparations();
+  }
+
+  if (page === "lists") {
+    renderLists();
+  }
+
+}
+
+
+/* =========================================================
+   MINUTEURS
+========================================================= */
+
+function openTimerModal() {
+
+  document
+    .getElementById("timerModal")
+    .classList.add("open");
+
+}
+
+
+function closeModal(id) {
+
+  document
+    .getElementById(id)
+    .classList.remove("open");
+
+}
+
+
+function closeOutside(event,id) {
+
+  if (
+    event.target.id === id
+  ) {
+
+    closeModal(id);
+
+  }
+
+}
+
+
+function setTime(seconds) {
+
+  document.getElementById(
+    "timerMinutes"
+  ).value =
+    Math.floor(seconds / 60);
+
+  document.getElementById(
+    "timerSeconds"
+  ).value =
+    seconds % 60;
+
+}
+
+
+function startCustomTimer() {
+
+  let name =
     document
-    .querySelectorAll(".nav button")
-    .forEach(function(button){
+      .getElementById("timerName")
+      .value
+      .trim();
 
-        button.classList.remove("active");
+  let minutes =
+    Number(
+      document
+        .getElementById("timerMinutes")
+        .value
+    ) || 0;
 
-    });
+  let seconds =
+    Number(
+      document
+        .getElementById("timerSeconds")
+        .value
+    ) || 0;
 
 
-    button.classList.add("active");
+  let total =
+    minutes * 60 + seconds;
+
+
+  if (total <= 0) {
+
+    alert(
+      "Choisis une durée supérieure à 0."
+    );
+
+    return;
+
+  }
+
+
+  if (!name) {
+
+    name = "Cuisson";
+
+  }
+
+
+  addTimer(
+    name,
+    total
+  );
+
+
+  closeModal("timerModal");
 
 }
 
 
-/* ======================================================
-MODAL
-====================================================== */
+function quickTimer(name,seconds) {
 
-function openModal(content){
-
-    $("sheet").innerHTML=content;
-
-    $("modal").classList.add("show");
+  addTimer(
+    name,
+    seconds
+  );
 
 }
 
 
-function closeModal(){
+function addTimer(name,total) {
 
-    $("modal").classList.remove("show");
+  const timer = {
+
+    id: Date.now() +
+      Math.random(),
+
+    name: name,
+
+    total: total,
+
+    remaining: total,
+
+    running: true,
+
+    finished: false,
+
+    last: Date.now()
+
+  };
+
+
+  timers.push(timer);
+
+  save();
+
+  renderTimers();
+
+  renderHome();
 
 }
 
 
-/* ======================================================
-CUISSONS
-====================================================== */
+/* =========================================================
+   HORLOGE
+========================================================= */
 
-function renderTimers(){
-
-    $("timerButtons").innerHTML =
-    data.timers.map(function(timer){
-
-        return `
-
-        <button
-            class="timerButton"
-            onclick="startTimer('${timer.id}')"
-        >
-
-            <div class="timerEmoji">
-
-                ${escapeHTML(timer.emoji)}
-
-            </div>
-
-            <div class="timerName">
-
-                ${escapeHTML(timer.name)}
-
-            </div>
-
-            <div class="timerDuration">
-
-                ${formatTime(timer.duration)}
-
-            </div>
+setInterval(
+  updateTimers,
+  500
+);
 
 
-            <button
-                class="editIcon"
-                onclick="event.stopPropagation();editTimer('${timer.id}')"
-            >
+function updateTimers() {
 
-                ✏️
-
-            </button>
-
-        </button>
-
-        `;
-
-    }).join("");
+  const now =
+    Date.now();
 
 
-    if(!data.active.length){
+  let changed = false;
 
-        $("activeTimers").innerHTML=`
+
+  timers.forEach(timer => {
+
+    if (
+      !timer.running ||
+      timer.finished
+    ) {
+      return;
+    }
+
+
+    const seconds =
+      Math.floor(
+        (now - timer.last) / 1000
+      );
+
+
+    if (seconds <= 0) {
+      return;
+    }
+
+
+    timer.remaining =
+      Math.max(
+        0,
+        timer.remaining - seconds
+      );
+
+
+    timer.last =
+      now;
+
+
+    changed = true;
+
+
+    if (
+      timer.remaining <= 0
+    ) {
+
+      timer.remaining = 0;
+
+      timer.running = false;
+
+      timer.finished = true;
+
+      alarm();
+
+    }
+
+  });
+
+
+  if (changed) {
+
+    save();
+
+    renderTimers();
+
+    renderHome();
+
+  }
+
+}
+
+
+/* =========================================================
+   AFFICHAGE MINUTEURS
+========================================================= */
+
+function formatTime(seconds) {
+
+  const min =
+    Math.floor(seconds / 60);
+
+  const sec =
+    seconds % 60;
+
+
+  return (
+    String(min).padStart(2,"0") +
+    ":" +
+    String(sec).padStart(2,"0")
+  );
+
+}
+
+
+function timerHTML(timer) {
+
+  let percent =
+    (
+      (timer.total -
+      timer.remaining)
+      /
+      timer.total
+    ) * 100;
+
+
+  let status =
+    timer.finished
+      ? "TERMINÉ"
+      :
+      timer.running
+        ? "EN COURS"
+        : "PAUSE";
+
+
+  return `
+
+    <div
+      class="timer ${
+        timer.finished
+          ? "finished"
+          : ""
+      }"
+    >
+
+      <div class="timer-header">
+
+        <div>
+
+          <div class="timer-status">
+            ${status}
+          </div>
+
+          <div class="timer-name">
+            ${escapeHTML(timer.name)}
+          </div>
+
+        </div>
+
+        <div>
+          ${
+            timer.finished
+              ? "🔔"
+              : "⏱️"
+          }
+        </div>
+
+      </div>
+
+
+      <div class="timer-display">
+
+        ${formatTime(
+          timer.remaining
+        )}
+
+      </div>
+
+
+      <div class="progress-background">
 
         <div
-            class="empty"
-            style="grid-column:1/-1"
-        >
-
-            ⏱️ Aucun minuteur en cours
-
-        </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    $("activeTimers").innerHTML =
-    data.active.map(function(timer){
-
-        return `
-
-        <div class="activeCard">
-
-            <div class="activeTop">
-
-                <div class="activeEmoji">
-
-                    ${escapeHTML(timer.emoji)}
-
-                </div>
-
-            </div>
-
-
-            <div class="activeName">
-
-                ${escapeHTML(timer.name)}
-
-            </div>
-
-
-            <div class="activeTime">
-
-                ${formatTime(timer.remaining)}
-
-            </div>
-
-
-            <div class="activeActions">
-
-                <button
-                    onclick="pauseTimer('${timer.id}')"
-                >
-
-                    ${timer.paused
-                    ?"▶️"
-                    :"⏸️"}
-
-                </button>
-
-                <button
-                    onclick="deleteActive('${timer.id}')"
-                >
-
-                    ✕
-
-                </button>
-
-            </div>
-
-        </div>
-
-        `;
-
-    }).join("");
-
-}
-
-
-function startTimer(id){
-
-    const timer =
-    data.timers.find(
-        timer=>timer.id===id
-    );
-
-    if(!timer)return;
-
-
-    data.active.push({
-
-        id:uid(),
-
-        emoji:timer.emoji,
-
-        name:timer.name,
-
-        duration:timer.duration,
-
-        remaining:timer.duration,
-
-        alarms:
-        timer.alarms.map(
-            alarm=>({...alarm})
-        ),
-
-        fired:[],
-
-        paused:false,
-
-        finished:false
-
-    });
-
-
-    save();
-
-    render();
-
-    toast(
-        timer.emoji+
-        " "+
-        timer.name+
-        " lancé"
-    );
-
-}
-
-
-function pauseTimer(id){
-
-    const timer =
-    data.active.find(
-        timer=>timer.id===id
-    );
-
-    if(!timer)return;
-
-    timer.paused=
-    !timer.paused;
-
-    save();
-
-    renderTimers();
-
-}
-
-
-function deleteActive(id){
-
-    data.active =
-    data.active.filter(
-        timer=>timer.id!==id
-    );
-
-    save();
-
-    renderTimers();
-
-}
-
-
-/* ======================================================
-MODIFICATION CUISSON
-====================================================== */
-
-function editTimer(id=null){
-
-    const timer =
-    data.timers.find(
-        timer=>timer.id===id
-    );
-
-
-    const alarms =
-    timer?.alarms || [];
-
-
-    openModal(`
-
-        <h2>
-
-            ${timer
-            ?"✏️ Modifier la cuisson"
-            :"➕ Nouvelle cuisson"}
-
-        </h2>
-
-
-        <div class="field">
-
-            <label>Emoji</label>
-
-            <input
-                id="timerEmoji"
-                value="${escapeHTML(timer?.emoji||"🍔")}"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Nom</label>
-
-            <input
-                id="timerName"
-                value="${escapeHTML(timer?.name||"")}"
-                placeholder="Ex : Burger"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Durée en secondes</label>
-
-            <input
-                id="timerDuration"
-                type="number"
-                min="1"
-                value="${timer?.duration||300}"
-            >
-
-        </div>
-
-
-        <h3>🔔 Sonneries</h3>
-
-
-        <div class="field">
-
-            <label>
-                Sonnerie 1 — secondes avant la fin
-            </label>
-
-            <input
-                id="alarm0"
-                type="number"
-                min="0"
-                value="${alarms[0]?.before??""}"
-                placeholder="Ex : 60"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Type</label>
-
-            <select id="sound0">
-
-                <option value="beep">
-                    🔔 Bip
-                </option>
-
-                <option
-                    value="double"
-                    ${alarms[0]?.sound==="double"
-                    ?"selected"
-                    :""}
-                >
-                    🔔🔔 Double bip
-                </option>
-
-                <option
-                    value="long"
-                    ${alarms[0]?.sound==="long"
-                    ?"selected"
-                    :""}
-                >
-                    📢 Bip long
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="field">
-
-            <label>
-                Sonnerie 2 — secondes avant la fin
-            </label>
-
-            <input
-                id="alarm1"
-                type="number"
-                min="0"
-                value="${alarms[1]?.before??""}"
-                placeholder="Ex : 30"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Type</label>
-
-            <select id="sound1">
-
-                <option value="beep">
-                    🔔 Bip
-                </option>
-
-                <option
-                    value="double"
-                    ${alarms[1]?.sound==="double"
-                    ?"selected"
-                    :""}
-                >
-                    🔔🔔 Double bip
-                </option>
-
-                <option
-                    value="long"
-                    ${alarms[1]?.sound==="long"
-                    ?"selected"
-                    :""}
-                >
-                    📢 Bip long
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="field">
-
-            <label>
-                Sonnerie finale
-            </label>
-
-            <select id="sound2">
-
-                <option
-                    value="long"
-                    ${alarms[2]?.sound==="long"
-                    ?"selected"
-                    :""}
-                >
-                    📢 Bip long
-                </option>
-
-                <option value="double">
-                    🔔🔔 Double bip
-                </option>
-
-                <option value="beep">
-                    🔔 Bip
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <button
-            class="primary"
-            onclick="saveTimer('${id||""}')"
-        >
-
-            Enregistrer
-
-        </button>
-
-
-        ${timer ? `
-
-        <button
-            class="danger"
-            onclick="deleteTimer('${timer.id}')"
-        >
-
-            Supprimer cette cuisson
-
-        </button>
-
-        `:""}
-
-
-        <button
-            class="secondary"
-            onclick="closeModal()"
-        >
-
-            Annuler
-
-        </button>
-
-    `);
-
-}
-
-
-function saveTimer(id){
-
-    const name =
-    $("timerName").value.trim();
-
-    const emoji =
-    $("timerEmoji").value.trim()
-    ||
-    "🍔";
-
-    const duration =
-    Number(
-        $("timerDuration").value
-    );
-
-
-    if(!name || duration<=0){
-
-        toast("Nom et durée obligatoires");
-
-        return;
-
-    }
-
-
-    const alarms=[];
-
-
-    if($("alarm0").value!==""){
-
-        alarms.push({
-
-            before:
-            Number(
-                $("alarm0").value
-            ),
-
-            sound:
-            $("sound0").value
-
-        });
-
-    }
-
-
-    if($("alarm1").value!==""){
-
-        alarms.push({
-
-            before:
-            Number(
-                $("alarm1").value
-            ),
-
-            sound:
-            $("sound1").value
-
-        });
-
-    }
-
-
-    /*
-    La sonnerie finale est automatique
-    si aucune alarme à 0 n'existe.
-    */
-
-    if(!alarms.some(
-        alarm=>alarm.before===0
-    )){
-
-        alarms.push({
-
-            before:0,
-
-            sound:$("sound2").value
-
-        });
-
-    }
-
-
-    if(id){
-
-        const timer =
-        data.timers.find(
-            timer=>timer.id===id
-        );
-
-
-        Object.assign(
-            timer,
-            {
-                name,
-                emoji,
-                duration,
-                alarms
+          class="progress"
+          style="
+            width:${percent}%
+          "
+        ></div>
+
+      </div>
+
+
+      <div class="timer-buttons">
+
+        ${
+          timer.finished
+
+          ?
+
+          `
+          <button
+            onclick="restartTimer(${timer.id})"
+          >
+            ↻ Recommencer
+          </button>
+          `
+
+          :
+
+          `
+          <button
+            onclick="pauseTimer(${timer.id})"
+          >
+            ${
+              timer.running
+                ? "Ⅱ Pause"
+                : "▶ Reprendre"
             }
-        );
-
-    }else{
-
-        data.timers.push({
-
-            id:uid(),
-
-            name,
-
-            emoji,
-
-            duration,
-
-            alarms
-
-        });
-
-    }
-
-
-    save();
-
-    closeModal();
-
-    render();
-
-}
-
-
-function deleteTimer(id){
-
-    data.timers =
-    data.timers.filter(
-        timer=>timer.id!==id
-    );
-
-    save();
-
-    closeModal();
-
-    render();
-
-}
-
-
-/* ======================================================
-PRODUITS
-====================================================== */
-
-function renderProducts(){
-
-    $("productsGrid").innerHTML =
-    data.products.map(function(product){
-
-        return `
-
-        <div class="productCard">
-
-            <div class="productEmoji">
-
-                ${escapeHTML(product.emoji)}
-
-            </div>
-
-
-            <div class="productName">
-
-                ${escapeHTML(product.name)}
-
-            </div>
-
-
-            <div class="productActions">
-
-                <button
-                    class="refillButton"
-                    onclick="toggleRefill('${product.id}')"
-                >
-
-                    ${product.refill
-                    ?"↩️ À remettre"
-                    :"🔴 À refaire"}
-
-                </button>
-
-
-                <button
-                    class="productEdit"
-                    onclick="editProduct('${product.id}')"
-                >
-
-                    ✏️
-
-                </button>
-
-            </div>
-
-        </div>
-
-        `;
-
-    }).join("");
-
-
-    const refill =
-    data.products.filter(
-        product=>product.refill
-    );
-
-
-    if(!refill.length){
-
-        $("refillList").innerHTML=`
-
-        <div class="empty">
-
-            Tout est disponible 👍
-
-        </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    $("refillList").innerHTML =
-    refill.map(function(product){
-
-        return `
-
-        <div class="todoItem">
-
-            <div class="todoEmoji">
-
-                ${escapeHTML(product.emoji)}
-
-            </div>
-
-            <div class="todoName">
-
-                ${escapeHTML(product.name)}
-
-            </div>
-
-            <button
-                class="doneButton"
-                onclick="toggleRefill('${product.id}')"
-            >
-
-                ✓ Fait
-
-            </button>
-
-        </div>
-
-        `;
-
-    }).join("");
-
-}
-
-
-function toggleRefill(id){
-
-    const product =
-    data.products.find(
-        product=>product.id===id
-    );
-
-    if(!product)return;
-
-    product.refill =
-    !product.refill;
-
-    save();
-
-    renderProducts();
-
-
-    if(product.refill){
-
-        toast(
-            product.emoji+
-            " "+
-            product.name+
-            " ajouté à la liste"
-        );
-
-    }
-
-}
-
-
-/* ======================================================
-AJOUT / MODIFICATION PRODUIT
-====================================================== */
-
-function editProduct(id=null){
-
-    const product =
-    data.products.find(
-        product=>product.id===id
-    );
-
-
-    openModal(`
-
-        <h2>
-
-            ${product
-            ?"✏️ Modifier le produit"
-            :"➕ Nouveau produit"}
-
-        </h2>
-
-
-        <div class="field">
-
-            <label>Emoji</label>
-
-            <input
-                id="productEmoji"
-                value="${escapeHTML(product?.emoji||"🥫")}"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Nom</label>
-
-            <input
-                id="productName"
-                value="${escapeHTML(product?.name||"")}"
-                placeholder="Sauce 1"
-            >
-
-        </div>
+          </button>
+          `
+        }
 
 
         <button
-            class="primary"
-            onclick="saveProduct('${id||""}')"
+          class="remove"
+          onclick="deleteTimer(${timer.id})"
         >
-
-            Enregistrer
-
+          Supprimer
         </button>
 
+      </div>
 
-        ${product ? `
+    </div>
 
-        <button
-            class="danger"
-            onclick="deleteProduct('${product.id}')"
-        >
+  `;
 
+}
+
+
+function renderTimers() {
+
+  const container =
+    document.getElementById(
+      "timerPageList"
+    );
+
+
+  if (!timers.length) {
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          ⏱️
+        </div>
+
+        Aucun minuteur.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    timers
+      .slice()
+      .reverse()
+      .map(timerHTML)
+      .join("");
+
+}
+
+
+function renderHome() {
+
+  const active =
+    timers.filter(
+      t => !t.finished
+    );
+
+
+  document.getElementById(
+    "activeCount"
+  ).textContent =
+    active.length;
+
+
+  const container =
+    document.getElementById(
+      "homeTimers"
+    );
+
+
+  if (!active.length) {
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          ⏱️
+        </div>
+
+        Aucun minuteur actif.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    active
+      .slice()
+      .reverse()
+      .map(timerHTML)
+      .join("");
+
+}
+
+
+function pauseTimer(id) {
+
+  const timer =
+    timers.find(
+      t => t.id == id
+    );
+
+
+  if (!timer) return;
+
+
+  timer.running =
+    !timer.running;
+
+
+  timer.last =
+    Date.now();
+
+
+  save();
+
+  renderTimers();
+
+  renderHome();
+
+}
+
+
+function restartTimer(id) {
+
+  const timer =
+    timers.find(
+      t => t.id == id
+    );
+
+
+  if (!timer) return;
+
+
+  timer.remaining =
+    timer.total;
+
+  timer.running =
+    true;
+
+  timer.finished =
+    false;
+
+  timer.last =
+    Date.now();
+
+
+  save();
+
+  renderTimers();
+
+  renderHome();
+
+}
+
+
+function deleteTimer(id) {
+
+  timers =
+    timers.filter(
+      t => t.id != id
+    );
+
+
+  save();
+
+  renderTimers();
+
+  renderHome();
+
+}
+
+
+/* =========================================================
+   SON
+========================================================= */
+
+let audio;
+
+
+function alarm() {
+
+  if (!sound) {
+    return;
+  }
+
+
+  try {
+
+    if (!audio) {
+
+      audio =
+        new (
+          window.AudioContext ||
+          window.webkitAudioContext
+        )();
+
+    }
+
+
+    if (
+      audio.state === "suspended"
+    ) {
+
+      audio.resume();
+
+    }
+
+
+    const now =
+      audio.currentTime;
+
+
+    for (
+      let i = 0;
+      i < 6;
+      i++
+    ) {
+
+      const oscillator =
+        audio.createOscillator();
+
+      const gain =
+        audio.createGain();
+
+
+      oscillator.frequency.value =
+        i % 2 === 0
+          ? 880
+          : 660;
+
+
+      oscillator.type =
+        "sine";
+
+
+      gain.gain.setValueAtTime(
+        .001,
+        now + i * .28
+      );
+
+
+      gain.gain.exponentialRampToValueAtTime(
+        .45,
+        now + i * .28 + .03
+      );
+
+
+      gain.gain.exponentialRampToValueAtTime(
+        .001,
+        now + i * .28 + .24
+      );
+
+
+      oscillator.connect(gain);
+
+      gain.connect(
+        audio.destination
+      );
+
+
+      oscillator.start(
+        now + i * .28
+      );
+
+
+      oscillator.stop(
+        now + i * .28 + .25
+      );
+
+    }
+
+  }
+
+  catch(error) {
+
+    console.log(
+      "Audio non disponible"
+    );
+
+  }
+
+}
+
+
+function toggleSound() {
+
+  sound =
+    !sound;
+
+
+  save();
+
+  updateSoundButton();
+
+}
+
+
+function updateSoundButton() {
+
+  const button =
+    document.getElementById(
+      "soundSwitch"
+    );
+
+
+  button.classList.toggle(
+    "on",
+    sound
+  );
+
+}
+
+
+function toggleTheme() {
+
+  dark =
+    !dark;
+
+
+  document.body.classList.toggle(
+    "dark",
+    dark
+  );
+
+
+  localStorage.setItem(
+    "kf_dark",
+    dark
+  );
+
+}
+
+
+/* =========================================================
+   PRÉPARATIONS
+========================================================= */
+
+function openPrepModal() {
+
+  document
+    .getElementById("prepModal")
+    .classList.add("open");
+
+}
+
+
+function savePreparation() {
+
+  const name =
+    document
+      .getElementById("prepName")
+      .value
+      .trim();
+
+
+  const raw =
+    document
+      .getElementById("prepSteps")
+      .value
+      .trim();
+
+
+  if (!name) {
+
+    alert(
+      "Donne un nom à la préparation."
+    );
+
+    return;
+
+  }
+
+
+  const steps =
+    raw
+      .split("\n")
+      .map(
+        x => x.trim()
+      )
+      .filter(Boolean);
+
+
+  preparations.push({
+
+    id:
+      Date.now(),
+
+    name:
+      name,
+
+    steps:
+      steps
+
+  });
+
+
+  save();
+
+
+  document.getElementById(
+    "prepName"
+  ).value = "";
+
+
+  document.getElementById(
+    "prepSteps"
+  ).value = "";
+
+
+  closeModal(
+    "prepModal"
+  );
+
+
+  renderPreparations();
+
+}
+
+
+function renderPreparations() {
+
+  const container =
+    document.getElementById(
+      "preparationList"
+    );
+
+
+  if (!preparations.length) {
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          📋
+        </div>
+
+        Aucune préparation.
+
+        <br><br>
+
+        Crée ta première recette
+        ou procédure.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    preparations
+      .slice()
+      .reverse()
+      .map(prep => `
+
+        <div class="card">
+
+          <h3>
+            ${escapeHTML(prep.name)}
+          </h3>
+
+          ${
+            prep.steps.length
+
+            ?
+
+            `
+            <ol>
+
+              ${prep.steps
+                .map(
+                  step =>
+                    `<li>
+                      ${escapeHTML(step)}
+                    </li>`
+                )
+                .join("")}
+
+            </ol>
+            `
+
+            :
+
+            `
+            <p>
+              Aucune étape.
+            </p>
+            `
+          }
+
+
+          <button
+            class="delete"
+            onclick="
+              deletePreparation(
+                ${prep.id}
+              )
+            "
+          >
             Supprimer
-
-        </button>
-
-        `:""}
-
-
-        <button
-            class="secondary"
-            onclick="closeModal()"
-        >
-
-            Annuler
-
-        </button>
-
-    `);
-
-}
-
-
-function saveProduct(id){
-
-    const name =
-    $("productName")
-    .value
-    .trim();
-
-
-    const emoji =
-    $("productEmoji")
-    .value
-    .trim()
-    ||
-    "📦";
-
-
-    if(!name)return;
-
-
-    if(id){
-
-        const product =
-        data.products.find(
-            product=>product.id===id
-        );
-
-
-        product.name=name;
-
-        product.emoji=emoji;
-
-    }else{
-
-        data.products.push({
-
-            id:uid(),
-
-            name,
-
-            emoji,
-
-            refill:false
-
-        });
-
-    }
-
-
-    save();
-
-    closeModal();
-
-    render();
-
-}
-
-
-function deleteProduct(id){
-
-    data.products =
-    data.products.filter(
-        product=>product.id!==id
-    );
-
-    save();
-
-    closeModal();
-
-    render();
-
-}
-
-
-/* ======================================================
-CHECKLISTS
-====================================================== */
-
-function renderChecklists(){
-
-    $("checklists").innerHTML =
-    data.checklists.map(function(list){
-
-        return `
-
-        <div class="checklist">
-
-            <div class="checkHeader">
-
-                <strong>
-
-                    ${escapeHTML(list.name)}
-
-                </strong>
-
-
-                <div>
-
-                    <button
-                        class="smallButton"
-                        onclick="addTask('${list.id}')"
-                    >
-
-                        ＋
-
-                    </button>
-
-
-                    <button
-                        class="smallButton"
-                        onclick="editChecklist('${list.id}')"
-                    >
-
-                        ⚙️
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            ${list.tasks.map(function(task){
-
-                return `
-
-                <div
-                    class="task
-                    ${task.done?"checked":""}"
-                >
-
-                    <div
-                        class="checkbox"
-                        onclick="
-                        toggleTask(
-                            '${list.id}',
-                            '${task.id}'
-                        )"
-                    >
-
-                        ${task.done?"✓":""}
-
-                    </div>
-
-
-                    <div class="taskText">
-
-                        ${escapeHTML(task.text)}
-
-                    </div>
-
-
-                    <button
-                        class="smallButton"
-                        onclick="
-                        deleteTask(
-                            '${list.id}',
-                            '${task.id}'
-                        )"
-                    >
-
-                        ✕
-
-                    </button>
-
-                </div>
-
-                `;
-
-            }).join("")}
+          </button>
 
         </div>
 
-        `;
-
-    }).join("");
+      `)
+      .join("");
 
 }
 
 
-function addTask(listId){
+function deletePreparation(id) {
 
-    const text =
+  preparations =
+    preparations.filter(
+      p => p.id != id
+    );
+
+
+  save();
+
+  renderPreparations();
+
+}
+
+
+/* =========================================================
+   LISTES
+========================================================= */
+
+function createList() {
+
+  const name =
     prompt(
-        "Nom de la tâche"
+      "Nom de la liste :"
     );
 
 
-    if(!text)return;
+  if (!name) return;
 
 
-    const list =
-    data.checklists.find(
-        list=>list.id===listId
-    );
+  lists.push({
+
+    id:
+      Date.now(),
+
+    name:
+      name,
+
+    tasks:
+      []
+
+  });
 
 
-    list.tasks.push({
+  save();
 
-        id:uid(),
-
-        text,
-
-        done:false
-
-    });
-
-
-    save();
-
-    renderChecklists();
+  renderLists();
 
 }
 
 
-function toggleTask(listId,taskId){
+function addTask(listId) {
 
-    const list =
-    data.checklists.find(
-        list=>list.id===listId
+  const text =
+    prompt(
+      "Nouvelle tâche :"
     );
 
 
-    const task =
+  if (!text) return;
+
+
+  const list =
+    lists.find(
+      l => l.id == listId
+    );
+
+
+  if (!list) return;
+
+
+  list.tasks.push({
+
+    id:
+      Date.now(),
+
+    text:
+      text,
+
+    done:
+      false
+
+  });
+
+
+  save();
+
+  renderLists();
+
+}
+
+
+function toggleTask(
+  listId,
+  taskId
+) {
+
+  const list =
+    lists.find(
+      l => l.id == listId
+    );
+
+
+  if (!list) return;
+
+
+  const task =
     list.tasks.find(
-        task=>task.id===taskId
+      t => t.id == taskId
     );
 
 
-    task.done =
+  if (!task) return;
+
+
+  task.done =
     !task.done;
 
 
-    save();
+  save();
 
-    renderChecklists();
+  renderLists();
 
 }
 
 
-function deleteTask(listId,taskId){
+function deleteTask(
+  listId,
+  taskId
+) {
 
-    const list =
-    data.checklists.find(
-        list=>list.id===listId
+  const list =
+    lists.find(
+      l => l.id == listId
     );
 
 
-    list.tasks =
+  if (!list) return;
+
+
+  list.tasks =
     list.tasks.filter(
-        task=>task.id!==taskId
+      t => t.id != taskId
     );
 
 
-    save();
+  save();
 
-    renderChecklists();
+  renderLists();
 
 }
 
 
-function editChecklist(id=null){
+function deleteList(id) {
 
-    const list =
-    data.checklists.find(
-        list=>list.id===id
+  lists =
+    lists.filter(
+      l => l.id != id
     );
 
 
-    openModal(`
+  save();
 
-        <h2>
+  renderLists();
 
-            ${list
-            ?"✏️ Modifier la checklist"
-            :"➕ Nouvelle checklist"}
-
-        </h2>
+}
 
 
-        <div class="field">
+function renderLists() {
 
-            <label>Nom</label>
+  const container =
+    document.getElementById(
+      "listsContainer"
+    );
 
-            <input
-                id="checklistName"
-                value="${escapeHTML(list?.name||"")}"
-                placeholder="🌅 Ouverture"
-            >
 
+  if (!lists.length) {
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          ✓
         </div>
 
+        Aucune liste.
 
-        <button
-            class="primary"
-            onclick="saveChecklist('${id||""}')"
-        >
+        <br><br>
 
-            Enregistrer
+        Crée une liste de mise en place.
 
-        </button>
+      </div>
 
+    `;
 
-        ${list?`
+    return;
 
-        <button
-            class="danger"
-            onclick="deleteChecklist('${list.id}')"
-        >
-
-            Supprimer
-
-        </button>
-
-        `:""}
+  }
 
 
-        <button
-            class="secondary"
-            onclick="closeModal()"
-        >
+  container.innerHTML =
+    lists
+      .slice()
+      .reverse()
+      .map(list => `
 
-            Annuler
+        <div class="card">
 
-        </button>
+          <div class="section-title">
 
-    `);
+            <h3>
+              ${escapeHTML(list.name)}
+            </h3>
 
-}
+            <button
+              class="delete"
+              onclick="
+                deleteList(
+                  ${list.id}
+                )
+              "
+            >
+              Supprimer
+            </button>
 
-
-function saveChecklist(id){
-
-    const name =
-    $("checklistName")
-    .value
-    .trim();
-
-
-    if(!name)return;
-
-
-    if(id){
-
-        data.checklists.find(
-            list=>list.id===id
-        ).name=name;
-
-    }else{
-
-        data.checklists.push({
-
-            id:uid(),
-
-            name,
-
-            tasks:[]
-
-        });
-
-    }
+          </div>
 
 
-    save();
+          ${
+            list.tasks.length
 
-    closeModal();
+            ?
 
-    render();
+            list.tasks
+              .map(task => `
 
-}
+                <div
+                  class="
+                    task
+                    ${
+                      task.done
+                        ? "done"
+                        : ""
+                    }
+                  "
+                >
 
+                  <input
+                    type="checkbox"
+                    ${
+                      task.done
+                        ? "checked"
+                        : ""
+                    }
+                    onchange="
+                      toggleTask(
+                        ${list.id},
+                        ${task.id}
+                      )
+                    "
+                  >
 
-function deleteChecklist(id){
-
-    data.checklists =
-    data.checklists.filter(
-        list=>list.id!==id
-    );
-
-
-    save();
-
-    closeModal();
-
-    render();
-
-}
-
-
-/* ======================================================
-RECETTES
-====================================================== */
-
-function renderRecipes(){
-
-    $("recipesContainer").innerHTML =
-    data.recipes.map(function(recipe){
-
-        return `
-
-        <div class="recipe">
-
-            <div class="recipeHeader">
-
-                <div class="recipeName">
-
-                    ${escapeHTML(recipe.emoji)}
-
-                    ${escapeHTML(recipe.name)}
+                  <span>
+                    ${escapeHTML(task.text)}
+                  </span>
 
                 </div>
 
+              `)
+              .join("")
 
-                <button
-                    class="smallButton"
-                    onclick="editRecipe('${recipe.id}')"
-                >
-
-                    ✏️
-
-                </button>
-
-            </div>
-
-
-            <div class="recipeText">
-
-                ${escapeHTML(recipe.notes)}
-
-            </div>
-
-        </div>
-
-        `;
-
-    }).join("");
-
-}
-
-
-function editRecipe(id=null){
-
-    const recipe =
-    data.recipes.find(
-        recipe=>recipe.id===id
-    );
-
-
-    openModal(`
-
-        <h2>
-
-            ${recipe
-            ?"✏️ Modifier"
-            :"➕ Nouvelle préparation"}
-
-        </h2>
-
-
-        <div class="field">
-
-            <label>Emoji</label>
-
-            <input
-                id="recipeEmoji"
-                value="${escapeHTML(recipe?.emoji||"🍳")}"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Nom</label>
-
-            <input
-                id="recipeName"
-                value="${escapeHTML(recipe?.name||"")}"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Recette / méthode</label>
-
-            <textarea
-                id="recipeNotes"
-            >${escapeHTML(recipe?.notes||"")}</textarea>
-
-        </div>
-
-
-        <button
-            class="primary"
-            onclick="saveRecipe('${id||""}')"
-        >
-
-            Enregistrer
-
-        </button>
-
-
-        ${recipe?`
-
-        <button
-            class="danger"
-            onclick="deleteRecipe('${recipe.id}')"
-        >
-
-            Supprimer
-
-        </button>
-
-        `:""}
-
-
-        <button
-            class="secondary"
-            onclick="closeModal()"
-        >
-
-            Annuler
-
-        </button>
-
-    `);
-
-}
-
-
-function saveRecipe(id){
-
-    const name =
-    $("recipeName")
-    .value
-    .trim();
-
-
-    const emoji =
-    $("recipeEmoji")
-    .value
-    .trim()
-    ||
-    "🍳";
-
-
-    const notes =
-    $("recipeNotes")
-    .value;
-
-
-    if(!name)return;
-
-
-    if(id){
-
-        const recipe =
-        data.recipes.find(
-            recipe=>recipe.id===id
-        );
-
-
-        recipe.name=name;
-
-        recipe.emoji=emoji;
-
-        recipe.notes=notes;
-
-    }else{
-
-        data.recipes.push({
-
-            id:uid(),
-
-            name,
-
-            emoji,
-
-            notes
-
-        });
-
-    }
-
-
-    save();
-
-    closeModal();
-
-    render();
-
-}
-
-
-function deleteRecipe(id){
-
-    data.recipes =
-    data.recipes.filter(
-        recipe=>recipe.id!==id
-    );
-
-
-    save();
-
-    closeModal();
-
-    render();
-
-}
-
-
-/* ======================================================
-PARAMÈTRES
-====================================================== */
-
-function openSettings(){
-
-    openModal(`
-
-        <h2>
-            ⚙️ Personnalisation
-        </h2>
-
-
-        <div class="field">
-
-            <label>
-                Nom
-            </label>
-
-            <input
-                id="settingName"
-                value="${escapeHTML(data.settings.name)}"
-            >
-
-        </div>
-
-
-        <div class="field">
-
-            <label>
-                Sous-titre
-            </label>
-
-            <input
-                id="settingSubtitle"
-                value="${escapeHTML(data.settings.subtitle)}"
-            >
-
-        </div>
-
-
-        <button
-            class="primary"
-            onclick="saveSettings()"
-        >
-
-            Enregistrer
-
-        </button>
-
-
-        <button
-            class="danger"
-            onclick="resetApp()"
-        >
-
-            Réinitialiser l'application
-
-        </button>
-
-
-        <button
-            class="secondary"
-            onclick="closeModal()"
-        >
-
-            Fermer
-
-        </button>
-
-    `);
-
-}
-
-
-function saveSettings(){
-
-    data.settings.name =
-    $("settingName")
-    .value
-    .trim()
-    ||
-    "Anastasiia";
-
-
-    data.settings.subtitle =
-    $("settingSubtitle")
-    .value
-    .trim()
-    ||
-    "Cuisine";
-
-
-    save();
-
-    closeModal();
-
-    render();
-
-}
-
-
-function resetApp(){
-
-    if(
-        !confirm(
-            "Supprimer toutes les personnalisations ?"
-        )
-    ){
-
-        return;
-
-    }
-
-
-    localStorage.removeItem(
-        STORAGE_KEY
-    );
-
-
-    location.reload();
-
-}
-
-
-/* ======================================================
-AJOUT RAPIDE
-====================================================== */
-
-function quickAdd(){
-
-    openModal(`
-
-        <h2>
-            ➕ Ajouter rapidement
-        </h2>
-
-
-        <button
-            class="primary"
-            onclick="
-                closeModal();
-                editTimer();
-            "
-        >
-
-            🔥 Cuisson
-
-        </button>
-
-
-        <button
-            class="secondary"
-            onclick="
-                closeModal();
-                editProduct();
-            "
-        >
-
-            🛒 Produit
-
-        </button>
-
-
-        <button
-            class="secondary"
-            onclick="
-                closeModal();
-                editChecklist();
-            "
-        >
-
-            📋 Checklist
-
-        </button>
-
-
-        <button
-            class="secondary"
-            onclick="
-                closeModal();
-                editRecipe();
-            "
-        >
-
-            🍳 Préparation
-
-        </button>
-
-
-        <button
-            class="secondary"
-            onclick="closeModal()"
-        >
-
-            Annuler
-
-        </button>
-
-    `);
-
-}
-
-
-/* ======================================================
-SON
-====================================================== */
-
-function playSound(type){
-
-    try{
-
-        audioContext =
-        audioContext
-        ||
-        new AudioContext();
-
-
-        const count =
-        type==="double"
-        ?
-        2
-        :
-        1;
-
-
-        for(
-            let i=0;
-            i<count;
-            i++
-        ){
-
-            const oscillator =
-            audioContext
-            .createOscillator();
-
-
-            const gain =
-            audioContext
-            .createGain();
-
-
-            oscillator.frequency.value =
-            type==="long"
-            ?
-            620
             :
-            880;
+
+            `
+            <p>
+              Aucune tâche.
+            </p>
+            `
+          }
 
 
-            gain.gain.value=.12;
+          <button
+            class="secondary"
+            style="margin-top:15px"
+            onclick="
+              addTask(
+                ${list.id}
+              )
+            "
+          >
+            + Ajouter une tâche
+          </button>
 
+        </div>
 
-            oscillator.connect(gain);
-
-            gain.connect(
-                audioContext.destination
-            );
-
-
-            const start =
-            audioContext.currentTime
-            +
-            i*.18;
-
-
-            oscillator.start(start);
-
-
-            oscillator.stop(
-                start+
-                (
-                    type==="long"
-                    ?
-                    1
-                    :
-                    .25
-                )
-            );
-
-        }
-
-    }catch(error){}
+      `)
+      .join("");
 
 }
 
 
-/* ======================================================
-MINUTEURS
-====================================================== */
+/* =========================================================
+   UTILITAIRE
+========================================================= */
 
-function tick(){
+function escapeHTML(text) {
 
-    let changed=false;
-
-
-    data.active.forEach(function(timer){
-
-        if(timer.paused)return;
-
-
-        const previous =
-        timer.remaining;
-
-
-        timer.remaining =
-        Math.max(
-            0,
-            timer.remaining-.5
-        );
-
-
-        timer.alarms.forEach(
-            function(alarm,index){
-
-                if(
-                    !timer.fired.includes(index)
-                    &&
-                    previous>alarm.before
-                    &&
-                    timer.remaining<=alarm.before
-                ){
-
-                    timer.fired.push(index);
-
-
-                    playSound(
-                        alarm.sound
-                    );
-
-
-                    toast(
-                        timer.emoji+
-                        " "+
-                        timer.name+
-                        " 🔔"
-                    );
-
-                }
-
-            }
-        );
-
-
-        if(
-            timer.remaining===0
-            &&
-            !timer.finished
-        ){
-
-            timer.finished=true;
-
-
-            playSound("long");
-
-
-            if(navigator.vibrate){
-
-                navigator.vibrate([
-                    500,
-                    200,
-                    500
-                ]);
-
-            }
-
-
-            toast(
-                timer.emoji+
-                " "+
-                timer.name+
-                " terminé !"
-            );
-
-        }
-
-
-        if(
-            previous!==timer.remaining
-        ){
-
-            changed=true;
-
-        }
-
-    });
-
-
-    if(changed){
-
-        save();
-
-        renderTimers();
-
-    }
+  return String(text)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
 }
 
 
-/* ======================================================
-RENDER
-====================================================== */
+/* =========================================================
+   INITIALISATION
+========================================================= */
 
-function render(){
-
-    $("restaurantName")
-    .textContent =
-    data.settings.subtitle+
-    " · "+
-    data.settings.name;
-
-
-    renderTimers();
-
-    renderProducts();
-
-    renderChecklists();
-
-    renderRecipes();
-
-}
-
-
-render();
-
-
-setInterval(
-    tick,
-    500
+document.body.classList.toggle(
+  "dark",
+  dark
 );
 
+updateSoundButton();
+
+renderHome();
+
+renderTimers();
+
+renderPreparations();
+
+renderLists();
+
 </script>
+
 
 </body>
 </html>
