@@ -2,10 +2,12 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
 <title>KitchenFlow</title>
 
 <style>
+
 :root{
     --bg:#111315;
     --panel:#191c20;
@@ -26,7 +28,8 @@
     -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,
+body{
     margin:0;
     padding:0;
     min-height:100%;
@@ -39,7 +42,8 @@ body{
     padding-bottom:40px;
 }
 
-button,input{
+button,
+input{
     font:inherit;
 }
 
@@ -58,13 +62,19 @@ button{
     position:sticky;
     top:0;
     z-index:50;
+
     height:72px;
+
     padding:12px 17px;
+
     display:flex;
     align-items:center;
     justify-content:space-between;
+
     background:rgba(17,19,21,.95);
+
     backdrop-filter:blur(15px);
+
     border-bottom:1px solid var(--border);
 }
 
@@ -72,6 +82,7 @@ button{
     display:flex;
     align-items:center;
     gap:10px;
+
     font-size:21px;
     font-weight:900;
 }
@@ -79,10 +90,18 @@ button{
 .logoIcon{
     width:42px;
     height:42px;
+
     display:grid;
     place-items:center;
+
     border-radius:13px;
-    background:linear-gradient(135deg,var(--yellow),var(--orange));
+
+    background:linear-gradient(
+        135deg,
+        var(--yellow),
+        var(--orange)
+    );
+
     color:#111;
 }
 
@@ -94,10 +113,15 @@ button{
 .iconBtn{
     width:44px;
     height:44px;
+
     border:1px solid var(--border);
+
     border-radius:13px;
+
     background:var(--panel2);
+
     color:white;
+
     font-size:20px;
 }
 
@@ -113,22 +137,31 @@ button{
 .nav{
     display:flex;
     gap:8px;
+
     padding:14px 16px 3px;
 }
 
 .nav button{
     flex:1;
+
     padding:13px 7px;
+
     border-radius:14px;
+
     border:1px solid var(--border);
+
     background:var(--panel);
+
     color:var(--muted);
+
     font-weight:900;
 }
 
 .nav button.active{
     background:var(--yellow);
+
     color:#111;
+
     border-color:var(--yellow);
 }
 
@@ -144,12 +177,15 @@ button{
 
 .pageTitle{
     margin:2px 0 5px;
+
     font-size:30px;
+
     font-weight:950;
 }
 
 .pageSubtitle{
     color:var(--muted);
+
     margin-bottom:20px;
 }
 
@@ -157,69 +193,98 @@ button{
 
 .dashboardGrid{
     display:grid;
-    grid-template-columns:1.35fr .9fr;
+
+    grid-template-columns:
+        1.35fr
+        .9fr;
+
     gap:15px;
 }
 
 @media(max-width:800px){
+
     .dashboardGrid{
         grid-template-columns:1fr;
     }
+
 }
 
 .dashboardCard{
     background:var(--panel);
+
     border:1px solid var(--border);
+
     border-radius:20px;
+
     overflow:hidden;
 }
 
 .dashboardHeader{
     display:flex;
+
     justify-content:space-between;
     align-items:center;
+
     padding:16px 17px;
+
     border-bottom:1px solid var(--border);
 }
 
 .dashboardHeader h2{
     margin:0;
+
     font-size:20px;
 }
 
 .badge{
     min-width:28px;
     height:28px;
+
     padding:0 8px;
+
     display:grid;
     place-items:center;
+
     border-radius:20px;
+
     background:var(--red);
+
     color:white;
+
     font-weight:900;
 }
 
 .noItems{
     padding:28px 15px;
+
     text-align:center;
+
     color:var(--muted);
 }
 
 .readyMessage{
     padding:24px;
+
     text-align:center;
+
     color:var(--green);
+
     font-weight:900;
+
     font-size:18px;
 }
 
-/* PRODUCTS TO REFILL */
+/* REFILL */
 
 .refillItem{
     display:flex;
+
     align-items:center;
+
     gap:12px;
+
     padding:13px 15px;
+
     border-bottom:1px solid #292d32;
 }
 
@@ -230,15 +295,20 @@ button{
 .productEmoji{
     width:43px;
     height:43px;
+
     display:grid;
     place-items:center;
+
     border-radius:13px;
+
     background:#292e34;
+
     font-size:21px;
 }
 
 .refillInfo{
     flex:1;
+
     min-width:0;
 }
 
@@ -248,17 +318,25 @@ button{
 
 .refillCategory{
     color:var(--muted);
+
     font-size:12px;
+
     margin-top:2px;
 }
 
 .doneBtn{
     min-height:42px;
+
     padding:0 12px;
+
     border-radius:11px;
+
     background:#173b2c;
+
     border:1px solid #286848;
+
     color:var(--green);
+
     font-weight:900;
 }
 
@@ -266,102 +344,152 @@ button{
 
 .timerGrid{
     display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
     gap:14px;
 }
 
 @media(max-width:650px){
+
     .timerGrid{
         grid-template-columns:1fr;
     }
+
 }
 
 .timerCard{
     min-height:185px;
+
     padding:17px;
+
     border-radius:20px;
-    background:linear-gradient(145deg,#202429,#171a1d);
+
+    background:
+        linear-gradient(
+            145deg,
+            #202429,
+            #171a1d
+        );
+
     border:1px solid var(--border);
+
     overflow:hidden;
 }
 
 .timerCard.running{
     border-color:var(--yellow);
+
+    box-shadow:
+        0 0 20px
+        rgba(255,176,0,.08);
 }
 
 .timerCard.finished{
     background:#3b1717;
+
     border-color:var(--red);
+
     animation:pulse 1s infinite alternate;
 }
 
 @keyframes pulse{
+
     to{
-        box-shadow:0 0 0 5px rgba(255,69,69,.13);
+        box-shadow:
+            0 0 0 5px
+            rgba(255,69,69,.13);
     }
+
 }
 
 .cardTop{
     display:flex;
+
     justify-content:space-between;
 }
 
 .cardName{
     font-size:19px;
+
     font-weight:900;
 }
 
 .cardCategory{
     margin-top:3px;
+
     color:var(--muted);
+
     font-size:12px;
 }
 
 .cardMenu{
     display:flex;
+
     gap:5px;
 }
 
 .smallBtn{
     width:34px;
     height:34px;
+
     border:0;
+
     border-radius:10px;
+
     background:#2b3036;
+
     color:white;
 }
 
 .time{
     text-align:center;
+
     margin:18px 0 12px;
+
     font-size:50px;
+
     font-weight:950;
+
     letter-spacing:-2px;
 }
 
 .cardButtons{
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
     gap:8px;
 }
 
 .actionBtn{
     min-height:48px;
+
     border-radius:13px;
+
     border:1px solid #373d44;
+
     background:#2a2f35;
+
     color:white;
+
     font-weight:900;
 }
 
 .actionBtn.primary{
     background:var(--yellow);
+
     color:#111;
+
     border-color:var(--yellow);
 }
 
 .actionBtn.stop{
     background:#3b2020;
+
     color:#ff7777;
 }
 
@@ -369,72 +497,112 @@ button{
 
 .sectionTitle{
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     margin:28px 0 12px;
+
     font-size:20px;
+
     font-weight:900;
 }
 
 .sectionAction{
     padding:9px 12px;
+
     border-radius:11px;
+
     background:var(--yellow);
+
     color:#111;
+
     font-size:13px;
+
     font-weight:900;
 }
 
-/* PRODUCT PAGE */
+/* PRODUCTS */
 
 .categoryTabs{
     display:flex;
+
     gap:8px;
+
     overflow-x:auto;
+
     padding-bottom:5px;
 }
 
 .categoryTab{
     white-space:nowrap;
+
     padding:11px 14px;
+
     border-radius:13px;
+
     background:var(--panel);
+
     border:1px solid var(--border);
+
     color:var(--muted);
+
     font-weight:800;
 }
 
 .categoryTab.active{
     background:var(--yellow);
+
     color:#111;
 }
 
 .productGrid{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+
+    grid-template-columns:
+        repeat(3,1fr);
+
     gap:12px;
 }
 
 @media(max-width:750px){
+
     .productGrid{
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:
+            repeat(2,1fr);
     }
+
 }
 
 .productBtn{
     min-height:125px;
+
     padding:14px;
+
     text-align:left;
+
     border-radius:18px;
+
     background:var(--panel);
+
     border:1px solid var(--border);
+
     color:white;
+
     transition:.12s;
 }
 
 .productBtn.needsRefill{
+
     border-color:var(--red);
-    background:linear-gradient(145deg,#321919,#1d191b);
+
+    background:
+        linear-gradient(
+            145deg,
+            #321919,
+            #1d191b
+        );
 }
 
 .productIcon{
@@ -443,17 +611,22 @@ button{
 
 .productName{
     margin-top:10px;
+
     font-weight:900;
 }
 
 .productStatus{
     margin-top:5px;
+
     color:var(--muted);
+
     font-size:12px;
 }
 
-.productBtn.needsRefill .productStatus{
+.productBtn.needsRefill
+.productStatus{
     color:#ff7373;
+
     font-weight:800;
 }
 
@@ -461,39 +634,57 @@ button{
 
 .checklistTabs{
     display:flex;
+
     gap:8px;
+
     overflow-x:auto;
+
     padding-bottom:5px;
 }
 
 .checklistTab{
     white-space:nowrap;
+
     padding:12px 15px;
+
     border-radius:13px;
+
     background:var(--panel);
+
     border:1px solid var(--border);
+
     color:var(--muted);
+
     font-weight:800;
 }
 
 .checklistTab.active{
     background:var(--yellow);
+
     color:#111;
 }
 
 .checklistBox{
     margin-top:15px;
+
     background:var(--panel);
+
     border:1px solid var(--border);
+
     border-radius:20px;
+
     overflow:hidden;
 }
 
 .checklistHeader{
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
+
     padding:17px;
+
     border-bottom:1px solid var(--border);
 }
 
@@ -503,9 +694,13 @@ button{
 
 .checkItem{
     display:flex;
+
     align-items:center;
+
     gap:12px;
+
     padding:15px 17px;
+
     border-bottom:1px solid #292d32;
 }
 
@@ -516,33 +711,45 @@ button{
 .checkBox{
     width:28px;
     height:28px;
+
     border-radius:8px;
+
     border:2px solid #59616a;
+
     display:grid;
+
     place-items:center;
+
     flex-shrink:0;
+
     background:transparent;
+
     color:#111;
+
     font-weight:900;
 }
 
 .checkItem.done .checkBox{
     background:var(--green);
+
     border-color:var(--green);
 }
 
 .checkItem.done .itemText{
     color:#747b83;
+
     text-decoration:line-through;
 }
 
 .itemText{
     flex:1;
+
     font-weight:700;
 }
 
 .itemActions{
     display:flex;
+
     gap:5px;
 }
 
@@ -550,9 +757,13 @@ button{
 
 .settingCard{
     margin-bottom:14px;
+
     padding:18px;
+
     border-radius:20px;
+
     background:var(--panel);
+
     border:1px solid var(--border);
 }
 
@@ -562,17 +773,25 @@ button{
 
 .formRow{
     display:flex;
+
     gap:9px;
+
     margin-bottom:10px;
 }
 
 input{
     width:100%;
+
     padding:13px 14px;
+
     border-radius:12px;
+
     border:1px solid var(--border);
+
     background:#111315;
+
     color:white;
+
     outline:none;
 }
 
@@ -584,37 +803,55 @@ input:focus{
 .secondaryBtn,
 .dangerBtn{
     padding:13px 16px;
+
     border-radius:12px;
+
     font-weight:900;
 }
 
 .primaryBtn{
     background:var(--yellow);
+
     color:#111;
+
+    border:0;
 }
 
 .secondaryBtn{
     background:var(--panel2);
+
     color:white;
+
     border:1px solid var(--border);
 }
 
 .dangerBtn{
     background:#391d1d;
+
     color:#ff7777;
+
+    border:0;
 }
 
 /* MODAL */
 
 .modalOverlay{
     position:fixed;
+
     inset:0;
+
     z-index:100;
+
     display:none;
+
     align-items:center;
+
     justify-content:center;
+
     padding:18px;
+
     background:rgba(0,0,0,.75);
+
     backdrop-filter:blur(7px);
 }
 
@@ -624,11 +861,17 @@ input:focus{
 
 .modal{
     width:min(500px,100%);
+
     max-height:90vh;
+
     overflow:auto;
+
     padding:20px;
+
     border-radius:24px;
+
     background:#1b1e22;
+
     border:1px solid var(--border);
 }
 
@@ -638,7 +881,9 @@ input:focus{
 
 .modalActions{
     display:flex;
+
     gap:8px;
+
     margin-top:15px;
 }
 
@@ -646,15 +891,21 @@ input:focus{
     flex:1;
 }
 
-/* ALERT */
+/* ALARM */
 
 .alertOverlay{
     position:fixed;
+
     inset:0;
+
     z-index:200;
+
     display:none;
+
     place-items:center;
-    background:rgba(120,0,0,.95);
+
+    background:rgba(120,0,0,.96);
+
     animation:alertFlash .7s infinite alternate;
 }
 
@@ -663,37 +914,54 @@ input:focus{
 }
 
 @keyframes alertFlash{
-    from{background:rgba(90,0,0,.95)}
-    to{background:rgba(190,20,20,.95)}
+
+    from{
+        background:rgba(90,0,0,.96);
+    }
+
+    to{
+        background:rgba(190,20,20,.96);
+    }
+
 }
 
 .alertBox{
     text-align:center;
+
     padding:25px;
 }
 
 .alertIcon{
-    font-size:70px;
+    font-size:75px;
 }
 
 .alertTitle{
     font-size:42px;
+
     font-weight:1000;
 }
 
 .alertName{
     margin:10px 0 25px;
+
     font-size:27px;
 }
 
 .stopAlarm{
     min-width:230px;
+
     min-height:65px;
+
     border:0;
+
     border-radius:17px;
+
     background:white;
+
     color:#111;
+
     font-size:20px;
+
     font-weight:1000;
 }
 
@@ -701,92 +969,164 @@ input:focus{
 
 .toast{
     position:fixed;
+
     left:50%;
+
     bottom:24px;
+
     z-index:300;
-    transform:translateX(-50%) translateY(30px);
+
+    transform:
+        translateX(-50%)
+        translateY(30px);
+
     opacity:0;
+
     pointer-events:none;
+
     padding:13px 18px;
+
     border-radius:14px;
+
     background:#272c31;
+
     border:1px solid #414850;
+
     font-weight:800;
+
     transition:.25s;
 }
 
 .toast.show{
     opacity:1;
-    transform:translateX(-50%) translateY(0);
-}
 
-/* EMPTY */
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
 
 .empty{
     padding:30px 15px;
+
     text-align:center;
+
     color:var(--muted);
 }
+
 </style>
 </head>
+
 
 <body>
 
 <div class="app">
 
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
 <header class="header">
 
     <div class="logo">
-        <div class="logoIcon">🔥</div>
+
+        <div class="logoIcon">
+            🔥
+        </div>
+
         KitchenFlow
+
     </div>
 
+
     <div class="headerActions">
-        <button class="iconBtn" onclick="openNewTimer()">＋</button>
-        <button class="iconBtn" onclick="showPage('settings')">⚙️</button>
+
+        <button
+            class="iconBtn"
+            onclick="openNewTimer()">
+
+            ＋
+
+        </button>
+
+
+        <button
+            class="iconBtn"
+            onclick="showPage('settings')">
+
+            ⚙️
+
+        </button>
+
     </div>
 
 </header>
 
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
 <nav class="nav">
 
-    <button id="navHome"
-            class="active"
-            onclick="showPage('home')">
+    <button
+        id="navHome"
+        class="active"
+        onclick="showPage('home')">
+
         🏠 Service
+
     </button>
 
-    <button id="navTimers"
-            onclick="showPage('timers')">
+
+    <button
+        id="navTimers"
+        onclick="showPage('timers')">
+
         ⏱️ Cuissons
+
     </button>
 
-    <button id="navProducts"
-            onclick="showPage('products')">
+
+    <button
+        id="navProducts"
+        onclick="showPage('products')">
+
         📦 Produits
+
     </button>
 
-    <button id="navChecklist"
-            onclick="showPage('checklist')">
+
+    <button
+        id="navChecklist"
+        onclick="showPage('checklist')">
+
         📋 Listes
+
     </button>
 
 </nav>
 
 
-<!-- ======================================================
+<!-- =====================================================
      SERVICE
-====================================================== -->
+===================================================== -->
 
-<section id="pageHome" class="page">
+<section
+    id="pageHome"
+    class="page">
 
-    <h1 class="pageTitle">Service</h1>
+    <h1 class="pageTitle">
+        Service
+    </h1>
 
     <div class="pageSubtitle">
         Vue rapide de ce qui se passe en cuisine.
     </div>
 
+
     <div class="dashboardGrid">
+
 
         <!-- À REFAIRE -->
 
@@ -794,29 +1134,38 @@ input:focus{
 
             <div class="dashboardHeader">
 
-                <h2>🔴 À refaire</h2>
+                <h2>
+                    🔴 À refaire
+                </h2>
 
-                <div id="refillCount"
-                     class="badge">
+                <div
+                    id="refillCount"
+                    class="badge">
+
                     0
+
                 </div>
 
             </div>
+
 
             <div id="refillList"></div>
 
         </div>
 
 
-        <!-- MINUTEURS ACTIFS -->
+        <!-- MINUTEURS -->
 
         <div class="dashboardCard">
 
             <div class="dashboardHeader">
 
-                <h2>⏱️ En cours</h2>
+                <h2>
+                    ⏱️ En cours
+                </h2>
 
             </div>
+
 
             <div id="activeTimers"></div>
 
@@ -827,189 +1176,284 @@ input:focus{
 
     <div class="sectionTitle">
 
-        <span>📦 Mise en place</span>
+        <span>
+            📦 Mise en place
+        </span>
 
-        <button class="sectionAction"
-                onclick="showPage('products')">
+
+        <button
+            class="sectionAction"
+            onclick="showPage('products')">
+
             Gérer
+
         </button>
 
     </div>
 
-    <div id="quickProducts"
-         class="productGrid">
+
+    <div
+        id="quickProducts"
+        class="productGrid">
     </div>
 
 </section>
 
 
-<!-- ======================================================
+<!-- =====================================================
      TIMERS
-====================================================== -->
+===================================================== -->
 
-<section id="pageTimers" class="page hidden">
+<section
+    id="pageTimers"
+    class="page hidden">
 
-    <h1 class="pageTitle">Cuissons</h1>
+    <h1 class="pageTitle">
+        Cuissons
+    </h1>
 
     <div class="pageSubtitle">
         Lance les cuissons sans modifier ton téléphone.
     </div>
 
-    <div id="timerGrid"
-         class="timerGrid">
+
+    <div
+        id="timerGrid"
+        class="timerGrid">
     </div>
 
 </section>
 
 
-<!-- ======================================================
+<!-- =====================================================
      PRODUCTS
-====================================================== -->
+===================================================== -->
 
-<section id="pageProducts" class="page hidden">
+<section
+    id="pageProducts"
+    class="page hidden">
 
-    <h1 class="pageTitle">Produits</h1>
+    <h1 class="pageTitle">
+        Produits
+    </h1>
 
     <div class="pageSubtitle">
         Appuie sur un produit lorsqu'il faut en refaire.
     </div>
 
-    <div id="categoryTabs"
-         class="categoryTabs">
+
+    <div
+        id="categoryTabs"
+        class="categoryTabs">
     </div>
+
 
     <div style="height:15px"></div>
 
-    <div id="productGrid"
-         class="productGrid">
+
+    <div
+        id="productGrid"
+        class="productGrid">
     </div>
 
 </section>
 
 
-<!-- ======================================================
+<!-- =====================================================
      CHECKLIST
-====================================================== -->
+===================================================== -->
 
-<section id="pageChecklist" class="page hidden">
+<section
+    id="pageChecklist"
+    class="page hidden">
 
-    <h1 class="pageTitle">Checklists</h1>
+    <h1 class="pageTitle">
+        Checklists
+    </h1>
 
     <div class="pageSubtitle">
         Ouverture, fermeture, nettoyage, préparation...
     </div>
 
-    <div id="checklistTabs"
-         class="checklistTabs">
+
+    <div
+        id="checklistTabs"
+        class="checklistTabs">
     </div>
+
 
     <div id="checklistContent"></div>
 
 </section>
 
 
-<!-- ======================================================
+<!-- =====================================================
      SETTINGS
-====================================================== -->
+===================================================== -->
 
-<section id="pageSettings" class="page hidden">
+<section
+    id="pageSettings"
+    class="page hidden">
 
-    <h1 class="pageTitle">Réglages</h1>
+    <h1 class="pageTitle">
+        Réglages
+    </h1>
 
     <div class="pageSubtitle">
         Personnalise ton KitchenFlow.
     </div>
 
+
+    <!-- STEAK -->
+
     <div class="settingCard">
 
-        <h2>🥩 Cuissons steak</h2>
+        <h2>
+            🥩 Cuissons steak
+        </h2>
+
 
         <div class="formRow">
-            <input id="bleuInput"
-                   type="number"
-                   min="1"
-                   placeholder="Bleu">
-            <span style="padding:13px 0">sec</span>
+
+            <input
+                id="bleuInput"
+                type="number"
+                min="1"
+                placeholder="Bleu">
+
+            <span style="padding:13px 0">
+                sec
+            </span>
+
         </div>
+
 
         <div class="formRow">
-            <input id="saignantInput"
-                   type="number"
-                   min="1"
-                   placeholder="Saignant">
-            <span style="padding:13px 0">sec</span>
+
+            <input
+                id="saignantInput"
+                type="number"
+                min="1"
+                placeholder="Saignant">
+
+            <span style="padding:13px 0">
+                sec
+            </span>
+
         </div>
+
 
         <div class="formRow">
-            <input id="pointInput"
-                   type="number"
-                   min="1"
-                   placeholder="À point">
-            <span style="padding:13px 0">sec</span>
+
+            <input
+                id="pointInput"
+                type="number"
+                min="1"
+                placeholder="À point">
+
+            <span style="padding:13px 0">
+                sec
+            </span>
+
         </div>
+
 
         <div class="formRow">
-            <input id="bienInput"
-                   type="number"
-                   min="1"
-                   placeholder="Bien cuit">
-            <span style="padding:13px 0">sec</span>
+
+            <input
+                id="bienInput"
+                type="number"
+                min="1"
+                placeholder="Bien cuit">
+
+            <span style="padding:13px 0">
+                sec
+            </span>
+
         </div>
 
-        <button class="primaryBtn"
-                onclick="saveSteakTimes()">
+
+        <button
+            class="primaryBtn"
+            onclick="saveSteakTimes()">
+
             Enregistrer
+
         </button>
 
     </div>
 
 
+    <!-- PRODUIT -->
+
     <div class="settingCard">
 
-        <h2>🍅 Ajouter un produit</h2>
+        <h2>
+            🍅 Ajouter un produit
+        </h2>
+
 
         <div class="formRow">
 
-            <input id="newProductName"
-                   placeholder="Ex : Sauce burger">
+            <input
+                id="newProductName"
+                placeholder="Ex : Sauce burger">
 
         </div>
+
 
         <div class="formRow">
 
-            <input id="newProductCategory"
-                   placeholder="Catégorie : Sauces">
+            <input
+                id="newProductCategory"
+                placeholder="Catégorie : Sauces">
 
         </div>
+
 
         <div class="formRow">
 
-            <input id="newProductEmoji"
-                   placeholder="Emoji : 🍔"
-                   value="🍽️">
+            <input
+                id="newProductEmoji"
+                placeholder="Emoji : 🍔"
+                value="🍽️">
 
         </div>
 
-        <button class="primaryBtn"
-                onclick="addProduct()">
+
+        <button
+            class="primaryBtn"
+            onclick="addProduct()">
+
             Ajouter le produit
+
         </button>
 
     </div>
 
 
+    <!-- CHECKLIST -->
+
     <div class="settingCard">
 
-        <h2>📋 Nouvelle checklist</h2>
+        <h2>
+            📋 Nouvelle checklist
+        </h2>
+
 
         <div class="formRow">
 
-            <input id="newChecklistName"
-                   placeholder="Ex : Mise en place">
+            <input
+                id="newChecklistName"
+                placeholder="Ex : Mise en place">
 
-            <button class="primaryBtn"
-                    onclick="addChecklist()">
+
+            <button
+                class="primaryBtn"
+                onclick="addChecklist()">
+
                 Ajouter
+
             </button>
 
         </div>
@@ -1017,43 +1461,66 @@ input:focus{
     </div>
 
 
+    <!-- TIMER -->
+
     <div class="settingCard">
 
-        <h2>⏱️ Minuteurs</h2>
+        <h2>
+            ⏱️ Minuteurs
+        </h2>
 
-        <button class="primaryBtn"
-                onclick="openNewTimer()">
+
+        <button
+            class="primaryBtn"
+            onclick="openNewTimer()">
+
             ＋ Ajouter un minuteur
+
         </button>
 
     </div>
 
 
+    <!-- DATA -->
+
     <div class="settingCard">
 
-        <h2>💾 Données</h2>
+        <h2>
+            💾 Données
+        </h2>
+
 
         <p style="color:var(--muted)">
+
             Les données sont sauvegardées automatiquement
             sur cet appareil.
+
         </p>
 
-        <button class="dangerBtn"
-                onclick="resetApp()">
+
+        <button
+            class="dangerBtn"
+            onclick="resetApp()">
+
             Réinitialiser l'application
+
         </button>
 
     </div>
 
 </section>
 
+
 </div>
 
 
-<!-- TIMER MODAL -->
+<!-- =====================================================
+     TIMER MODAL
+===================================================== -->
 
-<div id="timerModal"
-     class="modalOverlay">
+<div
+    id="timerModal"
+    class="modalOverlay">
 
     <div class="modal">
 
@@ -1061,26 +1528,39 @@ input:focus{
             Nouveau minuteur
         </h2>
 
-        <input id="timerNameInput"
-               placeholder="Nom du minuteur">
+
+        <input
+            id="timerNameInput"
+            placeholder="Nom du minuteur">
+
 
         <div style="height:10px"></div>
 
-        <input id="timerSecondsInput"
-               type="number"
-               min="1"
-               placeholder="Temps en secondes">
+
+        <input
+            id="timerSecondsInput"
+            type="number"
+            min="1"
+            placeholder="Temps en secondes">
+
 
         <div class="modalActions">
 
-            <button class="secondaryBtn"
-                    onclick="closeModal('timerModal')">
+            <button
+                class="secondaryBtn"
+                onclick="closeModal('timerModal')">
+
                 Annuler
+
             </button>
 
-            <button class="primaryBtn"
-                    onclick="saveTimerModal()">
+
+            <button
+                class="primaryBtn"
+                onclick="saveTimerModal()">
+
                 Enregistrer
+
             </button>
 
         </div>
@@ -1090,28 +1570,43 @@ input:focus{
 </div>
 
 
-<!-- CHECKLIST MODAL -->
+<!-- =====================================================
+     CHECKLIST MODAL
+===================================================== -->
 
-<div id="checkModal"
-     class="modalOverlay">
+<div
+    id="checkModal"
+    class="modalOverlay">
 
     <div class="modal">
 
-        <h2>Nouvelle tâche</h2>
+        <h2>
+            Nouvelle tâche
+        </h2>
 
-        <input id="checkTextInput"
-               placeholder="Ex : Préparer sauce burger">
+
+        <input
+            id="checkTextInput"
+            placeholder="Ex : Préparer sauce burger">
+
 
         <div class="modalActions">
 
-            <button class="secondaryBtn"
-                    onclick="closeModal('checkModal')">
+            <button
+                class="secondaryBtn"
+                onclick="closeModal('checkModal')">
+
                 Annuler
+
             </button>
 
-            <button class="primaryBtn"
-                    onclick="saveChecklistItem()">
+
+            <button
+                class="primaryBtn"
+                onclick="saveChecklistItem()">
+
                 Ajouter
+
             </button>
 
         </div>
@@ -1121,38 +1616,59 @@ input:focus{
 </div>
 
 
-<!-- PRODUCT EDIT MODAL -->
+<!-- =====================================================
+     PRODUCT MODAL
+===================================================== -->
 
-<div id="productModal"
-     class="modalOverlay">
+<div
+    id="productModal"
+    class="modalOverlay">
 
     <div class="modal">
 
-        <h2>Modifier le produit</h2>
+        <h2>
+            Modifier le produit
+        </h2>
 
-        <input id="editProductName"
-               placeholder="Nom">
+
+        <input
+            id="editProductName"
+            placeholder="Nom">
+
 
         <div style="height:10px"></div>
 
-        <input id="editProductCategory"
-               placeholder="Catégorie">
+
+        <input
+            id="editProductCategory"
+            placeholder="Catégorie">
+
 
         <div style="height:10px"></div>
 
-        <input id="editProductEmoji"
-               placeholder="Emoji">
+
+        <input
+            id="editProductEmoji"
+            placeholder="Emoji">
+
 
         <div class="modalActions">
 
-            <button class="secondaryBtn"
-                    onclick="closeModal('productModal')">
+            <button
+                class="secondaryBtn"
+                onclick="closeModal('productModal')">
+
                 Annuler
+
             </button>
 
-            <button class="primaryBtn"
-                    onclick="saveProductEdit()">
+
+            <button
+                class="primaryBtn"
+                onclick="saveProductEdit()">
+
                 Enregistrer
+
             </button>
 
         </div>
@@ -1162,27 +1678,41 @@ input:focus{
 </div>
 
 
-<!-- ALARM -->
+<!-- =====================================================
+     ALARM
+===================================================== -->
 
-<div id="alertOverlay"
-     class="alertOverlay">
+<div
+    id="alertOverlay"
+    class="alertOverlay">
 
     <div class="alertBox">
 
-        <div class="alertIcon">🔔</div>
+        <div class="alertIcon">
+            🔔
+        </div>
+
 
         <div class="alertTitle">
             TERMINÉ !
         </div>
 
-        <div id="alertName"
-             class="alertName">
+
+        <div
+            id="alertName"
+            class="alertName">
+
             Minuteur terminé
+
         </div>
 
-        <button class="stopAlarm"
-                onclick="stopAlarm()">
-            ARRÊTER L'ALARME
+
+        <button
+            class="stopAlarm"
+            onclick="stopAlarm()">
+
+            🔊 ARRÊTER L'ALARME
+
         </button>
 
     </div>
@@ -1190,8 +1720,9 @@ input:focus{
 </div>
 
 
-<div id="toast"
-     class="toast">
+<div
+    id="toast"
+    class="toast">
 </div>
 
 
@@ -1204,39 +1735,47 @@ input:focus{
 const DEFAULT_DATA = {
 
     timers:[
+
         {
             id:"fries",
             name:"Frites",
             category:"Cuisson",
             seconds:180
         },
+
         {
             id:"steak-bleu",
             name:"Steak — Bleu",
             category:"Viande",
             seconds:120
         },
+
         {
             id:"steak-saignant",
             name:"Steak — Saignant",
             category:"Viande",
             seconds:180
         },
+
         {
             id:"steak-point",
             name:"Steak — À point",
             category:"Viande",
             seconds:240
         },
+
         {
             id:"steak-bien",
             name:"Steak — Bien cuit",
             category:"Viande",
             seconds:360
         }
+
     ],
 
+
     products:[
+
         {
             id:"sauce-burger",
             name:"Sauce burger",
@@ -1244,6 +1783,7 @@ const DEFAULT_DATA = {
             emoji:"🍔",
             refill:false
         },
+
         {
             id:"sauce-curry",
             name:"Sauce curry",
@@ -1251,6 +1791,7 @@ const DEFAULT_DATA = {
             emoji:"🥫",
             refill:false
         },
+
         {
             id:"sauce-poivre",
             name:"Sauce poivre",
@@ -1258,6 +1799,7 @@ const DEFAULT_DATA = {
             emoji:"🥫",
             refill:false
         },
+
         {
             id:"oignons",
             name:"Oignons",
@@ -1265,6 +1807,7 @@ const DEFAULT_DATA = {
             emoji:"🧅",
             refill:false
         },
+
         {
             id:"pickles",
             name:"Pickles",
@@ -1272,6 +1815,7 @@ const DEFAULT_DATA = {
             emoji:"🥒",
             refill:false
         },
+
         {
             id:"salade",
             name:"Salade",
@@ -1279,6 +1823,7 @@ const DEFAULT_DATA = {
             emoji:"🥬",
             refill:false
         },
+
         {
             id:"tomates",
             name:"Tomates",
@@ -1286,6 +1831,7 @@ const DEFAULT_DATA = {
             emoji:"🍅",
             refill:false
         },
+
         {
             id:"steak-stock",
             name:"Steaks",
@@ -1293,84 +1839,416 @@ const DEFAULT_DATA = {
             emoji:"🥩",
             refill:false
         }
+
     ],
 
+
     checklists:[
+
         {
             id:"ouverture",
             name:"Ouverture",
+
             items:[
+
                 {
                     id:1,
                     text:"Allumer les équipements",
                     done:false
                 },
+
                 {
                     id:2,
                     text:"Vérifier les friteuses",
                     done:false
                 },
+
                 {
                     id:3,
                     text:"Préparer les postes",
                     done:false
                 },
+
                 {
                     id:4,
                     text:"Vérifier les stocks",
                     done:false
                 }
+
             ]
         },
+
+
         {
             id:"fermeture",
             name:"Fermeture",
+
             items:[
+
                 {
                     id:5,
                     text:"Nettoyer les postes",
                     done:false
                 },
+
                 {
                     id:6,
                     text:"Nettoyer les friteuses",
                     done:false
                 },
+
                 {
                     id:7,
                     text:"Ranger les produits",
                     done:false
                 },
+
                 {
                     id:8,
                     text:"Éteindre les équipements",
                     done:false
                 }
+
             ]
         }
+
     ],
 
+
     steakTimes:{
+
         bleu:120,
+
         saignant:180,
+
         point:240,
+
         bien:360
+
     }
+
 };
 
-let data = loadData();
 
-let activePage="home";
-let activeCategory="Tous";
-let activeChecklist=data.checklists[0]?.id;
+/* =========================================================
+   VARIABLES
+========================================================= */
 
-let runningTimers={};
+let data =
+    loadData();
 
-let editingTimerId=null;
-let editingProductId=null;
+let activePage =
+    "home";
 
-let alarmInterval=null;
-let audioContext=null;
+let activeCategory =
+    "Tous";
+
+let activeChecklist =
+    data.checklists[0]?.id;
+
+let runningTimers =
+    {};
+
+let editingTimerId =
+    null;
+
+let editingProductId =
+    null;
+
+
+/* =========================================================
+   AUDIO
+========================================================= */
+
+let audioContext =
+    null;
+
+let alarmInterval =
+    null;
+
+
+/*
+    Cette fonction prépare le système audio.
+
+    Elle est appelée dès la première interaction
+    avec la page.
+*/
+
+function unlockAudio(){
+
+    try{
+
+        if(!audioContext){
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        }
+
+        if(
+            audioContext.state === "suspended"
+        ){
+
+            audioContext.resume();
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Audio indisponible",
+            error
+        );
+
+    }
+
+}
+
+
+/*
+    Son de l'alarme.
+*/
+
+function playAlarmBeep(){
+
+    try{
+
+        unlockAudio();
+
+        if(!audioContext){
+            return;
+        }
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.type =
+            "square";
+
+
+        /*
+            Son assez aigu pour être entendu
+            dans une cuisine.
+        */
+
+        oscillator.frequency.setValueAtTime(
+            880,
+            audioContext.currentTime
+        );
+
+
+        oscillator.frequency.setValueAtTime(
+            660,
+            audioContext.currentTime + 0.18
+        );
+
+
+        /*
+            Volume progressif pour éviter
+            un clic brutal.
+        */
+
+        gain.gain.setValueAtTime(
+            0.001,
+            audioContext.currentTime
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.35,
+            audioContext.currentTime + 0.03
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audioContext.currentTime + 0.45
+        );
+
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.start();
+
+
+        oscillator.stop(
+            audioContext.currentTime + 0.5
+        );
+
+
+    }catch(error){
+
+        console.log(
+            "Erreur audio :",
+            error
+        );
+
+    }
+
+}
+
+
+/*
+    Déclenche l'alarme.
+*/
+
+function triggerAlarm(name){
+
+    const overlay =
+        document.getElementById(
+            "alertOverlay"
+        );
+
+
+    const nameElement =
+        document.getElementById(
+            "alertName"
+        );
+
+
+    nameElement.textContent =
+        name;
+
+
+    overlay.classList.add(
+        "show"
+    );
+
+
+    /*
+        On arrête une éventuelle
+        ancienne alarme.
+    */
+
+    if(alarmInterval){
+
+        clearInterval(
+            alarmInterval
+        );
+
+    }
+
+
+    /*
+        Premier bip immédiatement.
+    */
+
+    playAlarmBeep();
+
+
+    /*
+        Puis répétition.
+    */
+
+    alarmInterval =
+        setInterval(
+            playAlarmBeep,
+            700
+        );
+
+
+    /*
+        Vibration lorsque le navigateur
+        l'autorise.
+    */
+
+    if(
+        "vibrate" in navigator
+    ){
+
+        navigator.vibrate([
+
+            500,
+            200,
+            500,
+            200,
+            500,
+            200,
+            500
+
+        ]);
+
+    }
+
+}
+
+
+/*
+    Arrête complètement l'alarme.
+*/
+
+function stopAlarm(){
+
+    const overlay =
+        document.getElementById(
+            "alertOverlay"
+        );
+
+
+    overlay.classList.remove(
+        "show"
+    );
+
+
+    if(alarmInterval){
+
+        clearInterval(
+            alarmInterval
+        );
+
+        alarmInterval =
+            null;
+
+    }
+
+
+    if(
+        "vibrate" in navigator
+    ){
+
+        navigator.vibrate(0);
+
+    }
+
+}
+
+
+/*
+    IMPORTANT :
+
+    Au premier toucher de l'écran,
+    on déverrouille l'audio.
+
+    Cela améliore fortement la compatibilité
+    avec Safari / iPhone.
+*/
+
+document.addEventListener(
+    "click",
+    unlockAudio,
+    {once:true}
+);
+
+
+document.addEventListener(
+    "touchstart",
+    unlockAudio,
+    {once:true}
+);
 
 
 /* =========================================================
@@ -1381,27 +2259,43 @@ function loadData(){
 
     try{
 
-        const saved=
-            localStorage.getItem("kitchenflow_v4");
+        const saved =
+            localStorage.getItem(
+                "kitchenflow_v4"
+            );
+
 
         if(saved){
 
-            const parsed=JSON.parse(saved);
+            const parsed =
+                JSON.parse(saved);
+
 
             return {
+
                 ...DEFAULT_DATA,
+
                 ...parsed
+
             };
+
         }
 
-    }catch(e){
-        console.error(e);
+    }catch(error){
+
+        console.error(error);
+
     }
 
+
     return JSON.parse(
-        JSON.stringify(DEFAULT_DATA)
+        JSON.stringify(
+            DEFAULT_DATA
+        )
     );
+
 }
+
 
 function saveData(){
 
@@ -1409,6 +2303,7 @@ function saveData(){
         "kitchenflow_v4",
         JSON.stringify(data)
     );
+
 }
 
 
@@ -1418,221 +2313,400 @@ function saveData(){
 
 function showPage(page){
 
-    activePage=page;
+    activePage =
+        page;
 
-    const pages=[
+
+    const pages = [
+
         "home",
         "timers",
         "products",
         "checklist",
         "settings"
+
     ];
 
-    pages.forEach(p=>{
 
-        document
-            .getElementById("page"+capitalize(p))
-            ?.classList.toggle(
-                "hidden",
-                p!==page
-            );
-    });
+    pages.forEach(
+        p=>{
+
+            const element =
+                document.getElementById(
+                    "page"+
+                    capitalize(p)
+                );
+
+
+            if(element){
+
+                element.classList.toggle(
+                    "hidden",
+                    p !== page
+                );
+
+            }
+
+        }
+    );
+
 
     document
         .getElementById("navHome")
-        ?.classList.toggle("active",page==="home");
+        ?.classList.toggle(
+            "active",
+            page==="home"
+        );
+
 
     document
         .getElementById("navTimers")
-        ?.classList.toggle("active",page==="timers");
+        ?.classList.toggle(
+            "active",
+            page==="timers"
+        );
+
 
     document
         .getElementById("navProducts")
-        ?.classList.toggle("active",page==="products");
+        ?.classList.toggle(
+            "active",
+            page==="products"
+        );
+
 
     document
         .getElementById("navChecklist")
-        ?.classList.toggle("active",page==="checklist");
+        ?.classList.toggle(
+            "active",
+            page==="checklist"
+        );
+
 
     renderEverything();
+
 }
 
+
 function capitalize(str){
-    return str.charAt(0).toUpperCase()+str.slice(1);
+
+    return str
+        .charAt(0)
+        .toUpperCase()
+        +
+        str.slice(1);
+
 }
 
 
 /* =========================================================
-   SERVICE / DASHBOARD
+   HOME
 ========================================================= */
 
 function renderHome(){
 
-    const refillList=
-        document.getElementById("refillList");
+    const refillList =
+        document.getElementById(
+            "refillList"
+        );
 
-    const refills=
-        data.products.filter(p=>p.refill);
 
-    document.getElementById("refillCount")
-        .textContent=refills.length;
+    const refills =
+        data.products.filter(
+            p=>p.refill
+        );
 
-    refillList.innerHTML="";
 
-    if(refills.length===0){
+    document.getElementById(
+        "refillCount"
+    ).textContent =
+        refills.length;
 
-        refillList.innerHTML=`
+
+    refillList.innerHTML =
+        "";
+
+
+    if(refills.length === 0){
+
+        refillList.innerHTML = `
+
             <div class="readyMessage">
+
                 ✓ Tout est à jour
+
             </div>
+
         `;
 
     }else{
 
-        refills.forEach(product=>{
+        refills.forEach(
+            product=>{
 
-            const row=
-                document.createElement("div");
+                const row =
+                    document.createElement(
+                        "div"
+                    );
 
-            row.className="refillItem";
 
-            row.innerHTML=`
+                row.className =
+                    "refillItem";
 
-                <div class="productEmoji">
-                    ${escapeHTML(product.emoji)}
-                </div>
 
-                <div class="refillInfo">
+                row.innerHTML = `
 
-                    <div class="refillName">
-                        ${escapeHTML(product.name)}
+                    <div class="productEmoji">
+
+                        ${escapeHTML(
+                            product.emoji
+                        )}
+
                     </div>
 
-                    <div class="refillCategory">
-                        ${escapeHTML(product.category)}
+
+                    <div class="refillInfo">
+
+                        <div class="refillName">
+
+                            ${escapeHTML(
+                                product.name
+                            )}
+
+                        </div>
+
+
+                        <div class="refillCategory">
+
+                            ${escapeHTML(
+                                product.category
+                            )}
+
+                        </div>
+
                     </div>
 
-                </div>
 
-                <button class="doneBtn"
+                    <button
+                        class="doneBtn"
                         onclick="finishRefill('${product.id}')">
-                    ✓ Terminé
-                </button>
-            `;
 
-            refillList.appendChild(row);
-        });
+                        ✓ Terminé
+
+                    </button>
+
+                `;
+
+
+                refillList.appendChild(
+                    row
+                );
+
+            }
+        );
+
     }
 
 
     /* ACTIVE TIMERS */
 
-    const active=
-        Object.entries(runningTimers)
-        .filter(([id,state])=>
-            state && state.interval && !state.finished
+    const active =
+        Object.entries(
+            runningTimers
+        ).filter(
+            ([id,state])=>
+                state &&
+                state.interval &&
+                !state.finished
         );
 
-    const activeBox=
-        document.getElementById("activeTimers");
 
-    activeBox.innerHTML="";
+    const activeBox =
+        document.getElementById(
+            "activeTimers"
+        );
 
-    if(active.length===0){
 
-        activeBox.innerHTML=`
+    activeBox.innerHTML =
+        "";
+
+
+    if(active.length === 0){
+
+        activeBox.innerHTML = `
+
             <div class="noItems">
+
                 Aucun minuteur en cours.
+
             </div>
+
         `;
 
     }else{
 
-        active.forEach(([id,state])=>{
+        active.forEach(
+            ([id,state])=>{
 
-            const timer=
-                data.timers.find(t=>t.id===id);
+                const timer =
+                    data.timers.find(
+                        t=>t.id===id
+                    );
 
-            if(!timer) return;
 
-            const row=
-                document.createElement("div");
+                if(!timer){
+                    return;
+                }
 
-            row.className="refillItem";
 
-            row.innerHTML=`
+                const row =
+                    document.createElement(
+                        "div"
+                    );
 
-                <div class="productEmoji">
-                    ⏱️
-                </div>
 
-                <div class="refillInfo">
+                row.className =
+                    "refillItem";
 
-                    <div class="refillName">
-                        ${escapeHTML(timer.name)}
+
+                row.innerHTML = `
+
+                    <div class="productEmoji">
+
+                        ⏱️
+
                     </div>
 
-                    <div class="refillCategory">
-                        ${formatTime(state.remaining)}
+
+                    <div class="refillInfo">
+
+                        <div class="refillName">
+
+                            ${escapeHTML(
+                                timer.name
+                            )}
+
+                        </div>
+
+
+                        <div class="refillCategory">
+
+                            ${formatTime(
+                                state.remaining
+                            )}
+
+                        </div>
+
                     </div>
 
-                </div>
 
-                <button class="doneBtn"
+                    <button
+                        class="doneBtn"
                         onclick="pauseTimer('${timer.id}')">
-                    Pause
-                </button>
-            `;
 
-            activeBox.appendChild(row);
-        });
+                        Pause
+
+                    </button>
+
+                `;
+
+
+                activeBox.appendChild(
+                    row
+                );
+
+            }
+        );
+
     }
 
 
     /* QUICK PRODUCTS */
 
-    const quick=
-        document.getElementById("quickProducts");
+    const quick =
+        document.getElementById(
+            "quickProducts"
+        );
 
-    quick.innerHTML="";
 
-    const products=
+    quick.innerHTML =
+        "";
+
+
+    const products =
         data.products.slice(0,6);
 
-    products.forEach(product=>{
 
-        const btn=
-            document.createElement("button");
+    products.forEach(
+        product=>{
 
-        btn.className=
-            "productBtn "+
-            (product.refill ? "needsRefill":"");
+            const btn =
+                document.createElement(
+                    "button"
+                );
 
-        btn.onclick=()=>{
-            toggleRefill(product.id);
-        };
 
-        btn.innerHTML=`
-
-            <div class="productIcon">
-                ${escapeHTML(product.emoji)}
-            </div>
-
-            <div class="productName">
-                ${escapeHTML(product.name)}
-            </div>
-
-            <div class="productStatus">
-                ${
+            btn.className =
+                "productBtn "+
+                (
                     product.refill
-                    ? "🔴 À refaire"
-                    : "✓ Disponible"
-                }
-            </div>
-        `;
+                    ?
+                    "needsRefill"
+                    :
+                    ""
+                );
 
-        quick.appendChild(btn);
-    });
+
+            btn.onclick =
+                ()=>{
+                    toggleRefill(
+                        product.id
+                    );
+                };
+
+
+            btn.innerHTML = `
+
+                <div class="productIcon">
+
+                    ${escapeHTML(
+                        product.emoji
+                    )}
+
+                </div>
+
+
+                <div class="productName">
+
+                    ${escapeHTML(
+                        product.name
+                    )}
+
+                </div>
+
+
+                <div class="productStatus">
+
+                    ${
+                        product.refill
+                        ?
+                        "🔴 À refaire"
+                        :
+                        "✓ Disponible"
+                    }
+
+                </div>
+
+            `;
+
+
+            quick.appendChild(
+                btn
+            );
+
+        }
+    );
+
 }
 
 
@@ -1642,130 +2716,232 @@ function renderHome(){
 
 function renderProducts(){
 
-    const tabs=
-        document.getElementById("categoryTabs");
+    const tabs =
+        document.getElementById(
+            "categoryTabs"
+        );
 
-    const categories=[
+
+    const categories = [
+
         "Tous",
+
         ...new Set(
-            data.products.map(p=>p.category)
+            data.products.map(
+                p=>p.category
+            )
         )
+
     ];
 
-    tabs.innerHTML="";
 
-    categories.forEach(category=>{
-
-        const btn=
-            document.createElement("button");
-
-        btn.className=
-            "categoryTab "+
-            (activeCategory===category
-                ? "active":"");
-
-        btn.textContent=category;
-
-        btn.onclick=()=>{
-
-            activeCategory=category;
-
-            renderProducts();
-        };
-
-        tabs.appendChild(btn);
-    });
+    tabs.innerHTML =
+        "";
 
 
-    const grid=
-        document.getElementById("productGrid");
+    categories.forEach(
+        category=>{
 
-    grid.innerHTML="";
+            const btn =
+                document.createElement(
+                    "button"
+                );
 
-    let products=
-        activeCategory==="Tous"
-        ? data.products
-        : data.products.filter(
-            p=>p.category===activeCategory
+
+            btn.className =
+                "categoryTab "+
+                (
+                    activeCategory===category
+                    ?
+                    "active"
+                    :
+                    ""
+                );
+
+
+            btn.textContent =
+                category;
+
+
+            btn.onclick =
+                ()=>{
+
+                    activeCategory =
+                        category;
+
+                    renderProducts();
+
+                };
+
+
+            tabs.appendChild(
+                btn
+            );
+
+        }
+    );
+
+
+    const grid =
+        document.getElementById(
+            "productGrid"
         );
+
+
+    grid.innerHTML =
+        "";
+
+
+    const products =
+        activeCategory==="Tous"
+        ?
+        data.products
+        :
+        data.products.filter(
+            p=>
+                p.category ===
+                activeCategory
+        );
+
 
     if(products.length===0){
 
-        grid.innerHTML=`
+        grid.innerHTML = `
+
             <div class="empty">
+
                 Aucun produit.
+
             </div>
+
         `;
 
         return;
+
     }
 
-    products.forEach(product=>{
 
-        const btn=
-            document.createElement("button");
+    products.forEach(
+        product=>{
 
-        btn.className=
-            "productBtn "+
-            (product.refill
-                ? "needsRefill":"");
+            const btn =
+                document.createElement(
+                    "button"
+                );
 
-        btn.onclick=()=>{
-            toggleRefill(product.id);
-        };
 
-        btn.oncontextmenu=(e)=>{
-            e.preventDefault();
-            editProduct(product.id);
-        };
-
-        btn.innerHTML=`
-
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                align-items:start;
-            ">
-
-                <div class="productIcon">
-                    ${escapeHTML(product.emoji)}
-                </div>
-
-                <div class="itemActions">
-
-                    <button
-                        class="smallBtn"
-                        onclick="event.stopPropagation();editProduct('${product.id}')">
-                        ✏️
-                    </button>
-
-                    <button
-                        class="smallBtn"
-                        onclick="event.stopPropagation();deleteProduct('${product.id}')">
-                        🗑️
-                    </button>
-
-                </div>
-
-            </div>
-
-            <div class="productName">
-                ${escapeHTML(product.name)}
-            </div>
-
-            <div class="productStatus">
-
-                ${
+            btn.className =
+                "productBtn "+
+                (
                     product.refill
-                    ? "🔴 À refaire"
-                    : "🟢 Disponible"
-                }
+                    ?
+                    "needsRefill"
+                    :
+                    ""
+                );
 
-            </div>
-        `;
 
-        grid.appendChild(btn);
-    });
+            btn.onclick =
+                ()=>{
+                    toggleRefill(
+                        product.id
+                    );
+                };
+
+
+            btn.oncontextmenu =
+                event=>{
+
+                    event.preventDefault();
+
+                    editProduct(
+                        product.id
+                    );
+
+                };
+
+
+            btn.innerHTML = `
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:start;
+                ">
+
+
+                    <div class="productIcon">
+
+                        ${escapeHTML(
+                            product.emoji
+                        )}
+
+                    </div>
+
+
+                    <div class="itemActions">
+
+
+                        <button
+                            class="smallBtn"
+                            onclick="
+                                event.stopPropagation();
+                                editProduct('${product.id}')
+                            ">
+
+                            ✏️
+
+                        </button>
+
+
+                        <button
+                            class="smallBtn"
+                            onclick="
+                                event.stopPropagation();
+                                deleteProduct('${product.id}')
+                            ">
+
+                            🗑️
+
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="productName">
+
+                    ${escapeHTML(
+                        product.name
+                    )}
+
+                </div>
+
+
+                <div class="productStatus">
+
+                    ${
+                        product.refill
+                        ?
+                        "🔴 À refaire"
+                        :
+                        "🟢 Disponible"
+                    }
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(
+                btn
+            );
+
+        }
+    );
+
 }
 
 
@@ -1775,47 +2951,75 @@ function renderProducts(){
 
 function toggleRefill(id){
 
-    const product=
-        data.products.find(p=>p.id===id);
+    const product =
+        data.products.find(
+            p=>p.id===id
+        );
 
-    if(!product) return;
 
-    product.refill=!product.refill;
+    if(!product){
+        return;
+    }
+
+
+    product.refill =
+        !product.refill;
+
 
     saveData();
 
+
     renderEverything();
+
 
     if(product.refill){
 
         showToast(
-            product.name+" ajouté à « À refaire »"
+            product.name+
+            " ajouté à « À refaire »"
         );
 
     }else{
 
         showToast(
-            product.name+" est de nouveau disponible"
+            product.name+
+            " est de nouveau disponible"
         );
+
     }
+
 }
+
 
 function finishRefill(id){
 
-    const product=
-        data.products.find(p=>p.id===id);
+    const product =
+        data.products.find(
+            p=>p.id===id
+        );
 
-    if(!product) return;
 
-    product.refill=false;
+    if(!product){
+        return;
+    }
+
+
+    product.refill =
+        false;
+
 
     saveData();
 
+
     renderEverything();
 
+
     showToast(
-        "✓ "+product.name+" terminé"
+        "✓ "+
+        product.name+
+        " terminé"
     );
+
 }
 
 
@@ -1825,31 +3029,53 @@ function finishRefill(id){
 
 function addProduct(){
 
-    const name=
+    const name =
         document
-        .getElementById("newProductName")
-        .value.trim();
+        .getElementById(
+            "newProductName"
+        )
+        .value
+        .trim();
 
-    const category=
-        document
-        .getElementById("newProductCategory")
-        .value.trim() || "Autre";
 
-    const emoji=
+    const category =
         document
-        .getElementById("newProductEmoji")
-        .value.trim() || "🍽️";
+        .getElementById(
+            "newProductCategory"
+        )
+        .value
+        .trim()
+        ||
+        "Autre";
+
+
+    const emoji =
+        document
+        .getElementById(
+            "newProductEmoji"
+        )
+        .value
+        .trim()
+        ||
+        "🍽️";
+
 
     if(!name){
 
-        showToast("Donne un nom au produit.");
+        showToast(
+            "Donne un nom au produit."
+        );
 
         return;
+
     }
+
 
     data.products.push({
 
-        id:"product-"+Date.now(),
+        id:
+            "product-"+
+            Date.now(),
 
         name,
 
@@ -1858,103 +3084,216 @@ function addProduct(){
         emoji,
 
         refill:false
+
     });
 
-    document.getElementById("newProductName").value="";
-    document.getElementById("newProductCategory").value="";
-    document.getElementById("newProductEmoji").value="🍽️";
+
+    document
+        .getElementById(
+            "newProductName"
+        )
+        .value =
+        "";
+
+
+    document
+        .getElementById(
+            "newProductCategory"
+        )
+        .value =
+        "";
+
+
+    document
+        .getElementById(
+            "newProductEmoji"
+        )
+        .value =
+        "🍽️";
+
 
     saveData();
 
+
     renderEverything();
 
-    showToast("Produit ajouté.");
+
+    showToast(
+        "Produit ajouté."
+    );
+
 }
+
 
 function editProduct(id){
 
-    const product=
-        data.products.find(p=>p.id===id);
+    const product =
+        data.products.find(
+            p=>p.id===id
+        );
 
-    if(!product) return;
 
-    editingProductId=id;
+    if(!product){
+        return;
+    }
 
-    document.getElementById("editProductName")
-        .value=product.name;
 
-    document.getElementById("editProductCategory")
-        .value=product.category;
+    editingProductId =
+        id;
 
-    document.getElementById("editProductEmoji")
-        .value=product.emoji;
 
-    document.getElementById("productModal")
-        .classList.add("open");
+    document
+        .getElementById(
+            "editProductName"
+        )
+        .value =
+        product.name;
+
+
+    document
+        .getElementById(
+            "editProductCategory"
+        )
+        .value =
+        product.category;
+
+
+    document
+        .getElementById(
+            "editProductEmoji"
+        )
+        .value =
+        product.emoji;
+
+
+    document
+        .getElementById(
+            "productModal"
+        )
+        .classList.add(
+            "open"
+        );
+
 }
+
 
 function saveProductEdit(){
 
-    const product=
+    const product =
         data.products.find(
-            p=>p.id===editingProductId
+            p=>
+                p.id===
+                editingProductId
         );
 
-    if(!product) return;
 
-    const name=
+    if(!product){
+        return;
+    }
+
+
+    const name =
         document
-        .getElementById("editProductName")
-        .value.trim();
+        .getElementById(
+            "editProductName"
+        )
+        .value
+        .trim();
 
-    const category=
+
+    const category =
         document
-        .getElementById("editProductCategory")
-        .value.trim();
+        .getElementById(
+            "editProductCategory"
+        )
+        .value
+        .trim();
 
-    const emoji=
+
+    const emoji =
         document
-        .getElementById("editProductEmoji")
-        .value.trim();
+        .getElementById(
+            "editProductEmoji"
+        )
+        .value
+        .trim();
 
-    if(!name) return;
 
-    product.name=name;
-    product.category=category || "Autre";
-    product.emoji=emoji || "🍽️";
+    if(!name){
+        return;
+    }
+
+
+    product.name =
+        name;
+
+
+    product.category =
+        category ||
+        "Autre";
+
+
+    product.emoji =
+        emoji ||
+        "🍽️";
+
 
     saveData();
 
-    closeModal("productModal");
+
+    closeModal(
+        "productModal"
+    );
+
 
     renderEverything();
 
-    showToast("Produit modifié.");
+
+    showToast(
+        "Produit modifié."
+    );
+
 }
+
 
 function deleteProduct(id){
 
-    const product=
-        data.products.find(p=>p.id===id);
+    const product =
+        data.products.find(
+            p=>p.id===id
+        );
 
-    if(!product) return;
+
+    if(!product){
+        return;
+    }
+
 
     if(!confirm(
-        "Supprimer « "+product.name+" » ?"
+        "Supprimer « "+
+        product.name+
+        " » ?"
     )){
         return;
     }
 
-    data.products=
+
+    data.products =
         data.products.filter(
             p=>p.id!==id
         );
 
+
     saveData();
+
 
     renderEverything();
 
-    showToast("Produit supprimé.");
+
+    showToast(
+        "Produit supprimé."
+    );
+
 }
 
 
@@ -1964,191 +3303,367 @@ function deleteProduct(id){
 
 function renderTimers(){
 
-    const grid=
-        document.getElementById("timerGrid");
+    const grid =
+        document.getElementById(
+            "timerGrid"
+        );
 
-    grid.innerHTML="";
 
-    data.timers.forEach(timer=>{
+    grid.innerHTML =
+        "";
 
-        const state=
-            runningTimers[timer.id];
 
-        const remaining=
-            state
-            ? state.remaining
-            : timer.seconds;
+    data.timers.forEach(
+        timer=>{
 
-        const running=
-            state &&
-            state.interval &&
-            !state.finished;
+            const state =
+                runningTimers[
+                    timer.id
+                ];
 
-        const finished=
-            state?.finished;
 
-        const card=
-            document.createElement("div");
+            const remaining =
+                state
+                ?
+                state.remaining
+                :
+                timer.seconds;
 
-        card.className=
-            "timerCard "+
-            (running ? "running ":"")+
-            (finished ? "finished":"");
 
-        card.innerHTML=`
+            const running =
+                state &&
+                state.interval &&
+                !state.finished;
 
-            <div class="cardTop">
 
-                <div>
+            const finished =
+                state?.finished;
 
-                    <div class="cardName">
-                        ${escapeHTML(timer.name)}
-                    </div>
 
-                    <div class="cardCategory">
-                        ${escapeHTML(timer.category || "Cuisson")}
-                    </div>
+            const card =
+                document.createElement(
+                    "div"
+                );
 
-                </div>
 
-                <div class="cardMenu">
-
-                    <button class="smallBtn"
-                            onclick="editTimer('${timer.id}')">
-                        ✏️
-                    </button>
-
-                    <button class="smallBtn"
-                            onclick="deleteTimer('${timer.id}')">
-                        🗑️
-                    </button>
-
-                </div>
-
-            </div>
-
-            <div class="time">
-                ${formatTime(remaining)}
-            </div>
-
-            <div class="cardButtons">
-
-                ${
+            card.className =
+                "timerCard "+
+                (
                     running
                     ?
-                    `
-                    <button class="actionBtn stop"
-                            onclick="pauseTimer('${timer.id}')">
-                        ⏸ Pause
-                    </button>
-                    `
+                    "running "
                     :
-                    `
-                    <button class="actionBtn primary"
-                            onclick="startTimer('${timer.id}')">
-                        ▶ Démarrer
+                    ""
+                )+
+                (
+                    finished
+                    ?
+                    "finished"
+                    :
+                    ""
+                );
+
+
+            card.innerHTML = `
+
+                <div class="cardTop">
+
+
+                    <div>
+
+                        <div class="cardName">
+
+                            ${escapeHTML(
+                                timer.name
+                            )}
+
+                        </div>
+
+
+                        <div class="cardCategory">
+
+                            ${escapeHTML(
+                                timer.category ||
+                                "Cuisson"
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="cardMenu">
+
+
+                        <button
+                            class="smallBtn"
+                            onclick="
+                                editTimer('${timer.id}')
+                            ">
+
+                            ✏️
+
+                        </button>
+
+
+                        <button
+                            class="smallBtn"
+                            onclick="
+                                deleteTimer('${timer.id}')
+                            ">
+
+                            🗑️
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="time">
+
+                    ${formatTime(
+                        remaining
+                    )}
+
+                </div>
+
+
+                <div class="cardButtons">
+
+
+                    ${
+                        running
+                        ?
+
+                        `
+
+                        <button
+                            class="actionBtn stop"
+                            onclick="
+                                pauseTimer('${timer.id}')
+                            ">
+
+                            ⏸ Pause
+
+                        </button>
+
+                        `
+
+                        :
+
+                        `
+
+                        <button
+                            class="actionBtn primary"
+                            onclick="
+                                startTimer('${timer.id}')
+                            ">
+
+                            ▶ Démarrer
+
+                        </button>
+
+                        `
+                    }
+
+
+                    <button
+                        class="actionBtn"
+                        onclick="
+                            resetTimer('${timer.id}')
+                        ">
+
+                        ↺ Reset
+
                     </button>
-                    `
-                }
 
-                <button class="actionBtn"
-                        onclick="resetTimer('${timer.id}')">
-                    ↺ Reset
-                </button>
 
-            </div>
-        `;
+                </div>
 
-        grid.appendChild(card);
-    });
+            `;
+
+
+            grid.appendChild(
+                card
+            );
+
+        }
+    );
+
 }
+
+
+/*
+    Démarre un minuteur.
+*/
 
 function startTimer(id){
 
+    /*
+        Important pour iPhone :
+        l'utilisateur vient d'appuyer
+        sur un bouton.
+    */
+
     unlockAudio();
 
-    const timer=
-        data.timers.find(t=>t.id===id);
 
-    if(!timer) return;
+    const timer =
+        data.timers.find(
+            t=>t.id===id
+        );
+
+
+    if(!timer){
+        return;
+    }
+
 
     if(
         runningTimers[id]?.finished
     ){
+
         resetTimer(id);
+
     }
+
 
     if(!runningTimers[id]){
 
-        runningTimers[id]={
-            remaining:timer.seconds,
-            finished:false,
-            interval:null
+        runningTimers[id] = {
+
+            remaining:
+                timer.seconds,
+
+            finished:
+                false,
+
+            interval:
+                null
+
         };
+
     }
 
-    if(runningTimers[id].interval) return;
 
-    runningTimers[id].interval=
-        setInterval(()=>{
+    if(
+        runningTimers[id].interval
+    ){
+        return;
+    }
 
-            const state=
-                runningTimers[id];
 
-            if(!state) return;
+    runningTimers[id].interval =
 
-            state.remaining--;
+        setInterval(
+            ()=>{
 
-            if(state.remaining<=0){
+                const state =
+                    runningTimers[id];
 
-                state.remaining=0;
 
-                clearInterval(
-                    state.interval
-                );
+                if(!state){
+                    return;
+                }
 
-                state.interval=null;
-                state.finished=true;
 
-                triggerAlarm(timer.name);
-            }
+                state.remaining--;
 
-            renderEverything();
 
-        },1000);
+                if(
+                    state.remaining <= 0
+                ){
+
+                    state.remaining =
+                        0;
+
+
+                    clearInterval(
+                        state.interval
+                    );
+
+
+                    state.interval =
+                        null;
+
+
+                    state.finished =
+                        true;
+
+
+                    /*
+                        Le minuteur est terminé.
+                        On lance l'alarme.
+                    */
+
+                    triggerAlarm(
+                        timer.name
+                    );
+
+                }
+
+
+                renderEverything();
+
+            },
+
+            1000
+
+        );
+
 
     renderEverything();
+
 }
+
 
 function pauseTimer(id){
 
-    const state=
+    const state =
         runningTimers[id];
 
-    if(!state) return;
 
-    clearInterval(state.interval);
+    if(!state){
+        return;
+    }
 
-    state.interval=null;
+
+    clearInterval(
+        state.interval
+    );
+
+
+    state.interval =
+        null;
+
 
     renderEverything();
+
 }
+
 
 function resetTimer(id){
 
-    const state=
+    const state =
         runningTimers[id];
+
 
     if(state?.interval){
 
         clearInterval(
             state.interval
         );
+
     }
+
 
     delete runningTimers[id];
 
+
     renderEverything();
+
 }
 
 
@@ -2158,436 +3673,778 @@ function resetTimer(id){
 
 function openNewTimer(){
 
-    editingTimerId=null;
+    editingTimerId =
+        null;
 
-    document.getElementById("timerModalTitle")
-        .textContent="Nouveau minuteur";
 
-    document.getElementById("timerNameInput")
-        .value="";
+    document
+        .getElementById(
+            "timerModalTitle"
+        )
+        .textContent =
+        "Nouveau minuteur";
 
-    document.getElementById("timerSecondsInput")
-        .value="180";
 
-    document.getElementById("timerModal")
-        .classList.add("open");
+    document
+        .getElementById(
+            "timerNameInput"
+        )
+        .value =
+        "";
+
+
+    document
+        .getElementById(
+            "timerSecondsInput"
+        )
+        .value =
+        "180";
+
+
+    document
+        .getElementById(
+            "timerModal"
+        )
+        .classList.add(
+            "open"
+        );
+
 }
+
 
 function editTimer(id){
 
-    const timer=
-        data.timers.find(t=>t.id===id);
-
-    if(!timer) return;
-
-    editingTimerId=id;
-
-    document.getElementById("timerModalTitle")
-        .textContent="Modifier le minuteur";
-
-    document.getElementById("timerNameInput")
-        .value=timer.name;
-
-    document.getElementById("timerSecondsInput")
-        .value=timer.seconds;
-
-    document.getElementById("timerModal")
-        .classList.add("open");
-}
-
-function saveTimerModal(){
-
-    const name=
-        document
-        .getElementById("timerNameInput")
-        .value.trim();
-
-    const seconds=
-        Number(
-            document
-            .getElementById("timerSecondsInput")
-            .value
+    const timer =
+        data.timers.find(
+            t=>t.id===id
         );
 
-    if(!name || !seconds || seconds<1){
 
-        showToast("Vérifie le nom et le temps.");
-
+    if(!timer){
         return;
     }
 
+
+    editingTimerId =
+        id;
+
+
+    document
+        .getElementById(
+            "timerModalTitle"
+        )
+        .textContent =
+        "Modifier le minuteur";
+
+
+    document
+        .getElementById(
+            "timerNameInput"
+        )
+        .value =
+        timer.name;
+
+
+    document
+        .getElementById(
+            "timerSecondsInput"
+        )
+        .value =
+        timer.seconds;
+
+
+    document
+        .getElementById(
+            "timerModal"
+        )
+        .classList.add(
+            "open"
+        );
+
+}
+
+
+function saveTimerModal(){
+
+    const name =
+        document
+        .getElementById(
+            "timerNameInput"
+        )
+        .value
+        .trim();
+
+
+    const seconds =
+        Number(
+            document
+            .getElementById(
+                "timerSecondsInput"
+            )
+            .value
+        );
+
+
+    if(
+        !name ||
+        !seconds ||
+        seconds < 1
+    ){
+
+        showToast(
+            "Vérifie le nom et le temps."
+        );
+
+        return;
+
+    }
+
+
     if(editingTimerId){
 
-        const timer=
+        const timer =
             data.timers.find(
-                t=>t.id===editingTimerId
+                t=>
+                    t.id===
+                    editingTimerId
             );
+
 
         if(timer){
 
-            timer.name=name;
-            timer.seconds=seconds;
+            timer.name =
+                name;
 
-            resetTimer(editingTimerId);
+
+            timer.seconds =
+                seconds;
+
+
+            resetTimer(
+                editingTimerId
+            );
+
         }
 
     }else{
 
         data.timers.push({
 
-            id:"timer-"+Date.now(),
+            id:
+                "timer-"+
+                Date.now(),
 
             name,
 
-            category:"Personnalisé",
+            category:
+                "Personnalisé",
 
             seconds
+
         });
+
     }
+
 
     saveData();
 
-    closeModal("timerModal");
+
+    closeModal(
+        "timerModal"
+    );
+
 
     renderEverything();
 
-    showToast("Minuteur enregistré.");
+
+    showToast(
+        "Minuteur enregistré."
+    );
+
 }
+
 
 function deleteTimer(id){
 
-    const timer=
-        data.timers.find(t=>t.id===id);
+    const timer =
+        data.timers.find(
+            t=>t.id===id
+        );
 
-    if(!timer) return;
+
+    if(!timer){
+        return;
+    }
+
 
     if(!confirm(
-        "Supprimer « "+timer.name+" » ?"
+        "Supprimer « "+
+        timer.name+
+        " » ?"
     )){
         return;
     }
 
+
     resetTimer(id);
 
-    data.timers=
+
+    data.timers =
         data.timers.filter(
             t=>t.id!==id
         );
 
+
     saveData();
 
+
     renderEverything();
+
 }
 
 
 /* =========================================================
-   CHECKLIST
+   CHECKLISTS
 ========================================================= */
 
 function renderChecklists(){
 
-    const tabs=
-        document.getElementById("checklistTabs");
-
-    tabs.innerHTML="";
-
-    data.checklists.forEach(list=>{
-
-        const btn=
-            document.createElement("button");
-
-        btn.className=
-            "checklistTab "+
-            (
-                list.id===activeChecklist
-                ? "active":""
-            );
-
-        btn.textContent=list.name;
-
-        btn.onclick=()=>{
-
-            activeChecklist=list.id;
-
-            renderChecklists();
-        };
-
-        tabs.appendChild(btn);
-    });
-
-    const add=
-        document.createElement("button");
-
-    add.className="checklistTab";
-    add.textContent="＋ Nouvelle";
-
-    add.onclick=()=>{
-
-        showPage("settings");
-
-        document
-            .getElementById("newChecklistName")
-            .focus();
-    };
-
-    tabs.appendChild(add);
-
-
-    const list=
-        data.checklists.find(
-            x=>x.id===activeChecklist
+    const tabs =
+        document.getElementById(
+            "checklistTabs"
         );
 
-    const content=
+
+    tabs.innerHTML =
+        "";
+
+
+    data.checklists.forEach(
+        list=>{
+
+            const btn =
+                document.createElement(
+                    "button"
+                );
+
+
+            btn.className =
+                "checklistTab "+
+                (
+                    list.id===
+                    activeChecklist
+                    ?
+                    "active"
+                    :
+                    ""
+                );
+
+
+            btn.textContent =
+                list.name;
+
+
+            btn.onclick =
+                ()=>{
+
+                    activeChecklist =
+                        list.id;
+
+                    renderChecklists();
+
+                };
+
+
+            tabs.appendChild(
+                btn
+            );
+
+        }
+    );
+
+
+    const add =
+        document.createElement(
+            "button"
+        );
+
+
+    add.className =
+        "checklistTab";
+
+
+    add.textContent =
+        "＋ Nouvelle";
+
+
+    add.onclick =
+        ()=>{
+
+            showPage(
+                "settings"
+            );
+
+
+            document
+                .getElementById(
+                    "newChecklistName"
+                )
+                .focus();
+
+        };
+
+
+    tabs.appendChild(
+        add
+    );
+
+
+    const list =
+        data.checklists.find(
+            x=>
+                x.id===
+                activeChecklist
+        );
+
+
+    const content =
         document.getElementById(
             "checklistContent"
         );
 
+
     if(!list){
 
-        content.innerHTML=`
+        content.innerHTML = `
+
             <div class="empty">
+
                 Aucune checklist.
+
             </div>
+
         `;
 
         return;
+
     }
 
-    content.innerHTML=`
+
+    content.innerHTML = `
 
         <div class="checklistBox">
 
+
             <div class="checklistHeader">
+
 
                 <div>
 
                     <h2>
-                        ${escapeHTML(list.name)}
+
+                        ${escapeHTML(
+                            list.name
+                        )}
+
                     </h2>
 
-                    <small style="color:var(--muted)">
+
+                    <small
+                        style="color:var(--muted)">
+
                         ${
                             list.items.filter(
                                 x=>x.done
                             ).length
                         }
+
                         /
+
                         ${list.items.length}
+
                         terminées
+
                     </small>
 
                 </div>
 
+
                 <div class="itemActions">
 
-                    <button class="smallBtn"
-                            onclick="renameChecklist('${list.id}')">
+
+                    <button
+                        class="smallBtn"
+                        onclick="
+                            renameChecklist(
+                                '${list.id}'
+                            )
+                        ">
+
                         ✏️
+
                     </button>
 
-                    <button class="smallBtn"
-                            onclick="deleteChecklist('${list.id}')">
+
+                    <button
+                        class="smallBtn"
+                        onclick="
+                            deleteChecklist(
+                                '${list.id}'
+                            )
+                        ">
+
                         🗑️
+
                     </button>
 
-                    <button class="smallBtn"
-                            onclick="openCheckModal()">
+
+                    <button
+                        class="smallBtn"
+                        onclick="
+                            openCheckModal()
+                        ">
+
                         ＋
+
                     </button>
+
 
                 </div>
 
             </div>
 
+
             <div id="checkItems"></div>
 
         </div>
+
     `;
 
-    const items=
+
+    const items =
         document.getElementById(
             "checkItems"
         );
 
-    list.items.forEach(item=>{
 
-        const row=
-            document.createElement("div");
+    list.items.forEach(
+        item=>{
 
-        row.className=
-            "checkItem "+
-            (item.done ? "done":"");
+            const row =
+                document.createElement(
+                    "div"
+                );
 
-        row.innerHTML=`
 
-            <button class="checkBox"
-                    onclick="toggleCheck(${item.id})">
+            row.className =
+                "checkItem "+
+                (
+                    item.done
+                    ?
+                    "done"
+                    :
+                    ""
+                );
 
-                ${item.done ? "✓":""}
 
-            </button>
+            row.innerHTML = `
 
-            <div class="itemText">
-                ${escapeHTML(item.text)}
-            </div>
+                <button
+                    class="checkBox"
+                    onclick="
+                        toggleCheck(
+                            ${item.id}
+                        )
+                    ">
 
-            <div class="itemActions">
+                    ${item.done ? "✓":""}
 
-                <button class="smallBtn"
-                        onclick="editCheck(${item.id})">
-                    ✏️
                 </button>
 
-                <button class="smallBtn"
-                        onclick="deleteCheck(${item.id})">
-                    🗑️
-                </button>
 
-            </div>
-        `;
+                <div class="itemText">
 
-        items.appendChild(row);
-    });
+                    ${escapeHTML(
+                        item.text
+                    )}
+
+                </div>
+
+
+                <div class="itemActions">
+
+
+                    <button
+                        class="smallBtn"
+                        onclick="
+                            editCheck(
+                                ${item.id}
+                            )
+                        ">
+
+                        ✏️
+
+                    </button>
+
+
+                    <button
+                        class="smallBtn"
+                        onclick="
+                            deleteCheck(
+                                ${item.id}
+                            )
+                        ">
+
+                        🗑️
+
+                    </button>
+
+
+                </div>
+
+            `;
+
+
+            items.appendChild(
+                row
+            );
+
+        }
+    );
+
 }
+
 
 function openCheckModal(){
 
-    document.getElementById("checkTextInput")
-        .value="";
+    document
+        .getElementById(
+            "checkTextInput"
+        )
+        .value =
+        "";
 
-    document.getElementById("checkModal")
-        .classList.add("open");
+
+    document
+        .getElementById(
+            "checkModal"
+        )
+        .classList.add(
+            "open"
+        );
+
 }
+
 
 function saveChecklistItem(){
 
-    const text=
+    const text =
         document
-        .getElementById("checkTextInput")
-        .value.trim();
+        .getElementById(
+            "checkTextInput"
+        )
+        .value
+        .trim();
+
 
     if(!text){
 
-        showToast("Écris une tâche.");
+        showToast(
+            "Écris une tâche."
+        );
 
+        return;
+
+    }
+
+
+    const list =
+        data.checklists.find(
+            x=>
+                x.id===
+                activeChecklist
+        );
+
+
+    if(!list){
         return;
     }
 
-    const list=
-        data.checklists.find(
-            x=>x.id===activeChecklist
-        );
-
-    if(!list) return;
 
     list.items.push({
 
-        id:Date.now(),
+        id:
+            Date.now(),
 
         text,
 
         done:false
+
     });
+
 
     saveData();
 
-    closeModal("checkModal");
+
+    closeModal(
+        "checkModal"
+    );
+
 
     renderChecklists();
 
-    showToast("Tâche ajoutée.");
+
+    showToast(
+        "Tâche ajoutée."
+    );
+
 }
+
 
 function toggleCheck(id){
 
-    const list=
+    const list =
         data.checklists.find(
-            x=>x.id===activeChecklist
+            x=>
+                x.id===
+                activeChecklist
         );
 
-    const item=
+
+    const item =
         list?.items.find(
-            x=>x.id===id
+            x=>
+                x.id===
+                id
         );
 
-    if(!item) return;
 
-    item.done=!item.done;
+    if(!item){
+        return;
+    }
+
+
+    item.done =
+        !item.done;
+
 
     saveData();
 
+
     renderChecklists();
+
 }
+
 
 function editCheck(id){
 
-    const list=
+    const list =
         data.checklists.find(
-            x=>x.id===activeChecklist
+            x=>
+                x.id===
+                activeChecklist
         );
 
-    const item=
+
+    const item =
         list?.items.find(
-            x=>x.id===id
+            x=>
+                x.id===
+                id
         );
 
-    if(!item) return;
 
-    const value=
+    if(!item){
+        return;
+    }
+
+
+    const value =
         prompt(
             "Modifier la tâche :",
             item.text
         );
 
-    if(value===null) return;
 
-    if(!value.trim()) return;
+    if(value===null){
+        return;
+    }
 
-    item.text=value.trim();
+
+    if(!value.trim()){
+        return;
+    }
+
+
+    item.text =
+        value.trim();
+
 
     saveData();
 
+
     renderChecklists();
+
 }
+
 
 function deleteCheck(id){
 
-    const list=
+    const list =
         data.checklists.find(
-            x=>x.id===activeChecklist
+            x=>
+                x.id===
+                activeChecklist
         );
 
-    if(!list) return;
 
-    list.items=
+    if(!list){
+        return;
+    }
+
+
+    list.items =
         list.items.filter(
-            x=>x.id!==id
+            x=>
+                x.id!==id
         );
+
 
     saveData();
 
+
     renderChecklists();
+
 }
+
 
 function addChecklist(){
 
-    const input=
+    const input =
         document.getElementById(
             "newChecklistName"
         );
 
-    const name=input.value.trim();
+
+    const name =
+        input.value.trim();
+
 
     if(!name){
 
-        showToast("Donne un nom.");
+        showToast(
+            "Donne un nom."
+        );
 
         return;
+
     }
 
-    const id=
-        "list-"+Date.now();
+
+    const id =
+        "list-"+
+        Date.now();
+
 
     data.checklists.push({
 
@@ -2596,80 +4453,132 @@ function addChecklist(){
         name,
 
         items:[]
+
     });
 
-    activeChecklist=id;
 
-    input.value="";
+    activeChecklist =
+        id;
+
+
+    input.value =
+        "";
+
 
     saveData();
 
-    showPage("checklist");
 
-    showToast("Checklist créée.");
+    showPage(
+        "checklist"
+    );
+
+
+    showToast(
+        "Checklist créée."
+    );
+
 }
+
 
 function renameChecklist(id){
 
-    const list=
+    const list =
         data.checklists.find(
-            x=>x.id===id
+            x=>
+                x.id===
+                id
         );
 
-    if(!list) return;
 
-    const name=
+    if(!list){
+        return;
+    }
+
+
+    const name =
         prompt(
             "Nouveau nom :",
             list.name
         );
 
-    if(name===null) return;
 
-    if(!name.trim()) return;
+    if(name===null){
+        return;
+    }
 
-    list.name=name.trim();
+
+    if(!name.trim()){
+        return;
+    }
+
+
+    list.name =
+        name.trim();
+
 
     saveData();
 
+
     renderChecklists();
+
 }
+
 
 function deleteChecklist(id){
 
-    if(data.checklists.length<=1){
+    if(
+        data.checklists.length <= 1
+    ){
 
         showToast(
             "Il faut garder une checklist."
         );
 
         return;
+
     }
 
-    const list=
+
+    const list =
         data.checklists.find(
-            x=>x.id===id
+            x=>
+                x.id===
+                id
         );
 
-    if(!list) return;
 
-    if(!confirm(
-        "Supprimer « "+list.name+" » ?"
-    )){
+    if(!list){
         return;
     }
 
-    data.checklists=
+
+    if(!confirm(
+        "Supprimer « "+
+        list.name+
+        " » ?"
+    )){
+
+        return;
+
+    }
+
+
+    data.checklists =
         data.checklists.filter(
-            x=>x.id!==id
+            x=>
+                x.id!==id
         );
 
-    activeChecklist=
+
+    activeChecklist =
         data.checklists[0].id;
+
 
     saveData();
 
+
     renderChecklists();
+
 }
 
 
@@ -2679,183 +4588,144 @@ function deleteChecklist(id){
 
 function renderSettings(){
 
-    document.getElementById("bleuInput").value=
+    document
+        .getElementById(
+            "bleuInput"
+        )
+        .value =
         data.steakTimes.bleu;
 
-    document.getElementById("saignantInput").value=
+
+    document
+        .getElementById(
+            "saignantInput"
+        )
+        .value =
         data.steakTimes.saignant;
 
-    document.getElementById("pointInput").value=
+
+    document
+        .getElementById(
+            "pointInput"
+        )
+        .value =
         data.steakTimes.point;
 
-    document.getElementById("bienInput").value=
+
+    document
+        .getElementById(
+            "bienInput"
+        )
+        .value =
         data.steakTimes.bien;
+
 }
+
 
 function saveSteakTimes(){
 
-    data.steakTimes.bleu=
+    data.steakTimes.bleu =
         Number(
-            document.getElementById("bleuInput").value
+            document
+            .getElementById(
+                "bleuInput"
+            )
+            .value
         );
 
-    data.steakTimes.saignant=
+
+    data.steakTimes.saignant =
         Number(
-            document.getElementById("saignantInput").value
+            document
+            .getElementById(
+                "saignantInput"
+            )
+            .value
         );
 
-    data.steakTimes.point=
+
+    data.steakTimes.point =
         Number(
-            document.getElementById("pointInput").value
+            document
+            .getElementById(
+                "pointInput"
+            )
+            .value
         );
 
-    data.steakTimes.bien=
+
+    data.steakTimes.bien =
         Number(
-            document.getElementById("bienInput").value
+            document
+            .getElementById(
+                "bienInput"
+            )
+            .value
         );
 
-    const values=[
 
-        ["steak-bleu",data.steakTimes.bleu],
+    const values = [
 
-        ["steak-saignant",
-         data.steakTimes.saignant],
+        [
+            "steak-bleu",
+            data.steakTimes.bleu
+        ],
 
-        ["steak-point",
-         data.steakTimes.point],
+        [
+            "steak-saignant",
+            data.steakTimes.saignant
+        ],
 
-        ["steak-bien",
-         data.steakTimes.bien]
+        [
+            "steak-point",
+            data.steakTimes.point
+        ],
+
+        [
+            "steak-bien",
+            data.steakTimes.bien
+        ]
+
     ];
 
-    values.forEach(([id,time])=>{
 
-        const timer=
-            data.timers.find(
-                x=>x.id===id
-            );
+    values.forEach(
+        ([id,time])=>{
 
-        if(timer){
+            const timer =
+                data.timers.find(
+                    x=>
+                        x.id===
+                        id
+                );
 
-            timer.seconds=time;
 
-            resetTimer(id);
+            if(timer){
+
+                timer.seconds =
+                    time;
+
+
+                resetTimer(
+                    id
+                );
+
+            }
+
         }
-    });
+    );
+
 
     saveData();
+
 
     showToast(
         "Cuissons enregistrées."
     );
 
+
     renderEverything();
-}
 
-
-/* =========================================================
-   ALARME
-========================================================= */
-
-function unlockAudio(){
-
-    try{
-
-        if(!audioContext){
-
-            audioContext=
-                new (
-                    window.AudioContext ||
-                    window.webkitAudioContext
-                )();
-        }
-
-        if(
-            audioContext.state==="suspended"
-        ){
-
-            audioContext.resume();
-        }
-
-    }catch(e){}
-}
-
-function beep(){
-
-    try{
-
-        unlockAudio();
-
-        const oscillator=
-            audioContext.createOscillator();
-
-        const gain=
-            audioContext.createGain();
-
-        oscillator.type="square";
-        oscillator.frequency.value=850;
-
-        gain.gain.value=.12;
-
-        oscillator.connect(gain);
-        gain.connect(
-            audioContext.destination
-        );
-
-        oscillator.start();
-
-        oscillator.stop(
-            audioContext.currentTime+.45
-        );
-
-    }catch(e){}
-}
-
-function triggerAlarm(name){
-
-    document.getElementById("alertName")
-        .textContent=name;
-
-    document.getElementById("alertOverlay")
-        .classList.add("show");
-
-    beep();
-
-    if(alarmInterval){
-        clearInterval(alarmInterval);
-    }
-
-    alarmInterval=
-        setInterval(
-            beep,
-            900
-        );
-
-    if(navigator.vibrate){
-
-        navigator.vibrate([
-            500,200,500,200,500
-        ]);
-    }
-}
-
-function stopAlarm(){
-
-    document.getElementById("alertOverlay")
-        .classList.remove("show");
-
-    if(alarmInterval){
-
-        clearInterval(
-            alarmInterval
-        );
-
-        alarmInterval=null;
-    }
-
-    if(navigator.vibrate){
-        navigator.vibrate(0);
-    }
 }
 
 
@@ -2865,65 +4735,126 @@ function stopAlarm(){
 
 function formatTime(seconds){
 
-    seconds=Math.max(
-        0,
-        Math.floor(seconds)
-    );
+    seconds =
+        Math.max(
+            0,
+            Math.floor(
+                seconds
+            )
+        );
 
-    const minutes=
-        Math.floor(seconds/60);
 
-    const secs=
+    const minutes =
+        Math.floor(
+            seconds/60
+        );
+
+
+    const secs =
         seconds%60;
 
+
     return (
-        String(minutes).padStart(2,"0")
+
+        String(minutes)
+        .padStart(2,"0")
+
         +
+
         ":"
+
         +
-        String(secs).padStart(2,"0")
+
+        String(secs)
+        .padStart(2,"0")
+
     );
+
 }
+
 
 function closeModal(id){
 
     document
-        .getElementById(id)
-        .classList.remove("open");
+        .getElementById(
+            id
+        )
+        .classList.remove(
+            "open"
+        );
+
 }
+
 
 function showToast(message){
 
-    const toast=
-        document.getElementById("toast");
+    const toast =
+        document.getElementById(
+            "toast"
+        );
 
-    toast.textContent=message;
 
-    toast.classList.add("show");
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
 
     clearTimeout(
         window.toastTimeout
     );
 
-    window.toastTimeout=
-        setTimeout(()=>{
 
-            toast.classList.remove(
-                "show"
-            );
+    window.toastTimeout =
+        setTimeout(
+            ()=>{
 
-        },2200);
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+
+            2200
+        );
+
 }
+
 
 function escapeHTML(value){
 
     return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
 }
+
 
 function resetApp(){
 
@@ -2933,53 +4864,71 @@ function resetApp(){
         return;
     }
 
+
     localStorage.removeItem(
         "kitchenflow_v4"
     );
 
+
     location.reload();
+
 }
 
 
 /* =========================================================
-   RENDER GLOBAL
+   FERMETURE MODALES
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".modalOverlay"
+    )
+    .forEach(
+        modal=>{
+
+            modal.addEventListener(
+                "click",
+                event=>{
+
+                    if(
+                        event.target===
+                        modal
+                    ){
+
+                        modal.classList.remove(
+                            "open"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   RENDER
 ========================================================= */
 
 function renderEverything(){
 
     renderHome();
+
     renderTimers();
+
     renderProducts();
+
     renderChecklists();
+
     renderSettings();
+
 }
 
 
 /* =========================================================
-   MODALS
-========================================================= */
-
-document
-.querySelectorAll(".modalOverlay")
-.forEach(modal=>{
-
-    modal.addEventListener(
-        "click",
-        e=>{
-
-            if(e.target===modal){
-
-                modal.classList.remove(
-                    "open"
-                );
-            }
-        }
-    );
-});
-
-
-/* =========================================================
-   INITIALISATION
+   START
 ========================================================= */
 
 renderEverything();
